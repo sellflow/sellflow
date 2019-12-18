@@ -2,7 +2,7 @@ import React, { ComponentProps } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput } from 'exoflex';
 
-import { DARK_WHITE } from '../general/constants/color';
+import { COLORS } from '../general/constants/colors';
 
 type Props = ComponentProps<typeof TextInput> & {};
 
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     height: 42,
     marginHorizontal: 36,
     borderRadius: 8,
-    backgroundColor: DARK_WHITE,
-    borderColor: DARK_WHITE,
+    backgroundColor: COLORS.darkWhite,
+    borderColor: COLORS.darkWhite,
   },
 });
