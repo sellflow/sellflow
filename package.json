@@ -3,6 +3,7 @@
   "scripts": {
     "start": "expo start",
     "start:web": "expo start --web --host localhost",
+    "storybook": "expo start --config storybook.json",
     "eject": "expo eject",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -39,6 +40,7 @@
     "react-native-web": "~0.11.7"
   },
   "devDependencies": {
+    "@storybook/react-native": "^5.2.8",
     "@types/jest": "^24.0.23",
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
