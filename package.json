@@ -57,6 +57,11 @@
   "eslintConfig": {
     "extends": "kodefox/react-native"
   },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/src/__mocks__/setup.js"
+    ]
+  },
   "prettier": {
     "bracketSpacing": true,
     "singleQuote": true,
