@@ -12,7 +12,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <ThemeProvider theme={CustomTheme} fonts={fonts} useSystemFonts={false}>
         <View style={styles.container}>
-          <Text>App</Text>
+          <Text>Open up App.tsx to start working on your app!</Text>
         </View>
       </ThemeProvider>
     </ApolloProvider>
