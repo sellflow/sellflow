@@ -1,3 +1,3 @@
-import dummy from './dummyStory';
+import carouselStory from './core-ui/carouselStory';
 
-dummy();
+carouselStory();
