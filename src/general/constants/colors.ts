@@ -7,7 +7,10 @@ export const COLORS = {
   grey: '#A4A4A4',
   lightGrey: '#E8E8E8',
   primaryColor: '#0253B3',
+  stepIndicatorLabel: '#0458BD',
+  stepIndicator: '#0050B6',
   orderStatusDelivered: '#63CE05',
   orderStatusOnProcess: '#64B1FF',
   wishlist: '#FF4A88',
+  transparent: 'transparent',
 };

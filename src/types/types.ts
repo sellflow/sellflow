@@ -5,3 +5,8 @@ export type CarouselItem = {
   image: string;
   onItemPress?: () => void;
 };
+
+export type IndicatorItem = {
+  label: string;
+  timestamp?: string;
+};
