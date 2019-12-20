@@ -2,14 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 
-import { SectionHeader } from '../../../core-ui';
+import { Surface } from '../../../core-ui';
 import { COLORS } from '../../../general/constants/colors';
 import { FONT_SIZE } from '../../../general/constants/fonts';
 
-export default function sectionHeaderStory() {
-  return storiesOf('SectionHeader').add('SectionHeader', () => (
+export default function SurfaceStory() {
+  return storiesOf('Surface').add('Surface', () => (
     <View style={styles.container}>
-      <SectionHeader>
+      <Surface>
         <Text style={styles.title}>{'Anna Belle'}</Text>
         <Text>
           {
@@ -17,8 +17,8 @@ export default function sectionHeaderStory() {
           }
         </Text>
         <Text>{'0876123987'}</Text>
-      </SectionHeader>
-      <SectionHeader mode="row">
+      </Surface>
+      <Surface mode="row">
         <Text>{'Delivered'}</Text>
         <View
           style={[
@@ -26,8 +26,8 @@ export default function sectionHeaderStory() {
             { backgroundColor: COLORS.orderStatusDelivered },
           ]}
         />
-      </SectionHeader>
-      <SectionHeader mode="row">
+      </Surface>
+      <Surface mode="row">
         <Text>{'On Courier'}</Text>
         <View
           style={[
@@ -35,7 +35,7 @@ export default function sectionHeaderStory() {
             { backgroundColor: COLORS.orderStatusOnProcess },
           ]}
         />
-      </SectionHeader>
+      </Surface>
     </View>
   ));
 }

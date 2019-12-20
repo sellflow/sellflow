@@ -9,7 +9,7 @@ type Props = {
   mode?: 'row' | 'column';
 };
 
-export default function SectionHeader(props: Props) {
+export default function Surface(props: Props) {
   let { containerStyle, children, mode = 'column' } = props;
 
   return (
