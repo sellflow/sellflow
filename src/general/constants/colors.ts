@@ -5,6 +5,7 @@ export const COLORS = {
   red: '#FF5852',
   orange: '#FF5C5C',
   grey: '#A4A4A4',
+  priceGrey: '#C4C4C4',
   lightGrey: '#E8E8E8',
   primaryColor: '#0253B3',
   stepIndicatorLabel: '#0458BD',
