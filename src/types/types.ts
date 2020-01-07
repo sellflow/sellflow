@@ -6,7 +6,7 @@ export type CarouselItem = {
   onItemPress?: () => void;
 };
 
-export type OrderedItem = {
+export type OrderItem = {
   variantID: string;
   itemName: string;
   quantity: number;
@@ -14,7 +14,7 @@ export type OrderedItem = {
   discount?: number;
   variant: string;
   imageURL: string;
-  editMode: boolean;
+  cardType: 'checkout' | 'order';
   onRemovePress?: (variantID: string) => void;
 };
 

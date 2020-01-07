@@ -11,11 +11,10 @@ import { Text } from 'exoflex';
 import { COLORS } from '../general/constants/colors';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
 import { FONT_SIZE } from '../general/constants/fonts';
-import { priceAfterDiscount } from '../helpers/priceAfterDiscount';
-import { OrderedItem } from '../types/types';
+import { OrderItem as OrderItemType } from '../types/types';
 
 type Props = {
-  orderItem: OrderedItem;
+  orderItem: OrderItemType;
 };
 
 export default function OrderItem(props: Props) {
@@ -24,7 +23,7 @@ export default function OrderItem(props: Props) {
     variant,
     imageURL,
     discount,
-    editMode,
+    cardType,
     onRemovePress,
     variantID,
   } = props.orderItem;
@@ -44,16 +43,13 @@ export default function OrderItem(props: Props) {
 
       <View style={styles.infoContainer}>
         <Text weight="normal" style={styles.fontSmall}>
-          {itemName}
-          {!editMode && ` X ${quantity}`}
+          {itemName} {cardType === 'order' ? ` × ${quantity}` : ''}
         </Text>
         <View style={styles.price}>
           <View>
             <Text weight="bold" style={styles.fontMedium}>
               {`$ ${
-                discount && discount > 0
-                  ? priceAfterDiscount(itemPrice, discount)
-                  : itemPrice.toFixed(2)
+                discount && discount > 0 ? discount : itemPrice.toFixed(2)
               }`}
             </Text>
           </View>
@@ -71,7 +67,7 @@ export default function OrderItem(props: Props) {
         <Text style={[styles.greyText, styles.fontSmall]}>{variant}</Text>
       </View>
 
-      {editMode ? (
+      {cardType === 'checkout' ? (
         <View style={styles.amountContainer}>
           <TextInput
             style={styles.amountInput}

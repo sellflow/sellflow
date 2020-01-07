@@ -1,6 +1,6 @@
-import { OrderedItem } from '../types/types';
+import { OrderItem as OrderItemType } from '../types/types';
 
-export let OrderData: Array<OrderedItem> = [
+export let OrderData: Array<OrderItemType> = [
   {
     variantID: '92315121',
     itemName: 'Basic T Shirt',
@@ -10,7 +10,7 @@ export let OrderData: Array<OrderedItem> = [
     discount: 10,
     quantity: 2,
     variant: 'Size M Grey',
-    editMode: true,
+    cardType: 'checkout',
   },
   {
     variantID: '1162131',
@@ -21,6 +21,6 @@ export let OrderData: Array<OrderedItem> = [
     discount: 1,
     quantity: 2,
     variant: 'Size M Grey',
-    editMode: false,
+    cardType: 'order',
   },
 ];
