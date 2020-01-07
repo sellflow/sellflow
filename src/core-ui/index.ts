@@ -4,6 +4,7 @@ import Carousel from './Carousel';
 import TabView from './TabView';
 import Surface from './Surface';
 import StepIndicator from './StepIndicator';
+import DatePicker from './DatePicker';
 
 export {
   SearchInput,
@@ -12,4 +13,5 @@ export {
   TabView,
   Surface,
   StepIndicator,
+  DatePicker,
 };
