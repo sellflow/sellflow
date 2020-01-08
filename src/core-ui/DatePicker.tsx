@@ -1,6 +1,8 @@
 import React from 'react';
 import { DateTimePicker } from 'exoflex';
 
+import { is24Hour } from '../helpers/locale';
+
 type Props = {
   isVisible: boolean;
   onCancel: () => void;
@@ -13,7 +15,7 @@ export default function DatePicker(props: Props) {
     <DateTimePicker
       isVisible={isVisible}
       mode="date"
-      is24Hour={true}
+      is24Hour={is24Hour()}
       maximumDate={new Date()}
       onCancel={onCancel}
       onConfirm={onConfirm}
