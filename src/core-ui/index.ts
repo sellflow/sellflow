@@ -5,6 +5,7 @@ import TabView from './TabView';
 import Surface from './Surface';
 import StepIndicator from './StepIndicator';
 import DatePicker from './DatePicker';
+import RichRadioGroup from './RichRadioGroup';
 
 export {
   SearchInput,
@@ -14,4 +15,5 @@ export {
   Surface,
   StepIndicator,
   DatePicker,
+  RichRadioGroup,
 };

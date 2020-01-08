@@ -45,7 +45,7 @@ export default function ProductItem(props: Props) {
       <Image style={[styles.image, imageStyle]} source={{ uri }} />
       {discount && (
         <DiscountBadge
-          discountNumber={discount}
+          value={discount.toString()}
           containerStyle={styles.discountBox}
         />
       )}
