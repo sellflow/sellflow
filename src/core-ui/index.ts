@@ -6,6 +6,7 @@ import Surface from './Surface';
 import StepIndicator from './StepIndicator';
 import DatePicker from './DatePicker';
 import RichRadioGroup from './RichRadioGroup';
+import CategoryItem from './CategoryItem';
 
 export {
   SearchInput,
@@ -16,4 +17,5 @@ export {
   StepIndicator,
   DatePicker,
   RichRadioGroup,
+  CategoryItem,
 };
