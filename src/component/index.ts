@@ -1,3 +1,4 @@
 import OrderItem from './OrderItem';
+import OrderHistoryItem from './OrderHistoryItem';
 
-export { OrderItem };
+export { OrderItem, OrderHistoryItem };

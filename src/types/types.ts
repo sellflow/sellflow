@@ -22,3 +22,9 @@ export type IndicatorItem = {
   label: string;
   timestamp?: string;
 };
+
+export type OrderRecord = {
+  orderID: string;
+  orderTime: string;
+  totalPayment: string;
+};
