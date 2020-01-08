@@ -1,3 +1,4 @@
+import './polyfills';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ApolloProvider } from '@apollo/react-hooks';

@@ -1,3 +1,4 @@
+import '../polyfills';
 import React from 'react';
 import { registerRootComponent } from 'expo';
 import { getStorybookUI, configure } from '@storybook/react-native';
