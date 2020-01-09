@@ -9,7 +9,6 @@ import productItemStory from './component/productItemStory';
 import orderItemStory from './component/orderItemStory';
 import orderHistoryItemStory from './component/orderHistoryItemStory';
 import searchInputStory from './core-ui/searchInputStory';
-import richRadioGroupStory from './core-ui/richRadioGroupStory';
 
 carouselStory();
 discountBadgeStory();
@@ -22,5 +21,4 @@ datePickerStory();
 orderItemStory();
 orderHistoryItemStory();
 searchInputStory();
-richRadioGroupStory();
 categoryItemStory();
