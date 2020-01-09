@@ -7,7 +7,7 @@ import { COLORS } from '../../../general/constants/colors';
 import { FONT_SIZE } from '../../../general/constants/fonts';
 
 export default function SurfaceStory() {
-  return storiesOf('Surface').add('Surface', () => (
+  return storiesOf('Surface', module).add('Surface', () => (
     <View style={styles.container}>
       <Surface>
         <Text style={styles.title}>{'Anna Belle'}</Text>

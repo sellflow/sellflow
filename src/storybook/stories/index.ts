@@ -18,7 +18,6 @@ tabStory();
 stepIndicatorStory();
 productItemStory();
 datePickerStory();
-orderItemStory();
 orderHistoryItemStory();
 searchInputStory();
 categoryItemStory();
