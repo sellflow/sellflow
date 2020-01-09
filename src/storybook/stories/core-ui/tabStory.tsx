@@ -44,7 +44,7 @@ export default function tabStory() {
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <TabView routes={routes} />
+        <TabView routes={routes} containerStyle={styles.tabContainerStyle} />
       </SafeAreaView>
     );
   };
@@ -55,5 +55,10 @@ export default function tabStory() {
 const styles = StyleSheet.create({
   tabBoxContainer: {
     height: 100,
+  },
+  tabContainerStyle: {
+    maxHeight: 200,
+    minHeight: 100,
+    backgroundColor: 'red',
   },
 });

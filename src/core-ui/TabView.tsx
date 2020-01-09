@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { TabView as Tab, SceneMap, TabBar } from 'react-native-tab-view';
 import { COLORS } from '../general/constants/colors';
 import { Text } from 'exoflex';
@@ -16,12 +16,13 @@ export type TabRoute = {
 
 type Props = {
   routes: Array<TabRoute>;
+  containerStyle?: StyleProp<ViewStyle>;
 };
 
 export default function TabView(props: Props) {
   let dimensions = useDimensions();
   const initialLayout = { width: dimensions.width };
-  const { routes } = props;
+  const { routes, containerStyle } = props;
   const [index, setIndex] = useState(0);
   let allRoutes = routes;
   let data: { [key: string]: Scene } = {};
@@ -51,6 +52,7 @@ export default function TabView(props: Props) {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
+      style={containerStyle}
     />
   );
 }
