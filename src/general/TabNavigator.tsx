@@ -1,6 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { IconButton, Text } from 'exoflex';
+import {
+  NavigationState,
+  RouteProp,
+  ParamListBase,
+} from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';
@@ -13,6 +18,14 @@ type LabelProps = {
   color: string;
   label: string;
 };
+
+type State = {
+  state?: NavigationState;
+};
+
+type HomeRoute = RouteProp<ParamListBase, 'Home'> & State;
+type WishlistRoute = RouteProp<ParamListBase, 'Wishlist'> & State;
+type ProfileRoute = RouteProp<ParamListBase, 'Profile'> & State;
 
 function TabLabel(props: LabelProps) {
   let { focused, color, label } = props;
@@ -32,33 +45,48 @@ export default function TabNavigator() {
       <Tab.Screen
         name="Home"
         component={Home}
-        options={{
-          tabBarLabel: ({ focused, color }) => (
-            <TabLabel focused={focused} color={color} label={t('Home')} />
-          ),
-          tabBarIcon: ({ color }) => <IconButton icon="home" color={color} />,
+        options={({ route }: { route: HomeRoute }) => {
+          return {
+            tabBarLabel: ({ focused, color }) => (
+              <TabLabel focused={focused} color={color} label={t('Home')} />
+            ),
+            tabBarIcon: ({ color }) => <IconButton icon="home" color={color} />,
+            tabBarVisible: route.state && route.state.index <= 0,
+          };
         }}
       />
       <Tab.Screen
         name="Wishlist"
         component={Wishlist}
-        options={{
-          tabBarLabel: ({ focused, color }) => (
-            <TabLabel focused={focused} color={color} label={t('Wishlist')} />
-          ),
-          tabBarIcon: ({ color }) => (
-            <IconButton icon="favorite" color={color} />
-          ),
+        options={({ route }: { route: WishlistRoute }) => {
+          return {
+            tabBarLabel: ({ focused, color }) => (
+              <TabLabel focused={focused} color={color} label={t('Wishlist')} />
+            ),
+            tabBarIcon: ({ color }) => (
+              <IconButton icon="favorite" color={color} />
+            ),
+            tabBarVisible: route.state && route.state.index <= 0,
+          };
         }}
       />
       <Tab.Screen
         name="Profile"
         component={Profile}
-        options={{
-          tabBarLabel: ({ focused, color }) => (
-            <TabLabel focused={focused} color={color} label={t('My Profile')} />
-          ),
-          tabBarIcon: ({ color }) => <IconButton icon="person" color={color} />,
+        options={({ route }: { route: ProfileRoute }) => {
+          return {
+            tabBarLabel: ({ focused, color }) => (
+              <TabLabel
+                focused={focused}
+                color={color}
+                label={t('My Profile')}
+              />
+            ),
+            tabBarIcon: ({ color }) => (
+              <IconButton icon="person" color={color} />
+            ),
+            tabBarVisible: route.state && route.state.index <= 0,
+          };
         }}
       />
     </Tab.Navigator>

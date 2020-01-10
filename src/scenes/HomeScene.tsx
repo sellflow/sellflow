@@ -1,11 +1,16 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text } from 'exoflex';
+import { Button } from 'exoflex';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScene() {
+  let { navigate } = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Text>{t('Home Scene')}</Text>
+      <Button onPress={() => navigate('OrderHistory')}>
+        {t('Order History')}
+      </Button>
     </View>
   );
 }

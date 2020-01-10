@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 12,
     paddingVertical: 12,
+    backgroundColor: COLORS.white,
   },
   orderID: {
     fontSize: FONT_SIZE.medium,
