@@ -5,6 +5,8 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
 import { Text } from 'exoflex';
 
@@ -14,6 +16,7 @@ import { FONT_SIZE } from '../constants/fonts';
 import { OrderItem as OrderItemType } from '../types/types';
 
 type Props = {
+  containerStyle?: StyleProp<ViewStyle>;
   orderItem: OrderItemType;
 };
 
@@ -27,11 +30,12 @@ export default function OrderItem(props: Props) {
     onRemovePress,
     variantID,
   } = props.orderItem;
+  let { containerStyle } = props;
   let [quantity, setQuantity] = useState(props.orderItem.quantity);
   let [itemPrice] = useState(props.orderItem.itemPrice);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <View style={styles.imageContainer}>
         <Image
           source={{

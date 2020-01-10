@@ -64,7 +64,7 @@ export default function TabNavigator() {
               <TabLabel focused={focused} color={color} label={t('Wishlist')} />
             ),
             tabBarIcon: ({ color }) => (
-              <IconButton icon="favorite" color={color} />
+              <IconButton icon="heart" color={color} />
             ),
             tabBarVisible: route.state && route.state.index <= 0,
           };
@@ -83,7 +83,7 @@ export default function TabNavigator() {
               />
             ),
             tabBarIcon: ({ color }) => (
-              <IconButton icon="person" color={color} />
+              <IconButton icon="account" color={color} />
             ),
             tabBarVisible: route.state && route.state.index <= 0,
           };

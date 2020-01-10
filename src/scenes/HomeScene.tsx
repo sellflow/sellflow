@@ -5,11 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScene() {
   let { navigate } = useNavigation();
-
   return (
     <View style={styles.container}>
       <Button onPress={() => navigate('OrderHistory')}>
-        {t('Order History')}
+        {t('Go To History')}
+      </Button>
+      <Button onPress={() => navigate('OrderDetails')}>
+        {t('Go To Details')}
       </Button>
     </View>
   );

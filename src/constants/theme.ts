@@ -3,7 +3,7 @@ import { DefaultTheme, Theme } from 'exoflex';
 import { StackNavigationOptions } from '@react-navigation/stack';
 
 import { COLORS } from './colors';
-import { FONT_SIZE, FONT_FAMILY } from './fonts';
+import { FONT_SIZE, FONT_FAMILY, FONTS } from './fonts';
 
 export const ColorTheme = {
   ...DefaultTheme.colors,
@@ -19,14 +19,17 @@ export const CustomTheme: Theme = {
       normal: {
         name: 'SourceSansPro-Regular',
         weight: 'normal',
+        source: FONTS.SourceSansProRegular,
       },
       bold: {
         name: 'SourceSansPro-Bold',
         weight: '700',
+        source: FONTS.SourceSansProBold,
       },
       medium: {
         name: 'SourceSansPro-SemiBold',
         weight: '500',
+        source: FONTS.SourceSansProSemiBold,
       },
     },
     italic: {
@@ -34,12 +37,12 @@ export const CustomTheme: Theme = {
       normal: {
         name: 'SourceSansPro-Italic',
         weight: 'normal',
+        source: FONTS.SourceSansProItalic,
       },
     },
   },
   colors: ColorTheme,
 };
-
 export const headerOptions: StackNavigationOptions = {
   cardStyle: {
     backgroundColor: COLORS.white,

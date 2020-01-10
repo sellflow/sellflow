@@ -3,11 +3,11 @@ import SourceSansProBold from '../../assets/fonts/SourceSansPro-Bold.ttf';
 import SourceSansProSemiBold from '../../assets/fonts/SourceSansPro-SemiBold.ttf';
 import SourceSansProItalic from '../../assets/fonts/SourceSansPro-Italic.ttf';
 
-export const fonts = {
-  'SourceSansPro-Bold': SourceSansProBold,
-  'SourceSansPro-Regular': SourceSansProRegular,
-  'SourceSansPro-SemiBold': SourceSansProSemiBold,
-  'SourceSansPro-Italic': SourceSansProItalic,
+export const FONTS = {
+  SourceSansProBold,
+  SourceSansProRegular,
+  SourceSansProSemiBold,
+  SourceSansProItalic,
 };
 
 export const FONT_FAMILY = {

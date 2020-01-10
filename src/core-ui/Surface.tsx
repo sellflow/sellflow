@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, ViewProps, StyleProp } from 'react-native';
+import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
 
 import { COLORS } from '../constants/colors';
 
 type Props = {
-  containerStyle?: StyleProp<ViewProps>;
+  containerStyle?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
   mode?: 'row' | 'column';
 };

@@ -5,7 +5,6 @@ import { getStorybookUI, configure } from '@storybook/react-native';
 import { Provider } from 'exoflex';
 
 import { CustomTheme } from '../constants/theme';
-import { fonts } from '../constants/fonts';
 
 configure(() => {
   require('./stories');
@@ -15,7 +14,7 @@ const StorybookUIRoot = getStorybookUI({});
 
 function App() {
   return (
-    <Provider theme={CustomTheme} fonts={fonts} useSystemFonts={false}>
+    <Provider theme={CustomTheme}>
       <StorybookUIRoot />
     </Provider>
   );

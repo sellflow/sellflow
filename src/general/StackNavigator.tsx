@@ -14,6 +14,7 @@ import {
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
+import OrderDetailsScene from '../scenes/OrderDetailsScene';
 
 const Stack = createStackNavigator();
 
@@ -53,6 +54,22 @@ function Home() {
           };
         }}
       />
+      <Stack.Screen
+        name="OrderDetails"
+        options={({ navigation }) => {
+          return {
+            title: t('Order Details'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName={'Home'} /> // TODO: Change route
+            ),
+            cardStyle: {
+              backgroundColor: COLORS.darkWhite,
+            },
+          };
+        }}
+      >
+        {() => <OrderDetailsScene orderID="#1234567890" />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }
