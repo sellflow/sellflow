@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { TabView as Tab, SceneMap, TabBar } from 'react-native-tab-view';
-import { COLORS } from '../general/constants/colors';
+import { COLORS } from '../constants/colors';
 import { Text } from 'exoflex';
 import { useDimensions } from '../helpers/dimensions';
-import { FONT_SIZE } from '../general/constants/fonts';
+import { FONT_SIZE } from '../constants/fonts';
 
 type Scene = () => JSX.Element;
 

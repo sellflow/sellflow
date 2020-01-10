@@ -10,8 +10,8 @@ import { default as NativeStepIndicator } from 'react-native-step-indicator';
 import { Text } from 'exoflex';
 
 import { IndicatorItem } from '../types/types';
-import { COLORS } from '../general/constants/colors';
-import { FONT_SIZE } from '../general/constants/fonts';
+import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
 
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Text } from 'exoflex';
 
-import { COLORS } from '../general/constants/colors';
+import { COLORS } from '../constants/colors';
 
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;

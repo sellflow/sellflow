@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { Text } from 'exoflex';
 
-import { COLORS } from '../general/constants/colors';
-import { FONT_SIZE } from '../general/constants/fonts';
+import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
 
 // TODO: Find how to get the image from API, because I only get the category
 // without the image

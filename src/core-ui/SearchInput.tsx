@@ -2,7 +2,7 @@ import React, { ComponentProps } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput } from 'exoflex';
 
-import { COLORS } from '../general/constants/colors';
+import { COLORS } from '../constants/colors';
 
 type Props = ComponentProps<typeof TextInput> & {};
 

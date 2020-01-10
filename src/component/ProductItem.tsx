@@ -11,8 +11,8 @@ import {
 import { Text } from 'exoflex';
 
 import { DiscountBadge } from '../core-ui';
-import { FONT_SIZE } from '../general/constants/fonts';
-import { COLORS } from '../general/constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
+import { COLORS } from '../constants/colors';
 import { priceAfterDiscount } from '../helpers/priceAfterDiscount';
 
 type Props = {

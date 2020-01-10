@@ -1,5 +1,9 @@
+import { BottomTabBarOptions } from '@react-navigation/bottom-tabs';
 import { DefaultTheme, Theme } from 'exoflex';
+import { StackNavigationOptions } from '@react-navigation/stack';
+
 import { COLORS } from './colors';
+import { FONT_SIZE, FONT_FAMILY } from './fonts';
 
 export const ColorTheme = {
   ...DefaultTheme.colors,
@@ -34,4 +38,32 @@ export const CustomTheme: Theme = {
     },
   },
   colors: ColorTheme,
+};
+
+export const headerOptions: StackNavigationOptions = {
+  cardStyle: {
+    backgroundColor: COLORS.white,
+  },
+  headerTitleStyle: {
+    fontFamily: FONT_FAMILY.MEDIUM,
+    fontSize: FONT_SIZE.large,
+  },
+  gestureEnabled: false,
+};
+
+export const tabBarOptions: BottomTabBarOptions = {
+  activeTintColor: COLORS.primaryColor,
+  inactiveTintColor: COLORS.inactive,
+  tabStyle: {
+    paddingTop: 16,
+    marginBottom: 5,
+    height: 64,
+  },
+  style: {
+    height: 90,
+  },
+  labelPosition: 'below-icon',
+  labelStyle: {
+    fontFamily: FONT_FAMILY.REGULAR,
+  },
 };

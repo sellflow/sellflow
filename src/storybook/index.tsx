@@ -4,8 +4,8 @@ import { registerRootComponent } from 'expo';
 import { getStorybookUI, configure } from '@storybook/react-native';
 import { Provider } from 'exoflex';
 
-import { CustomTheme } from '../general/constants/theme';
-import { fonts } from '../general/constants/fonts';
+import { CustomTheme } from '../constants/theme';
+import { fonts } from '../constants/fonts';
 
 configure(() => {
   require('./stories');

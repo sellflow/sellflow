@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import { Text } from 'exoflex';
 
-import { COLORS } from '../general/constants/colors';
-import { FONT_SIZE } from '../general/constants/fonts';
+import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
 import { OrderRecord } from '../types/types';
 
 type Props = {

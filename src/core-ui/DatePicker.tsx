@@ -15,7 +15,7 @@ export default function DatePicker(props: Props) {
     <DateTimePicker
       isVisible={isVisible}
       mode="date"
-      is24Hour={is24Hour()}
+      use24Hour={is24Hour()}
       maximumDate={new Date()}
       onCancel={onCancel}
       onConfirm={onConfirm}

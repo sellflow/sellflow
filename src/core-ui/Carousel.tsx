@@ -10,7 +10,7 @@ import {
   Pagination,
 } from 'react-native-snap-carousel';
 
-import { COLORS } from '../general/constants/colors';
+import { COLORS } from '../constants/colors';
 import { CarouselItem } from '../types/types';
 import { useDimensions } from '../helpers/dimensions';
 

@@ -7,7 +7,7 @@ import { ApolloLink } from 'apollo-link';
 import { persistCache } from 'apollo-cache-persist';
 import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types';
 
-import { STOREFRONT_API } from '../general/constants/api';
+import { STOREFRONT_API } from '../constants/api';
 import { userData } from './userData';
 
 const cache = new InMemoryCache();

@@ -3,8 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import { Text, Button } from 'exoflex';
 
 import { CarouselItem } from '../types/types';
-import { COLORS } from '../general/constants/colors';
-import { FONT_SIZE } from '../general/constants/fonts';
+import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
 
 const styles = StyleSheet.create({
   contentContainer: {

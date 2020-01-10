@@ -14,4 +14,5 @@ export const COLORS = {
   orderStatusOnProcess: '#64B1FF',
   wishlist: '#FF4A88',
   transparent: 'transparent',
+  inactive: '#AAAAAA',
 };

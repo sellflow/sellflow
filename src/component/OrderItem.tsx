@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import { Text } from 'exoflex';
 
-import { COLORS } from '../general/constants/colors';
+import { COLORS } from '../constants/colors';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
-import { FONT_SIZE } from '../general/constants/fonts';
+import { FONT_SIZE } from '../constants/fonts';
 import { OrderItem as OrderItemType } from '../types/types';
 
 type Props = {

@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 
 import { Surface } from '../../../core-ui';
-import { COLORS } from '../../../general/constants/colors';
-import { FONT_SIZE } from '../../../general/constants/fonts';
+import { COLORS } from '../../../constants/colors';
+import { FONT_SIZE, FONT_FAMILY } from '../../../constants/fonts';
 
 export default function SurfaceStory() {
   return storiesOf('Surface', module).add('Surface', () => (
@@ -53,11 +53,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   text: {
-    fontFamily: 'SourceSansPro-Regular',
+    fontFamily: FONT_FAMILY.REGULAR,
     fontSize: FONT_SIZE.medium,
   },
   title: {
-    fontFamily: 'SourceSansPro-Bold',
+    fontFamily: FONT_FAMILY.BOLD,
     fontSize: FONT_SIZE.large,
   },
 });

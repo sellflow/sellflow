@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { StepIndicator } from '../../../core-ui';
 import { IndicatorItem } from '../../../types/types';
 import formatDateTime from '../../../helpers/formatDateTime';
-import { COLORS } from '../../../general/constants/colors';
+import { COLORS } from '../../../constants/colors';
 
 export default function stepIndicatorStory() {
   let timestamp = formatDateTime(new Date().toISOString());
