@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { ScaledSize } from 'react-native';
 
 export type CarouselItem = {
   content?: ReactNode;
@@ -27,4 +28,16 @@ export type OrderRecord = {
   orderID: string;
   orderTime: string;
   totalPayment: string;
+};
+
+export type DeviceType = 'MOBILE' | 'TABLET';
+
+export type ViewPortInfo = {
+  screenSize: ScaledSize;
+  device: DeviceInfo;
+};
+
+export type DeviceInfo = {
+  orientation: 'PORTRAIT' | 'LANDSCAPE';
+  deviceType: DeviceType;
 };

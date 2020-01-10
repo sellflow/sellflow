@@ -14,7 +14,7 @@ export default function tabStory() {
       <View
         style={[
           styles.tabBoxContainer,
-          { backgroundColor: '#ff4081', width: dimensions.width },
+          { backgroundColor: '#ff4081', width: dimensions.screenSize.width },
         ]}
       />
     );
@@ -23,7 +23,7 @@ export default function tabStory() {
       <View
         style={[
           styles.tabBoxContainer,
-          { backgroundColor: '#673ab7', width: dimensions.width },
+          { backgroundColor: '#673ab7', width: dimensions.screenSize.width },
         ]}
       />
     );
@@ -31,7 +31,7 @@ export default function tabStory() {
       <View
         style={[
           styles.tabBoxContainer,
-          { backgroundColor: 'green', width: dimensions.width },
+          { backgroundColor: 'green', width: dimensions.screenSize.width },
         ]}
       />
     );
