@@ -1,19 +1,21 @@
-import SearchInput from './SearchInput';
-import DiscountBadge from './DiscountBadge';
 import Carousel from './Carousel';
-import TabView from './TabView';
-import Surface from './Surface';
-import StepIndicator from './StepIndicator';
-import DatePicker from './DatePicker';
 import CategoryItem from './CategoryItem';
+import DatePicker from './DatePicker';
+import DiscountBadge from './DiscountBadge';
+import RichRadioGroup from './RichRadioGroup';
+import SearchInput from './SearchInput';
+import StepIndicator from './StepIndicator';
+import Surface from './Surface';
+import TabView from './TabView';
 
 export {
-  SearchInput,
-  DiscountBadge,
   Carousel,
-  TabView,
-  Surface,
-  StepIndicator,
-  DatePicker,
   CategoryItem,
+  DatePicker,
+  DiscountBadge,
+  RichRadioGroup,
+  SearchInput,
+  StepIndicator,
+  Surface,
+  TabView,
 };
