@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, StyleSheet, FlatList } from 'react-native';
 
-import { OrderItem } from '../../../component';
+import { OrderItem } from '../../../components';
 import { OrderData } from '../../../fixtures/OrderItemData';
 
 export default function orderItemStory() {

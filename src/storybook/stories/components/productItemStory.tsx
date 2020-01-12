@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, StyleSheet, FlatList } from 'react-native';
 
-import ProductItem from '../../../component/ProductItem';
+import ProductItem from '../../../components/ProductItem';
 
 export default function ProductItemStory() {
   type Product = {

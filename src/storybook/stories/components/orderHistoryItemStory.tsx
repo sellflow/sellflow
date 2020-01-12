@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { StyleSheet, View } from 'react-native';
 
-import { OrderHistoryItem } from '../../../component';
+import { OrderHistoryItem } from '../../../components';
 import { OrderRecord } from '../../../types/types';
 import formatDateTime from '../../../helpers/formatDateTime';
 

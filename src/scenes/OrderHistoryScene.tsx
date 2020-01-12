@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { orders } from '../fixtures/orderHistory';
-import { OrderHistoryItem } from '../component';
+import { OrderHistoryItem } from '../components';
 import { NavigationProp } from '../types/Navigation';
 
 export default function OrderHistoryScene() {

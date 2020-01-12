@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { ScrollView, StyleSheet, Alert, SafeAreaView } from 'react-native';
 
-import { AddressItem } from '../../../component';
+import { AddressItem } from '../../../components';
 import { RadioButton } from 'exoflex';
 
 function AddressItemStory() {

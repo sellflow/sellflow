@@ -7,7 +7,7 @@ import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { OrderData2 } from '../fixtures/OrderItemData';
 import formatDateTime from '../helpers/formatDateTime';
-import { OrderItem } from '../component';
+import { OrderItem } from '../components';
 import { useDimensions } from '../helpers/dimensions';
 import { RouteProp } from '../types/Navigation';
 
