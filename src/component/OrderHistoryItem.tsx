@@ -15,29 +15,30 @@ import { OrderRecord } from '../types/types';
 type Props = {
   order: OrderRecord;
   containerStyle?: StyleProp<ViewStyle>;
+  onPress: (order: OrderRecord) => void;
 };
 
 export default function OrderHistoryItem(props: Props) {
-  let { order, containerStyle } = props;
-  let onPress = () => {
-    // TODO: Navigate to OrderDetails scene
-  };
-
+  let { order, containerStyle, onPress } = props;
   return (
     <TouchableOpacity
       style={[styles.container, containerStyle]}
-      onPress={onPress}
+      onPress={() => onPress(order)}
     >
       <Text weight="medium" style={styles.orderID}>
         {t('Order {orderID}', { orderID: order.orderID })}
       </Text>
       <View style={styles.textStyle}>
-        <Text>{t('Order Time')}</Text>
-        <Text>{t('{orderTime}', { orderTime: order.orderTime })}</Text>
+        <Text>
+          {t('Order Time {orderTime}', { orderTime: order.orderTime })}
+        </Text>
       </View>
       <View style={styles.textStyle}>
-        <Text>{t('Total Payment')}</Text>
-        <Text>{t('{totalPayment}', { totalPayment: order.totalPayment })}</Text>
+        <Text>
+          {t('Total Payment {totalPayment}', {
+            totalPayment: order.totalPayment,
+          })}
+        </Text>
       </View>
     </TouchableOpacity>
   );

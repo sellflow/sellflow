@@ -1,7 +1,7 @@
 import { OrderRecord } from '../types/types';
 import formatDateTime from '../helpers/formatDateTime';
 
-export const order: Array<OrderRecord> = [
+export const orders: Array<OrderRecord> = [
   {
     orderID: '#8899112233',
     orderTime: formatDateTime(new Date().toISOString()),

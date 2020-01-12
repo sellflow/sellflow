@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Text, Button } from 'exoflex';
 import { Surface } from '../core-ui';
@@ -31,150 +31,134 @@ export default function OrderDetailsScene() {
     }
   };
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContentContainer}
-        style={styles.scrollContainer}
-        bounces={false}
-        nestedScrollEnabled={true}
-      >
-        <View style={containerStyle()}>
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContentContainer}
+    >
+      <View style={containerStyle()}>
+        <View>
+          <View style={styles.orderStatusSection}>
+            <View style={styles.orderStatusContainer}>
+              <Text style={[styles.greyText, styles.smallText]}>
+                {t('Order Status')}
+              </Text>
+              <Text style={[styles.greyText, styles.smallText]}>{orderID}</Text>
+            </View>
+            <Surface containerStyle={styles.surfaceOrderContainer}>
+              <Text weight="500" style={styles.mediumText}>
+                {t('Order Time')}
+              </Text>
+              <Text style={styles.mediumText}>{date}</Text>
+            </Surface>
+          </View>
           <View>
-            <View style={styles.orderStatusSection}>
-              <View style={styles.orderStatusContainer}>
-                <Text style={[styles.greyText, styles.smallText]}>
-                  {t('Order Status')}
-                </Text>
-                <Text style={[styles.greyText, styles.smallText]}>
-                  {orderID}
-                </Text>
+            <View style={styles.productDetailsContainer}>
+              <Text
+                style={[styles.greyText, styles.smallText, { marginBottom: 2 }]}
+              >
+                {t('Product Details')}
+              </Text>
+              <View style={styles.orderItemContainer}>
+                {OrderData2.map((item) => (
+                  <OrderItem
+                    orderItem={item}
+                    containerStyle={styles.orderItem}
+                    key={item.variantID}
+                  />
+                ))}
               </View>
-              <Surface containerStyle={styles.surfaceOrderContainer}>
-                <Text weight="500" style={styles.mediumText}>
-                  {t('Order Time')}
+            </View>
+          </View>
+          <View>
+            <View style={styles.shippingAddressContainer}>
+              <Text style={[styles.greyText, styles.smallText]}>
+                {t('Shipping Address')}
+              </Text>
+              <Surface containerStyle={styles.surfaceShippingContainer}>
+                <Text
+                  weight="400"
+                  style={[styles.mediumText, { marginBottom: 6 }]}
+                >
+                  {fullName}
                 </Text>
-                <Text style={styles.mediumText}>{date}</Text>
+                <Text style={[styles.greyText, styles.smallText]}>
+                  {shipmentAddress}
+                </Text>
+                <Text style={[styles.greyText, styles.smallText]}>
+                  {phoneNumber}
+                </Text>
               </Surface>
             </View>
-            <View>
-              <View style={styles.productDetailsContainer}>
-                <Text
-                  style={[
-                    styles.greyText,
-                    styles.smallText,
-                    { marginBottom: 2 },
-                  ]}
-                >
-                  {t('Product Details')}
-                </Text>
-                <View style={styles.orderItemContainer}>
-                  {OrderData2.map((item) => (
-                    <OrderItem
-                      orderItem={item}
-                      containerStyle={styles.orderItem}
-                      key={item.variantID}
-                    />
-                  ))}
-                </View>
-              </View>
-            </View>
-            <View>
-              <View style={styles.shippingAddressContainer}>
-                <Text style={[styles.greyText, styles.smallText]}>
-                  {t('Shipping Address')}
-                </Text>
-                <Surface containerStyle={styles.surfaceShippingContainer}>
+          </View>
+          <View>
+            <View style={styles.paymentDetailsContainer}>
+              <Text style={[styles.greyText, styles.smallText]}>
+                {t('Payment Details')}
+              </Text>
+              <Surface containerStyle={styles.surfacePaymentDetails}>
+                <View style={styles.innerPaymentDetailsContainer}>
                   <Text
                     weight="400"
                     style={[styles.mediumText, { marginBottom: 6 }]}
                   >
-                    {fullName}
+                    {t('Total Purchase')}
                   </Text>
-                  <Text style={[styles.greyText, styles.smallText]}>
-                    {shipmentAddress}
+                  <Text style={styles.mediumText}>
+                    {`$ ${subtotal.toFixed(2)}`}
                   </Text>
-                  <Text style={[styles.greyText, styles.smallText]}>
-                    {phoneNumber}
-                  </Text>
-                </Surface>
-              </View>
-            </View>
-            <View>
-              <View style={styles.paymentDetailsContainer}>
-                <Text style={[styles.greyText, styles.smallText]}>
-                  {t('Payment Details')}
-                </Text>
-                <Surface containerStyle={styles.surfacePaymentDetails}>
-                  <View style={styles.innerPaymentDetailsContainer}>
-                    <Text
-                      weight="400"
-                      style={[styles.mediumText, { marginBottom: 6 }]}
-                    >
-                      {t('Total Purchase')}
-                    </Text>
-                    <Text style={styles.mediumText}>
-                      {`$ ${subtotal.toFixed(2)}`}
-                    </Text>
-                  </View>
-                  <View style={styles.innerPaymentDetailsContainer}>
-                    <Text
-                      weight="400"
-                      style={[styles.mediumText, { marginBottom: 6 }]}
-                    >
-                      {t('Shipping Cost')}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.mediumText,
-                        { textTransform: 'uppercase' },
-                      ]}
-                    >
-                      {shippingCost === '0'
-                        ? t('FREE')
-                        : `$ ${shippingCost.toString()}`}
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.innerPaymentDetailsContainer,
-                      {
-                        borderTopWidth: 1,
-                        borderColor: COLORS.lightGrey,
-                      },
-                    ]}
+                </View>
+                <View style={styles.innerPaymentDetailsContainer}>
+                  <Text
+                    weight="400"
+                    style={[styles.mediumText, { marginBottom: 6 }]}
                   >
-                    <Text
-                      weight="400"
-                      style={[styles.mediumText, { marginBottom: 6 }]}
-                    >
-                      {t('Total')}
-                    </Text>
-                    <Text weight="bold" style={styles.mediumText}>
-                      {`$ ${total.toFixed(2)}`}
-                    </Text>
-                  </View>
-                </Surface>
-              </View>
+                    {t('Shipping Cost')}
+                  </Text>
+                  <Text
+                    style={[styles.mediumText, { textTransform: 'uppercase' }]}
+                  >
+                    {shippingCost === '0'
+                      ? t('Free')
+                      : `$ ${shippingCost.toString()}`}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.innerPaymentDetailsContainer,
+                    {
+                      borderTopWidth: 1,
+                      borderColor: COLORS.lightGrey,
+                    },
+                  ]}
+                >
+                  <Text
+                    weight="400"
+                    style={[styles.mediumText, { marginBottom: 6 }]}
+                  >
+                    {t('Total')}
+                  </Text>
+                  <Text weight="bold" style={styles.mediumText}>
+                    {`$ ${total.toFixed(2)}`}
+                  </Text>
+                </View>
+              </Surface>
             </View>
-          </View>
-          <View>
-            <Button style={styles.trackOrderButton}>
-              <Text weight="bold" style={styles.buttonText}>
-                {t('TRACK ORDER')}
-              </Text>
-            </Button>
           </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <View>
+          <Button style={styles.trackOrderButton}>
+            <Text weight="bold" style={styles.buttonText}>
+              {t('Track Order')}
+            </Text>
+          </Button>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 6,
-  },
-  scrollContainer: {
+  scrollView: {
     backgroundColor: COLORS.white,
   },
   scrollContentContainer: {
@@ -243,5 +227,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS.white,
     fontSize: FONT_SIZE.medium,
+    textTransform: 'uppercase',
   },
 });

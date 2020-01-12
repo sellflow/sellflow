@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { StyleSheet, View } from 'react-native';
@@ -17,8 +18,8 @@ export default function orderHistoryItemStory() {
       };
       return (
         <View style={styles.container}>
-          <OrderHistoryItem order={order} />
-          <OrderHistoryItem order={order} />
+          <OrderHistoryItem order={order} onPress={() => {}} />
+          <OrderHistoryItem order={order} onPress={() => {}} />
         </View>
       );
     },
