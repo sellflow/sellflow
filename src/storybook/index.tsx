@@ -10,7 +10,11 @@ configure(() => {
   require('./stories');
 }, module);
 
-const StorybookUIRoot = getStorybookUI({});
+const StorybookUIRoot = getStorybookUI({
+  onDeviceUI: true,
+  disableWebsockets: true,
+  asyncStorage: null,
+});
 
 function App() {
   return (
