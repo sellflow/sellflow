@@ -3,7 +3,6 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import { ParamListBase } from '@react-navigation/native';
 import { IconButton } from 'exoflex';
 
 import {
@@ -15,12 +14,13 @@ import {
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
 import OrderDetailsScene from '../scenes/OrderDetailsScene';
+import { RootParamList } from '../types/Navigation';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootParamList>();
 
 type HeaderProps = {
-  navigation: StackNavigationProp<ParamListBase>;
-  routeName: string;
+  navigation: StackNavigationProp<RootParamList>;
+  routeName: keyof RootParamList;
 };
 
 function HeaderLeft(props: HeaderProps) {
@@ -46,7 +46,7 @@ function Home() {
           return {
             title: t('Order History'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName={'Home'} /> // TODO: Change route
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
             ),
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
@@ -56,20 +56,19 @@ function Home() {
       />
       <Stack.Screen
         name="OrderDetails"
+        component={OrderDetailsScene}
         options={({ navigation }) => {
           return {
             title: t('Order Details'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName={'Home'} /> // TODO: Change route
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
             ),
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
             },
           };
         }}
-      >
-        {() => <OrderDetailsScene orderID="#1234567890" />}
-      </Stack.Screen>
+      />
     </Stack.Navigator>
   );
 }

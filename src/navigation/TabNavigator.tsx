@@ -1,17 +1,14 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { IconButton, Text } from 'exoflex';
-import {
-  NavigationState,
-  RouteProp,
-  ParamListBase,
-} from '@react-navigation/native';
+import { NavigationState } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';
 import { Home, Wishlist, Profile } from './StackNavigator';
+import { RootParamList, RouteProp } from '../types/Navigation';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootParamList>();
 
 type LabelProps = {
   focused: boolean;
@@ -23,9 +20,9 @@ type State = {
   state?: NavigationState;
 };
 
-type HomeRoute = RouteProp<ParamListBase, 'Home'> & State;
-type WishlistRoute = RouteProp<ParamListBase, 'Wishlist'> & State;
-type ProfileRoute = RouteProp<ParamListBase, 'Profile'> & State;
+type HomeRoute = RouteProp<'Home'> & State;
+type WishlistRoute = RouteProp<'Wishlist'> & State;
+type ProfileRoute = RouteProp<'Profile'> & State;
 
 function TabLabel(props: LabelProps) {
   let { focused, color, label } = props;

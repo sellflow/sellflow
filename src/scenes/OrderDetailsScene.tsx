@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import { Text, Button } from 'exoflex';
 import { Surface } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
@@ -8,13 +9,11 @@ import { OrderData2 } from '../fixtures/OrderItemData';
 import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem } from '../component';
 import { useDimensions } from '../helpers/dimensions';
+import { RouteProp } from '../types/Navigation';
 
-type Props = {
-  orderID: string;
-};
-
-export default function OrderDetailsScene(props: Props) {
-  let { orderID } = props;
+export default function OrderDetailsScene() {
+  let route = useRoute<RouteProp<'OrderDetails'>>();
+  let { orderID } = route.params;
   let viewPortInfo = useDimensions();
 
   let date = formatDateTime(new Date().toISOString());

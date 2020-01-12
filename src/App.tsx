@@ -5,7 +5,7 @@ import { Provider as ThemeProvider } from 'exoflex';
 
 import { client } from './graphql/client';
 import { CustomTheme } from './constants/theme';
-import AppNavigator from './general/AppNavigator';
+import AppNavigator from './navigation/AppNavigator';
 
 function App() {
   return (
