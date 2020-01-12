@@ -3,7 +3,7 @@ import { DefaultTheme, Theme } from 'exoflex';
 import { StackNavigationOptions } from '@react-navigation/stack';
 
 import { COLORS } from './colors';
-import { FONT_SIZE, FONT_FAMILY, FONTS } from './fonts';
+import { FONT_SIZE, FONT_FAMILY, FONT } from './fonts';
 
 export const ColorTheme = {
   ...DefaultTheme.colors,
@@ -17,27 +17,27 @@ export const CustomTheme: Theme = {
     default: {
       ...DefaultTheme.fonts.default,
       normal: {
-        name: 'SourceSansPro-Regular',
+        name: FONT_FAMILY.REGULAR,
         weight: 'normal',
-        source: FONTS.SourceSansProRegular,
-      },
-      bold: {
-        name: 'SourceSansPro-Bold',
-        weight: '700',
-        source: FONTS.SourceSansProBold,
+        source: FONT.REGULAR,
       },
       medium: {
-        name: 'SourceSansPro-SemiBold',
+        name: FONT_FAMILY.MEDIUM,
         weight: '500',
-        source: FONTS.SourceSansProSemiBold,
+        source: FONT.MEDIUM,
+      },
+      bold: {
+        name: FONT_FAMILY.BOLD,
+        weight: '700',
+        source: FONT.BOLD,
       },
     },
     italic: {
       ...DefaultTheme.fonts.italic,
       normal: {
-        name: 'SourceSansPro-Italic',
+        name: FONT_FAMILY.ITALIC,
         weight: 'normal',
-        source: FONTS.SourceSansProItalic,
+        source: FONT.ITALIC,
       },
     },
   },

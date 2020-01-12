@@ -7,10 +7,10 @@ export default function HomeScene() {
   let { navigate } = useNavigation();
   return (
     <View style={styles.container}>
-      <Button onPress={() => navigate('OrderHistory')}>
+      <Button style={styles.button} onPress={() => navigate('OrderHistory')}>
         {t('Go To History')}
       </Button>
-      <Button onPress={() => navigate('OrderDetails')}>
+      <Button style={styles.button} onPress={() => navigate('OrderDetails')}>
         {t('Go To Details')}
       </Button>
     </View>
@@ -22,5 +22,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  button: {
+    marginBottom: 20,
   },
 });

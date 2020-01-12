@@ -3,17 +3,17 @@ import SourceSansProBold from '../../assets/fonts/SourceSansPro-Bold.ttf';
 import SourceSansProSemiBold from '../../assets/fonts/SourceSansPro-SemiBold.ttf';
 import SourceSansProItalic from '../../assets/fonts/SourceSansPro-Italic.ttf';
 
-export const FONTS = {
-  SourceSansProBold,
-  SourceSansProRegular,
-  SourceSansProSemiBold,
-  SourceSansProItalic,
+export const FONT = {
+  REGULAR: SourceSansProRegular,
+  MEDIUM: SourceSansProSemiBold,
+  BOLD: SourceSansProBold,
+  ITALIC: SourceSansProItalic,
 };
 
 export const FONT_FAMILY = {
-  BOLD: 'SourceSansPro-Bold',
   REGULAR: 'SourceSansPro-Regular',
   MEDIUM: 'SourceSansPro-SemiBold',
+  BOLD: 'SourceSansPro-Bold',
   ITALIC: 'SourceSansPro-Italic',
 };
 
