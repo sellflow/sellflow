@@ -111,7 +111,6 @@ export default function ProductItemStory() {
             name={item.item.name}
             price={item.item.price}
             discount={item.item.discount}
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onPress={() => {}}
             containerStyle={styles.item}
           />
