@@ -21,7 +21,7 @@ type Props = {
 
 export default function TabView(props: Props) {
   let dimensions = useDimensions();
-  const initialLayout = { width: dimensions.screenSize.width };
+  const initialLayout = { width: dimensions.width };
   const { routes, containerStyle } = props;
   const [index, setIndex] = useState(0);
   let allRoutes = routes;

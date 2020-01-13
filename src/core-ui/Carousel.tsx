@@ -22,7 +22,7 @@ type Props = {
 
 export default function Carousel(props: Props) {
   let dimensions = useDimensions();
-  let { data, width = dimensions.screenSize.width, height } = props;
+  let { data, width = dimensions.width, height } = props;
   let [activeIndex, setActiveIndex] = useState(0);
 
   let renderItem = ({ item }: { item: CarouselItem }) => {

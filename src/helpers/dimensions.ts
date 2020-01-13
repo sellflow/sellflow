@@ -1,32 +1,50 @@
 import { useEffect, useState } from 'react';
 import { Dimensions, ScaledSize } from 'react-native';
-import { ViewPortInfo, DeviceInfo } from '../types/types';
 
-export function useDimensions(): ViewPortInfo {
-  const BREAKPOINT = 768;
+type DeviceSize = {
+  window: ScaledSize;
+  screen: ScaledSize;
+};
 
-  let [dimensions, setDimensions] = useState<ScaledSize>(
-    Dimensions.get('screen'),
-  );
+export enum ScreenSize {
+  Small = 1,
+  Medium = 2,
+  Large = 3,
+}
+
+const MAX_SMALL = 600;
+const MAX_MEDIUM = 900;
+
+export function useDimensions() {
+  let [dimensions, setDimensions] = useState(() => {
+    let { width, height } = Dimensions.get('screen');
+    return { width, height };
+  });
   let { width, height } = dimensions;
 
-  let device: DeviceInfo = {
-    deviceType: width >= BREAKPOINT ? 'TABLET' : 'MOBILE',
-    orientation: width > height ? 'LANDSCAPE' : 'PORTRAIT',
-  };
+  let screenSize: ScreenSize;
+  if (width < MAX_SMALL) {
+    screenSize = ScreenSize.Small;
+  } else if (width < MAX_MEDIUM) {
+    screenSize = ScreenSize.Medium;
+  } else {
+    screenSize = ScreenSize.Large;
+  }
 
   useEffect(() => {
-    let listenerHanlder: ({
-      window,
-      screen,
-    }: {
-      window: ScaledSize;
-      screen: ScaledSize;
-    }) => void = ({ screen }) => {
-      setDimensions(screen);
+    let onChange = ({ screen }: DeviceSize) => {
+      let { width, height } = screen;
+      setDimensions({ width, height });
     };
-    Dimensions.addEventListener('change', listenerHanlder);
-    return () => Dimensions.removeEventListener('change', listenerHanlder);
+    Dimensions.addEventListener('change', onChange);
+    return () => {
+      Dimensions.removeEventListener('change', onChange);
+    };
   }, []);
-  return { screenSize: dimensions, device };
+
+  return {
+    width,
+    height,
+    screenSize,
+  };
 }

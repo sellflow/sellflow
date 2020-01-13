@@ -8,13 +8,13 @@ import { COLORS } from '../constants/colors';
 import { OrderData2 } from '../fixtures/OrderItemData';
 import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem } from '../components';
-import { useDimensions } from '../helpers/dimensions';
+import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { RouteProp } from '../types/Navigation';
 
 export default function OrderDetailsScene() {
   let route = useRoute<RouteProp<'OrderDetails'>>();
   let { orderID } = route.params;
-  let viewPortInfo = useDimensions();
+  let dimensions = useDimensions();
 
   let date = formatDateTime(new Date().toISOString());
   let fullName = 'Anna Belle';
@@ -24,7 +24,7 @@ export default function OrderDetailsScene() {
   let total = 77;
   let shippingCost = (total - subtotal).toString();
   let containerStyle = () => {
-    if (viewPortInfo.device.deviceType === 'MOBILE') {
+    if (dimensions.screenSize === ScreenSize.Small) {
       return styles.container;
     } else {
       return [styles.container, { marginHorizontal: 36 }];
