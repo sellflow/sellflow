@@ -46,5 +46,6 @@ export function useDimensions() {
     width,
     height,
     screenSize,
+    isLandscape: width > height,
   };
 }
