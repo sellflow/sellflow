@@ -28,3 +28,14 @@ export type OrderRecord = {
   orderTime: string;
   totalPayment: string;
 };
+
+export type AddressItemProps = {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  region: string;
+  city: string;
+  address: string;
+  zip: string;
+  default: boolean;
+};
