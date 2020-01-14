@@ -135,7 +135,13 @@ function Wishlist() {
 function Profile() {
   return (
     <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
-      <Stack.Screen name="Profile" component={ProfileScene} />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScene}
+        options={{
+          title: t('My Profile'),
+        }}
+      />
     </Stack.Navigator>
   );
 }
