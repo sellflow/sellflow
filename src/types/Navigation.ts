@@ -15,6 +15,7 @@ export type RootParamList = {
   Home: undefined;
   OrderHistory: undefined;
   OrderDetails: { orderID: string };
+  ProductDetails: undefined;
   Wishlist: undefined;
   Profile: undefined;
 };

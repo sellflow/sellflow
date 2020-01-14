@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { IconButton, Text } from 'exoflex';
 import { NavigationState } from '@react-navigation/native';
+import { IconButton, Text } from 'exoflex';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';

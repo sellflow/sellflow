@@ -17,6 +17,9 @@ export default function HomeScene() {
       >
         {t('Go To Details')}
       </Button>
+      <Button style={styles.button} onPress={() => navigate('ProductDetails')}>
+        {t('Go To Product Detail')}
+      </Button>
     </View>
   );
 }
