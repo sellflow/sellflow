@@ -20,6 +20,9 @@ export default function HomeScene() {
       <Button style={styles.button} onPress={() => navigate('ProductDetails')}>
         {t('Go To Product Detail')}
       </Button>
+      <Button onPress={() => navigate('ShoppingCart')} style={styles.button}>
+        {t('Go To Shopping Cart')}
+      </Button>
     </View>
   );
 }

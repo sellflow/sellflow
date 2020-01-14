@@ -67,9 +67,43 @@
     "extends": "kodefox/react-native"
   },
   "jest": {
+    "preset": "jest-expo",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+      "^.+\\.tsx?$": "ts-jest"
+    },
     "setupFiles": [
       "<rootDir>/src/__mocks__/setup.js"
-    ]
+    ],
+    "moduleNameMapper": {
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "<rootDir>/__mocks__/fileMock.js"
+    },
+    "testMatch": [
+      "**/__tests__/**/*.ts?(x)",
+      "**/?(*.)+(spec|test).ts?(x)"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "ios.ts",
+      "ios.tsx",
+      "android.ts",
+      "android.tsx"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfig": {
+          "jsx": "react",
+          "esModuleInterop": true
+        }
+      }
+    }
   },
   "prettier": {
     "singleQuote": true,

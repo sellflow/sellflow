@@ -13,7 +13,6 @@ configure(() => {
 const StorybookUIRoot = getStorybookUI({
   onDeviceUI: true,
   disableWebsockets: true,
-  asyncStorage: null,
 });
 
 function App() {

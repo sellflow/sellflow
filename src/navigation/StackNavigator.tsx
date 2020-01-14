@@ -16,6 +16,7 @@ import {
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
 import { RootParamList } from '../types/Navigation';
+import ShoppingCartScene from '../scenes/ShoppingCartScene';
 
 const Stack = createStackNavigator<RootParamList>();
 
@@ -100,6 +101,21 @@ function Home() {
             ),
             cardStyle: {
               backgroundColor: COLORS.white,
+            },
+          };
+        }}
+      />
+      <Stack.Screen
+        name="ShoppingCart"
+        component={ShoppingCartScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Shopping Cart'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+            ),
+            cardStyle: {
+              backgroundColor: COLORS.darkWhite,
             },
           };
         }}

@@ -53,7 +53,9 @@ export default function OrderItem(props: Props) {
           <View>
             <Text weight="bold" style={styles.fontMedium}>
               {`$ ${
-                discount && discount > 0 ? discount : itemPrice.toFixed(2)
+                discount && discount > 0
+                  ? (discount * quantity).toFixed(2)
+                  : (itemPrice * quantity).toFixed(2)
               }`}
             </Text>
           </View>
@@ -63,7 +65,7 @@ export default function OrderItem(props: Props) {
                 weight="normal"
                 style={[styles.discountText, styles.fontMedium]}
               >
-                $ {itemPrice.toFixed(2)}
+                $ {(itemPrice * quantity).toFixed(2)}
               </Text>
             </View>
           ) : null}
