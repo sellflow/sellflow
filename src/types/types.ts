@@ -26,7 +26,7 @@ export type IndicatorItem = {
 export type OrderRecord = {
   orderID: string;
   orderTime: string;
-  totalPayment: string;
+  totalPayment: number;
 };
 
 export type AddressItem = {

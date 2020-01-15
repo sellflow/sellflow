@@ -7,7 +7,7 @@ import formatDateTime from '../../../helpers/formatDateTime';
 import { COLORS } from '../../../constants/colors';
 
 export default function stepIndicatorStory() {
-  let timestamp = formatDateTime(new Date().toISOString());
+  let timestamp = formatDateTime('2019-01-08T06:24:00.000Z');
   let indicatorItems: Array<IndicatorItem> = [
     { label: 'Delivered', timestamp },
     { label: 'Out for Delivery', timestamp },

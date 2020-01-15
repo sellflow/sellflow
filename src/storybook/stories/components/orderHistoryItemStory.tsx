@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native';
 
 import { OrderHistoryItem } from '../../../components';
 import { OrderRecord } from '../../../types/types';
-import formatDateTime from '../../../helpers/formatDateTime';
 
 export default function orderHistoryItemStory() {
   return storiesOf('Order History Item', module).add(
@@ -12,8 +11,8 @@ export default function orderHistoryItemStory() {
     () => {
       let order: OrderRecord = {
         orderID: '#8899112233',
-        orderTime: formatDateTime(new Date().toISOString()),
-        totalPayment: '$17.99',
+        orderTime: '2019-01-08T06:24:00.000Z',
+        totalPayment: 17.99,
       };
       return (
         <View style={styles.container}>

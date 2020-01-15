@@ -1,9 +1,18 @@
-export default function formatDateTime(datetime: string) {
-  let date = new Date(datetime);
-  let day = ('0' + date.getDate()).slice(-2);
-  let month = ('0' + (date.getMonth() + 1)).slice(-2);
-  let hours = ('0' + date.getHours()).slice(-2);
-  let minutes = ('0' + date.getMinutes()).slice(-2);
+import { LOCALE } from './translate';
 
-  return `${day}/${month}/${date.getFullYear()} ${hours}:${minutes}`;
+export default function formatDateTime(input: string, locale: string = LOCALE) {
+  let date = new Date(input);
+  let datePart = date.toLocaleDateString(locale);
+  let [time, amPm] = date.toLocaleTimeString(locale).split(' ');
+  let timeParts = time.split(':');
+  // Remove seconds if present.
+  if (timeParts.length === 3) {
+    timeParts.pop();
+    time = timeParts.join(':');
+  }
+  let result = datePart + ' ' + time;
+  if (amPm) {
+    result += ' ' + amPm;
+  }
+  return result;
 }

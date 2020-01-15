@@ -11,6 +11,7 @@ import { Text } from 'exoflex';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { OrderRecord } from '../types/types';
+import formatDateTime from '../helpers/formatDateTime';
 
 type Props = {
   order: OrderRecord;
@@ -29,16 +30,12 @@ export default function OrderHistoryItem(props: Props) {
         {t('Order {orderID}', { orderID: order.orderID })}
       </Text>
       <View style={styles.textStyle}>
-        <Text>
-          {t('Order Time {orderTime}', { orderTime: order.orderTime })}
-        </Text>
+        <Text>{t('Ordered At')}</Text>
+        <Text>{formatDateTime(order.orderTime)}</Text>
       </View>
       <View style={styles.textStyle}>
-        <Text>
-          {t('Total Payment {totalPayment}', {
-            totalPayment: order.totalPayment,
-          })}
-        </Text>
+        <Text>{t('Total')}</Text>
+        <Text>${order.totalPayment.toFixed(2)}</Text>
       </View>
     </TouchableOpacity>
   );

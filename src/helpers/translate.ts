@@ -2,6 +2,9 @@ type ParamsObject = {
   [key: string]: unknown;
 };
 
+// TODO: In future get this from the device.
+export const LOCALE = 'en-US';
+
 // This matches words inside curly braces.
 const PLACEHOLDER = /\{(\w+)\}/g;
 

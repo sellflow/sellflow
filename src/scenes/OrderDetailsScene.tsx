@@ -11,18 +11,21 @@ import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { RouteProp } from '../types/Navigation';
 
+const sampleData = {
+  date: '2019-01-08T06:24:00.000Z',
+  fullName: 'Anna Belle',
+  shipmentAddress: '400 Concar Dr, San Mateo, CA 94402',
+  phoneNumber: '650-555-1212',
+  subtotal: 77,
+  shippingCost: 0,
+};
+
 export default function OrderDetailsScene() {
   let route = useRoute<RouteProp<'OrderDetails'>>();
   let { orderID } = route.params;
   let dimensions = useDimensions();
+  let data = sampleData;
 
-  let date = formatDateTime(new Date().toISOString());
-  let fullName = 'Anna Belle';
-  let shipmentAddress = '400 Concar Dr, San Mateo, CA 94402';
-  let phoneNumber = '6505551212';
-  let subtotal = 77;
-  let total = 77;
-  let shippingCost = (total - subtotal).toString();
   let containerStyle = () => {
     if (dimensions.screenSize === ScreenSize.Small) {
       return styles.container;
@@ -48,7 +51,7 @@ export default function OrderDetailsScene() {
               <Text weight="500" style={styles.mediumText}>
                 {t('Order Time')}
               </Text>
-              <Text style={styles.mediumText}>{date}</Text>
+              <Text style={styles.mediumText}>{formatDateTime(data.date)}</Text>
             </Surface>
           </View>
           <View>
@@ -79,13 +82,13 @@ export default function OrderDetailsScene() {
                   weight="400"
                   style={[styles.mediumText, { marginBottom: 6 }]}
                 >
-                  {fullName}
+                  {data.fullName}
                 </Text>
                 <Text style={[styles.greyText, styles.smallText]}>
-                  {shipmentAddress}
+                  {data.shipmentAddress}
                 </Text>
                 <Text style={[styles.greyText, styles.smallText]}>
-                  {phoneNumber}
+                  {data.phoneNumber}
                 </Text>
               </Surface>
             </View>
@@ -104,7 +107,7 @@ export default function OrderDetailsScene() {
                     {t('Total Purchase')}
                   </Text>
                   <Text style={styles.mediumText}>
-                    {`$ ${subtotal.toFixed(2)}`}
+                    {`$${data.subtotal.toFixed(2)}`}
                   </Text>
                 </View>
                 <View style={styles.innerPaymentDetailsContainer}>
@@ -117,9 +120,9 @@ export default function OrderDetailsScene() {
                   <Text
                     style={[styles.mediumText, { textTransform: 'uppercase' }]}
                   >
-                    {shippingCost === '0'
+                    {data.shippingCost === 0
                       ? t('Free')
-                      : `$ ${shippingCost.toString()}`}
+                      : `$${data.shippingCost.toFixed(2)}`}
                   </Text>
                 </View>
                 <View
@@ -138,7 +141,7 @@ export default function OrderDetailsScene() {
                     {t('Total')}
                   </Text>
                   <Text weight="bold" style={styles.mediumText}>
-                    {`$ ${total.toFixed(2)}`}
+                    {`$${(data.subtotal + data.shippingCost).toFixed(2)}`}
                   </Text>
                 </View>
               </Surface>
