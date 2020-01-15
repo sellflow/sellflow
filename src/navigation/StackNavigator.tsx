@@ -12,6 +12,7 @@ import {
   OrderHistoryScene,
   OrderDetailsScene,
   ProductDetailsScene,
+  ProductCollectionScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -31,18 +32,6 @@ function HeaderLeft(props: HeaderProps) {
   return (
     <IconButton
       icon="chevron-left"
-      onPress={() => navigation.navigate(routeName)}
-      color={COLORS.primaryColor}
-    />
-  );
-}
-
-function HeaderRightProductDetails(props: HeaderProps) {
-  let { navigation, routeName } = props;
-
-  return (
-    <IconButton
-      icon="cart"
       onPress={() => navigation.navigate(routeName)}
       color={COLORS.primaryColor}
     />
@@ -94,10 +83,11 @@ function Home() {
               <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
             ),
             headerRight: () => (
-              <HeaderRightProductDetails
-                navigation={navigation}
-                routeName="Home"
-              /> // TODO: Change route
+              <IconButton
+                icon="cart"
+                onPress={() => navigation.navigate('Home')}
+                color={COLORS.primaryColor}
+              />
             ),
             cardStyle: {
               backgroundColor: COLORS.white,
@@ -117,6 +107,25 @@ function Home() {
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
             },
+          };
+        }}
+      />
+      <Stack.Screen
+        name="ProductCollection"
+        component={ProductCollectionScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Jackets'), // TODO: Change to corresponding product collection name
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+            ),
+            headerRight: () => (
+              <IconButton
+                icon="magnify"
+                onPress={() => navigation.navigate('Home')}
+                color={COLORS.primaryColor}
+              />
+            ),
           };
         }}
       />

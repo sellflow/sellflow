@@ -19,4 +19,5 @@ export type RootParamList = {
   ProductDetails: undefined;
   Wishlist: undefined;
   Profile: undefined;
+  ProductCollection: undefined;
 };

@@ -4,6 +4,7 @@ import ProfileScene from './ProfileScene';
 import OrderHistoryScene from './OrderHistoryScene';
 import OrderDetailsScene from './OrderDetailsScene';
 import ProductDetailsScene from './ProductDetailsScene';
+import ProductCollectionScene from './ProductCollection/ProductCollectionScene';
 
 export {
   HomeScene,
@@ -12,4 +13,5 @@ export {
   OrderHistoryScene,
   OrderDetailsScene,
   ProductDetailsScene,
+  ProductCollectionScene,
 };
