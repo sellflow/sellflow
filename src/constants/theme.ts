@@ -42,6 +42,7 @@ export const CustomTheme: Theme = {
     },
   },
   colors: ColorTheme,
+  roundness: 2,
 };
 export const headerOptions: StackNavigationOptions = {
   cardStyle: {

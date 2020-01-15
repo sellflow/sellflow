@@ -7,6 +7,7 @@ import searchInputStory from './core-ui/searchInputStory';
 import stepIndicatorStory from './core-ui/stepIndicatorStory';
 import surfaceStory from './core-ui/surfaceStory';
 import tabStory from './core-ui/tabStory';
+import modalBottomSheetStory from './core-ui/modalBottomSheetStory';
 
 import manageAddressStory from './components/manageAddressStory';
 import checkoutAddressStory from './components/checkOutAddressStory';
@@ -28,3 +29,4 @@ searchInputStory();
 stepIndicatorStory();
 surfaceStory();
 tabStory();
+modalBottomSheetStory();

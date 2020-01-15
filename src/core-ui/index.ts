@@ -7,6 +7,7 @@ import SearchInput from './SearchInput';
 import StepIndicator from './StepIndicator';
 import Surface from './Surface';
 import TabView from './TabView';
+import ModalBottomSheet from './ModalBottomSheet';
 
 export {
   Carousel,
@@ -18,4 +19,5 @@ export {
   StepIndicator,
   Surface,
   TabView,
+  ModalBottomSheet,
 };
