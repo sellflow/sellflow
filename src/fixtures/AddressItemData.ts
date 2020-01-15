@@ -1,11 +1,10 @@
-import { AddressItemProps } from '../types/types';
+import { AddressItem } from '../types/types';
 
-export let addressItemData: Array<AddressItemProps> = [
+export let addressItemData: Array<AddressItem> = [
   {
     id: 1,
     name: 'Anna Belle',
-    phoneNumber: '650-555-1212',
-    region: 'Canada',
+    phoneNumber: '920-292-3383',
     city: 'San Mateo',
     address: '400 Concar Dr',
     zip: '94402',
@@ -13,9 +12,8 @@ export let addressItemData: Array<AddressItemProps> = [
   },
   {
     id: 2,
-    name: 'Anna Belle',
-    phoneNumber: '087874500898',
-    region: 'Canada',
+    name: 'Flora Lockett',
+    phoneNumber: '518-523-1990',
     city: 'San Mateo',
     address: '1825 S Grant St',
     zip: '94402',
@@ -23,9 +21,8 @@ export let addressItemData: Array<AddressItemProps> = [
   },
   {
     id: 3,
-    name: 'Anna Belle',
-    phoneNumber: '650-555-1212',
-    region: 'Canada',
+    name: 'Charles Barnes',
+    phoneNumber: '801-429-4555',
     city: 'Palo Alto',
     address: '3101 Park Blvd',
     zip: '94301',
@@ -33,9 +30,8 @@ export let addressItemData: Array<AddressItemProps> = [
   },
   {
     id: 4,
-    name: 'Anna Belle',
-    phoneNumber: '650-555-1212',
-    region: 'Canada',
+    name: 'Robert Winslow',
+    phoneNumber: '410-516-2143',
     city: 'San Francisco',
     address: '44 Montgomery St',
     zip: '94104',

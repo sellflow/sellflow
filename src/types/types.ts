@@ -29,11 +29,10 @@ export type OrderRecord = {
   totalPayment: string;
 };
 
-export type AddressItemProps = {
+export type AddressItem = {
   id: number;
   name: string;
   phoneNumber: string;
-  region: string;
   city: string;
   address: string;
   zip: string;
