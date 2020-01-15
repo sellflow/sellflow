@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../types/Navigation';
@@ -7,7 +7,7 @@ import { NavigationProp } from '../types/Navigation';
 export default function HomeScene() {
   let { navigate } = useNavigation<NavigationProp<'Home'>>();
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Button style={styles.button} onPress={() => navigate('OrderHistory')}>
         {t('Go To History')}
       </Button>
@@ -29,15 +29,18 @@ export default function HomeScene() {
       >
         {t('Go To Product Collection')}
       </Button>
-    </View>
+
+      <Button style={styles.button} onPress={() => navigate('Register')}>
+        {t('Go To Register')}
+      </Button>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginHorizontal: 20,
   },
   button: {
     marginBottom: 20,

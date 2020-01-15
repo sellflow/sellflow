@@ -5,6 +5,9 @@ import OrderHistoryScene from './OrderHistoryScene';
 import OrderDetailsScene from './OrderDetailsScene';
 import ProductDetailsScene from './ProductDetailsScene';
 import ProductCollectionScene from './ProductCollection/ProductCollectionScene';
+import RegisterScene from './RegisterScene';
+import LoginScene from './LoginScene';
+import ShoppingCartScene from './ShoppingCartScene';
 
 export {
   HomeScene,
@@ -14,4 +17,7 @@ export {
   OrderDetailsScene,
   ProductDetailsScene,
   ProductCollectionScene,
+  RegisterScene,
+  LoginScene,
+  ShoppingCartScene,
 };

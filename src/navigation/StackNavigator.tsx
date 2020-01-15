@@ -3,21 +3,25 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import { IconButton } from 'exoflex';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { IconButton, Text } from 'exoflex';
 
 import {
   HomeScene,
   WishlistScene,
   ProfileScene,
-  OrderHistoryScene,
   OrderDetailsScene,
+  OrderHistoryScene,
   ProductDetailsScene,
   ProductCollectionScene,
+  RegisterScene,
+  LoginScene,
+  ShoppingCartScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
 import { RootParamList } from '../types/Navigation';
-import ShoppingCartScene from '../scenes/ShoppingCartScene';
+import { FONT_SIZE } from '../constants/fonts';
 
 const Stack = createStackNavigator<RootParamList>();
 
@@ -66,9 +70,6 @@ function Home() {
             headerLeft: () => (
               <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
             ),
-            cardStyle: {
-              backgroundColor: COLORS.darkWhite,
-            },
           };
         }}
       />
@@ -89,9 +90,6 @@ function Home() {
                 color={COLORS.primaryColor}
               />
             ),
-            cardStyle: {
-              backgroundColor: COLORS.white,
-            },
           };
         }}
       />
@@ -104,9 +102,6 @@ function Home() {
             headerLeft: () => (
               <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
             ),
-            cardStyle: {
-              backgroundColor: COLORS.darkWhite,
-            },
           };
         }}
       />
@@ -144,15 +139,64 @@ function Wishlist() {
 function Profile() {
   return (
     <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
+      <Stack.Screen name="Profile" component={ProfileScene} />
       <Stack.Screen
-        name="Profile"
-        component={ProfileScene}
-        options={{
-          title: t('My Profile'),
+        name="Login"
+        component={LoginScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Log in'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+            ),
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Login')}
+                style={styles.headerRight}
+              >
+                <Text weight="500" style={styles.headerRightText}>
+                  {t('Register')}
+                </Text>
+              </TouchableOpacity>
+            ),
+          };
+        }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={RegisterScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Register'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+            ),
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Register')}
+                style={styles.headerRight}
+              >
+                <Text weight="500" style={styles.headerRightText}>
+                  {t('Log In')}
+                </Text>
+              </TouchableOpacity>
+            ),
+          };
         }}
       />
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  headerRight: {
+    marginRight: 16,
+  },
+  headerRightText: {
+    fontSize: FONT_SIZE.medium,
+    color: COLORS.primaryColor,
+    textAlign: 'right',
+  },
+});
 
 export { Home, Wishlist, Profile };
