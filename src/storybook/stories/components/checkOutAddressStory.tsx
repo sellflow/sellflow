@@ -15,11 +15,8 @@ function CheckoutAddressList() {
           data={addressItemData}
           renderItem={({ item }) => (
             <CheckoutAddress
-              id={item.id}
+              data={item}
               style={styles.addressItem}
-              name={item.name}
-              address={item.address}
-              phoneNumber={item.phoneNumber}
               isSelected={selectedIndex === item.id}
               onSelect={() => setSelectedIndex(item.id)}
             />

@@ -17,6 +17,7 @@ import {
   RegisterScene,
   LoginScene,
   ShoppingCartScene,
+  CheckoutScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -121,6 +122,21 @@ function Home() {
                 color={COLORS.primaryColor}
               />
             ),
+          };
+        }}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={CheckoutScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Checkout'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+            ),
+            cardStyle: {
+              backgroundColor: COLORS.darkWhite,
+            },
           };
         }}
       />

@@ -14,12 +14,13 @@ export type RouteProp<T extends keyof RootParamList> = RoutePropBase<
 export type RootParamList = {
   Home: undefined;
   OrderHistory: undefined;
-  ShoppingCart: undefined;
   OrderDetails: { orderID: string };
-  ProductDetails: undefined;
   Wishlist: undefined;
   Profile: undefined;
   ProductCollection: undefined;
   Register: undefined;
   Login: undefined;
+  Checkout: undefined;
+  ProductDetails: undefined;
+  ShoppingCart: undefined;
 };

@@ -8,6 +8,7 @@ import ProductCollectionScene from './ProductCollection/ProductCollectionScene';
 import RegisterScene from './RegisterScene';
 import LoginScene from './LoginScene';
 import ShoppingCartScene from './ShoppingCartScene';
+import CheckoutScene from './CheckoutScene';
 
 export {
   HomeScene,
@@ -20,4 +21,5 @@ export {
   RegisterScene,
   LoginScene,
   ShoppingCartScene,
+  CheckoutScene,
 };

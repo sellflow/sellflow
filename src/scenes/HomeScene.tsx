@@ -33,6 +33,9 @@ export default function HomeScene() {
       <Button style={styles.button} onPress={() => navigate('Register')}>
         {t('Go To Register')}
       </Button>
+      <Button style={styles.button} onPress={() => navigate('Checkout')}>
+        {t('Checkout')}
+      </Button>
     </ScrollView>
   );
 }

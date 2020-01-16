@@ -13,17 +13,26 @@ import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 
 type Props = {
-  id: string | number;
   style?: StyleProp<ViewStyle>;
+  isSelected: boolean;
+  onSelect: () => void;
+  data: Data;
+};
+
+type Data = {
+  id: string | number;
   name: string;
   address: string;
   phoneNumber: string;
-  isSelected: boolean;
-  onSelect: () => void;
 };
 
-export default function CheckoutAddress(props: Props) {
-  let { id, style, name, address, phoneNumber, isSelected, onSelect } = props;
+export default function CheckoutAddress({
+  style,
+  isSelected,
+  onSelect,
+  data,
+}: Props) {
+  let { id, name, address, phoneNumber } = data;
 
   let onEdit = () => Alert.alert('Edit Clicked', 'Edit Adress with ID ' + id);
 
