@@ -10,6 +10,7 @@ import RegisterScene from './RegisterScene';
 import LoginScene from './LoginScene';
 import ShoppingCartScene from './ShoppingCartScene';
 import CheckoutScene from './CheckoutScene';
+import SearchScene from './SearchScene';
 
 export {
   HomeScene,
@@ -24,4 +25,5 @@ export {
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
+  SearchScene,
 };

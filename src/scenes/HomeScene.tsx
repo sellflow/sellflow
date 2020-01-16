@@ -29,12 +29,14 @@ export default function HomeScene() {
       >
         {t('Go To Product Collection')}
       </Button>
-
       <Button style={styles.button} onPress={() => navigate('Register')}>
         {t('Go To Register')}
       </Button>
       <Button style={styles.button} onPress={() => navigate('Checkout')}>
         {t('Checkout')}
+      </Button>
+      <Button style={styles.button} onPress={() => navigate('Search')}>
+        {t('Go To Search')}
       </Button>
     </ScrollView>
   );

@@ -13,6 +13,7 @@ export default function SearchInput(props: Props) {
     <View style={styles.container}>
       <TextInput
         containerStyle={[styles.textInputContainer, containerStyle]}
+        clearButtonMode="while-editing"
         {...otherProps}
       />
     </View>

@@ -19,6 +19,7 @@ import {
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
+  SearchScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -75,7 +76,6 @@ function Home() {
           };
         }}
       />
-
       <Stack.Screen
         name="ProductDetails"
         component={ProductDetailsScene}
@@ -135,8 +135,23 @@ function Home() {
             headerLeft: () => (
               <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
             ),
+          };
+        }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={SearchScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Search'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+            ),
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
+            },
+            headerStyle: {
+              shadowColor: COLORS.transparent,
             },
           };
         }}
