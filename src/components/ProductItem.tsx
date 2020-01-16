@@ -14,38 +14,37 @@ import { DiscountBadge } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { priceAfterDiscount } from '../helpers/priceAfterDiscount';
+import formatCurrency from '../helpers/formatCurrency';
+
+type Product = {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  discount?: number;
+};
 
 type Props = {
-  uri: string;
-  name: string;
-  price: number;
+  product: Product;
   onPress: () => void;
-  discount?: number;
   containerStyle?: StyleProp<ViewStyle>;
   imageStyle?: StyleProp<ImageStyle>;
 };
 
 export default function ProductItem(props: Props) {
-  let {
-    uri,
-    name,
-    price,
-    onPress,
-    discount,
-    containerStyle,
-    imageStyle,
-  } = props;
-  let afterDiscount = priceAfterDiscount(price, discount ? discount : 0);
+  let { product, onPress, containerStyle, imageStyle } = props;
+  let { name, image, price, discount } = product;
+  let afterDiscount = priceAfterDiscount(price, discount || 0);
 
   return (
     <TouchableOpacity
       style={[styles.container, containerStyle]}
       onPress={onPress}
     >
-      <Image style={[styles.image, imageStyle]} source={{ uri }} />
+      <Image style={[styles.image, imageStyle]} source={{ uri: image }} />
       {discount && (
         <DiscountBadge
-          value={discount.toString()}
+          value={Math.round(discount).toString()}
           containerStyle={styles.discountBox}
         />
       )}
@@ -55,13 +54,13 @@ export default function ProductItem(props: Props) {
       {discount ? (
         <View style={styles.priceContainer}>
           <Text style={styles.priceText} weight="bold">
-            ${afterDiscount}
+            {formatCurrency(afterDiscount)}
           </Text>
           <Text style={styles.discountedPrice}>${price}</Text>
         </View>
       ) : (
         <Text style={styles.priceText} weight="bold">
-          ${price}
+          ${formatCurrency(price)}
         </Text>
       )}
     </TouchableOpacity>

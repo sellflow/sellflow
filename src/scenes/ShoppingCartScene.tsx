@@ -7,12 +7,12 @@ import { COLORS } from '../constants/colors';
 import { CheckoutData as checkoutData } from '../fixtures/OrderItemData';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import formatCurrency from '../helpers/formatCurrency';
 
 export default function ShoppingCartScene() {
   let subtotal = 77;
-  let voucherDiscount = 0;
-  let total = subtotal - voucherDiscount;
-  let shippingCost = (total - subtotal).toFixed(2);
+  let shippingCost = 0;
+  let total = subtotal + shippingCost;
   let dimensions = useDimensions();
 
   let paymentData: PaymentData = { subtotal, shippingCost, total };
@@ -85,7 +85,7 @@ type PaymentProps = {
 };
 type PaymentData = {
   subtotal: number;
-  shippingCost: string;
+  shippingCost: number;
   total: number;
 };
 
@@ -131,16 +131,14 @@ function Payment(props: PaymentProps) {
               <Text style={[styles.mediumText, { marginBottom: 6 }]}>
                 {t('Subtotal')}
               </Text>
-              <Text style={styles.mediumText}>
-                {`$ ${subtotal.toFixed(2)}`}
-              </Text>
+              <Text style={styles.mediumText}>{formatCurrency(subtotal)}</Text>
             </View>
             <View style={styles.innerPaymentDetailsContainer}>
               <Text style={[styles.mediumText, { marginBottom: 6 }]}>
-                {t('Voucher Discount')}
+                {t('Shipping')}
               </Text>
               <Text style={[styles.mediumText, { textTransform: 'uppercase' }]}>
-                {`- $${shippingCost}`}
+                -{formatCurrency(shippingCost)}
               </Text>
             </View>
             <View
@@ -153,10 +151,10 @@ function Payment(props: PaymentProps) {
               ]}
             >
               <Text style={[styles.mediumText, { marginBottom: 6 }]}>
-                {t('Total Purchase')}
+                {t('Total')}
               </Text>
               <Text weight="bold" style={styles.mediumText}>
-                {`$ ${total.toFixed(2)}`}
+                {formatCurrency(total)}
               </Text>
             </View>
           </Surface>

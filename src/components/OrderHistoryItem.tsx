@@ -12,6 +12,7 @@ import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { OrderRecord } from '../types/types';
 import formatDateTime from '../helpers/formatDateTime';
+import formatCurrency from '../helpers/formatCurrency';
 
 type Props = {
   order: OrderRecord;
@@ -35,7 +36,7 @@ export default function OrderHistoryItem(props: Props) {
       </View>
       <View style={styles.textStyle}>
         <Text>{t('Total')}</Text>
-        <Text>${order.totalPayment.toFixed(2)}</Text>
+        <Text>{formatCurrency(order.totalPayment)}</Text>
       </View>
     </TouchableOpacity>
   );

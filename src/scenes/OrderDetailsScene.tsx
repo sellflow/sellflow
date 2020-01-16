@@ -10,6 +10,7 @@ import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { RouteProp } from '../types/Navigation';
+import formatCurrency from '../helpers/formatCurrency';
 
 const sampleData = {
   date: '2019-01-08T06:24:00.000Z',
@@ -107,7 +108,7 @@ export default function OrderDetailsScene() {
                     {t('Total Purchase')}
                   </Text>
                   <Text style={styles.mediumText}>
-                    {`$${data.subtotal.toFixed(2)}`}
+                    {formatCurrency(data.subtotal)}
                   </Text>
                 </View>
                 <View style={styles.innerPaymentDetailsContainer}>
@@ -122,7 +123,7 @@ export default function OrderDetailsScene() {
                   >
                     {data.shippingCost === 0
                       ? t('Free')
-                      : `$${data.shippingCost.toFixed(2)}`}
+                      : formatCurrency(data.shippingCost)}
                   </Text>
                 </View>
                 <View
@@ -141,7 +142,7 @@ export default function OrderDetailsScene() {
                     {t('Total')}
                   </Text>
                   <Text weight="bold" style={styles.mediumText}>
-                    {`$${(data.subtotal + data.shippingCost).toFixed(2)}`}
+                    {formatCurrency(data.subtotal + data.shippingCost)}
                   </Text>
                 </View>
               </Surface>

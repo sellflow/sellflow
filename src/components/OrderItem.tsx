@@ -12,6 +12,7 @@ import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
+import formatCurrency from '../helpers/formatCurrency';
 import { FONT_SIZE } from '../constants/fonts';
 import { OrderItem as OrderItemType } from '../types/types';
 
@@ -52,11 +53,9 @@ export default function OrderItem(props: Props) {
         <View style={styles.price}>
           <View>
             <Text weight="bold" style={styles.fontMedium}>
-              {`$ ${
-                discount && discount > 0
-                  ? (discount * quantity).toFixed(2)
-                  : (itemPrice * quantity).toFixed(2)
-              }`}
+              {discount && discount > 0
+                ? formatCurrency(discount * quantity)
+                : formatCurrency(itemPrice * quantity)}
             </Text>
           </View>
           {discount && discount > 0 ? (
@@ -65,7 +64,7 @@ export default function OrderItem(props: Props) {
                 weight="normal"
                 style={[styles.discountText, styles.fontMedium]}
               >
-                $ {(itemPrice * quantity).toFixed(2)}
+                {formatCurrency(itemPrice * quantity)}
               </Text>
             </View>
           ) : null}

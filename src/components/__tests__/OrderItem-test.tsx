@@ -21,11 +21,11 @@ test('should render normally', () => {
     <OrderItem orderItem={initialData} />,
   );
   let textInput = getByDisplayValue('2');
-  let discount = getByText('$ 24.26');
-  let price = getByText('$ 158.00');
+  let discount = getByText('$24.26');
+  let price = getByText('$158.00');
   expect(textInput).toBeTruthy();
   fireEvent.changeText(textInput, 3);
-  let label = getByText('$ 36.39');
+  let label = getByText('$36.39');
   expect(label).toBeTruthy();
   expect(price).toBeTruthy();
   expect(discount).toBeTruthy();
@@ -38,20 +38,20 @@ test('should multiply the value correctly', () => {
 
   let textInput = getByDisplayValue('2');
   fireEvent.changeText(textInput, 3);
-  let discount = getByText('$ 36.39');
-  let price = getByText('$ 237.00');
+  let discount = getByText('$36.39');
+  let price = getByText('$237.00');
   expect(discount).toBeTruthy();
   expect(price).toBeTruthy();
 
   fireEvent.changeText(textInput, 4);
-  discount = getByText('$ 48.52');
-  price = getByText('$ 316.00');
+  discount = getByText('$48.52');
+  price = getByText('$316.00');
 
   expect(discount).toBeTruthy();
   expect(price).toBeTruthy();
 
   fireEvent.changeText(textInput, 0);
-  let labels = getAllByText('$ 0.00');
+  let labels = getAllByText('$0.00');
   discount = labels[0];
   price = labels[1];
   expect(discount).toBeTruthy();
