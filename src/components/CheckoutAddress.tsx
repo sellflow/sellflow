@@ -11,19 +11,14 @@ import { Text, RadioButton } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
+import { AddressItem } from '../types/types';
+import formatAddress from '../helpers/formatAddress';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
   isSelected: boolean;
   onSelect: () => void;
-  data: Data;
-};
-
-type Data = {
-  id: string | number;
-  name: string;
-  address1: string;
-  phone: string;
+  data: AddressItem;
 };
 
 export default function CheckoutAddress({
@@ -32,13 +27,18 @@ export default function CheckoutAddress({
   onSelect,
   data,
 }: Props) {
-  let { id, name, address1: address, phone: phoneNumber } = data;
+  let { id, name, phone } = data;
 
   let onEdit = () => Alert.alert('Edit Clicked', 'Edit Adress with ID ' + id);
 
   return (
     <TouchableOpacity
-      style={[styles.container, styles.rowFlex, style]}
+      style={[
+        styles.container,
+        styles.rowFlex,
+        isSelected ? styles.selectedBorder : styles.greyBorder,
+        style,
+      ]}
       onPress={() => onSelect()}
     >
       <RadioButton
@@ -47,7 +47,7 @@ export default function CheckoutAddress({
         checked={isSelected}
         onPress={() => onSelect()}
       />
-      <View style={{ flex: 1, paddingBottom: 12 }}>
+      <View style={styles.textContainer}>
         <View style={styles.nameText}>
           <Text style={styles.label}>{name}</Text>
           <TouchableOpacity onPress={onEdit}>
@@ -57,9 +57,9 @@ export default function CheckoutAddress({
           </TouchableOpacity>
         </View>
         <Text style={[styles.address, styles.opacity]} numberOfLines={3}>
-          {address}
+          {formatAddress(data)}
         </Text>
-        <Text style={styles.opacity}>{phoneNumber}</Text>
+        <Text style={styles.opacity}>{phone}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -69,15 +69,17 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: COLORS.lightGrey,
   },
+  greyBorder: { borderColor: COLORS.lightGrey },
+  selectedBorder: { borderColor: COLORS.primaryColor },
+  textContainer: { flex: 1, paddingBottom: 12 },
   rowFlex: { flexDirection: 'row' },
   label: {
     fontSize: FONT_SIZE.medium,
     color: COLORS.black,
   },
   textCapitalized: {
-    textTransform: 'capitalize',
+    textTransform: 'uppercase',
   },
   nameText: {
     flexDirection: 'row',
