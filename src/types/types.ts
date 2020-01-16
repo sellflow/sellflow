@@ -40,3 +40,11 @@ export type AddressItem = {
   phone: string;
   default: boolean;
 };
+
+export type Product = {
+  id: string;
+  image: string;
+  name: string;
+  price: number;
+  discount?: number;
+};

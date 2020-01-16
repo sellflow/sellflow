@@ -3,14 +3,7 @@ import { storiesOf } from '@storybook/react-native';
 import { View, StyleSheet, FlatList } from 'react-native';
 
 import ProductItem from '../../../components/ProductItem';
-
-type Product = {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  discount?: number;
-};
+import { Product } from '../../../types/types';
 
 let exampleProducts: Array<Product> = [
   {

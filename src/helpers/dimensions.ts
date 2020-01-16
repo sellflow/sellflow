@@ -12,6 +12,12 @@ export enum ScreenSize {
   Large = 3,
 }
 
+export const NUM_COLUMNS = {
+  SMALL: 2,
+  MEDIUM: 4,
+  LARGE: 5,
+};
+
 const MAX_SMALL = 600;
 const MAX_MEDIUM = 900;
 
