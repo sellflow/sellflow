@@ -22,8 +22,8 @@ type Props = {
 type Data = {
   id: string | number;
   name: string;
-  address: string;
-  phoneNumber: string;
+  address1: string;
+  phone: string;
 };
 
 export default function CheckoutAddress({
@@ -32,7 +32,7 @@ export default function CheckoutAddress({
   onSelect,
   data,
 }: Props) {
-  let { id, name, address, phoneNumber } = data;
+  let { id, name, address1: address, phone: phoneNumber } = data;
 
   let onEdit = () => Alert.alert('Edit Clicked', 'Edit Adress with ID ' + id);
 

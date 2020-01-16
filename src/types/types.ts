@@ -32,9 +32,11 @@ export type OrderRecord = {
 export type AddressItem = {
   id: number;
   name: string;
-  phoneNumber: string;
+  address1: string;
   city: string;
-  address: string;
+  province: string;
   zip: string;
+  country: string;
+  phone: string;
   default: boolean;
 };

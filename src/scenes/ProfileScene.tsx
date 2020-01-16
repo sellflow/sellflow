@@ -29,7 +29,7 @@ export default function ProfileScene() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigate('Home')}
+          onPress={() => navigate('AddressManagement')}
         >
           <Text style={styles.buttonLabelStyle}>{t('Manage Address')}</Text>
         </TouchableOpacity>

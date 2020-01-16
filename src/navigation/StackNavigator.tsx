@@ -18,6 +18,7 @@ import {
   LoginScene,
   ShoppingCartScene,
   CheckoutScene,
+  AddressManagementScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -197,6 +198,21 @@ function Profile() {
                 </Text>
               </TouchableOpacity>
             ),
+          };
+        }}
+      />
+      <Stack.Screen
+        name="AddressManagement"
+        component={AddressManagementScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Manage Addresses'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Profile" />
+            ),
+            cardStyle: {
+              backgroundColor: COLORS.darkWhite,
+            },
           };
         }}
       />

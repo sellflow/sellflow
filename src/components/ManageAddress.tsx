@@ -12,22 +12,22 @@ import { Menu } from 'react-native-paper';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
+import { AddressItem } from '../types/types';
+import formatAddress from '../helpers/formatAddress';
 
 type Props = {
-  id: string | number;
+  data: AddressItem;
   style?: StyleProp<ViewStyle>;
-  name: string;
-  address: string;
-  primary: boolean;
-  phoneNumber: string;
 };
 
-export default function ManageAddress(props: Props) {
-  let { id, style, name, address, primary, phoneNumber } = props;
+export default function ManageAddress({ data, style }: Props) {
+  let { id, name, default: primary, phone } = data;
   let [showMenu, setShowMenu] = useState(false);
 
   let onEdit = () => Alert.alert('Edit', 'Edit Address with ID ' + id); //TODO API WITH ID
   let onDelete = () => Alert.alert('Delete', 'Delete Address with ID ' + id);
+  let onSetPrimary = () =>
+    Alert.alert('Set Primary', 'Set Primary Address with ID ' + id);
 
   return (
     <TouchableOpacity style={[styles.container, style]}>
@@ -61,9 +61,9 @@ export default function ManageAddress(props: Props) {
         </Menu>
       </View>
       <Text style={[styles.address, styles.opacity]} numberOfLines={3}>
-        {address}
+        {formatAddress(data)}
       </Text>
-      <Text style={styles.opacity}>{phoneNumber}</Text>
+      <Text style={styles.opacity}>{phone}</Text>
       <View style={styles.indicatorContainer}>
         {primary ? (
           <View style={styles.primary}>
@@ -81,7 +81,7 @@ export default function ManageAddress(props: Props) {
             </Text>
           </View>
         ) : (
-          <TouchableOpacity style={styles.setPrimary}>
+          <TouchableOpacity style={styles.setPrimary} onPress={onSetPrimary}>
             <Text style={[styles.label, styles.blueText]} weight="medium">
               {t('Set as Primary Address')}
             </Text>
