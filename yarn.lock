@@ -3641,10 +3641,10 @@ exit@^0.1.2:
   resolved "https://registry.yarnpkg.com/exit/-/exit-0.1.2.tgz#0632638f8d877cc82107d30a0fff1a17cba1cd0c"
   integrity sha1-BjJjj42HfMghB9MKD/8aF8uhzQw=
 
-exoflex@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/exoflex/-/exoflex-3.0.0.tgz#0072b7086a7fcf3913ec4d60dcb13430577795c7"
-  integrity sha512-XIYKlV37CMouSR4gTpQ7J6daj0MC6pOE0JI7qW9pRfKoeIm9vSR8ZYMMXxh2A9wf5Ei2xfrjmwPMivF7w7e7nQ==
+exoflex@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/exoflex/-/exoflex-3.0.1.tgz#f15125a79c0c187600875a6463917219de949302"
+  integrity sha512-gCbEJ8kSKGeejAMWch0G+/TnUro2WhunWuWHP/4onSu9mE3HT30fQt27kjpafY4rHlVpaN/bkQz0NccsPeuYUA==
   dependencies:
     color "^3.1.2"
     lodash.mergewith "^4.6.2"

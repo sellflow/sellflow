@@ -3,6 +3,7 @@ import OrderHistoryItem from './OrderHistoryItem';
 import ProductItem from './ProductItem';
 import CheckoutAddress from './CheckoutAddress';
 import ManageAddress from './ManageAddress';
+import ProductList from './ProductList';
 
 export {
   OrderItem,
@@ -10,4 +11,5 @@ export {
   ProductItem,
   CheckoutAddress,
   ManageAddress,
+  ProductList,
 };

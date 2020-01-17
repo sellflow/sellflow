@@ -14,6 +14,7 @@ import checkoutAddressStory from './components/checkOutAddressStory';
 import orderHistoryItemStory from './components/orderHistoryItemStory';
 import orderItemStory from './components/orderItemStory';
 import productItemStory from './components/productItemStory';
+import productListStory from './components/productListStory';
 
 manageAddressStory();
 checkoutAddressStory();
@@ -30,3 +31,4 @@ stepIndicatorStory();
 surfaceStory();
 tabStory();
 modalBottomSheetStory();
+productListStory();

@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Text } from 'exoflex';
 
 import { wishlist } from '../fixtures/wishlist';
-import { ProductItem } from '../components';
+import { ProductList } from '../components';
 import { useDimensions, ScreenSize, NUM_COLUMNS } from '../helpers/dimensions';
 import { FONT_SIZE } from '../constants/fonts';
 
@@ -24,7 +24,6 @@ export default function WishlistScene() {
       numColumns = NUM_COLUMNS.SMALL;
     }
   }
-  let itemRemainder: number = wishlist.length % numColumns;
 
   if (wishlist.length === 0) {
     return (
@@ -39,20 +38,9 @@ export default function WishlistScene() {
       <Text style={styles.count}>
         {t('Showing {count} item(s)', { count: wishlist.length })}
       </Text>
-      <FlatList
+      <ProductList
         data={wishlist}
-        keyExtractor={(item) => item.id}
         numColumns={numColumns}
-        key={numColumns}
-        renderItem={({ item, index }) => {
-          let productItem = <ProductItem product={item} onPress={() => {}} />;
-
-          if (index >= wishlist.length - itemRemainder) {
-            return <View style={{ flex: 1 / numColumns }}>{productItem}</View>;
-          }
-          return productItem;
-        }}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.wishlist}
       />
     </View>
