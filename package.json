@@ -28,6 +28,7 @@
     "apollo-link-http": "^1.5.16",
     "exoflex": "^3.0.1",
     "expo": "^36.0.2",
+    "expo-image-picker": "^8.0.2",
     "expo-localization": "^8.0.0",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",

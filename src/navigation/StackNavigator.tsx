@@ -17,6 +17,7 @@ import {
   CheckoutScene,
   AddressManagementScene,
   SearchScene,
+  EditProfileScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -43,33 +44,6 @@ function Home() {
   return (
     <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
       <Stack.Screen name="Home" component={HomeScene} />
-      <Stack.Screen
-        name="OrderHistory"
-        component={OrderHistoryScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Order History'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
-            ),
-            cardStyle: {
-              backgroundColor: COLORS.darkWhite,
-            },
-          };
-        }}
-      />
-      <Stack.Screen
-        name="OrderDetails"
-        component={OrderDetailsScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Order Details'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
-            ),
-          };
-        }}
-      />
       <Stack.Screen
         name="ProductDetails"
         component={ProductDetailsScene}
@@ -173,11 +147,11 @@ function Profile() {
           return {
             title: t('Log in'),
             headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
             ),
             headerRight: () => (
               <TouchableOpacity
-                onPress={() => navigation.navigate('Login')}
+                onPress={() => navigation.navigate('Register')}
                 style={styles.headerRight}
               >
                 <Text weight="500" style={styles.headerRightText}>
@@ -195,11 +169,11 @@ function Profile() {
           return {
             title: t('Register'),
             headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
             ),
             headerRight: () => (
               <TouchableOpacity
-                onPress={() => navigation.navigate('Register')}
+                onPress={() => navigation.navigate('Login')}
                 style={styles.headerRight}
               >
                 <Text weight="500" style={styles.headerRightText}>
@@ -219,9 +193,45 @@ function Profile() {
             headerLeft: () => (
               <HeaderLeft onPress={() => navigation.navigate('Profile')} />
             ),
+          };
+        }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Edit Profile'),
+            headerLeft: () => (
+              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
+            ),
+          };
+        }}
+      />
+      <Stack.Screen
+        name="OrderHistory"
+        component={OrderHistoryScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Order History'),
+            headerLeft: () => (
+              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
+            ),
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
             },
+          };
+        }}
+      />
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrderDetailsScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Order Details'),
+            headerLeft: () => (
+              <HeaderLeft onPress={() => navigation.navigate('OrderHistory')} /> // TODO: Change route
+            ),
           };
         }}
       />

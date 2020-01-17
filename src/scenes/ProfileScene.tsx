@@ -23,7 +23,7 @@ export default function ProfileScene() {
       <View style={[styles.menuContainer, styles.divider]}>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigate('Home')}
+          onPress={() => navigate('EditProfile')}
         >
           <Text style={styles.buttonLabelStyle}>{t('Edit Profile')}</Text>
         </TouchableOpacity>
@@ -35,7 +35,7 @@ export default function ProfileScene() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigate('Home')}
+          onPress={() => navigate('OrderHistory')}
         >
           <Text style={styles.buttonLabelStyle}>{t('View Order History')}</Text>
         </TouchableOpacity>
