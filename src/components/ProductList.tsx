@@ -8,10 +8,11 @@ type Props = {
   numColumns: number;
   data: Array<Product>;
   contentContainerStyle?: StyleProp<ViewStyle>;
+  onItemPress: () => void;
 };
 
 export default function ProductList(props: Props) {
-  let { numColumns, data, contentContainerStyle } = props;
+  let { numColumns, data, contentContainerStyle, onItemPress } = props;
   let itemRemainder: number = data.length % numColumns;
 
   return (
@@ -21,7 +22,7 @@ export default function ProductList(props: Props) {
       numColumns={numColumns}
       key={numColumns}
       renderItem={({ item, index }) => {
-        let productItem = <ProductItem product={item} onPress={() => {}} />;
+        let productItem = <ProductItem product={item} onPress={onItemPress} />;
         if (index >= data.length - itemRemainder) {
           return <View style={{ flex: 1 / numColumns }}>{productItem}</View>;
         }

@@ -33,6 +33,7 @@ function ProductListStory() {
         data={wishlist}
         numColumns={numColumns}
         contentContainerStyle={styles.wishlist}
+        onItemPress={() => {}}
       />
     </View>
   );

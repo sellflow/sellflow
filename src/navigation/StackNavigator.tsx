@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { IconButton, Text } from 'exoflex';
 
@@ -29,17 +26,14 @@ import { FONT_SIZE } from '../constants/fonts';
 const Stack = createStackNavigator<RootParamList>();
 
 type HeaderProps = {
-  navigation: StackNavigationProp<RootParamList>;
-  routeName: keyof RootParamList;
+  onPress: () => void;
 };
 
 function HeaderLeft(props: HeaderProps) {
-  let { navigation, routeName } = props;
-
   return (
     <IconButton
       icon="chevron-left"
-      onPress={() => navigation.navigate(routeName)}
+      onPress={props.onPress}
       color={COLORS.primaryColor}
     />
   );
@@ -56,7 +50,7 @@ function Home() {
           return {
             title: t('Order History'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
@@ -71,7 +65,7 @@ function Home() {
           return {
             title: t('Order Details'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
           };
         }}
@@ -83,7 +77,7 @@ function Home() {
           return {
             title: t('Product Detail'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
             headerRight: () => (
               <IconButton
@@ -102,7 +96,7 @@ function Home() {
           return {
             title: t('Shopping Cart'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
           };
         }}
@@ -114,12 +108,12 @@ function Home() {
           return {
             title: t('Jackets'), // TODO: Change to corresponding product collection name
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
             headerRight: () => (
               <IconButton
                 icon="magnify"
-                onPress={() => navigation.navigate('Home')}
+                onPress={() => navigation.navigate('Search')}
                 color={COLORS.primaryColor}
               />
             ),
@@ -133,7 +127,7 @@ function Home() {
           return {
             title: t('Checkout'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
           };
         }}
@@ -145,7 +139,7 @@ function Home() {
           return {
             title: t('Search'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.goBack()} /> // TODO: Change route
             ),
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
@@ -179,7 +173,7 @@ function Profile() {
           return {
             title: t('Log in'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
             headerRight: () => (
               <TouchableOpacity
@@ -201,7 +195,7 @@ function Profile() {
           return {
             title: t('Register'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Home" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
             headerRight: () => (
               <TouchableOpacity
@@ -223,7 +217,7 @@ function Profile() {
           return {
             title: t('Manage Addresses'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Profile" />
+              <HeaderLeft onPress={() => navigation.navigate('Profile')} />
             ),
             cardStyle: {
               backgroundColor: COLORS.darkWhite,
