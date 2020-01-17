@@ -7,67 +7,49 @@ import {
   TextStyle,
   FlatList,
   TouchableOpacity,
-  ImageBackground,
 } from 'react-native';
 import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
-
-// TODO: Find how to get the image from API, because I only get the category
-// without the image
-type CategoryProps = {
-  node: string;
-  imageSrc?: string;
-};
+import { CategoryItem } from '../types/types';
 
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  data: Array<CategoryProps>;
-  onSelect: (value: string) => void;
+  categories: Array<CategoryItem>;
+  onSelect: (category: CategoryItem) => void;
 };
 
-export default function CategoryItem(props: Props) {
-  let { containerStyle, textStyle, data, onSelect } = props;
+function Separator() {
+  return <View style={styles.separator} />;
+}
 
-  let Separator = () => <View style={styles.separator} />;
+export default function CategoryList(props: Props) {
+  let { containerStyle, textStyle, categories, onSelect } = props;
 
   return (
     <FlatList
-      bounces={false}
+      showsHorizontalScrollIndicator={false}
       horizontal={true}
-      contentContainerStyle={styles.container}
-      data={data}
+      data={categories}
       renderItem={({ item }) => (
         <TouchableOpacity
           style={[styles.categoryItemContainer, containerStyle]}
-          onPress={() => onSelect(item.node)}
+          onPress={() => onSelect(item)}
         >
-          {item.imageSrc && (
-            <ImageBackground
-              source={{ uri: item.imageSrc }}
-              resizeMode="cover"
-              blurRadius={5}
-              style={styles.imageBackground}
-            />
-          )}
           <Text weight="medium" style={[styles.categoryItemText, textStyle]}>
-            {item.node}
+            {item.name}
           </Text>
         </TouchableOpacity>
       )}
       ItemSeparatorComponent={Separator}
-      keyExtractor={(item) => item.node}
+      keyExtractor={(item) => item.id}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   categoryItemContainer: {
     height: 48,
     borderRadius: 2,
@@ -76,17 +58,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   categoryItemText: {
+    marginHorizontal: 12,
     color: COLORS.white,
     fontSize: FONT_SIZE.medium,
-    marginHorizontal: 12,
   },
   separator: {
     marginHorizontal: 6,
-  },
-  imageBackground: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    zIndex: 0,
   },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { IconButton, Text } from 'exoflex';
+import { IconButton, Button, Text } from 'exoflex';
 
 import {
   HomeScene,
@@ -31,21 +31,70 @@ type HeaderProps = {
   onPress: () => void;
 };
 
+type HomeHeaderProps = {
+  onPressRightIcon: () => void;
+  onPressSearch: () => void;
+};
+
 function HeaderLeft(props: HeaderProps) {
+  let { onPress } = props;
+
   return (
     <IconButton
       icon="chevron-left"
-      onPress={props.onPress}
+      onPress={onPress}
       color={COLORS.primaryColor}
       style={styles.backArrowIcon}
     />
   );
 }
 
+function HeaderRight(props: HeaderProps) {
+  let { onPress } = props;
+
+  return (
+    <IconButton icon="cart" onPress={onPress} color={COLORS.primaryColor} />
+  );
+}
+
+function HeaderHome(props: HomeHeaderProps) {
+  let { onPressRightIcon, onPressSearch } = props;
+
+  return (
+    <View style={styles.homeNavbar}>
+      <View style={styles.navbarContainer}>
+        <View />
+        <Text style={styles.title}>{t('Hello')}</Text>
+        <HeaderRight onPress={onPressRightIcon} />
+      </View>
+      <Button
+        style={styles.buttonContainer}
+        contentStyle={styles.buttonContent}
+        onPress={onPressSearch}
+      >
+        <Text style={styles.searchText}>Search</Text>
+      </Button>
+    </View>
+  );
+}
+
 function Home() {
   return (
     <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
-      <Stack.Screen name="Home" component={HomeScene} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScene}
+        options={({ navigation }) => {
+          return {
+            header: () => (
+              <HeaderHome
+                onPressRightIcon={() => navigation.navigate('ShoppingCart')}
+                onPressSearch={() => navigation.navigate('Search')}
+              />
+            ),
+          };
+        }}
+      />
       <Stack.Screen
         name="ProductDetails"
         component={ProductDetailsScene}
@@ -56,10 +105,8 @@ function Home() {
               <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),
             headerRight: () => (
-              <IconButton
-                icon="cart"
-                onPress={() => navigation.navigate('Home')}
-                color={COLORS.primaryColor}
+              <HeaderRight
+                onPress={() => navigation.navigate('ShoppingCart')}
               />
             ),
           };
@@ -171,7 +218,7 @@ function Profile() {
           return {
             title: t('Forgot Password'),
             headerLeft: () => (
-              <HeaderLeft navigation={navigation} routeName="Login" /> // TODO: Change route
+              <HeaderLeft onPress={() => navigation.navigate('Login')} /> // TODO: Change route
             ),
             cardStyle: {
               backgroundColor: COLORS.white,
@@ -267,6 +314,32 @@ const styles = StyleSheet.create({
   },
   backArrowIcon: {
     marginTop: 12,
+  },
+  homeNavbar: {
+    marginTop: 30,
+  },
+  navbarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  title: {
+    marginLeft: 50,
+    fontSize: FONT_SIZE.large,
+  },
+  buttonContainer: {
+    marginVertical: 16,
+    marginHorizontal: 24,
+    backgroundColor: COLORS.darkWhite,
+  },
+  buttonContent: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 12,
+  },
+  searchText: {
+    opacity: 0.6,
+    color: COLORS.black,
+    fontSize: FONT_SIZE.medium,
   },
 });
 

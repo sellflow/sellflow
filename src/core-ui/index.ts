@@ -1,5 +1,4 @@
 import Carousel from './Carousel';
-import CategoryItem from './CategoryItem';
 import DatePicker from './DatePicker';
 import DiscountBadge from './DiscountBadge';
 import RichRadioGroup from './RichRadioGroup';
@@ -8,10 +7,10 @@ import StepIndicator from './StepIndicator';
 import Surface from './Surface';
 import TabView from './TabView';
 import ModalBottomSheet from './ModalBottomSheet';
+import CategoryList from './CategoryList';
 
 export {
   Carousel,
-  CategoryItem,
   DatePicker,
   DiscountBadge,
   RichRadioGroup,
@@ -20,4 +19,5 @@ export {
   Surface,
   TabView,
   ModalBottomSheet,
+  CategoryList,
 };

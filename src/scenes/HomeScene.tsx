@@ -1,56 +1,114 @@
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import { Button } from 'exoflex';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationProp } from '../types/Navigation';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  StyleProp,
+  ViewStyle,
+  ScrollView,
+} from 'react-native';
+import { Text } from 'exoflex';
+
+import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import { Carousel, CategoryList } from '../core-ui';
+import { ProductItem } from '../components';
+
+import { CarouselData } from '../fixtures/carousel';
+import { ProductItemData } from '../fixtures/ProductItemData';
+import { CategoryListData } from '../fixtures/CategoryListData';
+
+function Header() {
+  let dimensions = useDimensions();
+
+  return (
+    <>
+      <Carousel
+        data={CarouselData}
+        height={dimensions.screenSize === ScreenSize.Small ? 180 : 384}
+      />
+
+      <View style={styles.subTitleContainer}>
+        <Text style={styles.subTitle}>{t('Browse By Category')}</Text>
+        <CategoryList
+          categories={CategoryListData}
+          onSelect={(category) => category}
+        />
+      </View>
+
+      <View style={styles.subTitleContainer}>
+        <Text style={styles.subTitle}>{t('Featured Collections')}</Text>
+      </View>
+    </>
+  );
+}
 
 export default function HomeScene() {
-  let { navigate } = useNavigation<NavigationProp<'Home'>>();
+  let dimensions = useDimensions();
+
+  let productItemStyle = {
+    flex: 1,
+    height: 270,
+    maxHeight: 270,
+    marginBottom: 24,
+  } as StyleProp<ViewStyle>;
+
+  let isHorizontal = dimensions.screenSize !== ScreenSize.Small;
+
   return (
-    <ScrollView style={styles.container}>
-      <Button style={styles.button} onPress={() => navigate('OrderHistory')}>
-        {t('Go To History')}
-      </Button>
-      <Button
-        style={styles.button}
-        onPress={() => navigate('OrderDetails', { orderID: '#1234567890' })}
-      >
-        {t('Go To Details')}
-      </Button>
-      <Button style={styles.button} onPress={() => navigate('ProductDetails')}>
-        {t('Go To Product Detail')}
-      </Button>
-      <Button onPress={() => navigate('ShoppingCart')} style={styles.button}>
-        {t('Go To Shopping Cart')}
-      </Button>
-      <Button
-        onPress={() => navigate('ProductCollection')}
-        style={styles.button}
-      >
-        {t('Go To Product Collection')}
-      </Button>
-      <Button style={styles.button} onPress={() => navigate('Register')}>
-        {t('Go To Register')}
-      </Button>
-      <Button style={styles.button} onPress={() => navigate('Checkout')}>
-        {t('Checkout')}
-      </Button>
-      <Button style={styles.button} onPress={() => navigate('Search')}>
-        {t('Go To Search')}
-      </Button>
-      <Button style={styles.button} onPress={() => navigate('ForgotPassword')}>
-        {t('Go To Forgot Password')}
-      </Button>
+    <ScrollView>
+      <Header />
+      {isHorizontal ? (
+        <FlatList
+          style={styles.flex}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          data={ProductItemData}
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.flex}>
+                <ProductItem
+                  product={item}
+                  onPress={() => {}}
+                  containerStyle={productItemStyle}
+                />
+              </View>
+            );
+          }}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      ) : (
+        <FlatList
+          style={styles.flex}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          data={ProductItemData}
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.flex}>
+                <ProductItem
+                  product={item}
+                  onPress={() => {}}
+                  containerStyle={productItemStyle}
+                />
+              </View>
+            );
+          }}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  flex: {
     flex: 1,
-    marginHorizontal: 20,
   },
-  button: {
-    marginBottom: 20,
+  subTitle: {
+    marginTop: 16,
+    marginBottom: 12,
+  },
+  subTitleContainer: {
+    marginHorizontal: 24,
   },
 });

@@ -48,3 +48,8 @@ export type Product = {
   price: number;
   discount?: number;
 };
+
+export type CategoryItem = {
+  id: string;
+  name: string;
+};
