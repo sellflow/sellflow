@@ -38,6 +38,9 @@ export default function HomeScene() {
       <Button style={styles.button} onPress={() => navigate('Search')}>
         {t('Go To Search')}
       </Button>
+      <Button style={styles.button} onPress={() => navigate('ForgotPassword')}>
+        {t('Go To Forgot Password')}
+      </Button>
     </ScrollView>
   );
 }

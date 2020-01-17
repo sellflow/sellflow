@@ -13,6 +13,7 @@ import {
   ProductCollectionScene,
   RegisterScene,
   LoginScene,
+  ForgotPasswordScene,
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
@@ -36,6 +37,7 @@ function HeaderLeft(props: HeaderProps) {
       icon="chevron-left"
       onPress={props.onPress}
       color={COLORS.primaryColor}
+      style={styles.backArrowIcon}
     />
   );
 }
@@ -163,6 +165,21 @@ function Profile() {
         }}
       />
       <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Forgot Password'),
+            headerLeft: () => (
+              <HeaderLeft navigation={navigation} routeName="Login" /> // TODO: Change route
+            ),
+            cardStyle: {
+              backgroundColor: COLORS.white,
+            },
+          };
+        }}
+      />
+      <Stack.Screen
         name="Register"
         component={RegisterScene}
         options={({ navigation }) => {
@@ -247,6 +264,9 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
     color: COLORS.primaryColor,
     textAlign: 'right',
+  },
+  backArrowIcon: {
+    marginTop: 12,
   },
 });
 

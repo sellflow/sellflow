@@ -8,6 +8,7 @@ import ProductDetailsScene from './ProductDetailsScene';
 import ProductCollectionScene from './ProductCollection/ProductCollectionScene';
 import RegisterScene from './RegisterScene';
 import LoginScene from './LoginScene';
+import ForgotPasswordScene from './ForgotPasswordScene';
 import ShoppingCartScene from './ShoppingCartScene';
 import CheckoutScene from './CheckoutScene';
 import SearchScene from './SearchScene';
@@ -23,6 +24,7 @@ export {
   ProductCollectionScene,
   RegisterScene,
   LoginScene,
+  ForgotPasswordScene,
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,

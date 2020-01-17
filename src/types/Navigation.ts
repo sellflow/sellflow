@@ -21,6 +21,7 @@ export type RootParamList = {
   ProductCollection: undefined;
   Register: undefined;
   Login: undefined;
+  ForgotPassword: undefined;
   Checkout: undefined;
   ProductDetails: undefined;
   ShoppingCart: undefined;
