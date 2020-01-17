@@ -47,7 +47,10 @@ export default function ProfileScene() {
         </TouchableOpacity>
       </View>
       <View style={styles.menuContainer}>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigate('Login')}
+        >
           <Text style={[styles.buttonLabelStyle, styles.redTextColor]}>
             {t('Log Out')}
           </Text>

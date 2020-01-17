@@ -237,7 +237,7 @@ function Profile() {
             ),
             headerRight: () => (
               <TouchableOpacity
-                onPress={() => navigation.navigate('Login')}
+                onPress={() => navigation.navigate('Register')}
                 style={styles.headerRight}
               >
                 <Text weight="500" style={styles.headerRightText}>
