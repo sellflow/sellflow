@@ -1,5 +1,6 @@
 import { RouteProp as RoutePropBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { CategoryItem, Product } from './types';
 
 export type NavigationProp<T extends keyof RootParamList> = StackNavigationProp<
   RootParamList,
@@ -18,12 +19,12 @@ export type RootParamList = {
   AddressManagement: undefined;
   Wishlist: undefined;
   Profile: undefined;
-  ProductCollection: undefined;
+  ProductCollection: { collection: CategoryItem };
   Register: undefined;
   Login: undefined;
   ForgotPassword: undefined;
   Checkout: undefined;
-  ProductDetails: undefined;
+  ProductDetails: { product: Product };
   ShoppingCart: undefined;
   Search: undefined;
   EditProfile: undefined;

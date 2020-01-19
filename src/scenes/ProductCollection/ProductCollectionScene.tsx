@@ -144,7 +144,7 @@ export default function ProductCollectionScene() {
           data={wishlist}
           numColumns={numColumns}
           contentContainerStyle={styles.productList}
-          onItemPress={() => navigate('ProductDetails')}
+          onItemPress={(product) => navigate('ProductDetails', { product })}
         />
       </View>
       <SortModal

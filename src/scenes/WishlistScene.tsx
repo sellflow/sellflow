@@ -45,7 +45,7 @@ export default function WishlistScene() {
         data={wishlist}
         numColumns={numColumns}
         contentContainerStyle={styles.wishlist}
-        onItemPress={() => navigate('ProductDetails')}
+        onItemPress={(product) => navigate('ProductDetails', { product })}
       />
     </View>
   );

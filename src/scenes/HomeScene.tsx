@@ -16,9 +16,12 @@ import { ProductItem } from '../components';
 import { CarouselData } from '../fixtures/carousel';
 import { ProductItemData } from '../fixtures/ProductItemData';
 import { CategoryListData } from '../fixtures/CategoryListData';
+import { NavigationProp } from '../types/Navigation';
+import { useNavigation } from '@react-navigation/native';
 
 function Header() {
   let dimensions = useDimensions();
+  let navigation = useNavigation<NavigationProp<'Home'>>();
 
   return (
     <>
@@ -31,7 +34,9 @@ function Header() {
         <Text style={styles.subTitle}>{t('Browse By Category')}</Text>
         <CategoryList
           categories={CategoryListData}
-          onSelect={(category) => category}
+          onSelect={(collection) => {
+            navigation.navigate('ProductCollection', { collection });
+          }}
         />
       </View>
 

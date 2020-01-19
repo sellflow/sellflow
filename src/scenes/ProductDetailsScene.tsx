@@ -13,18 +13,18 @@ import { FONT_SIZE } from '../constants/fonts';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { TabView, RichRadioGroup } from '../core-ui';
 import { TabRoute } from '../core-ui/TabView';
-
-type ProductVariant = {
-  name: string;
-  values: Array<string>;
-};
+import formatCurrency from '../helpers/formatCurrency';
+import { Product } from '../types/types';
+import { useRoute } from '@react-navigation/native';
+import { RouteProp } from '../types/Navigation';
 
 type ProductDetailsProps = {
+  product: Product;
   isWishlistActive: boolean;
   onWishlistPress: (value: boolean) => void;
 };
 
-const data = [
+const variants = [
   { name: 'Size', values: ['S', 'M', 'L', 'XL'] },
   {
     name: 'Color',
@@ -32,54 +32,38 @@ const data = [
   },
 ];
 
-function Description() {
-  return (
-    <View style={[styles.padding, styles.flex]}>
-      <Text>
-        Lightweight jacket padded shirt collar and long sleeves. Paspoal model
-        front pockets. Elastic at the end. Front cover with zipper.
-      </Text>
-    </View>
-  );
-}
-
-function Material() {
-  return (
-    <View style={[styles.padding, styles.flex]}>
-      <Text>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </Text>
-    </View>
-  );
-}
-
-const routes: Array<TabRoute> = [
-  { key: 'description', title: 'Description', scene: Description },
-  { key: 'material', title: 'Material & Care', scene: Material },
+const infoTabs = [
+  {
+    title: 'Description',
+    content:
+      'Lightweight jacket padded shirt collar and long sleeves. Paspoal model front pockets. Elastic at the end. Front cover with zipper.',
+  },
+  {
+    title: 'Material & Care',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  },
 ];
 
-function onPressShare() {
-  // NOTE: Remove this later
-  // eslint-disable-next-line no-console
-  console.log('Shared!');
+const infoTabRoutes: Array<TabRoute> = infoTabs.map(
+  ({ title, content }, i) => ({
+    key: i.toString(),
+    title,
+    scene: () => <TabPane content={content} />,
+  }),
+);
+
+function TabPane(props: { content: string }) {
+  return (
+    <View style={[styles.padding, styles.flex]}>
+      <Text>{props.content}</Text>
+    </View>
+  );
 }
 
-function onPressAddToCart() {
-  // NOTE: Remove this later
-  // eslint-disable-next-line no-console
-  console.log('Added to Cart!');
-}
-
-function RadioGroupWithState(props: ProductVariant) {
+function RadioGroupWithState(props: { name: string; values: Array<string> }) {
   let { name, values } = props;
   let [selectedValue, setSelectedValue] = useState(values[0]);
-
   return (
     <RichRadioGroup
       name={name}
@@ -90,17 +74,18 @@ function RadioGroupWithState(props: ProductVariant) {
   );
 }
 
-function RadioGroupContainer() {
+function ProductInfo(props: { product: Product }) {
+  let { product } = props;
   return (
     <>
       <View style={styles.padding}>
-        <Text style={styles.productInfoTitle}>{'Corduroy Trucker'}</Text>
+        <Text style={styles.productInfoTitle}>{product.name}</Text>
         <Text weight="bold" style={styles.productInfoPrice}>
-          {'$ 59.00'}
+          {formatCurrency(product.price)}
         </Text>
       </View>
 
-      {data.map((item, index) => (
+      {variants.map((item, index) => (
         <RadioGroupWithState
           key={index}
           name={item.name}
@@ -108,7 +93,7 @@ function RadioGroupContainer() {
         />
       ))}
 
-      <TabView routes={routes} />
+      <TabView routes={infoTabRoutes} />
     </>
   );
 }
@@ -126,7 +111,7 @@ function BottomAction(props: ProductDetailsProps) {
         <IconButton
           icon="share-variant"
           color={COLORS.primaryColor}
-          onPress={onPressShare}
+          onPress={() => {}}
         />
         {isWishlistActive ? (
           <IconButton
@@ -138,7 +123,7 @@ function BottomAction(props: ProductDetailsProps) {
           <IconButton icon="heart-outline" onPress={onPressWishlist} />
         )}
       </View>
-      <Button style={styles.flex} onPress={onPressAddToCart}>
+      <Button style={styles.flex} onPress={() => {}}>
         <Text weight="medium" style={styles.buttonTextStyle}>
           {t('Add to Cart')}
         </Text>
@@ -148,16 +133,12 @@ function BottomAction(props: ProductDetailsProps) {
 }
 
 function ProductDetailsLandscape(props: ProductDetailsProps) {
-  let { isWishlistActive, onWishlistPress } = props;
-
+  let { product } = props;
   return (
     <SafeAreaView style={[styles.flex, styles.flexRow]}>
       <View style={styles.flex}>
         <Image
-          source={{
-            uri:
-              'https://cdn.shopify.com/s/files/1/0130/1012/products/champion-logo-hood-black-1_2048x2048.jpg?v=1555275033',
-          }}
+          source={{ uri: product.image }}
           style={styles.flex}
           resizeMode="cover"
         />
@@ -168,13 +149,10 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flexColumn}
         >
-          <RadioGroupContainer />
+          <ProductInfo product={product} />
         </ScrollView>
         <View style={[styles.bottomContainer, styles.bottomLandscapeContainer]}>
-          <BottomAction
-            isWishlistActive={isWishlistActive}
-            onWishlistPress={onWishlistPress}
-          />
+          <BottomAction {...props} />
         </View>
       </View>
     </SafeAreaView>
@@ -182,33 +160,25 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
 }
 
 function ProductDetailsPortrait(props: ProductDetailsProps) {
-  let { isWishlistActive, onWishlistPress } = props;
-
+  let { product } = props;
   let dimensions = useDimensions();
-
   return (
     <>
       <ScrollView style={styles.flex}>
         <Image
-          source={{
-            uri:
-              'https://cdn.shopify.com/s/files/1/0130/1012/products/champion-logo-hood-black-1_2048x2048.jpg?v=1555275033',
-          }}
+          source={{ uri: product.image }}
           style={{
             height: dimensions.screenSize === ScreenSize.Small ? 320 : 576,
           }}
           resizeMode="cover"
         />
         <View style={styles.flex}>
-          <RadioGroupContainer />
+          <ProductInfo product={product} />
         </View>
       </ScrollView>
 
       <View style={styles.bottomContainer}>
-        <BottomAction
-          isWishlistActive={isWishlistActive}
-          onWishlistPress={onWishlistPress}
-        />
+        <BottomAction {...props} />
       </View>
     </>
   );
@@ -216,6 +186,8 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
 
 export default function ProductDetailsScene() {
   let dimensions = useDimensions();
+  let route = useRoute<RouteProp<'ProductDetails'>>();
+  let { product } = route.params;
 
   let [isWishlistActive, setWishlistActive] = useState(false);
 
@@ -223,6 +195,7 @@ export default function ProductDetailsScene() {
     <View style={styles.flex}>
       {dimensions.screenSize === ScreenSize.Large ? (
         <ProductDetailsLandscape
+          product={product}
           isWishlistActive={isWishlistActive}
           onWishlistPress={(isActive) => {
             setWishlistActive(isActive);
@@ -230,6 +203,7 @@ export default function ProductDetailsScene() {
         />
       ) : (
         <ProductDetailsPortrait
+          product={product}
           isWishlistActive={isWishlistActive}
           onWishlistPress={(isActive) => {
             setWishlistActive(isActive);

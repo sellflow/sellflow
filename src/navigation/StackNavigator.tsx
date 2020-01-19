@@ -128,9 +128,9 @@ function Home() {
       <Stack.Screen
         name="ProductCollection"
         component={ProductCollectionScene}
-        options={({ navigation }) => {
+        options={({ navigation, route }) => {
           return {
-            title: t('Jackets'), // TODO: Change to corresponding product collection name
+            title: route.params.collection.name,
             headerLeft: () => (
               <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
             ),

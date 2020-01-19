@@ -49,6 +49,7 @@ export type Product = {
   discount?: number;
 };
 
+// TODO: Rename Category to Collection
 export type CategoryItem = {
   id: string;
   name: string;
