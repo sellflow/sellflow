@@ -80,16 +80,15 @@ export default function EditProfileScene() {
         <View style={containerStyle()}>
           <KeyboardAvoidingView behavior="position">
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={styles.profilePictureEditContainer}>
+              <TouchableOpacity
+                style={styles.profilePictureEditContainer}
+                onPress={openGallery}
+              >
                 <Avatar.Image source={profilePicture} size={92} />
-                <Text
-                  onPress={openGallery}
-                  weight="bold"
-                  style={styles.changePictureClickable}
-                >
+                <Text style={styles.changePictureClickable}>
                   {t('Change Profile Picture')}
                 </Text>
-              </View>
+              </TouchableOpacity>
 
               <View style={styles.formsContainer}>
                 <View style={styles.infividualFormContainer}>

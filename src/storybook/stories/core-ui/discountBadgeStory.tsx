@@ -7,7 +7,7 @@ import { DiscountBadge } from '../../../core-ui';
 export default function discountBadgeStory() {
   return storiesOf('Discount Badge', module).add('Default', () => (
     <View style={style.container}>
-      <DiscountBadge value="50%" />
+      <DiscountBadge value={50} />
     </View>
   ));
 }

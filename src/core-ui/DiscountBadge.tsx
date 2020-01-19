@@ -13,12 +13,12 @@ import { COLORS } from '../constants/colors';
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  value: string;
+  value: number;
 };
 
 export default function DiscountBadge(props: Props) {
   let { containerStyle, textStyle, value, ...otherProps } = props;
-
+  let discount = Math.round(value);
   return (
     <View style={[styles.discountContainer, containerStyle]}>
       <Text
@@ -26,7 +26,7 @@ export default function DiscountBadge(props: Props) {
         style={[styles.discount, textStyle]}
         {...otherProps}
       >
-        {value}
+        {t('{discount}% off', { discount })}
       </Text>
     </View>
   );
@@ -34,10 +34,6 @@ export default function DiscountBadge(props: Props) {
 
 const styles = StyleSheet.create({
   discountContainer: {
-    minWidth: 34,
-    maxWidth: 46,
-    minHeight: 28,
-    maxHeight: 36,
     padding: 6,
     backgroundColor: COLORS.orange,
     justifyContent: 'center',

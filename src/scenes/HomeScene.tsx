@@ -36,7 +36,7 @@ function Header() {
       </View>
 
       <View style={styles.subTitleContainer}>
-        <Text style={styles.subTitle}>{t('Featured Collections')}</Text>
+        <Text style={styles.subTitle}>{t('Featured Products')}</Text>
       </View>
     </>
   );

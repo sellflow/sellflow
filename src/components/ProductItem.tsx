@@ -38,10 +38,7 @@ export default function ProductItem(props: Props) {
         <Image style={[styles.image, imageStyle]} source={{ uri: image }} />
       </View>
       {discount && (
-        <DiscountBadge
-          value={Math.round(discount).toString()}
-          containerStyle={styles.discountBox}
-        />
+        <DiscountBadge value={discount} containerStyle={styles.discountBox} />
       )}
       <Text numberOfLines={1} style={styles.nameText}>
         {name}
@@ -50,7 +47,9 @@ export default function ProductItem(props: Props) {
         <Text style={styles.priceText} weight="bold">
           {discount ? formatCurrency(afterDiscount) : formatCurrency(price)}
         </Text>
-        {discount && <Text style={styles.discountedPrice}>${price}</Text>}
+        {discount && (
+          <Text style={styles.discountedPrice}>{formatCurrency(price)}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );

@@ -13,13 +13,16 @@ export default function ProfileScene() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.profileContainer}>
+      <TouchableOpacity
+        style={styles.profileContainer}
+        onPress={() => navigate('EditProfile')}
+      >
         <Avatar.Image source={profile} size={84} />
         <View style={styles.profile}>
           <Text style={styles.nameTextStyle}>Anna Belle</Text>
           <Text style={styles.emailTextStyle}>anna.belle@gmail.com</Text>
         </View>
-      </View>
+      </TouchableOpacity>
       <View style={[styles.menuContainer, styles.divider]}>
         <TouchableOpacity
           style={styles.menuItem}
@@ -31,13 +34,13 @@ export default function ProfileScene() {
           style={styles.menuItem}
           onPress={() => navigate('AddressManagement')}
         >
-          <Text style={styles.buttonLabelStyle}>{t('Manage Address')}</Text>
+          <Text style={styles.buttonLabelStyle}>{t('Manage Addresses')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => navigate('OrderHistory')}
         >
-          <Text style={styles.buttonLabelStyle}>{t('View Order History')}</Text>
+          <Text style={styles.buttonLabelStyle}>{t('Order History')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}

@@ -106,7 +106,7 @@ export default function OrderDetailsScene() {
                     weight="400"
                     style={[styles.mediumText, { marginBottom: 6 }]}
                   >
-                    {t('Total Purchase')}
+                    {t('Subtotal')}
                   </Text>
                   <Text style={styles.mediumText}>
                     {formatCurrency(data.subtotal)}
@@ -117,7 +117,7 @@ export default function OrderDetailsScene() {
                     weight="400"
                     style={[styles.mediumText, { marginBottom: 6 }]}
                   >
-                    {t('Shipping Cost')}
+                    {t('Shipping')}
                   </Text>
                   <Text
                     style={[styles.mediumText, { textTransform: 'uppercase' }]}
