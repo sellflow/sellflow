@@ -13,6 +13,7 @@ import ShoppingCartScene from './ShoppingCartScene';
 import CheckoutScene from './CheckoutScene';
 import SearchScene from './SearchScene';
 import EditProfileScene from './EditProfileScene';
+import PaymentScene from './PaymentScene';
 
 export {
   HomeScene,
@@ -30,4 +31,5 @@ export {
   AddressManagementScene,
   SearchScene,
   EditProfileScene,
+  PaymentScene,
 };

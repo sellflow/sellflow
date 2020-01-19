@@ -19,6 +19,7 @@ import {
   AddressManagementScene,
   SearchScene,
   EditProfileScene,
+  PaymentScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -88,7 +89,7 @@ function Home() {
           return {
             header: () => (
               <HeaderHome
-                onPressRightIcon={() => navigation.navigate('ShoppingCart')}
+                onPressRightIcon={() => navigation.navigate('Payment')}
                 onPressSearch={() => navigation.navigate('Search')}
               />
             ),
@@ -170,6 +171,18 @@ function Home() {
             headerStyle: {
               shadowColor: COLORS.transparent,
             },
+          };
+        }}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={PaymentScene}
+        options={({ navigation }) => {
+          return {
+            title: t('Payment'),
+            headerLeft: () => (
+              <HeaderLeft onPress={() => navigation.goBack()} /> // TODO: Change route
+            ),
           };
         }}
       />

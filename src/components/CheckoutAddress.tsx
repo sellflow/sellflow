@@ -29,7 +29,7 @@ export default function CheckoutAddress({
 }: Props) {
   let { id, name, phone } = data;
 
-  let onEdit = () => Alert.alert('Edit Clicked', 'Edit Adress with ID ' + id);
+  let onEdit = () => Alert.alert('Edit Clicked', 'Edit Address with ID ' + id);
 
   return (
     <TouchableOpacity
@@ -56,10 +56,14 @@ export default function CheckoutAddress({
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={[styles.address, styles.opacity]} numberOfLines={3}>
-          {formatAddress(data)}
+        {formatAddress(data).map((item) => (
+          <Text key={item} style={[styles.address, styles.opacity]}>
+            {item}
+          </Text>
+        ))}
+        <Text style={[styles.opacity, styles.phone]}>
+          {t('Phone: {phone}', { phone })}
         </Text>
-        <Text style={styles.opacity}>{phone}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -89,7 +93,10 @@ const styles = StyleSheet.create({
   address: {
     fontSize: FONT_SIZE.small,
     color: COLORS.black,
-    marginVertical: 6,
+    marginTop: 6,
+  },
+  phone: {
+    marginTop: 6,
   },
   opacity: {
     opacity: 0.6,

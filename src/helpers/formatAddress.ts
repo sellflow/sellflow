@@ -7,5 +7,5 @@ export default function formatAddress({
   zip,
   country,
 }: AddressItem) {
-  return `${address1}, ${city}, ${province} ${zip}, ${country}`;
+  return [address1, `${city}, ${province} ${zip}`, country];
 }

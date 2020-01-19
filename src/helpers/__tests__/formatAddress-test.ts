@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import formatAddress from '../formatAddress';
 
 it('should format and combine the address ', () => {
+  // Data from Shopify API
   let address = {
     id: 207119551,
     customer_id: 207119551,
@@ -20,9 +20,11 @@ it('should format and combine the address ', () => {
     country_code: 'US',
     country_name: 'United States',
     default: true,
-  }; //Data get from Shopify API
+  };
 
-  expect(formatAddress(address)).toBe(
-    'Chestnut Street 92, Louisville, Kentucky 40202, United States',
-  );
+  expect(formatAddress(address)).toEqual([
+    'Chestnut Street 92',
+    'Louisville, Kentucky 40202',
+    'United States',
+  ]);
 });

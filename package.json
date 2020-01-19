@@ -65,7 +65,15 @@
     "typescript": "^3.7.4"
   },
   "eslintConfig": {
-    "extends": "kodefox/react-native"
+    "extends": "kodefox/react-native",
+    "rules": {
+      "@typescript-eslint/camelcase": [
+        "error",
+        {
+          "properties": "never"
+        }
+      ]
+    }
   },
   "jest": {
     "preset": "jest-expo",

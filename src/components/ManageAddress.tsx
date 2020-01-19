@@ -60,10 +60,14 @@ export default function ManageAddress({ data, style }: Props) {
           </TouchableOpacity>
         </Menu>
       </View>
-      <Text style={[styles.address, styles.opacity]} numberOfLines={3}>
-        {formatAddress(data)}
+      {formatAddress(data).map((item) => (
+        <Text key={item} style={[styles.address, styles.opacity]}>
+          {item}
+        </Text>
+      ))}
+      <Text style={[styles.opacity, styles.phone]}>
+        {t('Phone: {phone}', { phone })}
       </Text>
-      <Text style={styles.opacity}>{phone}</Text>
       <View style={styles.indicatorContainer}>
         {primary ? (
           <View style={styles.primary}>
@@ -137,6 +141,10 @@ const styles = StyleSheet.create({
   address: {
     fontSize: FONT_SIZE.small,
     color: COLORS.black,
+    marginTop: 6,
+  },
+  phone: {
+    marginTop: 6,
   },
   blueText: {
     color: COLORS.primaryColor,

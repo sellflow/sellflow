@@ -27,4 +27,5 @@ export type RootParamList = {
   ShoppingCart: undefined;
   Search: undefined;
   EditProfile: undefined;
+  Payment: undefined;
 };
