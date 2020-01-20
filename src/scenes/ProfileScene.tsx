@@ -42,10 +42,7 @@ export default function ProfileScene() {
         >
           <Text style={styles.buttonLabelStyle}>{t('Order History')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => navigate('Home')}
-        >
+        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
           <Text style={styles.buttonLabelStyle}>{t('About Us')}</Text>
         </TouchableOpacity>
       </View>

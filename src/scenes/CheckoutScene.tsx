@@ -11,7 +11,7 @@ import { COLORS } from '../constants/colors';
 import formatCurrency from '../helpers/formatCurrency';
 
 export default function CheckoutScene() {
-  let [selectedAddress, setSelectedAddress] = useState(0);
+  let [selectedAddress, setSelectedAddress] = useState(addressItemData[0].id);
 
   useEffect(() => {
     let defaultAddress =

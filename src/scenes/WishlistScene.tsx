@@ -44,7 +44,7 @@ export default function WishlistScene() {
       <ProductList
         data={wishlist}
         numColumns={numColumns}
-        contentContainerStyle={styles.wishlist}
+        contentContainerStyle={styles.contentContainer}
         onItemPress={(product) => navigate('ProductDetails', { product })}
       />
     </View>
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 12,
-    paddingVertical: 16,
   },
   emptyWishlist: {
     flex: 1,
@@ -66,10 +65,10 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
   },
   count: {
-    marginLeft: 12,
-    marginBottom: 16,
+    marginVertical: 16,
+    marginHorizontal: 12,
   },
-  wishlist: {
+  contentContainer: {
     marginBottom: 16,
   },
 });

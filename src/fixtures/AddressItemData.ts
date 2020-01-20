@@ -2,7 +2,7 @@ import { AddressItem } from '../types/types';
 
 export let addressItemData: Array<AddressItem> = [
   {
-    id: 1,
+    id: '1',
     name: 'Anna Belle',
     phone: '920-292-3383',
     city: 'San Mateo',
@@ -13,7 +13,7 @@ export let addressItemData: Array<AddressItem> = [
     country: 'United States',
   },
   {
-    id: 2,
+    id: '2',
     name: 'Flora Lockett',
     phone: '518-523-1990',
     city: 'San Mateo',
@@ -24,7 +24,7 @@ export let addressItemData: Array<AddressItem> = [
     country: 'United States',
   },
   {
-    id: 3,
+    id: '3',
     name: 'Charles Barnes',
     phone: '801-429-4555',
     city: 'Palo Alto',
@@ -35,7 +35,7 @@ export let addressItemData: Array<AddressItem> = [
     country: 'United States',
   },
   {
-    id: 4,
+    id: '4',
     name: 'Robert Winslow',
     phone: '410-516-2143',
     city: 'San Francisco',

@@ -3,7 +3,7 @@ import formatAddress from '../formatAddress';
 it('should format and combine the address ', () => {
   // Data from Shopify API
   let address = {
-    id: 207119551,
+    id: '207119551',
     customer_id: 207119551,
     first_name: null,
     last_name: null,

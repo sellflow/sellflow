@@ -30,7 +30,7 @@ export type OrderRecord = {
 };
 
 export type AddressItem = {
-  id: number;
+  id: string;
   name: string;
   address1: string;
   city: string;
