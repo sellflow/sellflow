@@ -18,7 +18,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      // TODO: Add necessary header
+      'X-Shopify-Storefront-Access-Token': 'fdfae894a8747ee7ddcfbebdcf1d721a',
     },
   };
 });

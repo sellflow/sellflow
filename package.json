@@ -12,7 +12,10 @@
     "lint": "eslint --max-warnings 0 \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit -p .",
     "jest": "jest --coverage --passWithNoTests",
-    "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest"
+    "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest",
+    "apollo:typegen-server": "apollo codegen:generate --localSchemaFile src/graphql/schema.json --target typescript --tagName gql --outputFlat src/generated",
+    "typegen-prettier": "prettier --write \"src/generated/**\"",
+    "download:schema" : "apollo schema:download src/graphql/schema.json —endpoint=https://ouioui-acc.myshopify.com/api/graphql --header='X-Shopify-Storefront-Access-Token: fdfae894a8747ee7ddcfbebdcf1d721a'"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
@@ -53,6 +56,7 @@
     "@types/react-native": "~0.60.23",
     "@types/react-native-snap-carousel": "^3.7.4",
     "@types/react-test-renderer": "^16.9.1",
+    "apollo": "^2.21.3",
     "babel-preset-expo": "~8.0.0",
     "eslint": "^6.8.0",
     "eslint-config-kodefox": "^0.1.0",
