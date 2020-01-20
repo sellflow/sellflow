@@ -17,7 +17,7 @@ import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { validateEmail, validatePassword } from '../helpers/validation';
-import formatDOB from '../helpers/formatDOB';
+import formatDateLong from '../helpers/formatDateLong';
 import { profile } from '../../assets/images';
 
 export default function EditProfileScene() {
@@ -143,7 +143,7 @@ export default function EditProfileScene() {
                   >
                     <TextInput
                       mode="flat"
-                      value={formatDOB(birthDate)}
+                      value={formatDateLong(birthDate)}
                       disabled={true}
                       editable={false}
                       pointerEvents="none"
