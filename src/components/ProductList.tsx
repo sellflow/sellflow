@@ -1,18 +1,19 @@
 import React from 'react';
-import { FlatList, View, StyleProp, ViewStyle } from 'react-native';
+import { FlatList, View, FlatListProps } from 'react-native';
 
 import { Product } from '../types/types';
 import ProductItem from './ProductItem';
 
-type Props = {
+type BaseProps = FlatListProps<Product>;
+
+type Props = Omit<BaseProps, 'data' | 'renderItem' | 'numColumns'> & {
   numColumns: number;
   data: Array<Product>;
-  contentContainerStyle?: StyleProp<ViewStyle>;
   onItemPress: (item: Product) => void;
 };
 
 export default function ProductList(props: Props) {
-  let { numColumns, data, contentContainerStyle, onItemPress } = props;
+  let { numColumns, data, onItemPress, ...otherProps } = props;
   let itemRemainder: number = data.length % numColumns;
 
   return (
@@ -31,7 +32,7 @@ export default function ProductList(props: Props) {
         return productItem;
       }}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={contentContainerStyle}
+      {...otherProps}
     />
   );
 }
