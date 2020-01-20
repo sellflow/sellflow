@@ -98,7 +98,7 @@ function ProductInfo(props: { product: Product }) {
   );
 }
 
-function BottomAction(props: ProductDetailsProps) {
+function BottomActionBar(props: ProductDetailsProps) {
   let { isWishlistActive, onWishlistPress } = props;
 
   let onPressWishlist = () => {
@@ -135,7 +135,7 @@ function BottomAction(props: ProductDetailsProps) {
 function ProductDetailsLandscape(props: ProductDetailsProps) {
   let { product } = props;
   return (
-    <SafeAreaView style={[styles.flex, styles.flexRow]}>
+    <View style={[styles.flex, styles.flexRow]}>
       <View style={styles.flex}>
         <Image
           source={{ uri: product.image }}
@@ -152,10 +152,10 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
           <ProductInfo product={product} />
         </ScrollView>
         <View style={[styles.bottomContainer, styles.bottomLandscapeContainer]}>
-          <BottomAction {...props} />
+          <BottomActionBar {...props} />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -178,7 +178,7 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
       </ScrollView>
 
       <View style={styles.bottomContainer}>
-        <BottomAction {...props} />
+        <BottomActionBar {...props} />
       </View>
     </>
   );
@@ -192,7 +192,7 @@ export default function ProductDetailsScene() {
   let [isWishlistActive, setWishlistActive] = useState(false);
 
   return (
-    <View style={styles.flex}>
+    <SafeAreaView style={styles.flex}>
       {dimensions.screenSize === ScreenSize.Large ? (
         <ProductDetailsLandscape
           product={product}
@@ -210,7 +210,7 @@ export default function ProductDetailsScene() {
           }}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -239,8 +239,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 24,
-    borderWidth: 1,
-    borderColor: COLORS.lightGrey,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.lightGrey,
   },
   bottomLandscapeContainer: {
     marginHorizontal: 36,
@@ -248,7 +248,6 @@ const styles = StyleSheet.create({
   },
   bottomIconContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     marginTop: 5,
     marginRight: 12,
   },

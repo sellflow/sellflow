@@ -52,7 +52,7 @@ export const headerOptions: StackNavigationOptions = {
     fontFamily: FONT_FAMILY.MEDIUM,
     fontSize: FONT_SIZE.large,
   },
-  gestureEnabled: false,
+  headerBackTitleVisible: false,
 };
 
 export const tabBarOptions: BottomTabBarOptions = {

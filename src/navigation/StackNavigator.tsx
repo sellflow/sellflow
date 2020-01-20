@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { IconButton, Button, Text } from 'exoflex';
+import { IconButton, Text } from 'exoflex';
 
 import {
   HomeScene,
@@ -28,169 +28,119 @@ import { FONT_SIZE } from '../constants/fonts';
 
 const Stack = createStackNavigator<RootParamList>();
 
-type HeaderProps = {
+type HeaderIconButtonProps = {
+  icon: string;
   onPress: () => void;
 };
 
-type HomeHeaderProps = {
-  onPressRightIcon: () => void;
-  onPressSearch: () => void;
+type HeaderTextButtonProps = {
+  text: string;
+  onPress: () => void;
 };
 
-function HeaderLeft(props: HeaderProps) {
-  let { onPress } = props;
-
+function HeaderIconButton(props: HeaderIconButtonProps) {
+  let { icon, onPress } = props;
   return (
-    <IconButton
-      icon="chevron-left"
-      onPress={onPress}
-      color={COLORS.primaryColor}
-      style={styles.backArrowIcon}
-    />
+    <IconButton icon={icon} onPress={onPress} color={COLORS.primaryColor} />
   );
 }
 
-function HeaderRight(props: HeaderProps) {
-  let { onPress } = props;
-
+function HeaderTextButton(props: HeaderTextButtonProps) {
+  let { text, onPress } = props;
   return (
-    <IconButton icon="cart" onPress={onPress} color={COLORS.primaryColor} />
+    <TouchableOpacity onPress={onPress} style={styles.headerTextButton}>
+      <Text weight="500" style={styles.headerRightText}>
+        {text}
+      </Text>
+    </TouchableOpacity>
   );
 }
 
-function HeaderHome(props: HomeHeaderProps) {
-  let { onPressRightIcon, onPressSearch } = props;
-
-  return (
-    <View style={styles.homeNavbar}>
-      <View style={styles.navbarContainer}>
-        <View />
-        <Text style={styles.title}>{t('Hello')}</Text>
-        <HeaderRight onPress={onPressRightIcon} />
-      </View>
-      <Button
-        style={styles.buttonContainer}
-        contentStyle={styles.buttonContent}
-        onPress={onPressSearch}
-      >
-        <Text style={styles.searchText}>Search</Text>
-      </Button>
-    </View>
-  );
-}
-
-function Home() {
+function HomeStack() {
   return (
     <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
       <Stack.Screen
         name="Home"
         component={HomeScene}
-        options={({ navigation }) => {
-          return {
-            header: () => (
-              <HeaderHome
-                onPressRightIcon={() => navigation.navigate('Payment')}
-                onPressSearch={() => navigation.navigate('Search')}
-              />
-            ),
-          };
-        }}
+        options={({ navigation }) => ({
+          title: t('Hello'),
+          headerRight: () => (
+            <HeaderIconButton
+              icon="cart"
+              onPress={() => navigation.navigate('ShoppingCart')}
+            />
+          ),
+          headerStyle: {
+            shadowColor: COLORS.transparent,
+          },
+        })}
       />
       <Stack.Screen
         name="ProductDetails"
         component={ProductDetailsScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Product Detail'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
-            ),
-            headerRight: () => (
-              <HeaderRight
-                onPress={() => navigation.navigate('ShoppingCart')}
-              />
-            ),
-          };
-        }}
+        options={({ navigation }) => ({
+          title: t('Product Details'),
+          headerRight: () => (
+            <HeaderIconButton
+              icon="cart"
+              onPress={() => navigation.navigate('ShoppingCart')}
+            />
+          ),
+        })}
       />
       <Stack.Screen
         name="ShoppingCart"
         component={ShoppingCartScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Shopping Cart'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
-            ),
-          };
-        }}
+        options={() => ({
+          title: t('Shopping Cart'),
+        })}
       />
       <Stack.Screen
         name="ProductCollection"
         component={ProductCollectionScene}
-        options={({ navigation, route }) => {
-          return {
-            title: route.params.collection.name,
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
-            ),
-            headerRight: () => (
-              <IconButton
-                icon="magnify"
-                onPress={() => navigation.navigate('Search')}
-                color={COLORS.primaryColor}
-              />
-            ),
-          };
-        }}
+        options={({ navigation, route }) => ({
+          title: route.params.collection.name,
+          headerRight: () => (
+            <IconButton
+              icon="magnify"
+              onPress={() => navigation.navigate('Search')}
+              color={COLORS.primaryColor}
+            />
+          ),
+        })}
       />
       <Stack.Screen
         name="Checkout"
         component={CheckoutScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Checkout'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Home')} /> // TODO: Change route
-            ),
-          };
-        }}
+        options={() => ({
+          title: t('Checkout'),
+        })}
       />
       <Stack.Screen
         name="Search"
         component={SearchScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Search'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.goBack()} /> // TODO: Change route
-            ),
-            cardStyle: {
-              backgroundColor: COLORS.darkWhite,
-            },
-            headerStyle: {
-              shadowColor: COLORS.transparent,
-            },
-          };
-        }}
+        options={() => ({
+          title: t('Search'),
+          cardStyle: {
+            backgroundColor: COLORS.darkWhite,
+          },
+          headerStyle: {
+            shadowColor: COLORS.transparent,
+          },
+        })}
       />
       <Stack.Screen
         name="Payment"
         component={PaymentScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Payment'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.goBack()} /> // TODO: Change route
-            ),
-          };
-        }}
+        options={() => ({
+          title: t('Payment'),
+        })}
       />
     </Stack.Navigator>
   );
 }
 
-function Wishlist() {
+function WishlistStack() {
   return (
     <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
       <Stack.Screen name="Wishlist" component={WishlistScene} />
@@ -198,126 +148,83 @@ function Wishlist() {
   );
 }
 
-function Profile() {
+function ProfileStack() {
   return (
     <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
       <Stack.Screen name="Profile" component={ProfileScene} />
       <Stack.Screen
         name="Login"
         component={LoginScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Log in'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Register')}
-                style={styles.headerRight}
-              >
-                <Text weight="500" style={styles.headerRightText}>
-                  {t('Register')}
-                </Text>
-              </TouchableOpacity>
-            ),
-          };
-        }}
+        options={({ navigation }) => ({
+          title: t('Log in'),
+          headerRight: () => (
+            <HeaderTextButton
+              text={t('Register')}
+              onPress={() => navigation.navigate('Register')}
+            />
+          ),
+        })}
       />
       <Stack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Forgot Password'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Login')} /> // TODO: Change route
-            ),
-            cardStyle: {
-              backgroundColor: COLORS.white,
-            },
-          };
-        }}
+        options={() => ({
+          title: t('Forgot Password'),
+          cardStyle: {
+            backgroundColor: COLORS.white,
+          },
+        })}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Register'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Register')}
-                style={styles.headerRight}
-              >
-                <Text weight="500" style={styles.headerRightText}>
-                  {t('Log In')}
-                </Text>
-              </TouchableOpacity>
-            ),
-          };
-        }}
+        options={({ navigation }) => ({
+          title: t('Register'),
+          headerRight: () => (
+            <HeaderTextButton
+              text={t('Log In')}
+              onPress={() => navigation.navigate('Register')}
+            />
+          ),
+        })}
       />
       <Stack.Screen
         name="AddressManagement"
         component={AddressManagementScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Manage Addresses'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Profile')} />
-            ),
-          };
-        }}
+        options={() => ({
+          title: t('Manage Addresses'),
+        })}
       />
       <Stack.Screen
         name="EditProfile"
         component={EditProfileScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Edit Profile'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
-            ),
-          };
-        }}
+        options={() => ({
+          title: t('Edit Profile'),
+        })}
       />
       <Stack.Screen
         name="OrderHistory"
         component={OrderHistoryScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Order History'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('Profile')} /> // TODO: Change route
-            ),
-            cardStyle: {
-              backgroundColor: COLORS.darkWhite,
-            },
-          };
-        }}
+        options={() => ({
+          title: t('Order History'),
+          cardStyle: {
+            backgroundColor: COLORS.darkWhite,
+          },
+        })}
       />
       <Stack.Screen
         name="OrderDetails"
         component={OrderDetailsScene}
-        options={({ navigation }) => {
-          return {
-            title: t('Order Details'),
-            headerLeft: () => (
-              <HeaderLeft onPress={() => navigation.navigate('OrderHistory')} /> // TODO: Change route
-            ),
-          };
-        }}
+        options={() => ({
+          title: t('Order Details'),
+        })}
       />
     </Stack.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
-  headerRight: {
+  headerTextButton: {
     marginRight: 16,
   },
   headerRightText: {
@@ -325,35 +232,6 @@ const styles = StyleSheet.create({
     color: COLORS.primaryColor,
     textAlign: 'right',
   },
-  backArrowIcon: {
-    marginTop: 12,
-  },
-  homeNavbar: {
-    marginTop: 30,
-  },
-  navbarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: {
-    marginLeft: 50,
-    fontSize: FONT_SIZE.large,
-  },
-  buttonContainer: {
-    marginVertical: 16,
-    marginHorizontal: 24,
-    backgroundColor: COLORS.darkWhite,
-  },
-  buttonContent: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 12,
-  },
-  searchText: {
-    opacity: 0.6,
-    color: COLORS.black,
-    fontSize: FONT_SIZE.medium,
-  },
 });
 
-export { Home, Wishlist, Profile };
+export { HomeStack, WishlistStack, ProfileStack };

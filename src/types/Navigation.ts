@@ -13,6 +13,9 @@ export type RouteProp<T extends keyof RootParamList> = RoutePropBase<
 >;
 
 export type RootParamList = {
+  HomeTab: undefined;
+  WishlistTab: undefined;
+  ProfileTab: undefined;
   Home: undefined;
   OrderHistory: undefined;
   OrderDetails: { orderID: string };

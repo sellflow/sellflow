@@ -5,7 +5,7 @@ import { IconButton, Text } from 'exoflex';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';
-import { Home, Wishlist, Profile } from './StackNavigator';
+import { HomeStack, WishlistStack, ProfileStack } from './StackNavigator';
 import { RootParamList, RouteProp } from '../types/Navigation';
 
 const Tab = createBottomTabNavigator<RootParamList>();
@@ -20,9 +20,9 @@ type State = {
   state?: NavigationState;
 };
 
-type HomeRoute = RouteProp<'Home'> & State;
-type WishlistRoute = RouteProp<'Wishlist'> & State;
-type ProfileRoute = RouteProp<'Profile'> & State;
+type HomeRoute = RouteProp<'HomeTab'> & State;
+type WishlistRoute = RouteProp<'WishlistTab'> & State;
+type ProfileRoute = RouteProp<'ProfileTab'> & State;
 
 function TabLabel(props: LabelProps) {
   let { focused, color, label } = props;
@@ -38,10 +38,10 @@ function TabLabel(props: LabelProps) {
 
 export default function TabNavigator() {
   return (
-    <Tab.Navigator initialRouteName="Home" tabBarOptions={tabBarOptions}>
+    <Tab.Navigator initialRouteName="HomeTab" tabBarOptions={tabBarOptions}>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="HomeTab"
+        component={HomeStack}
         options={({ route }: { route: HomeRoute }) => {
           return {
             tabBarLabel: ({ focused, color }) => (
@@ -53,8 +53,8 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Wishlist"
-        component={Wishlist}
+        name="WishlistTab"
+        component={WishlistStack}
         options={({ route }: { route: WishlistRoute }) => {
           return {
             tabBarLabel: ({ focused, color }) => (
@@ -68,8 +68,8 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileTab"
+        component={ProfileStack}
         options={({ route }: { route: ProfileRoute }) => {
           return {
             tabBarLabel: ({ focused, color }) => (
