@@ -10,17 +10,21 @@ import {
   ScreenSize,
   NUM_COLUMNS,
 } from '../../helpers/dimensions';
+import formatNumber from '../../helpers/formatNumber';
+import parseNumber from '../../helpers/parseNumber';
 import { COLORS } from '../../constants/colors';
 import { FONT_FAMILY, FONT_SIZE } from '../../constants/fonts';
 import { SortModal, SortRadioGroup } from './components';
 import { NavigationProp } from '../../types/Navigation';
+
+const DEFAULT_MAX_PRICE = 1000;
 
 export default function ProductCollectionScene() {
   let { navigate } = useNavigation<NavigationProp<'ProductCollection'>>();
   let [isModalVisible, setModalVisible] = useState(false);
   let [radioButtonValue, setRadioButtonValue] = useState('');
   let [minPrice, setMinPrice] = useState(0);
-  let [maxPrice, setMaxPrice] = useState(10000);
+  let [maxPrice, setMaxPrice] = useState(DEFAULT_MAX_PRICE);
 
   let { screenSize } = useDimensions();
   let numColumns: number;
@@ -72,8 +76,8 @@ export default function ProductCollectionScene() {
                 sliderLength={240}
                 values={[minPrice, maxPrice]}
                 showLabel={false}
-                min={minPrice}
-                max={maxPrice}
+                min={0}
+                max={Math.max(maxPrice, DEFAULT_MAX_PRICE)}
                 step={10}
                 onValuesChange={(values: Array<number>) => {
                   setMinPrice(values[0]);
@@ -87,16 +91,16 @@ export default function ProductCollectionScene() {
                 label={t('Min. Price')}
                 keyboardType="number-pad"
                 containerStyle={[styles.textInput, styles.margin]}
-                value={minPrice.toString()} // TODO: Change to formatted number
-                onChangeText={(text: string) => setMinPrice(Number(text))}
+                value={formatNumber(minPrice)}
+                onChangeText={(text: string) => setMinPrice(parseNumber(text))}
               />
               <TextInput
                 mode="outlined"
                 label={t('Max. Price')}
                 containerStyle={styles.textInput}
                 keyboardType="number-pad"
-                value={maxPrice.toString()} // TODO: Change to formatted number
-                onChangeText={(text: string) => setMaxPrice(Number(text))}
+                value={formatNumber(maxPrice)}
+                onChangeText={(text: string) => setMaxPrice(parseNumber(text))}
               />
             </View>
             <Button>{t('Set Filter')}</Button>
