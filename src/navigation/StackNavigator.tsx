@@ -41,7 +41,12 @@ type HeaderTextButtonProps = {
 function HeaderIconButton(props: HeaderIconButtonProps) {
   let { icon, onPress } = props;
   return (
-    <IconButton icon={icon} onPress={onPress} color={COLORS.primaryColor} />
+    <IconButton
+      icon={icon}
+      onPress={onPress}
+      color={COLORS.primaryColor}
+      style={styles.headerButton}
+    />
   );
 }
 
@@ -101,10 +106,9 @@ function HomeStack() {
         options={({ navigation, route }) => ({
           title: route.params.collection.name,
           headerRight: () => (
-            <IconButton
+            <HeaderIconButton
               icon="magnify"
               onPress={() => navigation.navigate('Search')}
-              color={COLORS.primaryColor}
             />
           ),
         })}
@@ -231,6 +235,9 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
     color: COLORS.primaryColor,
     textAlign: 'right',
+  },
+  headerButton: {
+    marginRight: 8,
   },
 });
 

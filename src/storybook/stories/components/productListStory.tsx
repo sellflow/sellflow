@@ -4,29 +4,10 @@ import { View, StyleSheet } from 'react-native';
 
 import { ProductList } from '../../../components';
 import { wishlist } from '../../../fixtures/wishlist';
-import {
-  useDimensions,
-  ScreenSize,
-  NUM_COLUMNS,
-} from '../../../helpers/dimensions';
+import { useColumns } from '../../../helpers/columns';
 
 function ProductListStory() {
-  let numColumns: number;
-  let { screenSize } = useDimensions();
-
-  switch (screenSize) {
-    case ScreenSize.Medium: {
-      numColumns = NUM_COLUMNS.MEDIUM;
-      break;
-    }
-    case ScreenSize.Large: {
-      numColumns = NUM_COLUMNS.LARGE;
-      break;
-    }
-    default: {
-      numColumns = NUM_COLUMNS.SMALL;
-    }
-  }
+  let numColumns = useColumns();
   return (
     <View style={styles.container}>
       <ProductList

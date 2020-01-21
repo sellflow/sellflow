@@ -53,6 +53,10 @@ export const headerOptions: StackNavigationOptions = {
     fontSize: FONT_SIZE.large,
   },
   headerBackTitleVisible: false,
+  headerLeftContainerStyle: {
+    marginLeft: 8,
+  },
+  headerTintColor: COLORS.primaryColor,
 };
 
 export const tabBarOptions: BottomTabBarOptions = {

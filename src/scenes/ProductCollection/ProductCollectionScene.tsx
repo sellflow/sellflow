@@ -1,113 +1,75 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Text, Button, Slider, TextInput } from 'exoflex';
+import { Text, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { wishlist } from '../../fixtures/wishlist';
 import { ProductList } from '../../components';
-import {
-  useDimensions,
-  ScreenSize,
-  NUM_COLUMNS,
-} from '../../helpers/dimensions';
-import formatNumber from '../../helpers/formatNumber';
-import parseNumber from '../../helpers/parseNumber';
+import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { COLORS } from '../../constants/colors';
 import { FONT_FAMILY, FONT_SIZE } from '../../constants/fonts';
-import { SortModal, SortRadioGroup } from './components';
+import {
+  SortModal,
+  SortRadioGroup,
+  PriceSlider,
+  FilterModal,
+} from './components';
 import { NavigationProp } from '../../types/Navigation';
+import { useColumns } from '../../helpers/columns';
 
 const DEFAULT_MAX_PRICE = 1000;
 
 export default function ProductCollectionScene() {
   let { navigate } = useNavigation<NavigationProp<'ProductCollection'>>();
-  let [isModalVisible, setModalVisible] = useState(false);
+  let [isSortModalVisible, setSortModalVisible] = useState(false);
+  let [isFilterModalVisible, setFilterModalVisible] = useState(false);
   let [radioButtonValue, setRadioButtonValue] = useState('');
-  let [minPrice, setMinPrice] = useState(0);
-  let [maxPrice, setMaxPrice] = useState(DEFAULT_MAX_PRICE);
-
+  let [priceRange, setPriceRange] = useState([0, DEFAULT_MAX_PRICE]);
   let { screenSize } = useDimensions();
-  let numColumns: number;
-  switch (screenSize) {
-    case ScreenSize.Medium: {
-      numColumns = NUM_COLUMNS.MEDIUM;
-      break;
-    }
-    case ScreenSize.Large: {
-      numColumns = 3;
-      break;
-    }
-    default: {
-      numColumns = NUM_COLUMNS.SMALL;
-    }
-  }
+  let numColumns = useColumns();
+  let isScreenSizeLarge = screenSize === ScreenSize.Large;
+
   let containerStyle = [
     styles.container,
-    screenSize === ScreenSize.Large && styles.containerLandscape,
+    isScreenSizeLarge && styles.containerLandscape,
   ];
 
-  let renderFilterAndSort = () => {
-    if (screenSize === ScreenSize.Large) {
-      return (
-        <ScrollView style={styles.sideMenu}>
-          <View style={[styles.menuContainer, styles.menuBorder]}>
-            <Text style={styles.menuTitle}>{t('Sort By')}</Text>
-            <SortRadioGroup
-              radioButtonValue={radioButtonValue}
-              onValueChange={(newValue: string) =>
-                setRadioButtonValue(newValue)
-              }
-            />
+  let onClear = () => setPriceRange([0, DEFAULT_MAX_PRICE]);
+  let toggleSortModal = () => setSortModalVisible(!isSortModalVisible);
+  let toggleFilterModal = () => setFilterModalVisible(!isFilterModalVisible);
+  let onPressRadioButton = (newValue: string) => setRadioButtonValue(newValue);
+  let onSetFilter = (values: Array<number>) => setPriceRange(values);
+
+  let SideBarMenu = () => {
+    return (
+      <ScrollView style={styles.sideBarMenu}>
+        <View style={[styles.menuContainer, styles.menuBorder]}>
+          <Text style={styles.menuTitle}>{t('Sort By')}</Text>
+          <SortRadioGroup
+            radioButtonValue={radioButtonValue}
+            onValueChange={onPressRadioButton}
+          />
+        </View>
+        <View style={styles.menuContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.menuTitle}>{t('Price')}</Text>
+            <TouchableOpacity onPress={onClear}>
+              <Text style={styles.clearButton}>{t('Clear')}</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.menuContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.menuTitle}>{t('Price')}</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setMinPrice(0);
-                  setMaxPrice(10000);
-                }}
-              >
-                <Text style={styles.clearButton}>{t('Clear')}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.sliderContainer}>
-              <Slider
-                sliderLength={240}
-                values={[minPrice, maxPrice]}
-                showLabel={false}
-                min={0}
-                max={Math.max(maxPrice, DEFAULT_MAX_PRICE)}
-                step={10}
-                onValuesChange={(values: Array<number>) => {
-                  setMinPrice(values[0]);
-                  setMaxPrice(values[1]);
-                }}
-              />
-            </View>
-            <View style={styles.textInputContainer}>
-              <TextInput
-                mode="outlined"
-                label={t('Min. Price')}
-                keyboardType="number-pad"
-                containerStyle={[styles.textInput, styles.margin]}
-                value={formatNumber(minPrice)}
-                onChangeText={(text: string) => setMinPrice(parseNumber(text))}
-              />
-              <TextInput
-                mode="outlined"
-                label={t('Max. Price')}
-                containerStyle={styles.textInput}
-                keyboardType="number-pad"
-                value={formatNumber(maxPrice)}
-                onChangeText={(text: string) => setMaxPrice(parseNumber(text))}
-              />
-            </View>
-            <Button>{t('Set Filter')}</Button>
-          </View>
-        </ScrollView>
-      );
-    }
+          <PriceSlider
+            minPrice={0}
+            maxPrice={DEFAULT_MAX_PRICE}
+            initialSliderValues={priceRange}
+            onSubmit={onSetFilter}
+            submitButtonText={t('Set Filter')}
+          />
+        </View>
+      </ScrollView>
+    );
+  };
+
+  let TopBarMenu = () => {
     return (
       <View style={styles.buttonContainer}>
         <Button
@@ -117,9 +79,7 @@ export default function ProductCollectionScene() {
           contentStyle={styles.buttonContent}
           uppercase={false}
           labelStyle={styles.buttonLabel}
-          onPress={() => {
-            // TODO: Modal Filter
-          }}
+          onPress={toggleFilterModal}
         >
           {t('Filter')}
         </Button>
@@ -129,7 +89,7 @@ export default function ProductCollectionScene() {
           style={styles.button}
           uppercase={false}
           labelStyle={styles.buttonLabel}
-          onPress={() => setModalVisible(true)}
+          onPress={toggleSortModal}
         >
           {t('Sort By')}
         </Button>
@@ -139,24 +99,36 @@ export default function ProductCollectionScene() {
 
   return (
     <View style={containerStyle}>
-      {renderFilterAndSort()}
+      {isScreenSizeLarge ? <SideBarMenu /> : <TopBarMenu />}
       <View style={styles.productsContainer}>
         <Text style={styles.count}>
           {t('Showing {count} item(s)', { count: wishlist.length })}
         </Text>
         <ProductList
           data={wishlist}
-          numColumns={numColumns}
+          numColumns={isScreenSizeLarge ? numColumns - 2 : numColumns}
           contentContainerStyle={styles.productList}
           onItemPress={(product) => navigate('ProductDetails', { product })}
         />
       </View>
-      <SortModal
-        isModalVisible={isModalVisible}
-        toggleModal={() => setModalVisible(!isModalVisible)}
-        radioButtonValue={radioButtonValue}
-        onValueChange={(newValue: string) => setRadioButtonValue(newValue)}
-      />
+      {!isScreenSizeLarge && (
+        <>
+          <SortModal
+            isModalVisible={isSortModalVisible}
+            toggleModal={toggleSortModal}
+            radioButtonValue={radioButtonValue}
+            onValueChange={onPressRadioButton}
+          />
+          <FilterModal
+            minPrice={0}
+            maxPrice={DEFAULT_MAX_PRICE}
+            isModalVisible={isFilterModalVisible}
+            toggleModal={toggleFilterModal}
+            onSetFilter={onSetFilter}
+            sliderValues={priceRange}
+          />
+        </>
+      )}
     </View>
   );
 }
@@ -201,7 +173,7 @@ const styles = StyleSheet.create({
   productList: {
     marginBottom: 16,
   },
-  sideMenu: {
+  sideBarMenu: {
     width: 320,
     maxWidth: 320,
     borderRightColor: COLORS.lightGrey,
@@ -219,24 +191,6 @@ const styles = StyleSheet.create({
   menuTitle: {
     fontFamily: FONT_FAMILY.MEDIUM,
     fontSize: FONT_SIZE.large,
-  },
-  sliderContainer: {
-    alignItems: 'center',
-    flex: 1,
-    marginVertical: 8,
-  },
-  textInputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-  },
-  textInput: {
-    flex: 1,
-    height: 60,
-  },
-  margin: {
-    marginRight: 16,
   },
   titleContainer: {
     flexDirection: 'row',

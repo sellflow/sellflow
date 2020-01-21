@@ -5,28 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 
 import { wishlist } from '../fixtures/wishlist';
 import { ProductList } from '../components';
-import { useDimensions, ScreenSize, NUM_COLUMNS } from '../helpers/dimensions';
 import { FONT_SIZE } from '../constants/fonts';
 import { NavigationProp } from '../types/Navigation';
+import { useColumns } from '../helpers/columns';
 
 export default function WishlistScene() {
   let { navigate } = useNavigation<NavigationProp<'Wishlist'>>();
-  let { screenSize } = useDimensions();
-  let numColumns: number;
-
-  switch (screenSize) {
-    case ScreenSize.Medium: {
-      numColumns = NUM_COLUMNS.MEDIUM;
-      break;
-    }
-    case ScreenSize.Large: {
-      numColumns = NUM_COLUMNS.LARGE;
-      break;
-    }
-    default: {
-      numColumns = NUM_COLUMNS.SMALL;
-    }
-  }
+  let numColumns = useColumns();
 
   if (wishlist.length === 0) {
     return (

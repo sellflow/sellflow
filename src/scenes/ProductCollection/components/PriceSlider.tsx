@@ -27,20 +27,26 @@ export default function PriceSlider(props: Props) {
   let [priceRange, setPriceRange] = useState(initialSliderValues);
 
   let clampMinValue = (value: number) => {
+    if (value === 0) {
+      return 0;
+    }
     if (value < minPrice) {
       return minPrice;
     }
-    if (value > priceRange[1]) {
+    if (value >= priceRange[1]) {
       return priceRange[1] - sliderStep;
     }
     return value;
   };
 
   let clampMaxValue = (value: number) => {
+    if (value === 0) {
+      return 0;
+    }
     if (value > maxPrice) {
       return maxPrice;
     }
-    if (value < priceRange[0]) {
+    if (value <= priceRange[0]) {
       return priceRange[0] + sliderStep;
     }
     return value;
