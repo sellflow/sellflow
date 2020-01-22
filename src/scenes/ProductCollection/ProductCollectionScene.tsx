@@ -14,13 +14,16 @@ import {
   PriceSlider,
   FilterModal,
 } from './components';
-import { NavigationProp } from '../../types/Navigation';
 import { useColumns } from '../../helpers/columns';
+import { NavigationProp } from '../../types/Navigation';
 
 const DEFAULT_MAX_PRICE = 1000;
 
 export default function ProductCollectionScene() {
-  let { navigate } = useNavigation<NavigationProp<'ProductCollection'>>();
+  let { navigate, setOptions } = useNavigation<
+    NavigationProp<'ProductCollection'>
+  >();
+
   let [isSortModalVisible, setSortModalVisible] = useState(false);
   let [isFilterModalVisible, setFilterModalVisible] = useState(false);
   let [radioButtonValue, setRadioButtonValue] = useState('');
@@ -63,6 +66,16 @@ export default function ProductCollectionScene() {
             initialSliderValues={priceRange}
             onSubmit={onSetFilter}
             submitButtonText={t('Set Filter')}
+            onValuesChangeStart={() => {
+              setOptions({
+                gestureEnabled: false,
+              });
+            }}
+            onValuesChangeFinish={() => {
+              setOptions({
+                gestureEnabled: true,
+              });
+            }}
           />
         </View>
       </ScrollView>
@@ -122,10 +135,11 @@ export default function ProductCollectionScene() {
           <FilterModal
             minPrice={0}
             maxPrice={DEFAULT_MAX_PRICE}
+            initialSliderValues={priceRange}
             isModalVisible={isFilterModalVisible}
             toggleModal={toggleFilterModal}
-            onSetFilter={onSetFilter}
-            sliderValues={priceRange}
+            onSubmit={onSetFilter}
+            onClear={onClear}
           />
         </>
       )}

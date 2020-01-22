@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useImperativeHandle, forwardRef, Ref } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Slider, TextInput, Button } from 'exoflex';
 
 import formatNumber from '../../../helpers/formatNumber';
 import parseNumber from '../../../helpers/parseNumber';
 
-type Props = {
+export type PriceSliderProps = {
   minPrice: number;
   maxPrice: number;
   initialSliderValues: Array<number>;
   sliderStep?: number;
-  onSubmit: (values: Array<number>) => void;
   submitButtonText: string;
+  onSubmit: (values: Array<number>) => void;
+  onValuesChangeStart?: () => void;
+  onValuesChangeFinish?: () => void;
 };
 
-export default function PriceSlider(props: Props) {
+export type PriceSliderRefObject = {
+  clear: () => void;
+};
+
+function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
   let {
     minPrice,
     maxPrice,
@@ -22,9 +28,17 @@ export default function PriceSlider(props: Props) {
     sliderStep = 1,
     onSubmit,
     submitButtonText,
+    onValuesChangeStart = () => {},
+    onValuesChangeFinish = () => {},
   } = props;
   let [sliderLength, setSliderLength] = useState(280); // default slider length
   let [priceRange, setPriceRange] = useState(initialSliderValues);
+
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      setPriceRange([minPrice, maxPrice]);
+    },
+  }));
 
   let clampMinValue = (value: number) => {
     if (value === 0) {
@@ -70,7 +84,11 @@ export default function PriceSlider(props: Props) {
         min={minPrice}
         max={maxPrice}
         step={sliderStep}
-        onValuesChangeFinish={setPriceRange}
+        onValuesChangeStart={onValuesChangeStart}
+        onValuesChangeFinish={(values: Array<number>) => {
+          setPriceRange(values);
+          onValuesChangeFinish();
+        }}
         containerStyle={styles.sliderContainer}
       />
       <View style={styles.textInputContainer}>
@@ -99,6 +117,8 @@ export default function PriceSlider(props: Props) {
     </View>
   );
 }
+
+export default forwardRef(PriceSlider);
 
 const styles = StyleSheet.create({
   sliderContainer: {
