@@ -5,7 +5,7 @@ import { IconButton, Text } from 'exoflex';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';
-import { HomeStack, WishlistStack, ProfileStack } from './StackNavigator';
+import StackNavigator from './StackNavigator';
 import { RootParamList, RouteProp } from '../types/Navigation';
 
 const Tab = createBottomTabNavigator<RootParamList>();
@@ -41,7 +41,7 @@ export default function TabNavigator() {
     <Tab.Navigator initialRouteName="HomeTab" tabBarOptions={tabBarOptions}>
       <Tab.Screen
         name="HomeTab"
-        component={HomeStack}
+        component={StackNavigator}
         options={({ route }: { route: HomeRoute }) => {
           return {
             tabBarLabel: ({ focused, color }) => (
@@ -54,7 +54,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name="WishlistTab"
-        component={WishlistStack}
+        component={StackNavigator}
         options={({ route }: { route: WishlistRoute }) => {
           return {
             tabBarLabel: ({ focused, color }) => (
@@ -69,7 +69,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={ProfileStack}
+        component={StackNavigator}
         options={({ route }: { route: ProfileRoute }) => {
           return {
             tabBarLabel: ({ focused, color }) => (

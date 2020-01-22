@@ -33,3 +33,5 @@ export type RootParamList = {
   EditProfile: undefined;
   Payment: undefined;
 };
+
+export type RouteName = keyof RootParamList;

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton, Text } from 'exoflex';
+import { Route } from '@react-navigation/native';
 
 import {
   HomeScene,
@@ -23,7 +24,7 @@ import {
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
-import { RootParamList } from '../types/Navigation';
+import { RootParamList, RouteName } from '../types/Navigation';
 import { FONT_SIZE } from '../constants/fonts';
 
 const Stack = createStackNavigator<RootParamList>();
@@ -61,9 +62,22 @@ function HeaderTextButton(props: HeaderTextButtonProps) {
   );
 }
 
-function HomeStack() {
+export default function StackNavigator({ route }: { route: Route<RouteName> }) {
+  let initialRouteName: RouteName;
+  if (route.name === 'HomeTab') {
+    initialRouteName = 'Home';
+  } else if (route.name === 'WishlistTab') {
+    initialRouteName = 'Wishlist';
+  } else {
+    initialRouteName = 'Profile';
+  }
+
   return (
-    <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
+    <Stack.Navigator
+      screenOptions={headerOptions}
+      headerMode="screen"
+      initialRouteName={initialRouteName}
+    >
       <Stack.Screen
         name="Home"
         component={HomeScene}
@@ -80,81 +94,7 @@ function HomeStack() {
           },
         })}
       />
-      <Stack.Screen
-        name="ProductDetails"
-        component={ProductDetailsScene}
-        options={({ navigation }) => ({
-          title: t('Product Details'),
-          headerRight: () => (
-            <HeaderIconButton
-              icon="cart"
-              onPress={() => navigation.navigate('ShoppingCart')}
-            />
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="ShoppingCart"
-        component={ShoppingCartScene}
-        options={() => ({
-          title: t('Shopping Cart'),
-        })}
-      />
-      <Stack.Screen
-        name="ProductCollection"
-        component={ProductCollectionScene}
-        options={({ navigation, route }) => ({
-          title: route.params.collection.name,
-          headerRight: () => (
-            <HeaderIconButton
-              icon="magnify"
-              onPress={() => navigation.navigate('Search')}
-            />
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="Checkout"
-        component={CheckoutScene}
-        options={() => ({
-          title: t('Checkout'),
-        })}
-      />
-      <Stack.Screen
-        name="Search"
-        component={SearchScene}
-        options={() => ({
-          title: t('Search'),
-          cardStyle: {
-            backgroundColor: COLORS.darkWhite,
-          },
-          headerStyle: {
-            shadowColor: COLORS.transparent,
-          },
-        })}
-      />
-      <Stack.Screen
-        name="Payment"
-        component={PaymentScene}
-        options={() => ({
-          title: t('Payment'),
-        })}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function WishlistStack() {
-  return (
-    <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
       <Stack.Screen name="Wishlist" component={WishlistScene} />
-    </Stack.Navigator>
-  );
-}
-
-function ProfileStack() {
-  return (
-    <Stack.Navigator screenOptions={headerOptions} headerMode="screen">
       <Stack.Screen name="Profile" component={ProfileScene} />
       <Stack.Screen
         name="Login"
@@ -223,6 +163,66 @@ function ProfileStack() {
           title: t('Order Details'),
         })}
       />
+      <Stack.Screen
+        name="ProductDetails"
+        component={ProductDetailsScene}
+        options={({ navigation }) => ({
+          title: t('Product Details'),
+          headerRight: () => (
+            <HeaderIconButton
+              icon="cart"
+              onPress={() => navigation.navigate('ShoppingCart')}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="ShoppingCart"
+        component={ShoppingCartScene}
+        options={() => ({
+          title: t('Shopping Cart'),
+        })}
+      />
+      <Stack.Screen
+        name="ProductCollection"
+        component={ProductCollectionScene}
+        options={({ navigation, route }) => ({
+          title: route.params.collection.name,
+          headerRight: () => (
+            <HeaderIconButton
+              icon="magnify"
+              onPress={() => navigation.navigate('Search')}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={CheckoutScene}
+        options={() => ({
+          title: t('Checkout'),
+        })}
+      />
+      <Stack.Screen
+        name="Search"
+        component={SearchScene}
+        options={() => ({
+          title: t('Search'),
+          cardStyle: {
+            backgroundColor: COLORS.darkWhite,
+          },
+          headerStyle: {
+            shadowColor: COLORS.transparent,
+          },
+        })}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={PaymentScene}
+        options={() => ({
+          title: t('Payment'),
+        })}
+      />
     </Stack.Navigator>
   );
 }
@@ -240,5 +240,3 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
 });
-
-export { HomeStack, WishlistStack, ProfileStack };
