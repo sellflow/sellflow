@@ -11,7 +11,7 @@ import { FONT_SIZE } from '../constants/fonts';
 import { CarouselData } from '../fixtures/carousel';
 import { ProductItemData } from '../fixtures/ProductItemData';
 import { CategoryListData } from '../fixtures/CategoryListData';
-import { NavigationProp } from '../types/Navigation';
+import { StackNavProp } from '../types/Navigation';
 
 // TODO: I kinda think this should be a real TextInput, however we don't really
 // have "Shared Elements" in RN, so we need a way to fake it so that when this
@@ -32,7 +32,7 @@ function SearchBar(props: { onSearchPress: () => void }) {
 
 export default function HomeScene() {
   let { screenSize, isLandscape } = useDimensions();
-  let { navigate } = useNavigation<NavigationProp<'Home'>>();
+  let { navigate } = useNavigation<StackNavProp<'Home'>>();
 
   let numColumns = screenSize === ScreenSize.Small ? 2 : isLandscape ? 5 : 4;
 

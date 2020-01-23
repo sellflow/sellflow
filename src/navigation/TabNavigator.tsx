@@ -6,9 +6,9 @@ import { IconButton, Text } from 'exoflex';
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';
 import StackNavigator from './StackNavigator';
-import { RootParamList, RouteProp } from '../types/Navigation';
+import { TabParamList, TabRouteProp } from '../types/Navigation';
 
-const Tab = createBottomTabNavigator<RootParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 type LabelProps = {
   focused: boolean;
@@ -20,9 +20,9 @@ type State = {
   state?: NavigationState;
 };
 
-type HomeRoute = RouteProp<'HomeTab'> & State;
-type WishlistRoute = RouteProp<'WishlistTab'> & State;
-type ProfileRoute = RouteProp<'ProfileTab'> & State;
+type HomeRoute = TabRouteProp<'HomeTab'> & State;
+type WishlistRoute = TabRouteProp<'WishlistTab'> & State;
+type ProfileRoute = TabRouteProp<'ProfileTab'> & State;
 
 function TabLabel(props: LabelProps) {
   let { focused, color, label } = props;

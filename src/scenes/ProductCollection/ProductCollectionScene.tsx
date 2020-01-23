@@ -15,13 +15,13 @@ import {
   FilterModal,
 } from './components';
 import { useColumns } from '../../helpers/columns';
-import { NavigationProp } from '../../types/Navigation';
+import { StackNavProp } from '../../types/Navigation';
 
 const DEFAULT_MAX_PRICE = 1000;
 
 export default function ProductCollectionScene() {
   let { navigate, setOptions } = useNavigation<
-    NavigationProp<'ProductCollection'>
+    StackNavProp<'ProductCollection'>
   >();
 
   let [isSortModalVisible, setSortModalVisible] = useState(false);

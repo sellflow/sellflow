@@ -10,7 +10,7 @@ import { OrderData2 } from '../fixtures/OrderItemData';
 import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { RouteProp } from '../types/Navigation';
+import { StackRouteProp } from '../types/Navigation';
 import formatCurrency from '../helpers/formatCurrency';
 
 const sampleData = {
@@ -23,7 +23,7 @@ const sampleData = {
 };
 
 export default function OrderDetailsScene() {
-  let route = useRoute<RouteProp<'OrderDetails'>>();
+  let route = useRoute<StackRouteProp<'OrderDetails'>>();
   let { orderID } = route.params;
   let dimensions = useDimensions();
   let data = sampleData;

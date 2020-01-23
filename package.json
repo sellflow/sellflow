@@ -8,15 +8,16 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format:generated": "prettier --write \"src/generated/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "lint": "eslint --max-warnings 0 \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit -p .",
     "jest": "jest --coverage --passWithNoTests",
     "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest",
-    "apollo:typegen-server": "apollo codegen:generate --localSchemaFile src/graphql/schema.json --target typescript --tagName gql --outputFlat src/generated",
-    "typegen-prettier": "prettier --write \"src/generated/**\"",
-    "download:schema" : "apollo schema:download src/graphql/schema.json --endpoint=https://ouioui-acc.myshopify.com/api/graphql --header='X-Shopify-Storefront-Access-Token: fdfae894a8747ee7ddcfbebdcf1d721a'",
-    "pretest" : "yarn download:schema && yarn apollo:typegen-server && yarn typegen-prettier"
+    "test-full": "yarn apollo:generate && yarn test",
+    "apollo:generate" : "yarn apollo:schema-download && yarn apollo:typegen-server && yarn format:generated",
+    "apollo:schema-download" : "apollo schema:download src/graphql/schema.json --endpoint=https://ouioui-acc.myshopify.com/api/graphql --header='X-Shopify-Storefront-Access-Token: fdfae894a8747ee7ddcfbebdcf1d721a'",
+    "apollo:typegen-server": "apollo codegen:generate --localSchemaFile src/graphql/schema.json --target typescript --tagName gql --outputFlat src/generated"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",

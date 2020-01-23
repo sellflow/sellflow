@@ -6,10 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { profile } from '../../assets/images';
-import { NavigationProp } from '../types/Navigation';
+import { StackNavProp } from '../types/Navigation';
 
 export default function ProfileScene() {
-  let { navigate } = useNavigation<NavigationProp<'Profile'>>();
+  let { navigate } = useNavigation<StackNavProp<'Profile'>>();
 
   return (
     <View style={styles.container}>

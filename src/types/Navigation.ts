@@ -1,21 +1,29 @@
 import { RouteProp as RoutePropBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { CategoryItem, Product } from './types';
 
-export type NavigationProp<T extends keyof RootParamList> = StackNavigationProp<
-  RootParamList,
+export type StackNavProp<T extends keyof StackParamList> = StackNavigationProp<
+  StackParamList,
   T
 >;
 
-export type RouteProp<T extends keyof RootParamList> = RoutePropBase<
-  RootParamList,
+export type TabNavProp<T extends keyof TabParamList> = BottomTabNavigationProp<
+  TabParamList,
   T
 >;
 
-export type RootParamList = {
-  HomeTab: undefined;
-  WishlistTab: undefined;
-  ProfileTab: undefined;
+export type StackRouteProp<T extends keyof StackParamList> = RoutePropBase<
+  StackParamList,
+  T
+>;
+
+export type TabRouteProp<T extends keyof TabParamList> = RoutePropBase<
+  TabParamList,
+  T
+>;
+
+export type StackParamList = {
   Home: undefined;
   OrderHistory: undefined;
   OrderDetails: { orderID: string };
@@ -34,4 +42,11 @@ export type RootParamList = {
   Payment: undefined;
 };
 
-export type RouteName = keyof RootParamList;
+export type TabParamList = {
+  HomeTab: undefined;
+  WishlistTab: undefined;
+  ProfileTab: undefined;
+};
+
+export type StackRouteName = keyof StackParamList;
+export type TabRouteName = keyof TabParamList;

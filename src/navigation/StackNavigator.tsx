@@ -24,10 +24,14 @@ import {
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
-import { RootParamList, RouteName } from '../types/Navigation';
+import {
+  StackParamList,
+  StackRouteName,
+  TabRouteName,
+} from '../types/Navigation';
 import { FONT_SIZE } from '../constants/fonts';
 
-const Stack = createStackNavigator<RootParamList>();
+const Stack = createStackNavigator<StackParamList>();
 
 type HeaderIconButtonProps = {
   icon: string;
@@ -62,8 +66,12 @@ function HeaderTextButton(props: HeaderTextButtonProps) {
   );
 }
 
-export default function StackNavigator({ route }: { route: Route<RouteName> }) {
-  let initialRouteName: RouteName;
+export default function StackNavigator({
+  route,
+}: {
+  route: Route<TabRouteName>;
+}) {
+  let initialRouteName: StackRouteName;
   if (route.name === 'HomeTab') {
     initialRouteName = 'Home';
   } else if (route.name === 'WishlistTab') {

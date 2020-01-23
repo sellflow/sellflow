@@ -16,7 +16,7 @@ import { TabRoute } from '../core-ui/TabView';
 import formatCurrency from '../helpers/formatCurrency';
 import { Product } from '../types/types';
 import { useRoute } from '@react-navigation/native';
-import { RouteProp } from '../types/Navigation';
+import { StackRouteProp } from '../types/Navigation';
 
 type ProductDetailsProps = {
   product: Product;
@@ -186,7 +186,7 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
 
 export default function ProductDetailsScene() {
   let dimensions = useDimensions();
-  let route = useRoute<RouteProp<'ProductDetails'>>();
+  let route = useRoute<StackRouteProp<'ProductDetails'>>();
   let { product } = route.params;
 
   let [isWishlistActive, setWishlistActive] = useState(false);

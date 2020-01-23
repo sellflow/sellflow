@@ -6,11 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { wishlist } from '../fixtures/wishlist';
 import { ProductList } from '../components';
 import { FONT_SIZE } from '../constants/fonts';
-import { NavigationProp } from '../types/Navigation';
+import { StackNavProp } from '../types/Navigation';
 import { useColumns } from '../helpers/columns';
 
 export default function WishlistScene() {
-  let { navigate } = useNavigation<NavigationProp<'Wishlist'>>();
+  let { navigate } = useNavigation<StackNavProp<'Wishlist'>>();
   let numColumns = useColumns();
 
   if (wishlist.length === 0) {

@@ -4,10 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 
 import { orders } from '../fixtures/orderHistory';
 import { OrderHistoryItem } from '../components';
-import { NavigationProp } from '../types/Navigation';
+import { StackNavProp } from '../types/Navigation';
 
 export default function OrderHistoryScene() {
-  let { navigate } = useNavigation<NavigationProp<'OrderHistory'>>();
+  let { navigate } = useNavigation<StackNavProp<'OrderHistory'>>();
   return (
     <FlatList
       data={orders} // TODO: Change data

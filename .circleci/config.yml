@@ -25,7 +25,7 @@ jobs:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       # run tests!
-      - run: yarn test --maxWorkers=4
+      - run: yarn test-full --maxWorkers=4
 
 workflows:
   main:
