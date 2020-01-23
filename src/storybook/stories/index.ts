@@ -1,6 +1,6 @@
 import carouselStory from './core-ui/carouselStory';
 import discountBadgeStory from './core-ui/discountBadgeStory';
-import datePickerStory from './core-ui/DatePicker';
+import datePickerStory from './core-ui/datePickerStory';
 import categoryListStory from './core-ui/categoryListStory';
 import richRadioGroupStory from './core-ui/richRadioGroupStory';
 import searchInputStory from './core-ui/searchInputStory';

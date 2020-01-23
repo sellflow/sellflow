@@ -42,37 +42,35 @@ export default function ProfileScene() {
 
   return (
     <View style={[containerStyle(), styles.container]}>
-      <View>
-        <TextInput
-          label="Email Address"
-          value={email}
-          onChangeText={setEmail}
-          containerStyle={styles.textInputContainer}
-          labelStyle={styles.inputLabel}
-          style={styles.textSize}
-          returnKeyType="next"
-          ref={emailRef}
-          onSubmitEditing={() => {
-            passwordRef.current && passwordRef.current.focus();
-          }}
-        />
-        <TextInput
-          returnKeyType="done"
-          ref={passwordRef}
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-          containerStyle={styles.textInputContainer}
-          labelStyle={styles.inputLabel}
-          style={styles.textSize}
-        />
-        <TouchableOpacity style={styles.forgetPassword}>
-          <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
-            {t('Forgot Password?')}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TextInput
+        label="Email Address"
+        value={email}
+        onChangeText={setEmail}
+        containerStyle={styles.textInputContainer}
+        labelStyle={styles.inputLabel}
+        style={styles.textSize}
+        returnKeyType="next"
+        ref={emailRef}
+        onSubmitEditing={() => {
+          passwordRef.current && passwordRef.current.focus();
+        }}
+      />
+      <TextInput
+        returnKeyType="done"
+        ref={passwordRef}
+        label="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry={true}
+        containerStyle={styles.textInputContainer}
+        labelStyle={styles.inputLabel}
+        style={styles.textSize}
+      />
+      <TouchableOpacity style={styles.forgetPassword}>
+        <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
+          {t('Forgot Password?')}
+        </Text>
+      </TouchableOpacity>
       <Button>{t('Log in')}</Button>
     </View>
   );

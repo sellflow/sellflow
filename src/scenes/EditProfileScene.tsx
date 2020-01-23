@@ -6,7 +6,6 @@ import {
   Alert,
   TouchableOpacity,
   KeyboardAvoidingView,
-  SafeAreaView,
   TextInput as TextInputType,
 } from 'react-native';
 import { Text, Button, Avatar, TextInput } from 'exoflex';
@@ -14,7 +13,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
 import { DatePicker } from '../core-ui';
-import { FONT_SIZE } from '../constants/fonts';
+import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { validateEmail, validatePassword } from '../helpers/validation';
@@ -72,143 +71,136 @@ export default function EditProfileScene() {
   };
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContentContainer}
-      >
-        <DatePicker
-          isVisible={isPickerVisible}
-          onCancel={() => setIsPickerVisible(false)}
-          onConfirm={(date: string) => {
-            setBirthDate(date);
-            setIsPickerVisible(false);
-          }}
-        />
-        <View style={containerStyle()}>
-          <KeyboardAvoidingView behavior="position">
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <TouchableOpacity
-                style={styles.profilePictureEditContainer}
-                onPress={openGallery}
-              >
-                <Avatar.Image source={profilePicture} size={92} />
-                <Text style={styles.changePictureClickable}>
-                  {t('Change Profile Picture')}
-                </Text>
-              </TouchableOpacity>
-
-              <View style={styles.formsContainer}>
-                <View style={styles.individualFormContainer}>
-                  <Text style={styles.greyText}>{t('Name')}</Text>
-                  <TextInput
-                    ref={nameRef}
-                    autoFocus={true}
-                    clearTextOnFocus={false}
-                    autoCapitalize="none"
-                    textContentType="name"
-                    mode="flat"
-                    value={name}
-                    onChangeText={setName}
-                    containerStyle={styles.textInputContainer}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      emailRef.current && emailRef.current.focus();
-                    }}
-                  />
-                </View>
-                <View style={styles.individualFormContainer}>
-                  <Text style={styles.greyText}>{t('Email Address')}</Text>
-                  <TextInput
-                    onFocus={() => {
-                      setIsEmailValid(true);
-                    }}
-                    onBlur={() => {
-                      setIsEmailValid(validateEmail(email));
-                    }}
-                    clearTextOnFocus={false}
-                    autoCapitalize="none"
-                    errorMessage={
-                      !isEmailValid ? t('Email is not valid') : undefined
-                    }
-                    ref={emailRef}
-                    textContentType="emailAddress"
-                    mode="flat"
-                    value={email}
-                    containerStyle={styles.textInputContainer}
-                    onChangeText={setEmail}
-                    errorMessageStyle={styles.errorMessage}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      passwordRef.current && passwordRef.current.focus();
-                    }}
-                  />
-                </View>
-                <View style={styles.individualFormContainer}>
-                  <Text style={styles.greyText}>{t('Password')}</Text>
-                  <TextInput
-                    onFocus={() => {
-                      setIsPasswordValid(true);
-                    }}
-                    onBlur={() => {
-                      setIsPasswordValid(validatePassword(password));
-                    }}
-                    ref={passwordRef}
-                    textContentType="password"
-                    autoCapitalize="none"
-                    errorMessage={
-                      !isPasswordValid
-                        ? t(
-                            'Password must contain at least one number, uppercase and lowercase letter',
-                          )
-                        : undefined
-                    }
-                    secureTextEntry={true}
-                    mode="flat"
-                    value={password}
-                    onChangeText={setPassword}
-                    containerStyle={styles.textInputContainer}
-                    errorMessageStyle={styles.errorMessage}
-                    returnKeyType="next"
-                    onSubmitEditing={togglePickerVisible}
-                  />
-                </View>
-                <View style={styles.individualFormContainer}>
-                  <Text style={styles.greyText}>{t('Date of Birth')}</Text>
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={togglePickerVisible}
-                  >
-                    <TextInput
-                      mode="flat"
-                      value={formatDateLong(birthDate)}
-                      disabled={true}
-                      editable={false}
-                      pointerEvents="none"
-                      containerStyle={styles.textInputContainer}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
-          <View style={styles.buttonSaveContainer}>
-            <Button onPress={saveChanges}>
-              <Text weight="500" style={styles.saveText}>
-                {t('Save Changes')}
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContentContainer}
+    >
+      <DatePicker
+        isVisible={isPickerVisible}
+        onCancel={() => setIsPickerVisible(false)}
+        onConfirm={(date: string) => {
+          setBirthDate(date);
+          setIsPickerVisible(false);
+        }}
+      />
+      <View style={containerStyle()}>
+        <KeyboardAvoidingView behavior="position">
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <TouchableOpacity
+              style={styles.profilePictureEditContainer}
+              onPress={openGallery}
+            >
+              <Avatar.Image source={profilePicture} size={92} />
+              <Text style={styles.changePictureClickable}>
+                {t('Change Profile Picture')}
               </Text>
-            </Button>
-          </View>
+            </TouchableOpacity>
+
+            <View style={styles.formsContainer}>
+              <View style={styles.individualFormContainer}>
+                <Text style={styles.greyText}>{t('Name')}</Text>
+                <TextInput
+                  ref={nameRef}
+                  autoFocus={true}
+                  clearTextOnFocus={false}
+                  autoCapitalize="none"
+                  textContentType="name"
+                  mode="flat"
+                  value={name}
+                  onChangeText={setName}
+                  containerStyle={styles.textInputContainer}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    emailRef.current && emailRef.current.focus();
+                  }}
+                />
+              </View>
+              <View style={styles.individualFormContainer}>
+                <Text style={styles.greyText}>{t('Email Address')}</Text>
+                <TextInput
+                  onFocus={() => {
+                    setIsEmailValid(true);
+                  }}
+                  onBlur={() => {
+                    setIsEmailValid(validateEmail(email));
+                  }}
+                  clearTextOnFocus={false}
+                  autoCapitalize="none"
+                  errorMessage={
+                    !isEmailValid ? t('Email is not valid') : undefined
+                  }
+                  ref={emailRef}
+                  textContentType="emailAddress"
+                  mode="flat"
+                  value={email}
+                  containerStyle={styles.textInputContainer}
+                  onChangeText={setEmail}
+                  errorMessageStyle={styles.errorMessage}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    passwordRef.current && passwordRef.current.focus();
+                  }}
+                />
+              </View>
+              <View style={styles.individualFormContainer}>
+                <Text style={styles.greyText}>{t('Password')}</Text>
+                <TextInput
+                  onFocus={() => {
+                    setIsPasswordValid(true);
+                  }}
+                  onBlur={() => {
+                    setIsPasswordValid(validatePassword(password));
+                  }}
+                  ref={passwordRef}
+                  textContentType="password"
+                  autoCapitalize="none"
+                  errorMessage={
+                    !isPasswordValid
+                      ? t(
+                          'Password must contain at least one number, uppercase and lowercase letter',
+                        )
+                      : undefined
+                  }
+                  secureTextEntry={true}
+                  mode="flat"
+                  value={password}
+                  onChangeText={setPassword}
+                  containerStyle={styles.textInputContainer}
+                  errorMessageStyle={styles.errorMessage}
+                  returnKeyType="next"
+                  onSubmitEditing={togglePickerVisible}
+                />
+              </View>
+              <View style={styles.individualFormContainer}>
+                <Text style={styles.greyText}>{t('Date of Birth')}</Text>
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={togglePickerVisible}
+                >
+                  <TextInput
+                    mode="flat"
+                    value={formatDateLong(birthDate)}
+                    disabled={true}
+                    editable={false}
+                    pointerEvents="none"
+                    containerStyle={styles.textInputContainer}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+        <View style={styles.buttonSaveContainer}>
+          <Button onPress={saveChanges} labelStyle={styles.saveText}>
+            {t('Save Changes')}
+          </Button>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 1,
-  },
   scrollView: {
     backgroundColor: COLORS.white,
   },
@@ -250,7 +242,7 @@ const styles = StyleSheet.create({
   saveText: {
     color: COLORS.white,
     fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
+    fontFamily: FONT_FAMILY.MEDIUM,
   },
   textInputContainer: {
     margin: 0,

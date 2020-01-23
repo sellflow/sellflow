@@ -57,6 +57,9 @@ export const headerOptions: StackNavigationOptions = {
     marginLeft: 8,
   },
   headerTintColor: COLORS.primaryColor,
+  headerStyle: {
+    elevation: 1,
+  },
 };
 
 export const tabBarOptions: BottomTabBarOptions = {
@@ -64,11 +67,10 @@ export const tabBarOptions: BottomTabBarOptions = {
   inactiveTintColor: COLORS.inactive,
   tabStyle: {
     paddingTop: 16,
-    marginBottom: 5,
-    height: 64,
+    marginBottom: 2,
   },
   style: {
-    height: 90,
+    paddingBottom: 4,
   },
   labelPosition: 'below-icon',
   labelStyle: {

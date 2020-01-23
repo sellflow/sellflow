@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text, Button, TextInput } from 'exoflex';
 
 import { Surface } from '../core-ui';
-import { FONT_SIZE } from '../constants/fonts';
+import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { CheckoutData as checkoutData } from '../fixtures/OrderItemData';
 import { OrderItem } from '../components';
@@ -40,32 +40,29 @@ export default function ShoppingCartScene() {
   };
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
       <ScrollView
         contentContainerStyle={styles.scrollContentContainer}
         style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}
       >
         <View style={containerProductStyle()}>
-          <View>
-            <View style={styles.productDetailsContainer}>
-              <View style={styles.orderItemContainer}>
-                {checkoutData.map((item, index) => {
-                  return (
-                    <View key={item.variantID}>
-                      {index > 0 ? (
-                        <View style={styles.productSeparator} />
-                      ) : null}
-                      <OrderItem
-                        orderItem={item}
-                        containerStyle={styles.orderItem}
-                        key={item.variantID}
-                      />
-                    </View>
-                  );
-                })}
-              </View>
+          <View style={styles.productDetailsContainer}>
+            <View style={styles.orderItemContainer}>
+              {checkoutData.map((item, index) => {
+                return (
+                  <View key={item.variantID}>
+                    {index > 0 ? (
+                      <View style={styles.productSeparator} />
+                    ) : null}
+                    <OrderItem
+                      orderItem={item}
+                      containerStyle={styles.orderItem}
+                      key={item.variantID}
+                    />
+                  </View>
+                );
+              })}
             </View>
           </View>
           {(dimensions.screenSize === ScreenSize.Medium ||
@@ -77,7 +74,7 @@ export default function ShoppingCartScene() {
       {dimensions.screenSize === ScreenSize.Large && (
         <Payment data={paymentData} />
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -94,78 +91,57 @@ function Payment(props: PaymentProps) {
   let { shippingCost, total, subtotal } = props.data;
   let dimensions = useDimensions();
   let containerCheckoutStyle = () => {
-    let styleApplied;
     if (dimensions.screenSize === ScreenSize.Large) {
-      styleApplied = styles.tabletLandscapeCheckoutContainer;
+      return styles.tabletLandscapeCheckoutContainer;
     }
-    return styleApplied;
   };
 
   return (
     <View style={containerCheckoutStyle()}>
       <View style={styles.voucherCodeContainer}>
-        <View>
-          <Text
-            style={[styles.greyText, styles.smallText, { marginBottom: 12 }]}
-          >
-            {t('Voucher code or giftcard')}
-          </Text>
-          <View>
-            <View style={styles.voucherInputButtonContainer}>
-              <TextInput
-                containerStyle={styles.voucherTextInputContainer}
-                autoCapitalize="none"
-                returnKeyType="done"
-              />
-              <Button contentStyle={styles.addBotton}>
-                <Text weight="bold" style={styles.buttonText}>
-                  {t('Add')}
-                </Text>
-              </Button>
-            </View>
-          </View>
-        </View>
-      </View>
-      <View>
-        <View style={styles.paymentDetailsContainer}>
-          <Surface containerStyle={styles.surfacePaymentDetails}>
-            <View style={styles.innerPaymentDetailsContainer}>
-              <Text style={[styles.mediumText, { marginBottom: 6 }]}>
-                {t('Subtotal')}
-              </Text>
-              <Text style={styles.mediumText}>{formatCurrency(subtotal)}</Text>
-            </View>
-            <View style={styles.innerPaymentDetailsContainer}>
-              <Text style={[styles.mediumText, { marginBottom: 6 }]}>
-                {t('Shipping')}
-              </Text>
-              <Text style={[styles.mediumText, { textTransform: 'uppercase' }]}>
-                -{formatCurrency(shippingCost)}
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.innerPaymentDetailsContainer,
-                {
-                  borderTopWidth: 1,
-                  borderColor: COLORS.lightGrey,
-                },
-              ]}
-            >
-              <Text style={[styles.mediumText, { marginBottom: 6 }]}>
-                {t('Total')}
-              </Text>
-              <Text weight="bold" style={styles.mediumText}>
-                {formatCurrency(total)}
-              </Text>
-            </View>
-          </Surface>
-        </View>
-      </View>
-      <Button style={styles.checkout}>
-        <Text weight="bold" style={styles.buttonText}>
-          {t('Checkout')}
+        <Text style={[styles.greyText, styles.smallText, styles.margin]}>
+          {t('Voucher code or giftcard')}
         </Text>
+        <View style={styles.voucherInputButtonContainer}>
+          <TextInput
+            containerStyle={styles.voucherTextInputContainer}
+            autoCapitalize="none"
+            returnKeyType="done"
+          />
+          <Button
+            contentStyle={styles.addButton}
+            labelStyle={styles.buttonText}
+          >
+            {t('Add')}
+          </Button>
+        </View>
+      </View>
+      <Surface containerStyle={styles.surfacePaymentDetails}>
+        <View style={styles.innerPaymentDetailsContainer}>
+          <Text style={styles.paymentDetailLabel}>{t('Subtotal')}</Text>
+          <Text style={styles.mediumText}>{formatCurrency(subtotal)}</Text>
+        </View>
+        <View style={styles.innerPaymentDetailsContainer}>
+          <Text style={styles.paymentDetailLabel}>{t('Shipping')}</Text>
+          <Text style={styles.mediumText}>-{formatCurrency(shippingCost)}</Text>
+        </View>
+        <View
+          style={[
+            styles.innerPaymentDetailsContainer,
+            {
+              borderTopWidth: 1,
+              borderColor: COLORS.lightGrey,
+            },
+          ]}
+        >
+          <Text style={styles.paymentDetailLabel}>{t('Total')}</Text>
+          <Text weight="bold" style={styles.mediumText}>
+            {formatCurrency(total)}
+          </Text>
+        </View>
+      </Surface>
+      <Button style={styles.checkout} labelStyle={styles.buttonText}>
+        {t('Checkout')}
       </Button>
     </View>
   );
@@ -233,15 +209,14 @@ const styles = StyleSheet.create({
   orderItemContainer: {
     marginVertical: 7,
   },
-  paymentDetailsContainer: {
-    marginVertical: 2,
-  },
   innerPaymentDetailsContainer: {
     paddingVertical: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   surfacePaymentDetails: {
+    marginTop: 16,
+    marginBottom: 24,
     paddingHorizontal: 15,
   },
   orderItem: {
@@ -256,14 +231,17 @@ const styles = StyleSheet.create({
   mediumText: {
     fontSize: FONT_SIZE.medium,
   },
+  paymentDetailLabel: {
+    fontSize: FONT_SIZE.medium,
+    marginBottom: 6,
+  },
   checkout: {
     backgroundColor: COLORS.primaryColor,
-    borderRadius: 0,
     justifyContent: 'center',
+    marginBottom: 14,
   },
-  addBotton: {
+  addButton: {
     backgroundColor: COLORS.primaryColor,
-    borderRadius: 0,
     justifyContent: 'center',
     maxWidth: 88,
     minWidth: 88,
@@ -271,10 +249,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS.white,
     fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
+    fontFamily: FONT_FAMILY.MEDIUM,
   },
   productSeparator: {
     borderWidth: 0.5,
     borderColor: COLORS.lightGrey,
+  },
+  margin: {
+    marginBottom: 12,
   },
 });

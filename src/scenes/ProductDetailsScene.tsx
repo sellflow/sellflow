@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { Text, IconButton, Button } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
@@ -191,26 +185,22 @@ export default function ProductDetailsScene() {
 
   let [isWishlistActive, setWishlistActive] = useState(false);
 
-  return (
-    <SafeAreaView style={styles.flex}>
-      {dimensions.screenSize === ScreenSize.Large ? (
-        <ProductDetailsLandscape
-          product={product}
-          isWishlistActive={isWishlistActive}
-          onWishlistPress={(isActive) => {
-            setWishlistActive(isActive);
-          }}
-        />
-      ) : (
-        <ProductDetailsPortrait
-          product={product}
-          isWishlistActive={isWishlistActive}
-          onWishlistPress={(isActive) => {
-            setWishlistActive(isActive);
-          }}
-        />
-      )}
-    </SafeAreaView>
+  return dimensions.screenSize === ScreenSize.Large ? (
+    <ProductDetailsLandscape
+      product={product}
+      isWishlistActive={isWishlistActive}
+      onWishlistPress={(isActive) => {
+        setWishlistActive(isActive);
+      }}
+    />
+  ) : (
+    <ProductDetailsPortrait
+      product={product}
+      isWishlistActive={isWishlistActive}
+      onWishlistPress={(isActive) => {
+        setWishlistActive(isActive);
+      }}
+    />
   );
 }
 

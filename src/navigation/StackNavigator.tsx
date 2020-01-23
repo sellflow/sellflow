@@ -99,6 +99,7 @@ export default function StackNavigator({
           ),
           headerStyle: {
             shadowColor: COLORS.transparent,
+            elevation: 0,
           },
         })}
       />
@@ -221,6 +222,7 @@ export default function StackNavigator({
           },
           headerStyle: {
             shadowColor: COLORS.transparent,
+            elevation: 0,
           },
         })}
       />
