@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { View, SafeAreaView, StyleSheet, Alert } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Alert,
+  TextInput as TextInputType,
+} from 'react-native';
 import { Text, TextInput, Button } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
@@ -21,6 +27,10 @@ export default function RegisterScene() {
     /*TODO: DO switch to terms and condition here */
   };
 
+  let emailRef = useRef<TextInputType>(null);
+  let passwordRef = useRef<TextInputType>(null);
+  let confirmPasswordRef = useRef<TextInputType>(null);
+
   let containerStyle = () => {
     let styleApplied;
     if (dimensions.screenSize === ScreenSize.Small) {
@@ -30,15 +40,18 @@ export default function RegisterScene() {
     }
     return styleApplied;
   };
-  let isEmailValid = validateEmail(email);
-  let isPasswordValid = validatePassword(password);
+  let [isEmailValid, setIsEmailValid] = useState(true);
+  let [isPasswordValid, setIsPasswordValid] = useState(true);
+  let [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
 
   let isDisabled =
     !email ||
     !password ||
     !confirmPassword ||
     !isPasswordValid ||
-    !isEmailValid;
+    !isEmailValid ||
+    !isConfirmPasswordValid;
+
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={containerStyle()}>
@@ -49,15 +62,24 @@ export default function RegisterScene() {
               autoFocus={true}
               clearTextOnFocus={false}
               autoCapitalize="none"
-              errorMessage={
-                (isEmailValid && email !== '') || email === ''
-                  ? undefined
-                  : 'Email is not valid'
-              }
+              onFocus={() => {
+                setIsEmailValid(true);
+              }}
+              onBlur={() => {
+                setIsEmailValid(validateEmail(email));
+              }}
+              errorMessage={!isEmailValid ? t('Email is not valid') : undefined}
               textContentType="emailAddress"
               mode="flat"
               value={email}
+              errorMessageStyle={styles.errorMessage}
               onChangeText={setEmail}
+              containerStyle={styles.insideTextInputContainer}
+              returnKeyType="next"
+              ref={emailRef}
+              onSubmitEditing={() => {
+                passwordRef.current && passwordRef.current.focus();
+              }}
             />
           </View>
           <View style={styles.textInputContainer}>
@@ -65,15 +87,31 @@ export default function RegisterScene() {
             <TextInput
               textContentType="password"
               autoCapitalize="none"
+              onFocus={() => {
+                setIsPasswordValid(true);
+              }}
+              onBlur={() => {
+                setIsPasswordValid(validatePassword(password));
+              }}
               errorMessage={
-                (isPasswordValid && password !== '') || password === ''
-                  ? undefined
-                  : 'Password must contain number, uppercase and lowercase letter'
+                !isPasswordValid
+                  ? t(
+                      'Password must contain at least one number, uppercase and lowercase letter',
+                    )
+                  : undefined
               }
+              returnKeyType="next"
+              containerStyle={styles.insideTextInputContainer}
               secureTextEntry={true}
               mode="flat"
               value={password}
+              errorMessageStyle={styles.errorMessage}
               onChangeText={setPassword}
+              ref={passwordRef}
+              onSubmitEditing={() => {
+                confirmPasswordRef.current &&
+                  confirmPasswordRef.current.focus();
+              }}
             />
           </View>
           <View style={styles.textInputContainer}>
@@ -81,17 +119,25 @@ export default function RegisterScene() {
             <TextInput
               clearTextOnFocus={false}
               autoCapitalize="none"
-              textContentType="password"
+              onFocus={() => {
+                setIsConfirmPasswordValid(true);
+              }}
+              onBlur={() => {
+                setIsConfirmPasswordValid(confirmPassword === password);
+              }}
               errorMessage={
-                (confirmPassword === password && confirmPassword !== '') ||
-                confirmPassword === ''
-                  ? undefined
-                  : "Password doesn't match"
+                !isConfirmPasswordValid
+                  ? t('Password does not match')
+                  : undefined
               }
+              containerStyle={styles.insideTextInputContainer}
               secureTextEntry={true}
               mode="flat"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              errorMessageStyle={styles.errorMessage}
+              ref={confirmPasswordRef}
+              returnKeyType="done"
             />
           </View>
         </View>
@@ -129,6 +175,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     marginVertical: 9,
+    height: 60,
   },
   button: {
     borderRadius: 2,
@@ -148,5 +195,13 @@ const styles = StyleSheet.create({
   },
   primaryColorText: {
     color: COLORS.primaryColor,
+  },
+  insideTextInputContainer: {
+    margin: 0,
+    paddingVertical: 10,
+  },
+  errorMessage: {
+    padding: 0,
+    marginTop: 0,
   },
 });

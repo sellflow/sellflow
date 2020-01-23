@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput as TextInputType,
+} from 'react-native';
 import { Text, TextInput, Button } from 'exoflex';
 
 import { FONT_SIZE } from '../constants/fonts';
@@ -9,6 +14,9 @@ import { useDimensions, ScreenSize } from '../helpers/dimensions';
 export default function ProfileScene() {
   let [email, setEmail] = useState();
   let [password, setPassword] = useState();
+
+  let emailRef = useRef<TextInputType>(null);
+  let passwordRef = useRef<TextInputType>(null);
 
   let dimensions = useDimensions();
 
@@ -42,8 +50,15 @@ export default function ProfileScene() {
           containerStyle={styles.textInputContainer}
           labelStyle={styles.inputLabel}
           style={styles.textSize}
+          returnKeyType="next"
+          ref={emailRef}
+          onSubmitEditing={() => {
+            passwordRef.current && passwordRef.current.focus();
+          }}
         />
         <TextInput
+          returnKeyType="done"
+          ref={passwordRef}
           label="Password"
           value={password}
           onChangeText={setPassword}

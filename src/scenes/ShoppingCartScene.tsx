@@ -115,6 +115,7 @@ function Payment(props: PaymentProps) {
               <TextInput
                 containerStyle={styles.voucherTextInputContainer}
                 autoCapitalize="none"
+                returnKeyType="done"
               />
               <Button contentStyle={styles.addBotton}>
                 <Text weight="bold" style={styles.buttonText}>

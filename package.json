@@ -81,7 +81,7 @@
       ]
     }
   },
-  "eslintIgnore": ["src/generated/*.ts", "src/generated/server/*.ts"],
+  "eslintIgnore": ["src/generated/**/*.ts"],
   "jest": {
     "preset": "jest-expo",
     "transform": {

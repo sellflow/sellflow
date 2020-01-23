@@ -77,6 +77,7 @@ export default function OrderItem(props: Props) {
           <TextInput
             style={styles.amountInput}
             keyboardType="number-pad"
+            returnKeyType="done"
             value={quantity.toString()}
             onChangeText={(value) => {
               setQuantity(valueBetweenZeroToMax(parseInt(value, 10), 999));
