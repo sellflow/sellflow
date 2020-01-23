@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text, Button, TextInput } from 'exoflex';
+import { useNavigation } from '@react-navigation/native';
 
 import { Surface } from '../core-ui';
-import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
+import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { CheckoutData as checkoutData } from '../fixtures/OrderItemData';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import formatCurrency from '../helpers/formatCurrency';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
+import { StackNavProp } from '../types/Navigation';
 
 export default function ShoppingCartScene() {
   let subtotal = 77;
@@ -90,6 +93,7 @@ type PaymentData = {
 function Payment(props: PaymentProps) {
   let { shippingCost, total, subtotal } = props.data;
   let dimensions = useDimensions();
+  let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
   let containerCheckoutStyle = () => {
     if (dimensions.screenSize === ScreenSize.Large) {
       return styles.tabletLandscapeCheckoutContainer;
@@ -109,8 +113,9 @@ function Payment(props: PaymentProps) {
             returnKeyType="done"
           />
           <Button
+            style={defaultButton}
             contentStyle={styles.addButton}
-            labelStyle={styles.buttonText}
+            labelStyle={defaultButtonLabel}
           >
             {t('Add')}
           </Button>
@@ -140,7 +145,11 @@ function Payment(props: PaymentProps) {
           </Text>
         </View>
       </Surface>
-      <Button style={styles.checkout} labelStyle={styles.buttonText}>
+      <Button
+        style={[defaultButton, styles.checkout]}
+        labelStyle={defaultButtonLabel}
+        onPress={() => navigate('Checkout')}
+      >
         {t('Checkout')}
       </Button>
     </View>
@@ -236,20 +245,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   checkout: {
-    backgroundColor: COLORS.primaryColor,
-    justifyContent: 'center',
     marginBottom: 14,
   },
   addButton: {
-    backgroundColor: COLORS.primaryColor,
-    justifyContent: 'center',
     maxWidth: 88,
     minWidth: 88,
-  },
-  buttonText: {
-    color: COLORS.white,
-    fontSize: FONT_SIZE.medium,
-    fontFamily: FONT_FAMILY.MEDIUM,
   },
   productSeparator: {
     borderWidth: 0.5,

@@ -109,7 +109,7 @@ export default function StackNavigator({
         name="Login"
         component={LoginScene}
         options={({ navigation }) => ({
-          title: t('Log in'),
+          title: t('Log In'),
           headerRight: () => (
             <HeaderTextButton
               text={t('Register')}

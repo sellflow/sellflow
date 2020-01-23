@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Text } from 'exoflex';
+import { TextInput, Button } from 'exoflex';
 
-import { FONT_SIZE } from '../constants/fonts';
-import { COLORS } from '../constants/colors';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
 export default function ForgotPasswordScene() {
   let [emailValue, setEmailValue] = useState('');
@@ -24,10 +23,12 @@ export default function ForgotPasswordScene() {
           onChangeText={setEmailValue}
         />
       </View>
-      <Button style={styles.buttonStyle} onPress={onPressButton}>
-        <Text weight="medium" style={styles.textButton}>
-          {t('Reset Password')}
-        </Text>
+      <Button
+        style={[defaultButton, styles.buttonStyle]}
+        labelStyle={defaultButtonLabel}
+        onPress={onPressButton}
+      >
+        {t('Reset Password')}
       </Button>
     </View>
   );
@@ -45,13 +46,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   buttonStyle: {
-    height: 48,
     marginHorizontal: 24,
     marginBottom: 24,
-  },
-  textButton: {
-    fontSize: FONT_SIZE.medium,
-    color: COLORS.white,
-    textTransform: 'uppercase',
   },
 });

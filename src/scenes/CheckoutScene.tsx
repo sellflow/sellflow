@@ -9,6 +9,7 @@ import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import formatCurrency from '../helpers/formatCurrency';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
 export default function CheckoutScene() {
   let [selectedAddress, setSelectedAddress] = useState(addressItemData[0].id);
@@ -92,7 +93,12 @@ export default function CheckoutScene() {
           <Text style={styles.mediumText}>{t('Total')}</Text>
           <Text style={styles.mediumText}>{formatCurrency(123)}</Text>
         </Surface>
-        <Button style={styles.verticalMargin}>{t('Proceed to payment')}</Button>
+        <Button
+          style={[defaultButton, styles.verticalMargin]}
+          labelStyle={defaultButtonLabel}
+        >
+          {t('Proceed to payment')}
+        </Button>
       </View>
     </View>
   );

@@ -12,6 +12,7 @@ import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { StackRouteProp } from '../types/Navigation';
 import formatCurrency from '../helpers/formatCurrency';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
 const sampleData = {
   date: '2019-01-08T06:24:00.000Z',
@@ -151,10 +152,8 @@ export default function OrderDetailsScene() {
           </View>
         </View>
         <View>
-          <Button style={styles.trackOrderButton}>
-            <Text weight="bold" style={styles.buttonText}>
-              {t('Track Order')}
-            </Text>
+          <Button style={defaultButton} labelStyle={defaultButtonLabel}>
+            {t('Track Order')}
           </Button>
         </View>
       </View>
@@ -224,14 +223,5 @@ const styles = StyleSheet.create({
   },
   mediumText: {
     fontSize: FONT_SIZE.medium,
-  },
-  trackOrderButton: {
-    backgroundColor: COLORS.primaryColor,
-    borderRadius: 0,
-  },
-  buttonText: {
-    color: COLORS.white,
-    fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
   },
 });

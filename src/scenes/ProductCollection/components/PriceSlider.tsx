@@ -4,6 +4,7 @@ import { Slider, TextInput, Button } from 'exoflex';
 
 import formatNumber from '../../../helpers/formatNumber';
 import parseNumber from '../../../helpers/parseNumber';
+import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
 
 export type PriceSliderProps = {
   minPrice: number;
@@ -113,7 +114,13 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
           }}
         />
       </View>
-      <Button onPress={() => onSubmit(priceRange)}>{submitButtonText}</Button>
+      <Button
+        style={defaultButton}
+        labelStyle={defaultButtonLabel}
+        onPress={() => onSubmit(priceRange)}
+      >
+        {submitButtonText}
+      </Button>
     </View>
   );
 }

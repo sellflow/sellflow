@@ -5,6 +5,7 @@ import { Text, Button } from 'exoflex';
 import { CarouselItem } from '../types/types';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
+import { defaultButtonLabel, defaultButton } from '../constants/theme';
 
 const styles = StyleSheet.create({
   contentContainer: {
@@ -16,15 +17,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 160,
     height: 40,
-    borderRadius: 0,
   },
   title: {
     marginBottom: 20,
     color: COLORS.white,
     fontSize: FONT_SIZE.large,
-  },
-  label: {
-    color: COLORS.white,
   },
 });
 
@@ -37,8 +34,8 @@ export const CarouselData: Array<CarouselItem> = [
         </Text>
         <Button
           preset="primary"
-          style={styles.button}
-          labelStyle={styles.label}
+          style={[defaultButton, styles.button]}
+          labelStyle={defaultButtonLabel}
         >
           Check Out Now
         </Button>

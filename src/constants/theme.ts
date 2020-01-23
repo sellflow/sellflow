@@ -1,3 +1,4 @@
+import { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { BottomTabBarOptions } from '@react-navigation/bottom-tabs';
 import { DefaultTheme, Theme } from 'exoflex';
 import { StackNavigationOptions } from '@react-navigation/stack';
@@ -76,4 +77,14 @@ export const tabBarOptions: BottomTabBarOptions = {
   labelStyle: {
     fontFamily: FONT_FAMILY.REGULAR,
   },
+};
+
+export const defaultButton: StyleProp<ViewStyle> = {
+  elevation: 0,
+  height: 48,
+};
+
+export const defaultButtonLabel: StyleProp<TextStyle> = {
+  fontSize: FONT_SIZE.medium,
+  fontFamily: FONT_FAMILY.MEDIUM,
 };

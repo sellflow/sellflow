@@ -11,6 +11,7 @@ import { OrderData2 } from '../fixtures/OrderItemData';
 import { addressItemData } from '../fixtures/AddressItemData';
 import { ScreenSize, useDimensions } from '../helpers/dimensions';
 import formatCurrency from '../helpers/formatCurrency';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
 export default function PaymentScene() {
   let { screenSize, isLandscape } = useDimensions();
@@ -83,7 +84,9 @@ export default function PaymentScene() {
           </Text>
         </Surface>
       </View>
-      <Button>{t('Pay')}</Button>
+      <Button style={defaultButton} labelStyle={defaultButtonLabel}>
+        {t('Pay')}
+      </Button>
     </View>
   );
 

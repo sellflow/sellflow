@@ -6,12 +6,16 @@ import {
   TextInput as TextInputType,
 } from 'react-native';
 import { Text, TextInput, Button } from 'exoflex';
+import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import { defaultButtonLabel, defaultButton } from '../constants/theme';
+import { StackNavProp } from '../types/Navigation';
 
 export default function ProfileScene() {
+  let { navigate } = useNavigation<StackNavProp<'Login'>>();
   let [email, setEmail] = useState();
   let [password, setPassword] = useState();
 
@@ -42,36 +46,43 @@ export default function ProfileScene() {
 
   return (
     <View style={[containerStyle(), styles.container]}>
-      <TextInput
-        label="Email Address"
-        value={email}
-        onChangeText={setEmail}
-        containerStyle={styles.textInputContainer}
-        labelStyle={styles.inputLabel}
-        style={styles.textSize}
-        returnKeyType="next"
-        ref={emailRef}
-        onSubmitEditing={() => {
-          passwordRef.current && passwordRef.current.focus();
-        }}
-      />
-      <TextInput
-        returnKeyType="done"
-        ref={passwordRef}
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        containerStyle={styles.textInputContainer}
-        labelStyle={styles.inputLabel}
-        style={styles.textSize}
-      />
-      <TouchableOpacity style={styles.forgetPassword}>
-        <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
-          {t('Forgot Password?')}
-        </Text>
-      </TouchableOpacity>
-      <Button>{t('Log in')}</Button>
+      <View>
+        <TextInput
+          label="Email Address"
+          value={email}
+          onChangeText={setEmail}
+          containerStyle={styles.textInputContainer}
+          labelStyle={styles.inputLabel}
+          style={styles.textSize}
+          returnKeyType="next"
+          ref={emailRef}
+          onSubmitEditing={() => {
+            passwordRef.current && passwordRef.current.focus();
+          }}
+        />
+        <TextInput
+          returnKeyType="done"
+          ref={passwordRef}
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+          containerStyle={styles.textInputContainer}
+          labelStyle={styles.inputLabel}
+          style={styles.textSize}
+        />
+        <TouchableOpacity
+          style={styles.forgetPassword}
+          onPress={() => navigate('ForgotPassword')}
+        >
+          <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
+            {t('Forgot Password?')}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <Button style={defaultButton} labelStyle={defaultButtonLabel}>
+        {t('Log in')}
+      </Button>
     </View>
   );
 }

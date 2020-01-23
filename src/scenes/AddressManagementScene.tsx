@@ -4,6 +4,7 @@ import { Button } from 'exoflex';
 
 import { ManageAddress } from '../components';
 import { addressItemData } from '../fixtures/AddressItemData';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
 export default function AddressManagementScene() {
   let addNewAddress = () => Alert.alert('Add New', 'ToDo Routing'); //TODO Routing to Add Scene
@@ -18,7 +19,11 @@ export default function AddressManagementScene() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.contentContainer}
       />
-      <Button uppercase={true} onPress={addNewAddress} style={styles.bottomBar}>
+      <Button
+        onPress={addNewAddress}
+        style={[defaultButton, styles.bottomBar]}
+        labelStyle={defaultButtonLabel}
+      >
         {t('Add new address')}
       </Button>
     </View>

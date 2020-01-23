@@ -13,12 +13,13 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
 import { DatePicker } from '../core-ui';
-import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
+import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { validateEmail, validatePassword } from '../helpers/validation';
 import formatDateLong from '../helpers/formatDateLong';
 import { profile } from '../../assets/images';
+import { defaultButtonLabel, defaultButton } from '../constants/theme';
 
 export default function EditProfileScene() {
   let [profilePicture, setProfilePicture] = useState(profile);
@@ -191,7 +192,11 @@ export default function EditProfileScene() {
           </ScrollView>
         </KeyboardAvoidingView>
         <View style={styles.buttonSaveContainer}>
-          <Button onPress={saveChanges} labelStyle={styles.saveText}>
+          <Button
+            onPress={saveChanges}
+            style={defaultButton}
+            labelStyle={defaultButtonLabel}
+          >
             {t('Save Changes')}
           </Button>
         </View>
@@ -238,11 +243,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 24,
     backgroundColor: COLORS.red,
-  },
-  saveText: {
-    color: COLORS.white,
-    fontSize: FONT_SIZE.medium,
-    fontFamily: FONT_FAMILY.MEDIUM,
   },
   textInputContainer: {
     margin: 0,

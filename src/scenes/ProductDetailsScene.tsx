@@ -11,6 +11,7 @@ import formatCurrency from '../helpers/formatCurrency';
 import { Product } from '../types/types';
 import { useRoute } from '@react-navigation/native';
 import { StackRouteProp } from '../types/Navigation';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
 type ProductDetailsProps = {
   product: Product;
@@ -117,10 +118,12 @@ function BottomActionBar(props: ProductDetailsProps) {
           <IconButton icon="heart-outline" onPress={onPressWishlist} />
         )}
       </View>
-      <Button style={styles.flex} onPress={() => {}}>
-        <Text weight="medium" style={styles.buttonTextStyle}>
-          {t('Add to Cart')}
-        </Text>
+      <Button
+        style={[defaultButton, styles.flex]}
+        labelStyle={defaultButtonLabel}
+        onPress={() => {}}
+      >
+        {t('Add to Cart')}
       </Button>
     </>
   );
@@ -240,10 +243,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 5,
     marginRight: 12,
-  },
-  buttonTextStyle: {
-    marginTop: 5,
-    color: COLORS.white,
-    fontSize: FONT_SIZE.medium,
   },
 });
