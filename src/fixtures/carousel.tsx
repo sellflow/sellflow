@@ -12,12 +12,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 160,
-    height: 40,
-  },
   title: {
     marginBottom: 20,
     color: COLORS.white,
@@ -34,7 +28,7 @@ export const CarouselData: Array<CarouselItem> = [
         </Text>
         <Button
           preset="primary"
-          style={[defaultButton, styles.button]}
+          style={defaultButton}
           labelStyle={defaultButtonLabel}
         >
           Check Out Now

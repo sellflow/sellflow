@@ -1,24 +1,56 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text } from 'exoflex';
+import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@apollo/react-hooks';
 
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { Carousel, CategoryList } from '../core-ui';
 import { ProductList } from '../components';
 import SearchBar from '../components/SearchBar';
 import { CarouselData } from '../fixtures/carousel';
-import { ProductItemData } from '../fixtures/ProductItemData';
-import { CategoryListData } from '../fixtures/CategoryListData';
 import { StackNavProp } from '../types/Navigation';
+import { CategoryItem, Product } from '../types/types';
+import { GetCategoriesAndFeaturedProducts } from '../generated/GetCategoriesAndFeaturedProducts';
+import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../graphql/queries/categoriesAndFeaturedProducts';
 
 export default function HomeScene() {
   let { screenSize, isLandscape } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
 
+  let { loading, data } = useQuery<GetCategoriesAndFeaturedProducts>(
+    GET_CATEGORIES_AND_FEATURED_PRODUCTS,
+    { fetchPolicy: 'network-only' },
+  );
+
+  if (loading || !data) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   let numColumns = screenSize === ScreenSize.Small ? 2 : isLandscape ? 5 : 4;
 
-  let header = (
+  let categoryData: Array<CategoryItem> = data.collections.edges.map(
+    (item) => ({
+      id: item.node.id,
+      title: item.node.title,
+    }),
+  );
+
+  // TODO: What about discount?
+  let productData: Array<Product> = data.products.edges.map((item) => ({
+    id: item.node.id,
+    image: item.node.images.edges[0].node.originalSrc,
+    title: item.node.title,
+    price: Number(
+      item.node.presentmentPriceRanges.edges[0].node.minVariantPrice.amount,
+    ),
+  }));
+
+  let renderHeader = () => (
     <>
       <Carousel
         data={CarouselData}
@@ -28,7 +60,7 @@ export default function HomeScene() {
       <View style={styles.subTitleContainer}>
         <Text style={styles.subTitle}>{t('Browse By Category')}</Text>
         <CategoryList
-          categories={CategoryListData}
+          categories={categoryData}
           onSelect={(collection) => {
             navigate('ProductCollection', { collection });
           }}
@@ -45,8 +77,8 @@ export default function HomeScene() {
     <View style={styles.flex}>
       <SearchBar />
       <ProductList
-        ListHeaderComponent={() => header}
-        data={ProductItemData}
+        ListHeaderComponent={renderHeader}
+        data={productData}
         numColumns={numColumns}
         onItemPress={(product) => navigate('ProductDetails', { product })}
       />
@@ -57,6 +89,11 @@ export default function HomeScene() {
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   subTitle: {
     marginTop: 16,
