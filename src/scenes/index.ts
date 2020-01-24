@@ -11,7 +11,6 @@ import LoginScene from './LoginScene';
 import ForgotPasswordScene from './ForgotPasswordScene';
 import ShoppingCartScene from './ShoppingCartScene';
 import CheckoutScene from './CheckoutScene';
-import SearchScene from './SearchScene';
 import EditProfileScene from './EditProfileScene';
 import PaymentScene from './PaymentScene';
 
@@ -29,7 +28,6 @@ export {
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
-  SearchScene,
   EditProfileScene,
   PaymentScene,
 };

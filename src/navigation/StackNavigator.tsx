@@ -18,7 +18,6 @@ import {
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
-  SearchScene,
   EditProfileScene,
   PaymentScene,
 } from '../scenes';
@@ -210,20 +209,6 @@ export default function StackNavigator({
         component={CheckoutScene}
         options={() => ({
           title: t('Checkout'),
-        })}
-      />
-      <Stack.Screen
-        name="Search"
-        component={SearchScene}
-        options={() => ({
-          title: t('Search'),
-          cardStyle: {
-            backgroundColor: COLORS.darkWhite,
-          },
-          headerStyle: {
-            shadowColor: COLORS.transparent,
-            elevation: 0,
-          },
         })}
       />
       <Stack.Screen

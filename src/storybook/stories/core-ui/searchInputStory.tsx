@@ -7,7 +7,10 @@ import { SearchInput } from '../../../core-ui';
 export default function searchInputStory() {
   return storiesOf('Search Input', module).add('Default', () => (
     <View style={style.container}>
-      <SearchInput placeholder="Find by brand, category, etc." />
+      <SearchInput
+        style={style.searchInput}
+        placeholder="Find by brand, category, etc."
+      />
     </View>
   ));
 }
@@ -15,7 +18,10 @@ export default function searchInputStory() {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'center',
+  },
+  searchInput: {
+    marginHorizontal: 20,
   },
 });
