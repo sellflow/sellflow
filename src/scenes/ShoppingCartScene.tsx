@@ -18,6 +18,7 @@ export default function ShoppingCartScene() {
   let shippingCost = 0;
   let total = subtotal + shippingCost;
   let dimensions = useDimensions();
+  let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
 
   let paymentData: PaymentData = { subtotal, shippingCost, total };
 
@@ -42,6 +43,14 @@ export default function ShoppingCartScene() {
     return styleApplied;
   };
 
+  let renderPaymentView = () => (
+    <Payment
+      data={paymentData}
+      onSubmit={() => {
+        navigate('Checkout');
+      }}
+    />
+  );
   return (
     <View style={styles.safeContainer}>
       <ScrollView
@@ -69,20 +78,18 @@ export default function ShoppingCartScene() {
             </View>
           </View>
           {(dimensions.screenSize === ScreenSize.Medium ||
-            dimensions.screenSize === ScreenSize.Small) && (
-            <Payment data={paymentData} />
-          )}
+            dimensions.screenSize === ScreenSize.Small) &&
+            renderPaymentView()}
         </View>
       </ScrollView>
-      {dimensions.screenSize === ScreenSize.Large && (
-        <Payment data={paymentData} />
-      )}
+      {dimensions.screenSize === ScreenSize.Large && renderPaymentView()}
     </View>
   );
 }
 
 type PaymentProps = {
   data: PaymentData;
+  onSubmit: () => void;
 };
 type PaymentData = {
   subtotal: number;
@@ -91,9 +98,9 @@ type PaymentData = {
 };
 
 function Payment(props: PaymentProps) {
+  let { onSubmit } = props;
   let { shippingCost, total, subtotal } = props.data;
   let dimensions = useDimensions();
-  let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
   let containerCheckoutStyle = () => {
     if (dimensions.screenSize === ScreenSize.Large) {
       return styles.tabletLandscapeCheckoutContainer;
@@ -148,7 +155,7 @@ function Payment(props: PaymentProps) {
       <Button
         style={[defaultButton, styles.checkout]}
         labelStyle={defaultButtonLabel}
-        onPress={() => navigate('Checkout')}
+        onPress={onSubmit}
       >
         {t('Checkout')}
       </Button>
