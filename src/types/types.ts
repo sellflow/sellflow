@@ -44,7 +44,8 @@ export type AddressItem = {
 export type Product = {
   id: string;
   image: string;
-  name: string;
+  title: string;
+  productType: string;
   price: number;
   discount?: number;
 };
@@ -52,5 +53,5 @@ export type Product = {
 // TODO: Rename Category to Collection
 export type CategoryItem = {
   id: string;
-  name: string;
+  title: string;
 };

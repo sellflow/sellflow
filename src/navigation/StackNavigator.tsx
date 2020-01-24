@@ -196,7 +196,7 @@ export default function StackNavigator({
         name="ProductCollection"
         component={ProductCollectionScene}
         options={({ navigation, route }) => ({
-          title: route.params.collection.name,
+          title: route.params.collection.title,
           headerRight: () => (
             <HeaderIconButton
               icon="magnify"

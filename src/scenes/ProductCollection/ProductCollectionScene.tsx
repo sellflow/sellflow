@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Text, Button } from 'exoflex';
+import { Text, Button, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@apollo/react-hooks';
 
-import { wishlist } from '../../fixtures/wishlist';
 import { ProductList } from '../../components';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { COLORS } from '../../constants/colors';
@@ -16,8 +16,41 @@ import {
 } from './components';
 import { useColumns } from '../../helpers/columns';
 import { StackNavProp } from '../../types/Navigation';
+import { GET_COLLECTION } from '../../graphql/queries/productCollection';
+import { GetCollection } from '../../generated/GetCollection';
+import { Product } from '../../types/types';
 
 const DEFAULT_MAX_PRICE = 1000;
+
+function getProducts(
+  collectionData: GetCollection | undefined,
+): Array<Product> {
+  if (collectionData) {
+    if (collectionData.collectionByHandle) {
+      return collectionData.collectionByHandle.products.edges.map((item) => {
+        let product = item.node;
+        return {
+          id: product.id,
+          image: product.images.edges[0].node.transformedSrc.toString(),
+          title: product.title,
+          productType: product.productType,
+          price: Number(
+            product.presentmentPriceRanges.edges[0].node.minVariantPrice.amount,
+          ),
+        };
+      });
+    }
+  }
+  return [
+    {
+      id: '',
+      title: '',
+      productType: '',
+      price: 0,
+      image: '',
+    },
+  ];
+}
 
 export default function ProductCollectionScene() {
   let { navigate, setOptions } = useNavigation<
@@ -31,6 +64,18 @@ export default function ProductCollectionScene() {
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let isScreenSizeLarge = screenSize === ScreenSize.Large;
+
+  let { data: collectionData, loading } = useQuery<GetCollection>(
+    GET_COLLECTION,
+    {
+      variables: {
+        // TODO: Use collection handle from params
+        collectionHandle: 'accessories',
+      },
+    },
+  );
+
+  let collection = getProducts(collectionData);
 
   let containerStyle = [
     styles.container,
@@ -110,15 +155,19 @@ export default function ProductCollectionScene() {
     );
   };
 
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <View style={containerStyle}>
       {isScreenSizeLarge ? <SideBarMenu /> : <TopBarMenu />}
       <View style={styles.productsContainer}>
         <Text style={styles.count}>
-          {t('Showing {count} item(s)', { count: wishlist.length })}
+          {t('Showing {count} item(s)', { count: collection.length })}
         </Text>
         <ProductList
-          data={wishlist}
+          data={collection}
           numColumns={isScreenSizeLarge ? numColumns - 2 : numColumns}
           contentContainerStyle={styles.productList}
           onItemPress={(product) => navigate('ProductDetails', { product })}

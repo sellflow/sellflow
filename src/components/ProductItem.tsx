@@ -26,7 +26,7 @@ type Props = {
 
 export default function ProductItem(props: Props) {
   let { product, onPress, containerStyle, imageStyle } = props;
-  let { name, image, price, discount } = product;
+  let { title, image, price, discount } = product;
   let afterDiscount = priceAfterDiscount(price, discount || 0);
 
   return (
@@ -41,7 +41,7 @@ export default function ProductItem(props: Props) {
         <DiscountBadge value={discount} containerStyle={styles.discountBox} />
       )}
       <Text numberOfLines={1} style={styles.nameText}>
-        {name}
+        {title}
       </Text>
       <View style={styles.priceContainer}>
         <Text style={styles.priceText} weight="bold">

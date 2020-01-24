@@ -39,7 +39,7 @@ export default function CategoryList(props: Props) {
           onPress={() => onSelect(item)}
         >
           <Text weight="medium" style={[styles.categoryItemText, textStyle]}>
-            {item.name}
+            {item.title}
           </Text>
         </TouchableOpacity>
       )}

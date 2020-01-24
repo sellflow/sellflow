@@ -3,22 +3,22 @@ import { CategoryItem } from '../types/types';
 export const CategoryListData: Array<CategoryItem> = [
   {
     id: '1',
-    name: 'Jackets',
+    title: 'Jackets',
   },
   {
     id: '2',
-    name: 'Jeans',
+    title: 'Jeans',
   },
   {
     id: '3',
-    name: 'Accessories',
+    title: 'Accessories',
   },
   {
     id: '4',
-    name: 'Jewelry',
+    title: 'Jewelry',
   },
   {
     id: '5',
-    name: 'Boots',
+    title: 'Boots',
   },
 ];

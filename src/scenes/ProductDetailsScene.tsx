@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { Text, IconButton, Button } from 'exoflex';
+import { useRoute } from '@react-navigation/native';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -9,7 +10,6 @@ import { TabView, RichRadioGroup } from '../core-ui';
 import { TabRoute } from '../core-ui/TabView';
 import formatCurrency from '../helpers/formatCurrency';
 import { Product } from '../types/types';
-import { useRoute } from '@react-navigation/native';
 import { StackRouteProp } from '../types/Navigation';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
@@ -74,7 +74,7 @@ function ProductInfo(props: { product: Product }) {
   return (
     <>
       <View style={styles.padding}>
-        <Text style={styles.productInfoTitle}>{product.name}</Text>
+        <Text style={styles.productInfoTitle}>{product.title}</Text>
         <Text weight="bold" style={styles.productInfoPrice}>
           {formatCurrency(product.price)}
         </Text>
