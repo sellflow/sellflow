@@ -10,6 +10,7 @@ npm-debug.*
 web-build/
 web-report/
 src/generated/**/*.ts
+src/graphql/schema.json
 
 # macOS
 .DS_Store

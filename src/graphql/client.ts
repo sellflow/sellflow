@@ -8,7 +8,8 @@ import { persistCache } from 'apollo-cache-persist';
 import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types';
 
 import { STOREFRONT_API } from '../constants/api';
-import { userData } from './userData';
+import { customerData } from './customerData';
+import { authResolver } from './resolvers/authResolver';
 
 const cache = new InMemoryCache();
 const httpLink = createHttpLink({
@@ -35,11 +36,15 @@ async function setupPersistCache() {
 function setupApolloClient() {
   setupPersistCache();
 
-  cache.writeData(userData);
+  cache.writeData(customerData);
 
   return new ApolloClient({
     link: ApolloLink.from([authLink, httpLink]),
-    resolvers: {},
+    resolvers: {
+      Mutation: {
+        setLocalState: authResolver,
+      },
+    },
     cache,
   });
 }

@@ -112,7 +112,7 @@ export default function StackNavigator({
           headerRight: () => (
             <HeaderTextButton
               text={t('Register')}
-              onPress={() => navigation.navigate('Register')}
+              onPress={() => navigation.replace('Register')}
             />
           ),
         })}
@@ -135,7 +135,7 @@ export default function StackNavigator({
           headerRight: () => (
             <HeaderTextButton
               text={t('Log In')}
-              onPress={() => navigation.navigate('Login')}
+              onPress={() => navigation.replace('Login')}
             />
           ),
         })}

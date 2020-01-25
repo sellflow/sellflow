@@ -16,7 +16,12 @@ import { DatePicker } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { validateEmail, validatePassword } from '../helpers/validation';
+import {
+  INVALID_EMAIL_MESSAGE,
+  INVALID_PASSWORD_MESSAGE,
+  validateEmail,
+  validatePassword,
+} from '../helpers/validation';
 import formatDateLong from '../helpers/formatDateLong';
 import { profile } from '../../assets/images';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
@@ -128,7 +133,7 @@ export default function EditProfileScene() {
                   clearTextOnFocus={false}
                   autoCapitalize="none"
                   errorMessage={
-                    !isEmailValid ? t('Email is not valid') : undefined
+                    !isEmailValid ? INVALID_EMAIL_MESSAGE : undefined
                   }
                   ref={emailRef}
                   textContentType="emailAddress"
@@ -156,11 +161,7 @@ export default function EditProfileScene() {
                   textContentType="password"
                   autoCapitalize="none"
                   errorMessage={
-                    !isPasswordValid
-                      ? t(
-                          'Password must contain at least one number, uppercase and lowercase letter',
-                        )
-                      : undefined
+                    !isPasswordValid ? INVALID_PASSWORD_MESSAGE : undefined
                   }
                   secureTextEntry={true}
                   mode="flat"

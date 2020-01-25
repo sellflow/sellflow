@@ -15,9 +15,10 @@
     "jest": "jest --coverage --passWithNoTests",
     "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest",
     "test-full": "yarn apollo:generate && yarn test",
-    "apollo:generate" : "yarn apollo:schema-download && yarn apollo:typegen-server && yarn format:generated",
+    "apollo:generate" : "yarn apollo:schema-download  && yarn apollo:typegen-server && yarn apollo:typegen-client && yarn format:generated",
     "apollo:schema-download" : "apollo schema:download src/graphql/schema.json --endpoint=https://ouioui-acc.myshopify.com/api/graphql --header='X-Shopify-Storefront-Access-Token: fdfae894a8747ee7ddcfbebdcf1d721a'",
-    "apollo:typegen-server": "apollo codegen:generate --localSchemaFile src/graphql/schema.json --target typescript --tagName gql --outputFlat src/generated"
+    "apollo:typegen-server": "apollo codegen:generate --excludes=src/graphql/client/*.*  --localSchemaFile src/graphql/schema.json --target typescript --tagName gql --outputFlat src/generated/server",
+    "apollo:typegen-client": "apollo client:codegen src/generated/client --target typescript --includes=src/graphql/client/clientQueries.ts --tagName gql --localSchemaFile=src/graphql/client/local-schema.graphql --outputFlat"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",

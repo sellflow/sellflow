@@ -4,26 +4,45 @@ import {
   StyleSheet,
   Alert,
   TextInput as TextInputType,
+  AsyncStorage,
 } from 'react-native';
 import { Text, TextInput, Button } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { validateEmail, validatePassword } from '../helpers/validation';
+import {
+  INVALID_EMAIL_MESSAGE,
+  INVALID_PASSWORD_MESSAGE,
+  validateEmail,
+  validatePassword,
+} from '../helpers/validation';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
+import { useMutation } from '@apollo/react-hooks';
+import { CUSTOMER_REGISTER } from '../graphql/server/auth';
+import {
+  CustomerRegister,
+  CustomerRegisterVariables,
+} from '../generated/server/CustomerRegister';
+import { SET_LOCAL_STATE } from '../graphql/client/clientQueries';
+import {
+  SetLocalState,
+  SetLocalStateVariables,
+} from '../generated/client/SetLocalState';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavProp } from '../types/Navigation';
 
 export default function RegisterScene() {
+  let navigation = useNavigation<StackNavProp<'Register'>>();
   let [email, setEmail] = useState('');
   let [password, setPassword] = useState('');
   let [confirmPassword, setConfirmPassword] = useState('');
   let dimensions = useDimensions();
-  let onRegisterPressed = () => {
-    Alert.alert('Register');
-    /*TODO: DO register here */
+  let onSubmit = () => {
+    register();
   };
   let onTermsPressed = () => {
     Alert.alert('Terms & Condition');
-    /*TODO: DO switch to terms and condition here */
+    // TODO: Show terms and condition here
   };
 
   let emailRef = useRef<TextInputType>(null);
@@ -51,6 +70,55 @@ export default function RegisterScene() {
     !isEmailValid ||
     !isConfirmPasswordValid;
 
+  let [register, { loading: registerLoading }] = useMutation<
+    CustomerRegister,
+    CustomerRegisterVariables
+  >(CUSTOMER_REGISTER, {
+    variables: {
+      email,
+      password,
+    },
+    onCompleted: ({ customerCreate, customerAccessTokenCreate }) => {
+      if (
+        customerCreate &&
+        customerCreate.customer &&
+        customerAccessTokenCreate &&
+        customerAccessTokenCreate.customerAccessToken
+      ) {
+        let { email, id } = customerCreate.customer;
+        let {
+          accessToken,
+          expiresAt,
+        } = customerAccessTokenCreate.customerAccessToken;
+        AsyncStorage.setItem('accessToken', accessToken);
+        if (email) {
+          setLocalState({
+            variables: {
+              customer: {
+                id,
+                email,
+                expiresAt,
+              },
+            },
+          });
+        }
+      }
+    },
+  });
+
+  let [setLocalState, { loading: localStateLoading }] = useMutation<
+    SetLocalState,
+    SetLocalStateVariables
+  >(SET_LOCAL_STATE, {
+    onCompleted: () => {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Profile' }],
+      });
+    },
+  });
+
+  let isLoading = localStateLoading || registerLoading;
   return (
     <View style={containerStyle()}>
       <View>
@@ -66,7 +134,7 @@ export default function RegisterScene() {
             onBlur={() => {
               setIsEmailValid(validateEmail(email));
             }}
-            errorMessage={!isEmailValid ? t('Email is not valid') : undefined}
+            errorMessage={!isEmailValid ? INVALID_EMAIL_MESSAGE : undefined}
             textContentType="emailAddress"
             mode="flat"
             value={email}
@@ -92,11 +160,7 @@ export default function RegisterScene() {
               setIsPasswordValid(validatePassword(password));
             }}
             errorMessage={
-              !isPasswordValid
-                ? t(
-                    'Password must contain at least one number, uppercase and lowercase letter',
-                  )
-                : undefined
+              !isPasswordValid ? INVALID_PASSWORD_MESSAGE : undefined
             }
             returnKeyType="next"
             containerStyle={styles.insideTextInputContainer}
@@ -144,7 +208,8 @@ export default function RegisterScene() {
           </Text>
         </Text>
         <Button
-          onPress={onRegisterPressed}
+          loading={isLoading}
+          onPress={onSubmit}
           style={[defaultButton, styles.button]}
           disabled={isDisabled}
           labelStyle={defaultButtonLabel}

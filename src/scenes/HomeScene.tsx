@@ -11,7 +11,7 @@ import SearchBar from '../components/SearchBar';
 import { CarouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
-import { GetCategoriesAndFeaturedProducts } from '../generated/GetCategoriesAndFeaturedProducts';
+import { GetCategoriesAndFeaturedProducts } from '../generated/server/GetCategoriesAndFeaturedProducts';
 import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../graphql/queries/categoriesAndFeaturedProducts';
 
 export default function HomeScene() {

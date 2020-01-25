@@ -17,7 +17,7 @@ import {
 import { useColumns } from '../../helpers/columns';
 import { StackNavProp } from '../../types/Navigation';
 import { GET_COLLECTION } from '../../graphql/queries/productCollection';
-import { GetCollection } from '../../generated/GetCollection';
+import { GetCollection } from '../../generated/server/GetCollection';
 import { Product } from '../../types/types';
 
 const DEFAULT_MAX_PRICE = 1000;
