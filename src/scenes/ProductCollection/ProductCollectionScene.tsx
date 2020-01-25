@@ -16,7 +16,7 @@ import {
 } from './components';
 import { useColumns } from '../../helpers/columns';
 import { StackNavProp } from '../../types/Navigation';
-import { GET_COLLECTION } from '../../graphql/queries/productCollection';
+import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import { GetCollection } from '../../generated/server/GetCollection';
 import { Product } from '../../types/types';
 

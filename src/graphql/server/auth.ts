@@ -16,3 +16,23 @@ export const CUSTOMER_REGISTER = gql`
     }
   }
 `;
+
+export const CUSTOMER_CREATE_TOKEN = gql`
+  mutation CustomerCreateToken($email: String!, $password: String!) {
+    customerAccessTokenCreate(input: { email: $email, password: $password }) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+    }
+  }
+`;
+
+export const GET_CUSTOMER_DATA = gql`
+  query GetCustomerData($accessToken: String!) {
+    customer(customerAccessToken: $accessToken) {
+      email
+      id
+    }
+  }
+`;

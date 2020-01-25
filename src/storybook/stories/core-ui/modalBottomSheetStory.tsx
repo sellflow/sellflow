@@ -45,12 +45,12 @@ export default function modalBottomSheetStory() {
             <View style={styles.textInputContainer}>
               <TextInput
                 mode="outlined"
-                label="Min. Price ($)"
+                label={t('Min. Price')}
                 containerStyle={styles.textInput}
               />
               <TextInput
                 mode="outlined"
-                label="Max. Price ($)"
+                label={t('Max. Price')}
                 containerStyle={styles.textInput}
               />
             </View>

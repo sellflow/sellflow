@@ -12,7 +12,7 @@ import { CarouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
 import { GetCategoriesAndFeaturedProducts } from '../generated/server/GetCategoriesAndFeaturedProducts';
-import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../graphql/queries/categoriesAndFeaturedProducts';
+import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../graphql/server/categoriesAndFeaturedProducts';
 
 export default function HomeScene() {
   let { screenSize, isLandscape } = useDimensions();

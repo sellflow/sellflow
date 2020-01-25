@@ -4,6 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput as TextInputType,
+  Alert,
+  AsyncStorage,
 } from 'react-native';
 import { Text, TextInput, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
@@ -13,9 +15,27 @@ import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
+import {
+  CUSTOMER_CREATE_TOKEN,
+  GET_CUSTOMER_DATA,
+} from '../graphql/server/auth';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
+import {
+  CustomerCreateToken,
+  CustomerCreateTokenVariables,
+} from '../generated/server/CustomerCreateToken';
+import {
+  GetCustomerData,
+  GetCustomerDataVariables,
+} from '../generated/server/GetCustomerData';
+import { SET_LOCAL_STATE } from '../graphql/client/clientQueries';
+import {
+  SetLocalState,
+  SetLocalStateVariables,
+} from '../generated/client/SetLocalState';
 
 export default function ProfileScene() {
-  let { navigate } = useNavigation<StackNavProp<'Login'>>();
+  let navigation = useNavigation<StackNavProp<'Login'>>();
   let [email, setEmail] = useState();
   let [password, setPassword] = useState();
 
@@ -23,6 +43,7 @@ export default function ProfileScene() {
   let passwordRef = useRef<TextInputType>(null);
 
   let dimensions = useDimensions();
+  let [expiresDate, setExpiresDate] = useState('');
 
   let containerStyle = () => {
     let styleApplied;
@@ -44,13 +65,81 @@ export default function ProfileScene() {
     return styleApplied;
   };
 
+  let [setLocalState, { loading: setLocalStateLoading }] = useMutation<
+    SetLocalState,
+    SetLocalStateVariables
+  >(SET_LOCAL_STATE, {
+    onCompleted: () => {
+      // Note: I'm not sure if this is correct.
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Profile' }],
+      });
+    },
+  });
+
+  let [createToken, { loading: createTokenLoading }] = useMutation<
+    CustomerCreateToken,
+    CustomerCreateTokenVariables
+  >(CUSTOMER_CREATE_TOKEN, {
+    variables: { email, password },
+    onCompleted: ({ customerAccessTokenCreate }) => {
+      if (
+        customerAccessTokenCreate &&
+        customerAccessTokenCreate.customerAccessToken
+      ) {
+        let {
+          accessToken,
+          expiresAt,
+        } = customerAccessTokenCreate.customerAccessToken;
+        setExpiresDate(expiresAt);
+        AsyncStorage.setItem('accessToken', accessToken);
+        login({ variables: { accessToken } });
+      } else {
+        Alert.alert(
+          'Something went wrong!',
+          'Your email or password might be wrong!',
+        );
+      }
+    },
+  });
+
+  let [login, { loading: getDataLoading }] = useLazyQuery<
+    GetCustomerData,
+    GetCustomerDataVariables
+  >(GET_CUSTOMER_DATA, {
+    onCompleted: ({ customer }) => {
+      if (customer) {
+        let { email, id } = customer;
+        if (email) {
+          setLocalState({
+            variables: {
+              customer: {
+                email,
+                id,
+                expiresAt: expiresDate,
+              },
+            },
+          });
+        }
+      }
+    },
+  });
+
+  let onSubmit = () => {
+    createToken();
+  };
+
+  let isLoading = createTokenLoading || getDataLoading || setLocalStateLoading;
+
   return (
     <View style={[containerStyle(), styles.container]}>
       <View>
         <TextInput
-          label="Email Address"
+          label={t('Email Address')}
           value={email}
           onChangeText={setEmail}
+          autoCapitalize="none"
           containerStyle={styles.textInputContainer}
           labelStyle={styles.inputLabel}
           style={styles.textSize}
@@ -63,9 +152,10 @@ export default function ProfileScene() {
         <TextInput
           returnKeyType="done"
           ref={passwordRef}
-          label="Password"
+          label={t('Password')}
           value={password}
           onChangeText={setPassword}
+          autoCapitalize="none"
           secureTextEntry={true}
           containerStyle={styles.textInputContainer}
           labelStyle={styles.inputLabel}
@@ -73,14 +163,19 @@ export default function ProfileScene() {
         />
         <TouchableOpacity
           style={styles.forgetPassword}
-          onPress={() => navigate('ForgotPassword')}
+          onPress={() => navigation.navigate('ForgotPassword')}
         >
           <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
             {t('Forgot Password?')}
           </Text>
         </TouchableOpacity>
       </View>
-      <Button style={defaultButton} labelStyle={defaultButtonLabel}>
+      <Button
+        loading={isLoading}
+        style={defaultButton}
+        labelStyle={defaultButtonLabel}
+        onPress={onSubmit}
+      >
         {t('Log in')}
       </Button>
     </View>

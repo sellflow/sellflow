@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Text, Avatar } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,9 +7,33 @@ import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { profile } from '../../assets/images';
 import { StackNavProp } from '../types/Navigation';
+import { useMutation } from '@apollo/react-hooks';
+import {
+  SetLocalState,
+  SetLocalStateVariables,
+} from '../generated/client/SetLocalState';
+import { SET_LOCAL_STATE } from '../graphql/client/clientQueries';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<StackNavProp<'Profile'>>();
+
+  let [logout] = useMutation<SetLocalState, SetLocalStateVariables>(
+    SET_LOCAL_STATE,
+    {
+      variables: {
+        customer: {
+          email: '',
+          expiresAt: '',
+          id: '',
+        },
+      },
+      onCompleted: () => {
+        AsyncStorage.setItem('accessToken', '');
+        // TODO: We probably don't want to navigate anywhere.
+        navigate('Login');
+      },
+    },
+  );
 
   return (
     <View style={styles.container}>
@@ -49,7 +73,9 @@ export default function ProfileScene() {
       <View style={styles.menuContainer}>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigate('Login')}
+          onPress={() => {
+            logout();
+          }}
         >
           <Text style={[styles.buttonLabelStyle, styles.redTextColor]}>
             {t('Log Out')}
