@@ -25,26 +25,20 @@ export default function Carousel(props: Props) {
   let { data, width = dimensions.width, height } = props;
   let [activeIndex, setActiveIndex] = useState(0);
 
-  let renderItem = ({ item }: { item: CarouselItem }) => {
-    let { content = null, image, onItemPress } = item;
-
-    return (
-      <TouchableWithoutFeedback onPress={onItemPress}>
-        <ImageBackground
-          source={{ uri: image }}
-          style={[styles.itemContainer, { height }]}
-        >
-          {content}
-        </ImageBackground>
-      </TouchableWithoutFeedback>
-    );
-  };
-
   return (
     <View style={[styles.carouselContainer, { height }]}>
       <SnapCarousel
         data={data}
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <TouchableWithoutFeedback onPress={item.onItemPress}>
+            <ImageBackground
+              source={{ uri: item.image }}
+              style={[styles.itemContainer, { height }]}
+            >
+              {item.render()}
+            </ImageBackground>
+          </TouchableWithoutFeedback>
+        )}
         sliderWidth={width}
         itemWidth={width}
         inactiveSlideScale={1}

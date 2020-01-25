@@ -8,7 +8,7 @@ import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { Carousel, CategoryList } from '../core-ui';
 import { ProductList } from '../components';
 import SearchBar from '../components/SearchBar';
-import { CarouselData } from '../fixtures/carousel';
+import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
 import { GetCategoriesAndFeaturedProducts } from '../generated/server/GetCategoriesAndFeaturedProducts';
@@ -53,7 +53,7 @@ export default function HomeScene() {
   let renderHeader = () => (
     <>
       <Carousel
-        data={CarouselData}
+        data={carouselData}
         height={screenSize === ScreenSize.Small ? 180 : 384}
       />
 

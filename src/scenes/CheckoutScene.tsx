@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, RadioButton, IconButton, Button } from 'exoflex';
-import { CheckoutAddress } from '../components';
+import { useNavigation } from '@react-navigation/native';
 
+import { CheckoutAddress } from '../components';
 import { Surface } from '../core-ui';
 import { addressItemData } from '../fixtures/AddressItemData';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
@@ -10,9 +11,11 @@ import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
+import { StackNavProp } from '../types/Navigation';
 
 export default function CheckoutScene() {
   let [selectedAddress, setSelectedAddress] = useState(addressItemData[0].id);
+  let { navigate } = useNavigation<StackNavProp<'Checkout'>>();
 
   useEffect(() => {
     let defaultAddress =
@@ -96,6 +99,7 @@ export default function CheckoutScene() {
         <Button
           style={[defaultButton, styles.verticalMargin]}
           labelStyle={defaultButtonLabel}
+          onPress={() => navigate('Payment')}
         >
           {t('Proceed to payment')}
         </Button>

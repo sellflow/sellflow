@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView, FlatList, StyleSheet, Alert } from 'react-native';
 import { Button } from 'exoflex';
 
 import { ManageAddress } from '../components';
@@ -10,7 +10,7 @@ export default function AddressManagementScene() {
   let addNewAddress = () => Alert.alert('Add New', 'ToDo Routing'); //TODO Routing to Add Scene
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={addressItemData}
         renderItem={({ item }) => (
@@ -21,19 +21,18 @@ export default function AddressManagementScene() {
       />
       <Button
         onPress={addNewAddress}
-        style={[defaultButton, styles.bottomBar]}
+        style={[defaultButton, styles.bottomButton]}
         labelStyle={defaultButtonLabel}
       >
         {t('Add new address')}
       </Button>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 14,
   },
   item: {
     marginTop: 16,
@@ -41,8 +40,9 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 24,
   },
-  bottomBar: {
+  bottomButton: {
     marginHorizontal: 24,
     marginTop: 20,
+    marginBottom: 10,
   },
 });

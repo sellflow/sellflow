@@ -31,7 +31,7 @@ export default function OrderHistoryItem(props: Props) {
         {t('Order {orderID}', { orderID: order.orderID })}
       </Text>
       <View style={styles.textStyle}>
-        <Text>{t('Ordered At')}</Text>
+        <Text>{t('Ordered')}</Text>
         <Text>{formatDateTime(order.orderTime)}</Text>
       </View>
       <View style={styles.textStyle}>

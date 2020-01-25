@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text, Button, TextInput } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
@@ -13,83 +13,82 @@ import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 
+let paymentData: PaymentData = {
+  subtotal: 77,
+  shippingCost: 0,
+  total: 77,
+};
+
 export default function ShoppingCartScene() {
-  let subtotal = 77;
-  let shippingCost = 0;
-  let total = subtotal + shippingCost;
-  let dimensions = useDimensions();
+  let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
 
-  let paymentData: PaymentData = { subtotal, shippingCost, total };
-
-  let containerProductStyle = () => {
-    let styleApplied;
-
-    switch (dimensions.screenSize) {
-      case ScreenSize.Small: {
-        styleApplied = styles.container;
-        break;
-      }
-      case ScreenSize.Medium: {
-        styleApplied = styles.portraitTabletProductsContainer;
-        break;
-      }
-      case ScreenSize.Large: {
-        styleApplied = styles.landscapeTabletProductsContainer;
-        break;
-      }
-    }
-
-    return styleApplied;
-  };
-
-  let renderPaymentView = () => (
-    <Payment
-      data={paymentData}
-      onSubmit={() => {
+  let renderCartView = () => (
+    <View style={styles.cartContainer}>
+      <View style={styles.orderItemContainer}>
+        {checkoutData.map((item, index) => (
+          <View key={item.variantID}>
+            {index > 0 ? <View style={styles.productSeparator} /> : null}
+            <OrderItem
+              orderItem={item}
+              containerStyle={styles.orderItem}
+              key={item.variantID}
+            />
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+  let renderPaymentView = () => <Payment data={paymentData} />;
+  let renderButton = () => (
+    <Button
+      style={defaultButton}
+      labelStyle={defaultButtonLabel}
+      onPress={() => {
         navigate('Checkout');
       }}
-    />
+    >
+      {t('Checkout')}
+    </Button>
   );
-  return (
-    <View style={styles.safeContainer}>
+  return screenSize === ScreenSize.Large ? (
+    <View style={styles.horizontalLayout}>
       <ScrollView
-        contentContainerStyle={styles.scrollContentContainer}
-        style={styles.scrollContainer}
-        nestedScrollEnabled={true}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        contentInsetAdjustmentBehavior="automatic"
       >
-        <View style={containerProductStyle()}>
-          <View style={styles.productDetailsContainer}>
-            <View style={styles.orderItemContainer}>
-              {checkoutData.map((item, index) => {
-                return (
-                  <View key={item.variantID}>
-                    {index > 0 ? (
-                      <View style={styles.productSeparator} />
-                    ) : null}
-                    <OrderItem
-                      orderItem={item}
-                      containerStyle={styles.orderItem}
-                      key={item.variantID}
-                    />
-                  </View>
-                );
-              })}
-            </View>
-          </View>
-          {(dimensions.screenSize === ScreenSize.Medium ||
-            dimensions.screenSize === ScreenSize.Small) &&
-            renderPaymentView()}
-        </View>
+        {renderCartView()}
       </ScrollView>
-      {dimensions.screenSize === ScreenSize.Large && renderPaymentView()}
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ paddingTop: 15, paddingHorizontal: 15 }}>
+          {renderPaymentView()}
+          {renderButton()}
+        </View>
+      </SafeAreaView>
     </View>
+  ) : (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={
+          screenSize === ScreenSize.Small
+            ? styles.scrollContentSmall
+            : styles.scrollContentMedium
+        }
+      >
+        {renderCartView()}
+        {renderPaymentView()}
+      </ScrollView>
+      <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
+        {renderButton()}
+      </View>
+    </SafeAreaView>
   );
 }
 
 type PaymentProps = {
   data: PaymentData;
-  onSubmit: () => void;
 };
 type PaymentData = {
   subtotal: number;
@@ -98,21 +97,11 @@ type PaymentData = {
 };
 
 function Payment(props: PaymentProps) {
-  let { onSubmit } = props;
   let { shippingCost, total, subtotal } = props.data;
-  let dimensions = useDimensions();
-  let containerCheckoutStyle = () => {
-    if (dimensions.screenSize === ScreenSize.Large) {
-      return styles.tabletLandscapeCheckoutContainer;
-    }
-  };
-
   return (
-    <View style={containerCheckoutStyle()}>
+    <>
       <View style={styles.voucherCodeContainer}>
-        <Text style={[styles.greyText, styles.smallText, styles.margin]}>
-          {t('Voucher code or giftcard')}
-        </Text>
+        <Text style={styles.textLabel}>{t('Voucher code or giftcard')}</Text>
         <View style={styles.voucherInputButtonContainer}>
           <TextInput
             containerStyle={styles.voucherTextInputContainer}
@@ -152,53 +141,21 @@ function Payment(props: PaymentProps) {
           </Text>
         </View>
       </Surface>
-      <Button
-        style={[defaultButton, styles.checkout]}
-        labelStyle={defaultButtonLabel}
-        onPress={onSubmit}
-      >
-        {t('Checkout')}
-      </Button>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 6,
-    justifyContent: 'space-between',
+  horizontalLayout: {
     flexDirection: 'row',
+    paddingHorizontal: 15,
+    alignItems: 'stretch',
   },
-  scrollContainer: {
-    backgroundColor: COLORS.white,
-    flex: 1,
-  },
-  scrollContentContainer: {
-    flexGrow: 1,
-  },
-  tabletLandscapeCheckoutContainer: {
-    paddingTop: 14,
-    paddingRight: 36,
-    paddingLeft: 12,
-    backgroundColor: COLORS.white,
-    flex: 1,
-  },
-  container: {
+  scrollContentSmall: {
     paddingHorizontal: 24,
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    flexGrow: 1,
   },
-  portraitTabletProductsContainer: {
+  scrollContentMedium: {
     paddingHorizontal: 36,
-    justifyContent: 'space-between',
-    flexGrow: 1,
-  },
-  landscapeTabletProductsContainer: {
-    paddingLeft: 36,
-    paddingRight: 12,
-    justifyContent: 'space-between',
-    flexGrow: 1,
   },
   voucherCodeContainer: {
     padding: 12,
@@ -218,7 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  productDetailsContainer: {
+  cartContainer: {
     flexDirection: 'column',
     marginVertical: 2,
   },
@@ -238,11 +195,10 @@ const styles = StyleSheet.create({
   orderItem: {
     paddingVertical: 7,
   },
-  greyText: {
+  textLabel: {
     color: COLORS.grey,
-  },
-  smallText: {
     fontSize: FONT_SIZE.small,
+    marginBottom: 12,
   },
   mediumText: {
     fontSize: FONT_SIZE.medium,
@@ -251,9 +207,6 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
     marginBottom: 6,
   },
-  checkout: {
-    marginBottom: 14,
-  },
   addButton: {
     maxWidth: 88,
     minWidth: 88,
@@ -261,8 +214,5 @@ const styles = StyleSheet.create({
   productSeparator: {
     borderWidth: 0.5,
     borderColor: COLORS.lightGrey,
-  },
-  margin: {
-    marginBottom: 12,
   },
 });

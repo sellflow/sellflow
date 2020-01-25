@@ -67,11 +67,9 @@ export const tabBarOptions: BottomTabBarOptions = {
   activeTintColor: COLORS.primaryColor,
   inactiveTintColor: COLORS.inactive,
   tabStyle: {
-    paddingTop: 16,
-    marginBottom: 2,
-  },
-  style: {
-    paddingBottom: 4,
+    paddingTop: 12,
+    paddingBottom: 8,
+    height: 60,
   },
   labelPosition: 'below-icon',
   labelStyle: {

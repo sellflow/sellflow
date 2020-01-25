@@ -101,23 +101,27 @@ function BottomActionBar(props: ProductDetailsProps) {
   };
 
   return (
-    <>
-      <View style={styles.bottomIconContainer}>
+    <View style={styles.bottomIconContainer}>
+      <IconButton
+        icon="share-variant"
+        color={COLORS.primaryColor}
+        onPress={() => {}}
+        style={styles.icon}
+      />
+      {isWishlistActive ? (
         <IconButton
-          icon="share-variant"
-          color={COLORS.primaryColor}
-          onPress={() => {}}
+          icon="heart"
+          color={COLORS.wishlist}
+          onPress={onPressWishlist}
+          style={styles.icon}
         />
-        {isWishlistActive ? (
-          <IconButton
-            icon="heart"
-            color={COLORS.wishlist}
-            onPress={onPressWishlist}
-          />
-        ) : (
-          <IconButton icon="heart-outline" onPress={onPressWishlist} />
-        )}
-      </View>
+      ) : (
+        <IconButton
+          icon="heart-outline"
+          onPress={onPressWishlist}
+          style={styles.icon}
+        />
+      )}
       <Button
         style={[defaultButton, styles.flex]}
         labelStyle={defaultButtonLabel}
@@ -125,7 +129,7 @@ function BottomActionBar(props: ProductDetailsProps) {
       >
         {t('Add to Cart')}
       </Button>
-    </>
+    </View>
   );
 }
 
@@ -234,6 +238,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderTopWidth: 1,
     borderTopColor: COLORS.lightGrey,
+    marginBottom: 12,
   },
   bottomLandscapeContainer: {
     marginHorizontal: 36,
@@ -241,7 +246,10 @@ const styles = StyleSheet.create({
   },
   bottomIconContainer: {
     flexDirection: 'row',
-    marginTop: 5,
-    marginRight: 12,
+    alignItems: 'center',
+    flex: 1,
+  },
+  icon: {
+    marginRight: 14,
   },
 });
