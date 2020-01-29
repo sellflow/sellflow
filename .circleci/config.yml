@@ -28,7 +28,36 @@ jobs:
       - run: yarn decrypt-env $encryption_key
       - run: yarn test-full --maxWorkers=4
 
+  auto-mirror:
+    docker:
+      - image: circleci/node:lts
+
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 'af:de:07:c5:4c:08:f8:bf:22:f7:b5:ef:dd:5b:d6:3d'
+
+      - run:
+          name: Prepare for mirroring
+          command: |
+            # Need to create .ssh dir in case it doesn't exists
+            mkdir -p ~/.ssh
+            # This too
+            touch ~/.ssh/known_hosts
+            # To avoid prompt when doing ssh connection
+            ssh-keyscan 'github.com' >> ~/.ssh/known_hosts
+      - run:
+          name: Mirroring repo
+          command: |
+            git clone --bare $source_repo
+            cd sellflow.git
+            git push --mirror git@github.com:sellflow/sellflow.git
+
 workflows:
   main:
     jobs:
       - test
+      - auto-mirror:
+          filters:
+            branches:
+              only: master
