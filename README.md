@@ -1,11 +1,13 @@
-![sellflow-cover-photo](https://user-images.githubusercontent.com/369384/73391480-ebf86280-428c-11ea-808f-4edba24d36bc.png)
+<p align="center">
+<img width="300" alt="Sellflow Logo" src="https://user-images.githubusercontent.com/369384/73398699-ce31fa00-429a-11ea-8afb-ed5ea6812a4c.png">
+</p>
 
-### An open-source mobile commerce UI for Shopify's [Storefront API](https://help.shopify.com/en/api/storefront-api)!
+<h3 align="center">An open-source, pre-built mobile app for your <a href="https://help.shopify.com/en/api/storefront-api">Shopify storefront</a>!</h3>
 
 ## Features
 
-- 100% [React Native](https://facebook.github.io/react-native/) and [Expo](https://expo.io)
-- Built with [TypeScript](http://typescriptlang.org)
+- 100% [React Native](https://facebook.github.io/react-native/) and [TypeScript](http://typescriptlang.org) built on [Expo](https://expo.io)
+- Plugs directly into your existing Shopify store
 - Android, iPhone and iPad
 - Customizable to your brand's look and feel
 - Responsive layout: supports phones and tablets
@@ -77,13 +79,9 @@ yarn test-full
 
 Push to your fork and create a PR
 
-## Code of Conduct
+## Professional Support
 
-We are committed to evaluating contributions within project channels (such as reporting issues, posting feature requests, updating documentation, submitting pull requests and other project activities) without regard to the contributor's level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, religion, nationality, politics, or activity outside of project channels.
-
-## Consulting
-
-With official support, you get expert help straight from the core team. We provide dedicated support, prioritize feature requests, deployment strategies, advice on best practices, design decisions, and team augmentation. Reach out to us at support@kodefox.com.
+With official support, you get expert help straight from the core team. We provide dedicated support, prioritize feature requests, deployment strategies, advice on best practices, design decisions, and team augmentation. Reach out to us for consulting at support@kodefox.com.
 
 ## License
 
