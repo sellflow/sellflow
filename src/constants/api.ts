@@ -1,2 +1,1 @@
-// TODO: Change API to Shopify Storefront API URL
-export const STOREFRONT_API = 'https://ouioui-acc.myshopify.com/api/graphql';
+export { STOREFRONT_API_URL, STOREFRONT_ACCESS_TOKEN } from '../../.env.json';

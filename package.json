@@ -15,10 +15,12 @@
     "jest": "jest --coverage --passWithNoTests",
     "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest",
     "test-full": "yarn apollo:generate && yarn test",
-    "apollo:generate" : "yarn apollo:schema-download  && yarn apollo:typegen-server && yarn apollo:typegen-client && yarn format:generated",
-    "apollo:schema-download" : "apollo schema:download src/graphql/schema.json --endpoint=https://ouioui-acc.myshopify.com/api/graphql --header='X-Shopify-Storefront-Access-Token: fdfae894a8747ee7ddcfbebdcf1d721a'",
+    "apollo:generate": "yarn apollo:schema-download  && yarn apollo:typegen-server && yarn apollo:typegen-client && yarn format:generated",
+    "apollo:schema-download": "node -r ./src/scripts/load-env.js ./node_modules/.bin/cross-var apollo schema:download src/graphql/schema.json --endpoint=%STOREFRONT_API_URL% --header='X-Shopify-Storefront-Access-Token: %STOREFRONT_ACCESS_TOKEN%'",
     "apollo:typegen-server": "apollo codegen:generate --excludes=src/graphql/client/*.*  --localSchemaFile src/graphql/schema.json --target typescript --tagName gql --outputFlat src/generated/server",
-    "apollo:typegen-client": "apollo client:codegen src/generated/client --target typescript --includes=src/graphql/client/clientQueries.ts --tagName gql --localSchemaFile=src/graphql/client/local-schema.graphql --outputFlat"
+    "apollo:typegen-client": "apollo client:codegen src/generated/client --target typescript --includes=src/graphql/client/clientQueries.ts --tagName gql --localSchemaFile=src/graphql/client/local-schema.graphql --outputFlat",
+    "encrypt-env": "openssl enc -aes-256-cbc -md md5 -salt -in ./.env.json -out ./.env.enc -k",
+    "decrypt-env": "openssl enc -aes-256-cbc -md md5 -d -in ./.env.enc -out ./.env.json -k"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
@@ -61,6 +63,7 @@
     "@types/react-test-renderer": "^16.9.1",
     "apollo": "^2.21.3",
     "babel-preset-expo": "~8.0.0",
+    "cross-var": "^1.1.0",
     "eslint": "^6.8.0",
     "eslint-config-kodefox": "^0.1.0",
     "jest": "^24.9.0",
@@ -82,7 +85,9 @@
       ]
     }
   },
-  "eslintIgnore": ["src/generated/**/*.ts"],
+  "eslintIgnore": [
+    "src/generated/**/*.ts"
+  ],
   "jest": {
     "preset": "jest-expo",
     "transform": {

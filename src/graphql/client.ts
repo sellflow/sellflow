@@ -7,19 +7,19 @@ import { ApolloLink } from 'apollo-link';
 import { persistCache } from 'apollo-cache-persist';
 import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types';
 
-import { STOREFRONT_API } from '../constants/api';
+import { STOREFRONT_API_URL, STOREFRONT_ACCESS_TOKEN } from '../constants/api';
 import { customerData } from './customerData';
 import { authResolver } from './resolvers/authResolver';
 
 const cache = new InMemoryCache();
 const httpLink = createHttpLink({
-  uri: STOREFRONT_API,
+  uri: STOREFRONT_API_URL,
 });
 const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      'X-Shopify-Storefront-Access-Token': 'fdfae894a8747ee7ddcfbebdcf1d721a',
+      'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN,
     },
   };
 });

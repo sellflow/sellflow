@@ -17,3 +17,6 @@ src/graphql/schema.json
 
 # Jest
 coverage/
+
+# env
+.env.json
