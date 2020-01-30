@@ -54,6 +54,7 @@ export type Product = {
 export type CategoryItem = {
   id: string;
   title: string;
+  handle: string;
 };
 
 export type CachedData = {

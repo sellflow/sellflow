@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Button, ActivityIndicator } from 'exoflex';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from '@apollo/react-hooks';
 
 import { ProductList } from '../../components';
@@ -15,7 +15,7 @@ import {
   FilterModal,
 } from './components';
 import { useColumns } from '../../helpers/columns';
-import { StackNavProp } from '../../types/Navigation';
+import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import { GetCollection } from '../../generated/server/GetCollection';
 import { Product } from '../../types/types';
@@ -63,14 +63,14 @@ export default function ProductCollectionScene() {
   let [priceRange, setPriceRange] = useState([0, DEFAULT_MAX_PRICE]);
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
+  let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   let isScreenSizeLarge = screenSize === ScreenSize.Large;
 
   let { data: collectionData, loading } = useQuery<GetCollection>(
     GET_COLLECTION,
     {
       variables: {
-        // TODO: Use collection handle from params
-        collectionHandle: 'accessories',
+        collectionHandle: params.collection.handle,
       },
     },
   );

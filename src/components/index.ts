@@ -4,6 +4,7 @@ import ProductItem from './ProductItem';
 import CheckoutAddress from './CheckoutAddress';
 import ManageAddress from './ManageAddress';
 import ProductList from './ProductList';
+import SearchBar from './SearchBar';
 
 export {
   OrderItem,
@@ -12,4 +13,5 @@ export {
   CheckoutAddress,
   ManageAddress,
   ProductList,
+  SearchBar,
 };

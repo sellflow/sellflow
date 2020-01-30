@@ -6,17 +6,18 @@ import { useQuery } from '@apollo/react-hooks';
 
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { Carousel, CategoryList } from '../core-ui';
-import { ProductList } from '../components';
-import SearchBar from '../components/SearchBar';
+import { ProductList, SearchBar } from '../components';
 import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
 import { GetCategoriesAndFeaturedProducts } from '../generated/server/GetCategoriesAndFeaturedProducts';
 import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../graphql/server/categoriesAndFeaturedProducts';
+import { useColumns } from '../helpers/columns';
 
 export default function HomeScene() {
-  let { screenSize, isLandscape } = useDimensions();
+  let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
+  let numColumns = useColumns();
 
   let { loading, data } = useQuery<GetCategoriesAndFeaturedProducts>(
     GET_CATEGORIES_AND_FEATURED_PRODUCTS,
@@ -31,12 +32,11 @@ export default function HomeScene() {
     );
   }
 
-  let numColumns = screenSize === ScreenSize.Small ? 2 : isLandscape ? 5 : 4;
-
   let categoryData: Array<CategoryItem> = data.collections.edges.map(
     (item) => ({
       id: item.node.id,
       title: item.node.title,
+      handle: item.node.handle,
     }),
   );
 
@@ -81,6 +81,7 @@ export default function HomeScene() {
         data={productData}
         numColumns={numColumns}
         onItemPress={(product) => navigate('ProductDetails', { product })}
+        columnWrapperStyle={styles.itemWrapperStyle}
       />
     </View>
   );
@@ -100,6 +101,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   subTitleContainer: {
+    marginLeft: 24,
+  },
+  itemWrapperStyle: {
     marginHorizontal: 24,
   },
 });

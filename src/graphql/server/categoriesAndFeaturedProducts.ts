@@ -29,6 +29,7 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
           images(first: 1) {
             edges {
               node {
+                id
                 originalSrc
               }
             }
