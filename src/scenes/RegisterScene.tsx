@@ -19,20 +19,22 @@ import {
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { useMutation } from '@apollo/react-hooks';
 import { CUSTOMER_REGISTER } from '../graphql/server/auth';
+import { SET_CUSTOMER } from '../graphql/client/clientQueries';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavProp } from '../types/Navigation';
 import {
   CustomerRegister,
   CustomerRegisterVariables,
 } from '../generated/server/CustomerRegister';
-import { SET_LOCAL_STATE } from '../graphql/client/clientQueries';
 import {
-  SetLocalState,
-  SetLocalStateVariables,
-} from '../generated/client/SetLocalState';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavProp } from '../types/Navigation';
+  SetCustomer,
+  SetCustomerVariables,
+} from '../generated/client/SetCustomer';
 
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
+  let [firstName, setFirstName] = useState('');
+  let [lastName, setLastName] = useState('');
   let [email, setEmail] = useState('');
   let [password, setPassword] = useState('');
   let [confirmPassword, setConfirmPassword] = useState('');
@@ -45,6 +47,8 @@ export default function RegisterScene() {
     // TODO: Show terms and condition here
   };
 
+  let firstNameRef = useRef<TextInputType>(null);
+  let lastNameRef = useRef<TextInputType>(null);
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
   let confirmPasswordRef = useRef<TextInputType>(null);
@@ -63,12 +67,15 @@ export default function RegisterScene() {
   let [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
 
   let isDisabled =
+    !firstName ||
+    !lastName ||
     !email ||
     !password ||
     !confirmPassword ||
     !isPasswordValid ||
     !isEmailValid ||
-    !isConfirmPasswordValid;
+    !isConfirmPasswordValid ||
+    password !== confirmPassword;
 
   let [register, { loading: registerLoading }] = useMutation<
     CustomerRegister,
@@ -77,6 +84,11 @@ export default function RegisterScene() {
     variables: {
       email,
       password,
+      firstName,
+      lastName,
+    },
+    onError: (error) => {
+      Alert.alert('Error ocurred!', error.message);
     },
     onCompleted: ({ customerCreate, customerAccessTokenCreate }) => {
       if (
@@ -85,19 +97,21 @@ export default function RegisterScene() {
         customerAccessTokenCreate &&
         customerAccessTokenCreate.customerAccessToken
       ) {
-        let { email, id } = customerCreate.customer;
+        let { email, id, firstName, lastName } = customerCreate.customer;
         let {
           accessToken,
           expiresAt,
         } = customerAccessTokenCreate.customerAccessToken;
         AsyncStorage.setItem('accessToken', accessToken);
-        if (email) {
+        if (email && firstName && lastName) {
           setLocalState({
             variables: {
               customer: {
                 id,
                 email,
                 expiresAt,
+                firstName,
+                lastName,
               },
             },
           });
@@ -107,9 +121,9 @@ export default function RegisterScene() {
   });
 
   let [setLocalState, { loading: localStateLoading }] = useMutation<
-    SetLocalState,
-    SetLocalStateVariables
-  >(SET_LOCAL_STATE, {
+    SetCustomer,
+    SetCustomerVariables
+  >(SET_CUSTOMER, {
     onCompleted: () => {
       navigation.reset({
         index: 0,
@@ -123,9 +137,45 @@ export default function RegisterScene() {
     <View style={containerStyle()}>
       <View>
         <View style={styles.textInputContainer}>
+          <Text style={styles.greyText}>{t('First Name')}</Text>
+          <TextInput
+            autoFocus={false}
+            clearTextOnFocus={false}
+            autoCapitalize="none"
+            textContentType="name"
+            mode="flat"
+            value={firstName}
+            onChangeText={setFirstName}
+            containerStyle={styles.insideTextInputContainer}
+            returnKeyType="next"
+            ref={firstNameRef}
+            onSubmitEditing={() => {
+              lastNameRef.current && lastNameRef.current.focus();
+            }}
+          />
+        </View>
+        <View style={styles.textInputContainer}>
+          <Text style={styles.greyText}>{t('Last Name')}</Text>
+          <TextInput
+            autoFocus={false}
+            clearTextOnFocus={false}
+            autoCapitalize="none"
+            textContentType="name"
+            mode="flat"
+            value={lastName}
+            onChangeText={setLastName}
+            containerStyle={styles.insideTextInputContainer}
+            returnKeyType="next"
+            ref={lastNameRef}
+            onSubmitEditing={() => {
+              emailRef.current && emailRef.current.focus();
+            }}
+          />
+        </View>
+        <View style={styles.textInputContainer}>
           <Text style={styles.greyText}>{t('Email Address')}</Text>
           <TextInput
-            autoFocus={true}
+            autoFocus={false}
             clearTextOnFocus={false}
             autoCapitalize="none"
             onFocus={() => {

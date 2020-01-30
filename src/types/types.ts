@@ -55,3 +55,20 @@ export type CategoryItem = {
   id: string;
   title: string;
 };
+
+export type CachedData = {
+  data: Data;
+};
+
+type Data = {
+  customer: Customer;
+};
+
+type Customer = {
+  __typename: string;
+  email: string;
+  id: string;
+  expiresAt: string;
+  firstName: string;
+  lastName: string;
+};

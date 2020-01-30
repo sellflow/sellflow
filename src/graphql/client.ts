@@ -42,7 +42,7 @@ function setupApolloClient() {
     link: ApolloLink.from([authLink, httpLink]),
     resolvers: {
       Mutation: {
-        setLocalState: authResolver,
+        setCustomer: authResolver,
       },
     },
     cache,

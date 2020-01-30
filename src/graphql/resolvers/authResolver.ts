@@ -1,10 +1,11 @@
 import { ApolloCache } from 'apollo-cache';
-import { SetLocalStateVariables } from '../../generated/client/SetLocalState';
+import { SetCustomerVariables } from '../../generated/client/SetCustomer';
+import { CachedData } from '../../types/types';
 
 function authResolver(
   _: object,
-  args: SetLocalStateVariables,
-  { cache }: { cache: ApolloCache<object> },
+  args: SetCustomerVariables,
+  { cache }: { cache: ApolloCache<CachedData> },
 ) {
   let { customer } = args;
 

@@ -1,10 +1,14 @@
 type Customer {
+  firstName: String!
+  lastName: String!
   id: String!
   email: String!
   expiresAt: String!
 }
 
 input CustomerInput {
+  firstName: String!
+  lastName: String!
   id: String!
   email: String!
   expiresAt: String!
@@ -15,5 +19,5 @@ type Query {
 }
 
 type Mutation {
-  setLocalState(customer: CustomerInput!): Customer!
+  setCustomer(customer: CustomerInput!): Customer!
 }

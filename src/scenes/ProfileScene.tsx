@@ -8,32 +8,31 @@ import { COLORS } from '../constants/colors';
 import { profile } from '../../assets/images';
 import { StackNavProp } from '../types/Navigation';
 import { useMutation } from '@apollo/react-hooks';
+import { SET_CUSTOMER } from '../graphql/client/clientQueries';
 import {
-  SetLocalState,
-  SetLocalStateVariables,
-} from '../generated/client/SetLocalState';
-import { SET_LOCAL_STATE } from '../graphql/client/clientQueries';
+  SetCustomer,
+  SetCustomerVariables,
+} from '../generated/client/SetCustomer';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<StackNavProp<'Profile'>>();
 
-  let [logout] = useMutation<SetLocalState, SetLocalStateVariables>(
-    SET_LOCAL_STATE,
-    {
-      variables: {
-        customer: {
-          email: '',
-          expiresAt: '',
-          id: '',
-        },
-      },
-      onCompleted: () => {
-        AsyncStorage.setItem('accessToken', '');
-        // TODO: We probably don't want to navigate anywhere.
-        navigate('Login');
+  let [logout] = useMutation<SetCustomer, SetCustomerVariables>(SET_CUSTOMER, {
+    variables: {
+      customer: {
+        email: '',
+        expiresAt: '',
+        id: '',
+        firstName: '',
+        lastName: '',
       },
     },
-  );
+    onCompleted: () => {
+      AsyncStorage.setItem('accessToken', '');
+      // TODO: We probably don't want to navigate anywhere.
+      navigate('Login');
+    },
+  });
 
   return (
     <View style={styles.container}>

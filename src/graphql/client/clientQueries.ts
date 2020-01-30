@@ -1,19 +1,23 @@
 import gql from 'graphql-tag';
 
-export const SET_LOCAL_STATE = gql`
-  mutation SetLocalState($customer: CustomerInput!) {
-    setLocalState(customer: $customer) @client {
+export const SET_CUSTOMER = gql`
+  mutation SetCustomer($customer: CustomerInput!) {
+    setCustomer(customer: $customer) @client {
       id
+      firstName
+      lastName
       email
       expiresAt
     }
   }
 `;
 
-export const GET_LOCAL_STATE = gql`
-  query GetLocalState {
+export const GET_CUSTOMER = gql`
+  query GetCustomer {
     customer @client {
       id
+      firstName
+      lastName
       email
       expiresAt
     }
