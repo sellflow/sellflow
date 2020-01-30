@@ -9,6 +9,7 @@ import { FONT_SIZE, FONT_FAMILY, FONT } from './fonts';
 export const ColorTheme = {
   ...DefaultTheme.colors,
   primary: COLORS.primaryColor,
+  accent: COLORS.primaryColor,
 };
 
 export const CustomTheme: Theme = {
