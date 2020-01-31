@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   TextInput as TextInputType,
+  ActivityIndicator,
+  AsyncStorage,
 } from 'react-native';
 import { Text, Button, Avatar, TextInput } from 'exoflex';
 import * as ImagePicker from 'expo-image-picker';
@@ -23,6 +25,15 @@ import {
 } from '../helpers/validation';
 import { profile } from '../../assets/images';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
+import { GET_CUSTOMER } from '../graphql/client/clientQueries';
+import { GetCustomer } from '../generated/client/GetCustomer';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { UPDATE_CUSTOMER_DATA } from '../graphql/server/auth';
+import {
+  UpdateCustomerData,
+  UpdateCustomerDataVariables,
+} from '../generated/server/UpdateCustomerData';
+import { useNavigation } from '@react-navigation/native';
 
 export default function EditProfileScene() {
   let [profilePicture, setProfilePicture] = useState(profile);
@@ -37,6 +48,7 @@ export default function EditProfileScene() {
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
   let dimensions = useDimensions();
+  let { goBack } = useNavigation();
 
   let togglePickerVisible = () => {
     setIsPickerVisible(!isPickerVisible);
@@ -69,11 +81,67 @@ export default function EditProfileScene() {
     }
   };
   let saveChanges = () => {
-    if (isPasswordValid && isEmailValid) {
-      //TODO: save fields here
-    }
+    AsyncStorage.getItem('accessToken').then((customerAccessToken) => {
+      if (customerAccessToken) {
+        if (password === '') {
+          updateCustomerData({
+            variables: {
+              email,
+              customerAccessToken,
+              firstName,
+              lastName,
+            },
+          });
+        } else {
+          updateCustomerData({
+            variables: {
+              email,
+              customerAccessToken,
+              firstName,
+              lastName,
+              password,
+            },
+          });
+        }
+      }
+    });
   };
 
+  let [
+    updateCustomerData,
+    { loading: updateCustomerDataLoading },
+  ] = useMutation<UpdateCustomerData, UpdateCustomerDataVariables>(
+    UPDATE_CUSTOMER_DATA,
+    {
+      onCompleted() {
+        goBack();
+      },
+    },
+  );
+
+  let { data: customerData } = useQuery<GetCustomer>(GET_CUSTOMER, {
+    fetchPolicy: 'cache-only',
+    notifyOnNetworkStatusChange: true,
+    onCompleted({ customer }) {
+      let { email, firstName, lastName } = customer;
+      setFirstName(firstName);
+      setLastName(lastName);
+      setEmail(email);
+    },
+  });
+
+  if (!customerData) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  let isDisabled =
+    !firstName || !lastName || !email || password.length > 0
+      ? !isPasswordValid
+      : false || !isEmailValid;
   return (
     <ScrollView
       style={styles.scrollView}
@@ -154,7 +222,9 @@ export default function EditProfileScene() {
                   setIsPasswordValid(true);
                 }}
                 onBlur={() => {
-                  setIsPasswordValid(validatePassword(password));
+                  if (password.length > 0) {
+                    setIsPasswordValid(validatePassword(password));
+                  }
                 }}
                 ref={passwordRef}
                 textContentType="password"
@@ -178,7 +248,9 @@ export default function EditProfileScene() {
         </KeyboardAvoidingView>
         <View style={styles.buttonSaveContainer}>
           <Button
+            disabled={isDisabled}
             onPress={saveChanges}
+            loading={updateCustomerDataLoading}
             style={defaultButton}
             labelStyle={defaultButtonLabel}
           >
@@ -233,5 +305,10 @@ const styles = StyleSheet.create({
   errorMessage: {
     padding: 0,
     marginTop: 0,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

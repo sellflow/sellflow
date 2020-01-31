@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  AsyncStorage,
+  ActivityIndicator,
+} from 'react-native';
 import { Text, Avatar } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,15 +13,16 @@ import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { profile } from '../../assets/images';
 import { StackNavProp } from '../types/Navigation';
-import { useMutation } from '@apollo/react-hooks';
-import { SET_CUSTOMER } from '../graphql/client/clientQueries';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { SET_CUSTOMER, GET_CUSTOMER } from '../graphql/client/clientQueries';
 import {
   SetCustomer,
   SetCustomerVariables,
 } from '../generated/client/SetCustomer';
+import { GetCustomer } from '../generated/client/GetCustomer';
 
 export default function ProfileScene() {
-  let { navigate } = useNavigation<StackNavProp<'Profile'>>();
+  let { navigate, reset } = useNavigation<StackNavProp<'Profile'>>();
 
   let [logout] = useMutation<SetCustomer, SetCustomerVariables>(SET_CUSTOMER, {
     variables: {
@@ -30,9 +37,26 @@ export default function ProfileScene() {
     onCompleted: () => {
       AsyncStorage.setItem('accessToken', '');
       // TODO: We probably don't want to navigate anywhere.
-      navigate('Login');
+      reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
     },
   });
+  let { data: customerData } = useQuery<GetCustomer>(GET_CUSTOMER, {
+    fetchPolicy: 'cache-only',
+    notifyOnNetworkStatusChange: true,
+  });
+
+  if (!customerData) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  let { email, firstName, lastName } = customerData.customer;
 
   return (
     <View style={styles.container}>
@@ -42,8 +66,10 @@ export default function ProfileScene() {
       >
         <Avatar.Image source={profile} size={84} />
         <View style={styles.profile}>
-          <Text style={styles.nameTextStyle}>Anna Belle</Text>
-          <Text style={styles.emailTextStyle}>anna.belle@gmail.com</Text>
+          <Text style={styles.nameTextStyle}>
+            {firstName} {lastName}
+          </Text>
+          <Text style={styles.emailTextStyle}>{email}</Text>
         </View>
       </TouchableOpacity>
       <View style={[styles.menuContainer, styles.divider]}>
@@ -124,5 +150,10 @@ const styles = StyleSheet.create({
   },
   emailTextStyle: {
     opacity: 0.6,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

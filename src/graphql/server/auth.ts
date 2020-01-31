@@ -52,3 +52,34 @@ export const GET_CUSTOMER_DATA = gql`
     }
   }
 `;
+
+export const UPDATE_CUSTOMER_DATA = gql`
+  mutation UpdateCustomerData(
+    $customerAccessToken: String!
+    $password: String
+    $lastName: String!
+    $firstName: String!
+    $email: String!
+  ) {
+    customerUpdate(
+      customerAccessToken: $customerAccessToken
+      customer: {
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        password: $password
+      }
+    ) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+      }
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+    }
+  }
+`;
