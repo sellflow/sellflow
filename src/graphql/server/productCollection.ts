@@ -5,11 +5,13 @@ export const GET_COLLECTION = gql`
     collectionByHandle(handle: $collectionHandle) {
       id
       title
+      handle
       products(first: 10) {
         edges {
           node {
             id
             title
+            handle
             availableForSale
             productType
             presentmentPriceRanges(first: 1, presentmentCurrencies: USD) {

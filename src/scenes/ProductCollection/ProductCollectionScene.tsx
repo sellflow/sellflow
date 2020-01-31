@@ -33,6 +33,7 @@ function getProducts(
           id: product.id,
           image: product.images.edges[0].node.transformedSrc.toString(),
           title: product.title,
+          handle: product.handle,
           productType: product.productType,
           price: Number(
             product.presentmentPriceRanges.edges[0].node.minVariantPrice.amount,
@@ -45,6 +46,7 @@ function getProducts(
     {
       id: '',
       title: '',
+      handle: '',
       productType: '',
       price: 0,
       image: '',

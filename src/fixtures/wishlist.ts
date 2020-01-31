@@ -7,6 +7,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -15,6 +16,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -23,6 +25,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
     discount: 75,
   },
@@ -32,6 +35,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -40,6 +44,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
     discount: 25,
   },
@@ -49,6 +54,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -57,6 +63,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -65,6 +72,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -73,6 +81,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
     discount: 50,
   },
@@ -82,6 +91,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -90,6 +100,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -98,6 +109,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
   {
@@ -106,6 +118,7 @@ export const wishlist: Array<Product> = [
       'https://stormonline-com.imgix.net/products/on-edge-leather-jacket-black-full-12308lea~1565233171.jpg?w=3900&h=3000&fit=fillmax&auto=format&s=f42d9b1a521c79793a38755671e336a1',
     productType: 'shirt',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     price: 1000,
   },
 ];

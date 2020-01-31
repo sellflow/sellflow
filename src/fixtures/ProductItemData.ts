@@ -5,6 +5,7 @@ export const ProductItemData: Array<Product> = [
     id: '1',
     image: 'https://s7d5.scene7.com/is/image/UrbanOutfitters/51302875_016_b',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     productType: 'shirt',
     price: 1000,
   },
@@ -12,6 +13,7 @@ export const ProductItemData: Array<Product> = [
     id: '2',
     image: 'https://s7d5.scene7.com/is/image/UrbanOutfitters/51302875_016_b',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     productType: 'shirt',
     price: 1000,
   },
@@ -19,6 +21,7 @@ export const ProductItemData: Array<Product> = [
     id: '3',
     image: 'https://s7d5.scene7.com/is/image/UrbanOutfitters/51302875_016_b',
     title: 'Box Flannel Trucker',
+    handle: 'box-flannel-trucker',
     productType: 'shirt',
     price: 1000,
     discount: 75,
@@ -28,6 +31,7 @@ export const ProductItemData: Array<Product> = [
     image:
       'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
     title: 'Sweater Champion',
+    handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
   },
@@ -36,6 +40,7 @@ export const ProductItemData: Array<Product> = [
     image:
       'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
     title: 'Sweater Champion',
+    handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
   },
@@ -44,6 +49,7 @@ export const ProductItemData: Array<Product> = [
     image:
       'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
     title: 'Sweater Champion',
+    handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
   },
@@ -52,6 +58,7 @@ export const ProductItemData: Array<Product> = [
     image:
       'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
     title: 'Sweater Champion',
+    handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
   },
@@ -60,6 +67,7 @@ export const ProductItemData: Array<Product> = [
     image:
       'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
     title: 'Sweater Champion',
+    handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
   },

@@ -40,6 +40,12 @@ export default function RichRadioGroup(props: Props<string>) {
     nameExtractor = defaultNameExtractor,
   } = props;
 
+  let textStyle = [
+    styles.text,
+    name === 'Color' && styles.capitalText,
+    buttonTextStyle,
+  ];
+
   return (
     <View style={[styles.container, containerStyle]}>
       <Text style={styles.categoryTitle}>{name}</Text>
@@ -65,9 +71,7 @@ export default function RichRadioGroup(props: Props<string>) {
               ]}
               onPress={() => onSelect(item)}
             >
-              <Text style={[styles.text, buttonTextStyle]}>
-                {nameExtractor(item)}
-              </Text>
+              <Text style={textStyle}>{nameExtractor(item)}</Text>
             </TouchableOpacity>
           );
         })}
@@ -97,6 +101,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: FONT_SIZE.medium,
+  },
+  capitalText: {
+    textTransform: 'capitalize',
   },
   categoryTitle: {
     opacity: 0.6,

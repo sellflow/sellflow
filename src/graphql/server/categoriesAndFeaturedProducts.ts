@@ -16,6 +16,7 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
         node {
           id
           title
+          handle
           presentmentPriceRanges(first: 1) {
             edges {
               node {

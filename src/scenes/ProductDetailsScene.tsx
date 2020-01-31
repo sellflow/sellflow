@@ -1,52 +1,43 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
-import { Text, IconButton, Button } from 'exoflex';
-import { useRoute } from '@react-navigation/native';
+import { StyleSheet, View, Image, ScrollView, Alert } from 'react-native';
+import { Text, IconButton, Button, ActivityIndicator } from 'exoflex';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { useQuery } from '@apollo/react-hooks';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import formatCurrency from '../helpers/formatCurrency';
 import { TabView, RichRadioGroup } from '../core-ui';
 import { TabRoute } from '../core-ui/TabView';
-import formatCurrency from '../helpers/formatCurrency';
 import { Product } from '../types/types';
 import { StackRouteProp } from '../types/Navigation';
-import { defaultButton, defaultButtonLabel } from '../constants/theme';
+import {
+  GetProductByHandle,
+  GetProductByHandleVariables,
+} from '../generated/server/GetProductByHandle';
+import { GET_PRODUCT_BY_HANDLE } from '../graphql/server/productByHandle';
 
 type ProductDetailsProps = {
   product: Product;
+  options?: Options;
+  infoTabs?: Tabs;
   isWishlistActive: boolean;
   onWishlistPress: (value: boolean) => void;
 };
 
-const variants = [
-  { name: 'Size', values: ['S', 'M', 'L', 'XL'] },
-  {
-    name: 'Color',
-    values: ['Brown', 'Blue', 'Black', 'Red', 'Green', 'Yellow'],
-  },
-];
+type Options = Array<{ name: string; values: Array<string> }>;
 
-const infoTabs = [
-  {
-    title: 'Description',
-    content:
-      'Lightweight jacket padded shirt collar and long sleeves. Paspoal model front pockets. Elastic at the end. Front cover with zipper.',
-  },
-  {
-    title: 'Material & Care',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  },
-];
+type Tabs = Array<{ title: string; content: string }>;
 
-const infoTabRoutes: Array<TabRoute> = infoTabs.map(
-  ({ title, content }, i) => ({
+function infoTabRoutes(infoTabs: Tabs): Array<TabRoute> {
+  return infoTabs.map(({ title, content }, i) => ({
     key: i.toString(),
     title,
     scene: () => <TabPane content={content} />,
-  }),
-);
+  }));
+}
 
 function TabPane(props: { content: string }) {
   return (
@@ -69,8 +60,13 @@ function RadioGroupWithState(props: { name: string; values: Array<string> }) {
   );
 }
 
-function ProductInfo(props: { product: Product }) {
-  let { product } = props;
+function ProductInfo(props: {
+  product: Product;
+  options: Options;
+  infoTabs: Tabs;
+}) {
+  let { product, options, infoTabs } = props;
+
   return (
     <>
       <View style={styles.padding}>
@@ -80,7 +76,7 @@ function ProductInfo(props: { product: Product }) {
         </Text>
       </View>
 
-      {variants.map((item, index) => (
+      {options.map((item, index) => (
         <RadioGroupWithState
           key={index}
           name={item.name}
@@ -88,13 +84,14 @@ function ProductInfo(props: { product: Product }) {
         />
       ))}
 
-      <TabView routes={infoTabRoutes} />
+      <TabView routes={infoTabRoutes(infoTabs)} />
     </>
   );
 }
 
 function BottomActionBar(props: ProductDetailsProps) {
   let { isWishlistActive, onWishlistPress } = props;
+  let { navigate } = useNavigation();
 
   let onPressWishlist = () => {
     onWishlistPress(!isWishlistActive);
@@ -125,7 +122,7 @@ function BottomActionBar(props: ProductDetailsProps) {
       <Button
         style={[defaultButton, styles.flex]}
         labelStyle={defaultButtonLabel}
-        onPress={() => {}}
+        onPress={() => navigate('ShoppingCart')}
       >
         {t('Add to Cart')}
       </Button>
@@ -134,7 +131,8 @@ function BottomActionBar(props: ProductDetailsProps) {
 }
 
 function ProductDetailsLandscape(props: ProductDetailsProps) {
-  let { product } = props;
+  let { product, options, infoTabs } = props;
+
   return (
     <View style={[styles.flex, styles.flexRow]}>
       <View style={styles.flex}>
@@ -150,7 +148,11 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flexColumn}
         >
-          <ProductInfo product={product} />
+          <ProductInfo
+            product={product}
+            options={options ? options : []}
+            infoTabs={infoTabs ? infoTabs : []}
+          />
         </ScrollView>
         <View style={[styles.bottomContainer, styles.bottomLandscapeContainer]}>
           <BottomActionBar {...props} />
@@ -161,8 +163,9 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
 }
 
 function ProductDetailsPortrait(props: ProductDetailsProps) {
-  let { product } = props;
+  let { product, options, infoTabs } = props;
   let dimensions = useDimensions();
+
   return (
     <>
       <ScrollView style={styles.flex}>
@@ -174,7 +177,11 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
           resizeMode="cover"
         />
         <View style={styles.flex}>
-          <ProductInfo product={product} />
+          <ProductInfo
+            product={product}
+            options={options ? options : []}
+            infoTabs={infoTabs ? infoTabs : []}
+          />
         </View>
       </ScrollView>
 
@@ -191,10 +198,42 @@ export default function ProductDetailsScene() {
   let { product } = route.params;
 
   let [isWishlistActive, setWishlistActive] = useState(false);
+  let [options, setOptions] = useState<Options>([]);
+  let [infoTabs, setInfoTabs] = useState<Tabs>([
+    { title: 'Description', content: '' },
+  ]);
 
-  return dimensions.screenSize === ScreenSize.Large ? (
+  let { loading, data } = useQuery<
+    GetProductByHandle,
+    GetProductByHandleVariables
+  >(GET_PRODUCT_BY_HANDLE, {
+    fetchPolicy: 'network-only',
+    onCompleted({ productByHandle }) {
+      if (productByHandle) {
+        setOptions([...options, ...productByHandle.options]);
+        setInfoTabs([
+          ...[{ title: 'Description', content: productByHandle.description }],
+        ]);
+      }
+    },
+    onError(error) {
+      let newError = error.message.split(':');
+      Alert.alert(newError[1]);
+    },
+    variables: {
+      productHandle: product.handle,
+    },
+  });
+
+  return loading || !data ? (
+    <View style={styles.centered}>
+      <ActivityIndicator size="large" />
+    </View>
+  ) : dimensions.screenSize === ScreenSize.Large ? (
     <ProductDetailsLandscape
       product={product}
+      options={options}
+      infoTabs={infoTabs}
       isWishlistActive={isWishlistActive}
       onWishlistPress={(isActive) => {
         setWishlistActive(isActive);
@@ -203,6 +242,8 @@ export default function ProductDetailsScene() {
   ) : (
     <ProductDetailsPortrait
       product={product}
+      options={options}
+      infoTabs={infoTabs}
       isWishlistActive={isWishlistActive}
       onWishlistPress={(isActive) => {
         setWishlistActive(isActive);
@@ -214,6 +255,11 @@ export default function ProductDetailsScene() {
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   padding: {
     padding: 24,
