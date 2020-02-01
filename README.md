@@ -1,5 +1,5 @@
 <p align="center">
-<img width="300" alt="Sellflow Logo" src="https://user-images.githubusercontent.com/369384/73398699-ce31fa00-429a-11ea-8afb-ed5ea6812a4c.png">
+<img width="300" alt="Sellflow Logo" src="https://user-images.githubusercontent.com/369384/73599036-f5cfcf00-44f3-11ea-9696-91e9c56b6e49.png">
 </p>
 
 <h3 align="center">An open-source, pre-built mobile app for your <a href="https://help.shopify.com/en/api/storefront-api">Shopify storefront</a>!</h3>
