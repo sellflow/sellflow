@@ -2249,19 +2249,19 @@
         "enumValues": [
           {
             "name": "PNG",
-            "description": null,
+            "description": "A PNG image.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "JPG",
-            "description": null,
+            "description": "A JPG image.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "WEBP",
-            "description": null,
+            "description": "A WEBP image.",
             "isDeprecated": false,
             "deprecationReason": null
           }

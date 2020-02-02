@@ -5,7 +5,7 @@ export const GET_PRODUCT_BY_HANDLE = gql`
     productByHandle(handle: $productHandle) {
       title
       description
-      options(first: 3) {
+      options(first: 5) {
         name
         values
       }

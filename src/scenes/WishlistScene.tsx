@@ -3,37 +3,43 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
-import { wishlist } from '../fixtures/wishlist';
 import { ProductList } from '../components';
 import { FONT_SIZE } from '../constants/fonts';
 import { StackNavProp } from '../types/Navigation';
 import { useColumns } from '../helpers/columns';
+import { useQuery } from '@apollo/react-hooks';
+import { GetWishlist } from '../generated/client/GetWishlist';
+import { GET_WISHLIST } from '../graphql/client/clientQueries';
 
 export default function WishlistScene() {
   let { navigate } = useNavigation<StackNavProp<'Wishlist'>>();
   let numColumns = useColumns();
 
-  if (wishlist.length === 0) {
+  let { data: wishlistData } = useQuery<GetWishlist>(GET_WISHLIST);
+
+  if (!wishlistData || wishlistData.wishlist.length === 0) {
     return (
       <View style={styles.emptyWishlist}>
         <Text style={styles.emptyWishlistText}>{t('No products yet.')}</Text>
       </View>
     );
+  } else {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.count}>
+          {t('Showing {count} item(s)', {
+            count: wishlistData.wishlist.length,
+          })}
+        </Text>
+        <ProductList
+          data={wishlistData.wishlist}
+          numColumns={numColumns}
+          contentContainerStyle={styles.contentContainer}
+          onItemPress={(product) => navigate('ProductDetails', { product })}
+        />
+      </View>
+    );
   }
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.count}>
-        {t('Showing {count} item(s)', { count: wishlist.length })}
-      </Text>
-      <ProductList
-        data={wishlist}
-        numColumns={numColumns}
-        contentContainerStyle={styles.contentContainer}
-        onItemPress={(product) => navigate('ProductDetails', { product })}
-      />
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({

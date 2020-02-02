@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import { GetCustomer_customer as Customer } from '../generated/client/GetCustomer';
+import { GetWishlist_wishlist as Wishlist } from '../generated/client/GetWishlist';
 
 export type CarouselItem = {
   render: () => ReactNode;
@@ -58,19 +60,11 @@ export type CategoryItem = {
   handle: string;
 };
 
-export type CachedData = {
-  data: Data;
-};
-
-type Data = {
+export type LocalData = {
   customer: Customer;
+  wishlist: Array<Wishlist>;
 };
 
-type Customer = {
-  __typename: string;
-  email: string;
-  id: string;
-  expiresAt: string;
-  firstName: string;
-  lastName: string;
+export type LocalCache = {
+  data: LocalData;
 };

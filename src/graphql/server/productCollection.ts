@@ -14,6 +14,7 @@ export const GET_COLLECTION = gql`
             handle
             availableForSale
             productType
+            handle
             presentmentPriceRanges(first: 1, presentmentCurrencies: USD) {
               edges {
                 node {

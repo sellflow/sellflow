@@ -16,9 +16,9 @@
     "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest",
     "test-full": "yarn apollo:generate && yarn test",
     "apollo:generate": "yarn apollo:schema-download  && yarn apollo:typegen-server && yarn apollo:typegen-client && yarn format:generated",
-    "apollo:schema-download": "node -r ./src/scripts/load-env.js ./node_modules/.bin/cross-var apollo schema:download src/graphql/schema.json --endpoint=%STOREFRONT_API_URL% --header='X-Shopify-Storefront-Access-Token: %STOREFRONT_ACCESS_TOKEN%'",
-    "apollo:typegen-server": "apollo codegen:generate --excludes=src/graphql/client/*.*  --localSchemaFile src/graphql/schema.json --target typescript --tagName gql --outputFlat src/generated/server",
-    "apollo:typegen-client": "apollo client:codegen src/generated/client --target typescript --includes=src/graphql/client/clientQueries.ts --tagName gql --localSchemaFile=src/graphql/client/local-schema.graphql --outputFlat",
+    "apollo:schema-download": "node -r ./src/scripts/load-env.js ./node_modules/.bin/cross-var apollo schema:download src/graphql/schema.json --endpoint=%STOREFRONT_API_URL% --header=\"X-Shopify-Storefront-Access-Token: %STOREFRONT_ACCESS_TOKEN%\"",
+    "apollo:typegen-server": "apollo client:codegen --target=typescript --excludes=src/graphql/client/*.* --localSchemaFile=src/graphql/schema.json --tagName=gql --outputFlat src/generated/server",
+    "apollo:typegen-client": "apollo client:codegen --target=typescript --includes=src/graphql/client/clientQueries.ts --localSchemaFile=src/graphql/client/local-schema.graphql --tagName=gql --outputFlat src/generated/client",
     "encrypt-env": "openssl enc -aes-256-cbc -md md5 -salt -in ./.env.json -out ./.env.enc -k",
     "decrypt-env": "openssl enc -aes-256-cbc -md md5 -d -in ./.env.enc -out ./.env.json -k"
   },

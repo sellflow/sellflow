@@ -14,10 +14,29 @@ input CustomerInput {
   expiresAt: String!
 }
 
+type WishlistProduct {
+  id: String!
+  handle: String!
+  image: String!
+  title: String!
+  price: Int!
+}
+
+input WishlistProductInput {
+  id: String!
+  handle: String!
+  image: String!
+  title: String!
+  price: Int!
+}
+
 type Query {
   customer: Customer!
+  wishlist: [WishlistProduct!]!
 }
 
 type Mutation {
   setCustomer(customer: CustomerInput!): Customer!
+  addToWishlist(product: WishlistProductInput!): [WishlistProduct]!
+  removeFromWishlist(productHandle: String!): [WishlistProduct]!
 }

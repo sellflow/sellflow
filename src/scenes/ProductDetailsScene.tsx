@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Image, ScrollView, Alert } from 'react-native';
 import { Text, IconButton, Button, ActivityIndicator } from 'exoflex';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -17,7 +17,21 @@ import {
   GetProductByHandle,
   GetProductByHandleVariables,
 } from '../generated/server/GetProductByHandle';
+import {
+  AddToWishlist,
+  AddToWishlistVariables,
+} from '../generated/client/AddToWishlist';
 import { GET_PRODUCT_BY_HANDLE } from '../graphql/server/productByHandle';
+import {
+  ADD_TO_WISHLIST,
+  GET_WISHLIST,
+  REMOVE_FROM_WISHLIST,
+} from '../graphql/client/clientQueries';
+import { GetWishlist } from '../generated/client/GetWishlist';
+import {
+  RemoveFromWishlist,
+  RemoveFromWishlistVariables,
+} from '../generated/client/RemoveFromWishlist';
 
 type ProductDetailsProps = {
   product: Product;
@@ -90,11 +104,30 @@ function ProductInfo(props: {
 }
 
 function BottomActionBar(props: ProductDetailsProps) {
-  let { isWishlistActive, onWishlistPress } = props;
+  let { isWishlistActive, onWishlistPress, product } = props;
   let { navigate } = useNavigation();
+
+  let [addToWishlist] = useMutation<AddToWishlist, AddToWishlistVariables>(
+    ADD_TO_WISHLIST,
+  );
+
+  let [removeFromWishlist] = useMutation<
+    RemoveFromWishlist,
+    RemoveFromWishlistVariables
+  >(REMOVE_FROM_WISHLIST);
 
   let onPressWishlist = () => {
     onWishlistPress(!isWishlistActive);
+
+    if (isWishlistActive === false) {
+      addToWishlist({ variables: { product } });
+    } else {
+      removeFromWishlist({ variables: { productHandle: product.handle } });
+    }
+  };
+
+  let onPressAddToCart = () => {
+    navigate('ShoppingCart');
   };
 
   return (
@@ -122,7 +155,7 @@ function BottomActionBar(props: ProductDetailsProps) {
       <Button
         style={[defaultButton, styles.flex]}
         labelStyle={defaultButtonLabel}
-        onPress={() => navigate('ShoppingCart')}
+        onPress={onPressAddToCart}
       >
         {t('Add to Cart')}
       </Button>
@@ -203,7 +236,15 @@ export default function ProductDetailsScene() {
     { title: 'Description', content: '' },
   ]);
 
-  let { loading, data } = useQuery<
+  let { data: wishlistData } = useQuery<GetWishlist>(GET_WISHLIST, {
+    onCompleted: ({ wishlist }) => {
+      if (wishlist.find((item) => item.handle === product.handle)) {
+        setWishlistActive(true);
+      }
+    },
+  });
+
+  let { loading, data: productData } = useQuery<
     GetProductByHandle,
     GetProductByHandleVariables
   >(GET_PRODUCT_BY_HANDLE, {
@@ -225,7 +266,7 @@ export default function ProductDetailsScene() {
     },
   });
 
-  return loading || !data ? (
+  return loading || !productData || !wishlistData ? (
     <View style={styles.centered}>
       <ActivityIndicator size="large" />
     </View>
