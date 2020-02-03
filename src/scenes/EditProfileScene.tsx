@@ -13,6 +13,7 @@ import {
 import { Text, Button, Avatar, TextInput } from 'exoflex';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
@@ -33,7 +34,7 @@ import {
   UpdateCustomerData,
   UpdateCustomerDataVariables,
 } from '../generated/server/UpdateCustomerData';
-import { useNavigation } from '@react-navigation/native';
+import { StackNavProp } from '../types/Navigation';
 
 export default function EditProfileScene() {
   let [profilePicture, setProfilePicture] = useState(profile);
@@ -48,7 +49,7 @@ export default function EditProfileScene() {
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
   let dimensions = useDimensions();
-  let { goBack } = useNavigation();
+  let { goBack } = useNavigation<StackNavProp<'EditProfile'>>();
 
   let togglePickerVisible = () => {
     setIsPickerVisible(!isPickerVisible);

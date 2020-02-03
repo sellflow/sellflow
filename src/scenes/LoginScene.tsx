@@ -132,6 +132,10 @@ export default function ProfileScene() {
     createToken();
   };
 
+  let onPressForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
+
   let isLoading = createTokenLoading || getDataLoading || setLocalStateLoading;
 
   return (
@@ -167,7 +171,11 @@ export default function ProfileScene() {
           style={styles.forgetPassword}
           onPress={() => navigation.navigate('ForgotPassword')}
         >
-          <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
+          <Text
+            onPress={onPressForgotPassword}
+            style={[styles.colorPrimary, styles.textSize]}
+            weight="medium"
+          >
             {t('Forgot Password?')}
           </Text>
         </TouchableOpacity>

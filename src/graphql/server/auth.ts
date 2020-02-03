@@ -83,3 +83,13 @@ export const UPDATE_CUSTOMER_DATA = gql`
     }
   }
 `;
+
+export const INITIATE_PASSWORD_RESET = gql`
+  mutation InitiatePasswordReset($email: String!) {
+    customerRecover(email: $email) {
+      customerUserErrors {
+        message
+      }
+    }
+  }
+`;

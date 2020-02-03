@@ -7,6 +7,7 @@ export const COLORS = {
   grey: '#A4A4A4',
   priceGrey: '#C4C4C4',
   lightGrey: '#E8E8E8',
+  lightGreen: '#37B4371F',
   primaryColor: '#0253B3',
   stepIndicatorLabel: '#0458BD',
   stepIndicator: '#0050B6',
