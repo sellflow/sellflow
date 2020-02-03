@@ -26,7 +26,7 @@ export default function OrderItem(props: Props) {
     itemName,
     variant,
     imageURL,
-    discount,
+    priceAfterDiscount,
     cardType,
     onRemovePress,
     variantID,
@@ -53,12 +53,12 @@ export default function OrderItem(props: Props) {
         <View style={styles.price}>
           <View>
             <Text weight="bold" style={styles.fontMedium}>
-              {discount && discount > 0
-                ? formatCurrency(discount * quantity)
+              {priceAfterDiscount && priceAfterDiscount > 0
+                ? formatCurrency(priceAfterDiscount * quantity)
                 : formatCurrency(itemPrice * quantity)}
             </Text>
           </View>
-          {discount && discount > 0 ? (
+          {priceAfterDiscount && priceAfterDiscount > 0 ? (
             <View style={styles.section2}>
               <Text
                 weight="normal"

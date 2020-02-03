@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, ScrollView, Alert } from 'react-native';
 import { Text, IconButton, Button, ActivityIndicator } from 'exoflex';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { COLORS } from '../constants/colors';
@@ -33,11 +33,19 @@ import {
   RemoveFromWishlistVariables,
 } from '../generated/client/RemoveFromWishlist';
 
+import { ADD_TO_SHOPPING_CART } from '../graphql/client/shoppingCartQueries';
+
+import {
+  AddToShoppingCart,
+  AddToShoppingCartVariables,
+} from '../generated/client/AddToShoppingCart';
+
 type ProductDetailsProps = {
   product: Product;
   options?: Options;
   infoTabs?: Tabs;
   isWishlistActive: boolean;
+  onAddToCartPress: (variantId: string, quantity: number) => void;
   onWishlistPress: (value: boolean) => void;
 };
 
@@ -104,9 +112,6 @@ function ProductInfo(props: {
 }
 
 function BottomActionBar(props: ProductDetailsProps) {
-  let { isWishlistActive, onWishlistPress, product } = props;
-  let { navigate } = useNavigation();
-
   let [addToWishlist] = useMutation<AddToWishlist, AddToWishlistVariables>(
     ADD_TO_WISHLIST,
   );
@@ -115,6 +120,7 @@ function BottomActionBar(props: ProductDetailsProps) {
     RemoveFromWishlist,
     RemoveFromWishlistVariables
   >(REMOVE_FROM_WISHLIST);
+  let { isWishlistActive, onWishlistPress, onAddToCartPress, product } = props;
 
   let onPressWishlist = () => {
     onWishlistPress(!isWishlistActive);
@@ -124,10 +130,6 @@ function BottomActionBar(props: ProductDetailsProps) {
     } else {
       removeFromWishlist({ variables: { productHandle: product.handle } });
     }
-  };
-
-  let onPressAddToCart = () => {
-    navigate('ShoppingCart');
   };
 
   return (
@@ -155,7 +157,9 @@ function BottomActionBar(props: ProductDetailsProps) {
       <Button
         style={[defaultButton, styles.flex]}
         labelStyle={defaultButtonLabel}
-        onPress={onPressAddToCart}
+        onPress={() => {
+          onAddToCartPress(product.id, 10);
+        }}
       >
         {t('Add to Cart')}
       </Button>
@@ -230,6 +234,14 @@ export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
   let { product } = route.params;
 
+  let [addToCart] = useMutation<AddToShoppingCart, AddToShoppingCartVariables>(
+    ADD_TO_SHOPPING_CART,
+  );
+
+  let onAddToCart = (variantId: string, quantity: number) => {
+    addToCart({ variables: { variantId, quantity } });
+  };
+
   let [isWishlistActive, setWishlistActive] = useState(false);
   let [options, setOptions] = useState<Options>([]);
   let [infoTabs, setInfoTabs] = useState<Tabs>([
@@ -272,6 +284,7 @@ export default function ProductDetailsScene() {
     </View>
   ) : dimensions.screenSize === ScreenSize.Large ? (
     <ProductDetailsLandscape
+      onAddToCartPress={onAddToCart}
       product={product}
       options={options}
       infoTabs={infoTabs}
@@ -282,6 +295,7 @@ export default function ProductDetailsScene() {
     />
   ) : (
     <ProductDetailsPortrait
+      onAddToCartPress={onAddToCart}
       product={product}
       options={options}
       infoTabs={infoTabs}

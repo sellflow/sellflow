@@ -10,4 +10,9 @@ export const initialData: LocalData = {
     lastName: '',
   },
   wishlist: [],
+  shoppingCart: {
+    __typename: 'ShoppingCart',
+    id: '',
+    items: [],
+  },
 };

@@ -12,16 +12,61 @@ import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import {
+  GET_SHOPPING_CART,
+  SET_SHOPPING_CART_ID,
+} from '../graphql/client/shoppingCartQueries';
+import { GetShoppingCart } from '../generated/client/GetShoppingCart';
+import { SHOPPING_CART_CREATE } from '../graphql/server/shoppingCart';
+import {
+  ShoppingCartCreate,
+  ShoppingCartCreateVariables,
+} from '../generated/server/ShoppingCartCreate';
+import {
+  SetShoppingCartID,
+  SetShoppingCartIDVariables,
+} from '../generated/client/SetShoppingCartID';
 
 let paymentData: PaymentData = {
   subtotal: 77,
-  shippingCost: 0,
-  total: 77,
+  discount: 0,
 };
 
 export default function ShoppingCartScene() {
   let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
+  let shoppingCartData: Array<{ variantId: string; quantity: number }> = [];
+  useQuery<GetShoppingCart>(GET_SHOPPING_CART, {
+    onCompleted({ shoppingCart }) {
+      if (shoppingCart.id === '') {
+        createCheckout();
+      } else {
+        shoppingCartData = shoppingCart.items.map(({ variantId, quantity }) => {
+          return { variantId, quantity };
+        });
+      }
+    },
+  });
+
+  let [setShoppingCartID] = useMutation<
+    SetShoppingCartID,
+    SetShoppingCartIDVariables
+  >(SET_SHOPPING_CART_ID);
+
+  let [createCheckout] = useMutation<
+    ShoppingCartCreate,
+    ShoppingCartCreateVariables
+  >(SHOPPING_CART_CREATE, {
+    variables: {
+      checkoutCreateInput: { lineItems: shoppingCartData },
+    },
+    onCompleted({ checkoutCreate }) {
+      if (checkoutCreate && checkoutCreate.checkout) {
+        setShoppingCartID({ variables: { id: checkoutCreate.checkout.id } });
+      }
+    },
+  });
 
   let renderCartView = () => (
     <View style={styles.cartContainer}>
@@ -39,6 +84,7 @@ export default function ShoppingCartScene() {
       </View>
     </View>
   );
+
   let renderPaymentView = () => <Payment data={paymentData} />;
   let renderButton = () => (
     <Button
@@ -92,12 +138,11 @@ type PaymentProps = {
 };
 type PaymentData = {
   subtotal: number;
-  shippingCost: number;
-  total: number;
+  discount: number;
 };
 
 function Payment(props: PaymentProps) {
-  let { shippingCost, total, subtotal } = props.data;
+  let { discount, subtotal } = props.data;
   return (
     <>
       <View style={styles.voucherCodeContainer}>
@@ -123,8 +168,8 @@ function Payment(props: PaymentProps) {
           <Text style={styles.mediumText}>{formatCurrency(subtotal)}</Text>
         </View>
         <View style={styles.innerPaymentDetailsContainer}>
-          <Text style={styles.paymentDetailLabel}>{t('Shipping')}</Text>
-          <Text style={styles.mediumText}>-{formatCurrency(shippingCost)}</Text>
+          <Text style={styles.paymentDetailLabel}>{t('Discount')}</Text>
+          <Text style={styles.mediumText}>-{formatCurrency(discount)}</Text>
         </View>
         <View
           style={[
@@ -137,7 +182,7 @@ function Payment(props: PaymentProps) {
         >
           <Text style={styles.paymentDetailLabel}>{t('Total')}</Text>
           <Text weight="bold" style={styles.mediumText}>
-            {formatCurrency(total)}
+            {formatCurrency(subtotal - discount)}
           </Text>
         </View>
       </Surface>

@@ -13,6 +13,15 @@ input AuthenticatedUserInput {
   email: String!
   expiresAt: String!
 }
+type ShoppingCart {
+  id: String!
+  items: [LineItem!]!
+}
+
+type LineItem {
+  quantity: Int!
+  variantId: String!
+}
 
 type WishlistProduct {
   id: String!
@@ -33,10 +42,14 @@ input WishlistProductInput {
 type Query {
   authenticatedUser: AuthenticatedUser!
   wishlist: [WishlistProduct!]!
+  shoppingCart: ShoppingCart!
 }
 
 type Mutation {
   setAuthenticatedUser(user: AuthenticatedUserInput!): AuthenticatedUser!
   addToWishlist(product: WishlistProductInput!): [WishlistProduct]!
   removeFromWishlist(productHandle: String!): [WishlistProduct]!
+  addToShoppingCart(quantity: Int!, variantId: String!): ShoppingCart!
+  resetShoppingCart: ShoppingCart!
+  setShoppingCartID(id: String!): ShoppingCart!
 }

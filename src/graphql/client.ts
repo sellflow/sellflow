@@ -8,10 +8,13 @@ import { persistCache } from 'apollo-cache-persist';
 import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types';
 
 import { STOREFRONT_API_URL, STOREFRONT_ACCESS_TOKEN } from '../constants/api';
-import { initialData } from './initialData';
 import { setAuthenticatedUserResolver } from './resolvers/setAuthenticatedUserResolver';
 import { addToWishlistResolver } from './resolvers/addToWishlistResolver';
 import { removeFromWishlistResolver } from './resolvers/removeFromWishlistResolver';
+import { initialData } from './initialData';
+import { addToShoppingCartResolver } from './resolvers/addToShoppingCartResolver';
+import { setShoppingCartIDResolver } from './resolvers/setShoppingCartIDResolver';
+import { resetShoppingCartResolver } from './resolvers/resetShoppingCartResolver';
 
 const cache = new InMemoryCache();
 
@@ -48,6 +51,9 @@ function setupApolloClient() {
         setAuthenticatedUser: setAuthenticatedUserResolver,
         addToWishlist: addToWishlistResolver,
         removeFromWishlist: removeFromWishlistResolver,
+        addToShoppingCart: addToShoppingCartResolver,
+        setShoppingCartID: setShoppingCartIDResolver,
+        resetShoppingCart: resetShoppingCartResolver,
       },
     },
     cache,

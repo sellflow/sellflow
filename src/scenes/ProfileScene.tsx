@@ -24,6 +24,9 @@ import {
 } from '../generated/client/SetAuthenticatedUser';
 import { GetAuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
 
+import { RESET_SHOPPING_CART } from '../graphql/client/shoppingCartQueries';
+import { ResetShoppingCart } from '../generated/client/ResetShoppingCart';
+
 export default function ProfileScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Profile'>>();
 
@@ -42,7 +45,9 @@ export default function ProfileScene() {
     },
     onCompleted: () => {
       AsyncStorage.setItem('accessToken', '');
-      // TODO: We probably don't want to navigate anywhere.
+      resetShoppingCart();
+      // TODO: We probably don't want to navigate anywhere. Customer can
+      // continue shopping as guest, right?
       reset({
         index: 0,
         routes: [{ name: 'Login' }],
@@ -56,6 +61,8 @@ export default function ProfileScene() {
       notifyOnNetworkStatusChange: true,
     },
   );
+
+  let [resetShoppingCart] = useMutation<ResetShoppingCart>(RESET_SHOPPING_CART);
 
   if (loading || !data) {
     return (

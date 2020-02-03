@@ -10,7 +10,7 @@ let initialData: OrderItemType = {
   imageURL:
     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
   itemPrice: 79,
-  discount: 12.13,
+  priceAfterDiscount: 12.13,
   quantity: 2,
   variant: 'Size M Grey',
   cardType: 'checkout',

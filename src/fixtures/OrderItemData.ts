@@ -7,7 +7,7 @@ export let OrderData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 10,
+    priceAfterDiscount: 10,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -18,7 +18,7 @@ export let OrderData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 1,
+    priceAfterDiscount: 1,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'order',
@@ -32,7 +32,7 @@ export let OrderData2: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 10,
+    priceAfterDiscount: 10,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'order',
@@ -43,7 +43,7 @@ export let OrderData2: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'order',
@@ -57,7 +57,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 10,
+    priceAfterDiscount: 10,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -68,7 +68,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -79,7 +79,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -90,7 +90,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -101,7 +101,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -112,7 +112,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -123,7 +123,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -134,7 +134,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -145,7 +145,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -156,7 +156,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -167,7 +167,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -178,7 +178,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',
@@ -189,7 +189,7 @@ export let CheckoutData: Array<OrderItemType> = [
     imageURL:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
     itemPrice: 79,
-    discount: 12,
+    priceAfterDiscount: 12,
     quantity: 2,
     variant: 'Size M Grey',
     cardType: 'checkout',

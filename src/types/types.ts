@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { GetAuthenticatedUser_authenticatedUser as AuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
 import { GetWishlist_wishlist as Wishlist } from '../generated/client/GetWishlist';
+import { GetShoppingCart_shoppingCart as ShoppingCart } from '../generated/client/GetShoppingCart';
 
 export type CarouselItem = {
   render: () => ReactNode;
@@ -13,7 +14,7 @@ export type OrderItem = {
   itemName: string;
   quantity: number;
   itemPrice: number;
-  discount?: number;
+  priceAfterDiscount?: number;
   variant: string;
   imageURL: string;
   cardType: 'checkout' | 'order';
@@ -63,6 +64,7 @@ export type CategoryItem = {
 export type LocalData = {
   authenticatedUser: AuthenticatedUser;
   wishlist: Array<Wishlist>;
+  shoppingCart: ShoppingCart;
 };
 
 export type LocalCache = {
