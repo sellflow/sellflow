@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Button, ActivityIndicator } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useQuery } from '@apollo/react-hooks';
 
 import { ProductList } from '../../components';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
@@ -16,48 +15,11 @@ import {
 } from './components';
 import { useColumns } from '../../helpers/columns';
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
-import { GET_COLLECTION } from '../../graphql/server/productCollection';
-import {
-  GetCollection,
-  GetCollectionVariables,
-} from '../../generated/server/GetCollection';
-import { Product } from '../../types/types';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
+import { useCollectionQuery } from '../../helpers/useCollectionQuery';
 
 const DEFAULT_MAX_PRICE = 1000;
-
-function getProducts(
-  collectionData: GetCollection | undefined,
-): Array<Product> {
-  if (collectionData) {
-    if (collectionData.collectionByHandle) {
-      return collectionData.collectionByHandle.products.edges.map((item) => {
-        let product = item.node;
-        return {
-          id: product.id,
-          image: product.images.edges[0].node.transformedSrc.toString(),
-          title: product.title,
-          handle: product.handle,
-          productType: product.productType,
-          price: Number(
-            product.presentmentPriceRanges.edges[0].node.minVariantPrice.amount,
-          ),
-        };
-      });
-    }
-  }
-  return [
-    {
-      id: '',
-      title: '',
-      handle: '',
-      productType: '',
-      price: 0,
-      image: '',
-    },
-  ];
-}
 
 export default function ProductCollectionScene() {
   let { navigate, setOptions } = useNavigation<
@@ -71,19 +33,11 @@ export default function ProductCollectionScene() {
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
-  let isScreenSizeLarge = screenSize === ScreenSize.Large;
   const collectionHandle = params.collection.handle;
-
-  let { data: collectionData, loading, refetch } = useQuery<
-    GetCollection,
-    GetCollectionVariables
-  >(GET_COLLECTION, {
-    variables: {
-      collectionHandle,
-      sortKey: ProductCollectionSortKeys.BEST_SELLING,
-    },
-  });
-  let collection = getProducts(collectionData);
+  let { data: collection, loading, refetch } = useCollectionQuery(
+    collectionHandle,
+  );
+  let isScreenSizeLarge = screenSize === ScreenSize.Large;
 
   let containerStyle = [
     styles.container,
