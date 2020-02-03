@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { GetCustomer_customer as Customer } from '../generated/client/GetCustomer';
+import { GetAuthenticatedUser_authenticatedUser as AuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
 import { GetWishlist_wishlist as Wishlist } from '../generated/client/GetWishlist';
 
 export type CarouselItem = {
@@ -61,7 +61,7 @@ export type CategoryItem = {
 };
 
 export type LocalData = {
-  customer: Customer;
+  authenticatedUser: AuthenticatedUser;
   wishlist: Array<Wishlist>;
 };
 

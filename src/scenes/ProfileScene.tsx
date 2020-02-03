@@ -14,19 +14,25 @@ import { COLORS } from '../constants/colors';
 import { profile } from '../../assets/images';
 import { StackNavProp } from '../types/Navigation';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { SET_CUSTOMER, GET_CUSTOMER } from '../graphql/client/clientQueries';
 import {
-  SetCustomer,
-  SetCustomerVariables,
-} from '../generated/client/SetCustomer';
-import { GetCustomer } from '../generated/client/GetCustomer';
+  SET_AUTHENTICATED_USER,
+  GET_AUTHENTICATED_USER,
+} from '../graphql/client/clientQueries';
+import {
+  SetAuthenticatedUser,
+  SetAuthenticatedUserVariables,
+} from '../generated/client/SetAuthenticatedUser';
+import { GetAuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
 
 export default function ProfileScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Profile'>>();
 
-  let [logout] = useMutation<SetCustomer, SetCustomerVariables>(SET_CUSTOMER, {
+  let [logout] = useMutation<
+    SetAuthenticatedUser,
+    SetAuthenticatedUserVariables
+  >(SET_AUTHENTICATED_USER, {
     variables: {
-      customer: {
+      user: {
         email: '',
         expiresAt: '',
         id: '',
@@ -43,12 +49,15 @@ export default function ProfileScene() {
       });
     },
   });
-  let { data: customerData } = useQuery<GetCustomer>(GET_CUSTOMER, {
-    fetchPolicy: 'cache-only',
-    notifyOnNetworkStatusChange: true,
-  });
+  let { loading, data } = useQuery<GetAuthenticatedUser>(
+    GET_AUTHENTICATED_USER,
+    {
+      fetchPolicy: 'cache-only',
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
-  if (!customerData) {
+  if (loading || !data) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
@@ -56,7 +65,7 @@ export default function ProfileScene() {
     );
   }
 
-  let { email, firstName, lastName } = customerData.customer;
+  let { email, firstName, lastName } = data.authenticatedUser;
 
   return (
     <View style={styles.container}>

@@ -9,7 +9,7 @@ import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types';
 
 import { STOREFRONT_API_URL, STOREFRONT_ACCESS_TOKEN } from '../constants/api';
 import { initialData } from './initialData';
-import { authResolver } from './resolvers/authResolver';
+import { setAuthenticatedUserResolver } from './resolvers/setAuthenticatedUserResolver';
 import { addToWishlistResolver } from './resolvers/addToWishlistResolver';
 import { removeFromWishlistResolver } from './resolvers/removeFromWishlistResolver';
 
@@ -45,7 +45,7 @@ function setupApolloClient() {
     link: ApolloLink.from([authLink, httpLink]),
     resolvers: {
       Mutation: {
-        setCustomer: authResolver,
+        setAuthenticatedUser: setAuthenticatedUserResolver,
         addToWishlist: addToWishlistResolver,
         removeFromWishlist: removeFromWishlistResolver,
       },

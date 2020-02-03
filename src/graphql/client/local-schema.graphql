@@ -1,4 +1,4 @@
-type Customer {
+type AuthenticatedUser {
   firstName: String!
   lastName: String!
   id: String!
@@ -6,7 +6,7 @@ type Customer {
   expiresAt: String!
 }
 
-input CustomerInput {
+input AuthenticatedUserInput {
   firstName: String!
   lastName: String!
   id: String!
@@ -31,12 +31,12 @@ input WishlistProductInput {
 }
 
 type Query {
-  customer: Customer!
+  authenticatedUser: AuthenticatedUser!
   wishlist: [WishlistProduct!]!
 }
 
 type Mutation {
-  setCustomer(customer: CustomerInput!): Customer!
+  setAuthenticatedUser(user: AuthenticatedUserInput!): AuthenticatedUser!
   addToWishlist(product: WishlistProductInput!): [WishlistProduct]!
   removeFromWishlist(productHandle: String!): [WishlistProduct]!
 }

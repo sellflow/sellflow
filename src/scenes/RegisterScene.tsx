@@ -19,7 +19,7 @@ import {
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { useMutation } from '@apollo/react-hooks';
 import { CUSTOMER_REGISTER } from '../graphql/server/auth';
-import { SET_CUSTOMER } from '../graphql/client/clientQueries';
+import { SET_AUTHENTICATED_USER } from '../graphql/client/clientQueries';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavProp } from '../types/Navigation';
 import {
@@ -27,9 +27,9 @@ import {
   CustomerRegisterVariables,
 } from '../generated/server/CustomerRegister';
 import {
-  SetCustomer,
-  SetCustomerVariables,
-} from '../generated/client/SetCustomer';
+  SetAuthenticatedUser,
+  SetAuthenticatedUserVariables,
+} from '../generated/client/SetAuthenticatedUser';
 
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
@@ -104,9 +104,9 @@ export default function RegisterScene() {
         } = customerAccessTokenCreate.customerAccessToken;
         AsyncStorage.setItem('accessToken', accessToken);
         if (email && firstName && lastName) {
-          setLocalState({
+          setAuthenticatedUser({
             variables: {
-              customer: {
+              user: {
                 id,
                 email,
                 expiresAt,
@@ -120,10 +120,10 @@ export default function RegisterScene() {
     },
   });
 
-  let [setLocalState, { loading: localStateLoading }] = useMutation<
-    SetCustomer,
-    SetCustomerVariables
-  >(SET_CUSTOMER, {
+  let [setAuthenticatedUser, { loading: localStateLoading }] = useMutation<
+    SetAuthenticatedUser,
+    SetAuthenticatedUserVariables
+  >(SET_AUTHENTICATED_USER, {
     onCompleted: () => {
       navigation.reset({
         index: 0,

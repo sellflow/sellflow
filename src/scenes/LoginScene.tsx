@@ -28,11 +28,11 @@ import {
   GetCustomerData,
   GetCustomerDataVariables,
 } from '../generated/server/GetCustomerData';
-import { SET_CUSTOMER } from '../graphql/client/clientQueries';
+import { SET_AUTHENTICATED_USER } from '../graphql/client/clientQueries';
 import {
-  SetCustomer,
-  SetCustomerVariables,
-} from '../generated/client/SetCustomer';
+  SetAuthenticatedUser,
+  SetAuthenticatedUserVariables,
+} from '../generated/client/SetAuthenticatedUser';
 
 export default function ProfileScene() {
   let navigation = useNavigation<StackNavProp<'Login'>>();
@@ -65,10 +65,10 @@ export default function ProfileScene() {
     return styleApplied;
   };
 
-  let [setLocalState, { loading: setLocalStateLoading }] = useMutation<
-    SetCustomer,
-    SetCustomerVariables
-  >(SET_CUSTOMER, {
+  let [setAuthenticatedUser, { loading: setLocalStateLoading }] = useMutation<
+    SetAuthenticatedUser,
+    SetAuthenticatedUserVariables
+  >(SET_AUTHENTICATED_USER, {
     onCompleted: () => {
       // Note: I'm not sure if this is correct.
       navigation.reset({
@@ -112,9 +112,9 @@ export default function ProfileScene() {
       if (customer) {
         let { email, id, firstName, lastName } = customer;
         if (email && firstName && lastName) {
-          setLocalState({
+          setAuthenticatedUser({
             variables: {
-              customer: {
+              user: {
                 email,
                 id,
                 expiresAt: expiresDate,

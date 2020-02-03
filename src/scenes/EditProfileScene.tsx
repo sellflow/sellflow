@@ -25,8 +25,8 @@ import {
 } from '../helpers/validation';
 import { profile } from '../../assets/images';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
-import { GET_CUSTOMER } from '../graphql/client/clientQueries';
-import { GetCustomer } from '../generated/client/GetCustomer';
+import { GET_AUTHENTICATED_USER } from '../graphql/client/clientQueries';
+import { GetAuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { UPDATE_CUSTOMER_DATA } from '../graphql/server/auth';
 import {
@@ -107,30 +107,28 @@ export default function EditProfileScene() {
     });
   };
 
-  let [
-    updateCustomerData,
-    { loading: updateCustomerDataLoading },
-  ] = useMutation<UpdateCustomerData, UpdateCustomerDataVariables>(
-    UPDATE_CUSTOMER_DATA,
-    {
-      onCompleted() {
-        goBack();
-      },
+  let [updateCustomerData, { loading: saving }] = useMutation<
+    UpdateCustomerData,
+    UpdateCustomerDataVariables
+  >(UPDATE_CUSTOMER_DATA, {
+    onCompleted() {
+      // TODO: Update locally stored authenticatedUser
+      goBack();
     },
-  );
+  });
 
-  let { data: customerData } = useQuery<GetCustomer>(GET_CUSTOMER, {
+  let { loading } = useQuery<GetAuthenticatedUser>(GET_AUTHENTICATED_USER, {
     fetchPolicy: 'cache-only',
     notifyOnNetworkStatusChange: true,
-    onCompleted({ customer }) {
-      let { email, firstName, lastName } = customer;
+    onCompleted({ authenticatedUser }) {
+      let { email, firstName, lastName } = authenticatedUser;
       setFirstName(firstName);
       setLastName(lastName);
       setEmail(email);
     },
   });
 
-  if (!customerData) {
+  if (loading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
@@ -250,7 +248,7 @@ export default function EditProfileScene() {
           <Button
             disabled={isDisabled}
             onPress={saveChanges}
-            loading={updateCustomerDataLoading}
+            loading={saving}
             style={defaultButton}
             labelStyle={defaultButtonLabel}
           >

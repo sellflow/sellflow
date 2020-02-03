@@ -1,8 +1,8 @@
 import { LocalData } from '../types/types';
 
 export const initialData: LocalData = {
-  customer: {
-    __typename: 'Customer',
+  authenticatedUser: {
+    __typename: 'AuthenticatedUser',
     email: '',
     id: '',
     expiresAt: '',

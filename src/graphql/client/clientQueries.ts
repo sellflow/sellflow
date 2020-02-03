@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const SET_CUSTOMER = gql`
-  mutation SetCustomer($customer: CustomerInput!) {
-    setCustomer(customer: $customer) @client {
+export const SET_AUTHENTICATED_USER = gql`
+  mutation SetAuthenticatedUser($user: AuthenticatedUserInput!) {
+    setAuthenticatedUser(user: $user) @client {
       id
       firstName
       lastName
@@ -12,9 +12,9 @@ export const SET_CUSTOMER = gql`
   }
 `;
 
-export const GET_CUSTOMER = gql`
-  query GetCustomer {
-    customer @client {
+export const GET_AUTHENTICATED_USER = gql`
+  query GetAuthenticatedUser {
+    authenticatedUser @client {
       id
       firstName
       lastName
