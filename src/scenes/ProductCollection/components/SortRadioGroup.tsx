@@ -4,6 +4,7 @@ import { RadioButton } from 'exoflex';
 
 import { FONT_SIZE, FONT_FAMILY } from '../../../constants/fonts';
 import { COLORS } from '../../../constants/colors';
+import { PRODUCT_SORT_VALUES } from '../../../constants/values';
 
 type Props = {
   radioButtonValue: string;
@@ -23,24 +24,24 @@ export default function SortRadioGroup(props: Props) {
   return (
     <RadioButton.Group value={radioButtonValue} onValueChange={onValueChange}>
       <RadioButton
-        label={t('Popularity')}
+        label={PRODUCT_SORT_VALUES.POPULARITY}
         {...(!radioButtonValue && { checked: true })}
         style={styles.radioButton}
         textStyle={
           !radioButtonValue
-            ? styles.activeTextStyle
-            : textStyle(t('Popularity'))
+            ? [styles.radioButtonText, styles.activeTextStyle]
+            : textStyle(PRODUCT_SORT_VALUES.POPULARITY)
         }
       />
       <RadioButton
-        label={t('Price from High to Low')}
+        label={PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW}
         style={styles.radioButton}
-        textStyle={textStyle(t('Price from High to Low'))}
+        textStyle={textStyle(PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW)}
       />
       <RadioButton
-        label={t('Price from Low to High')}
+        label={PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH}
         style={styles.radioButton}
-        textStyle={textStyle(t('Price from Low to High'))}
+        textStyle={textStyle(PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH)}
       />
     </RadioButton.Group>
   );

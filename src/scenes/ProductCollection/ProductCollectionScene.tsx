@@ -17,8 +17,13 @@ import {
 import { useColumns } from '../../helpers/columns';
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { GET_COLLECTION } from '../../graphql/server/productCollection';
-import { GetCollection } from '../../generated/server/GetCollection';
+import {
+  GetCollection,
+  GetCollectionVariables,
+} from '../../generated/server/GetCollection';
 import { Product } from '../../types/types';
+import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
+import { PRODUCT_SORT_VALUES } from '../../constants/values';
 
 const DEFAULT_MAX_PRICE = 1000;
 
@@ -67,16 +72,17 @@ export default function ProductCollectionScene() {
   let numColumns = useColumns();
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   let isScreenSizeLarge = screenSize === ScreenSize.Large;
+  const collectionHandle = params.collection.handle;
 
-  let { data: collectionData, loading } = useQuery<GetCollection>(
-    GET_COLLECTION,
-    {
-      variables: {
-        collectionHandle: params.collection.handle,
-      },
+  let { data: collectionData, loading, refetch } = useQuery<
+    GetCollection,
+    GetCollectionVariables
+  >(GET_COLLECTION, {
+    variables: {
+      collectionHandle,
+      sortKey: ProductCollectionSortKeys.BEST_SELLING,
     },
-  );
-
+  });
   let collection = getProducts(collectionData);
 
   let containerStyle = [
@@ -87,8 +93,27 @@ export default function ProductCollectionScene() {
   let onClear = () => setPriceRange([0, DEFAULT_MAX_PRICE]);
   let toggleSortModal = () => setSortModalVisible(!isSortModalVisible);
   let toggleFilterModal = () => setFilterModalVisible(!isFilterModalVisible);
-  let onPressRadioButton = (newValue: string) => setRadioButtonValue(newValue);
   let onSetFilter = (values: Array<number>) => setPriceRange(values);
+  let onPressRadioButton = (newValue: string) => {
+    setRadioButtonValue(newValue);
+    toggleSortModal();
+
+    let sortKey = ProductCollectionSortKeys.BEST_SELLING;
+    let reverse = false;
+
+    if (newValue === PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH) {
+      sortKey = ProductCollectionSortKeys.PRICE;
+    } else if (newValue === PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW) {
+      sortKey = ProductCollectionSortKeys.PRICE;
+      reverse = true;
+    }
+
+    refetch({
+      collectionHandle,
+      sortKey,
+      reverse,
+    });
+  };
 
   let SideBarMenu = () => {
     return (
@@ -136,7 +161,7 @@ export default function ProductCollectionScene() {
           icon="filter-variant"
           preset="invisible"
           style={[styles.button, styles.filter]}
-          contentStyle={styles.buttonContent}
+          contentStyle={styles.center}
           uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleFilterModal}
@@ -158,7 +183,7 @@ export default function ProductCollectionScene() {
   };
 
   if (loading) {
-    return <ActivityIndicator />;
+    return <ActivityIndicator style={[styles.container, styles.center]} />;
   }
 
   return (
@@ -202,6 +227,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   containerLandscape: {
     flexDirection: 'row',
   },
@@ -217,10 +246,6 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-  },
-  buttonContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   buttonLabel: {
     color: COLORS.black,
