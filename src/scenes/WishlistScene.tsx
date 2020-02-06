@@ -7,15 +7,13 @@ import { ProductList } from '../components';
 import { FONT_SIZE } from '../constants/fonts';
 import { StackNavProp } from '../types/Navigation';
 import { useColumns } from '../helpers/columns';
-import { useQuery } from '@apollo/react-hooks';
-import { GetWishlist } from '../generated/client/GetWishlist';
-import { GET_WISHLIST } from '../graphql/client/clientQueries';
+import { useWishlistQuery } from '../helpers/queries';
 
 export default function WishlistScene() {
   let { navigate } = useNavigation<StackNavProp<'Wishlist'>>();
   let numColumns = useColumns();
 
-  let { data: wishlistData } = useQuery<GetWishlist>(GET_WISHLIST);
+  let { data: wishlistData } = useWishlistQuery();
 
   if (!wishlistData || wishlistData.wishlist.length === 0) {
     return (

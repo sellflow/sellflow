@@ -8,7 +8,6 @@ import {
   TextInput,
 } from 'exoflex';
 import { useRoute } from '@react-navigation/native';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -19,40 +18,14 @@ import { TabView, RichRadioGroup } from '../core-ui';
 import { TabRoute } from '../core-ui/TabView';
 import { Product, VariantQueryData } from '../types/types';
 import { StackRouteProp } from '../types/Navigation';
-import {
-  GetProductByHandle,
-  GetProductByHandleVariables,
-} from '../generated/server/GetProductByHandle';
-import {
-  AddToWishlist,
-  AddToWishlistVariables,
-} from '../generated/client/AddToWishlist';
-import {
-  GET_PRODUCT_BY_HANDLE,
-  GET_PRODUCT_VARIANT_ID,
-} from '../graphql/server/productByHandle';
-import {
-  ADD_TO_WISHLIST,
-  GET_WISHLIST,
-  REMOVE_FROM_WISHLIST,
-} from '../graphql/client/clientQueries';
-import { GetWishlist } from '../generated/client/GetWishlist';
-import {
-  RemoveFromWishlist,
-  RemoveFromWishlistVariables,
-} from '../generated/client/RemoveFromWishlist';
-
-import { ADD_TO_SHOPPING_CART } from '../graphql/client/shoppingCartQueries';
-
-import {
-  AddToShoppingCart,
-  AddToShoppingCartVariables,
-} from '../generated/client/AddToShoppingCart';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
+import { useWishlistQuery, useProductByHandleQuery } from '../helpers/queries';
 import {
-  GetProductVariantID,
-  GetProductVariantIDVariables,
-} from '../generated/server/GetProductVariantID';
+  useAddToCartMutation,
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
+} from '../helpers/mutations';
+import { useGetProductVariantIdQuery } from '../helpers/queries/useGetProductVariantIdQuery';
 
 type ProductDetailsProps = {
   onSelectionOptionChange: (key: string, value: string) => void;
@@ -128,14 +101,10 @@ function ProductInfo(props: {
       </View>
 
       {radioGroupRenderView}
-      <View style={{ paddingHorizontal: 24 }}>
-        <Text
-          style={{ opacity: 0.6, fontSize: FONT_SIZE.small, marginBottom: 12 }}
-        >
-          Quantity
-        </Text>
+      <View style={styles.paddingHorizontal}>
+        <Text style={styles.quantityText}>Quantity</Text>
         <TextInput
-          containerStyle={{ width: 80, height: 48 }}
+          containerStyle={styles.textInputStyle}
           value={quantity.toString()}
           onBlur={() => {
             if (quantity === 0) {
@@ -153,14 +122,8 @@ function ProductInfo(props: {
 }
 
 function BottomActionBar(props: ProductDetailsProps) {
-  let [addToWishlist] = useMutation<AddToWishlist, AddToWishlistVariables>(
-    ADD_TO_WISHLIST,
-  );
-
-  let [removeFromWishlist] = useMutation<
-    RemoveFromWishlist,
-    RemoveFromWishlistVariables
-  >(REMOVE_FROM_WISHLIST);
+  let { addToWishlist } = useAddToWishlistMutation();
+  let { removeFromWishlist } = useRemoveFromWishlistMutation();
   let { isWishlistActive, onWishlistPress, onAddToCartPress, product } = props;
 
   let onPressWishlist = () => {
@@ -303,9 +266,7 @@ export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
   let { product } = route.params;
 
-  let [addToCart] = useMutation<AddToShoppingCart, AddToShoppingCartVariables>(
-    ADD_TO_SHOPPING_CART,
-  );
+  let { addToCart } = useAddToCartMutation();
 
   let [isWishlistActive, setWishlistActive] = useState(false);
   let [options, setOptions] = useState<Options>([]);
@@ -336,10 +297,7 @@ export default function ProductDetailsScene() {
     setSelectedOptions({ ...selectedOptions, [key]: value });
   };
 
-  let [getVariantID] = useLazyQuery<
-    GetProductVariantID,
-    GetProductVariantIDVariables
-  >(GET_PRODUCT_VARIANT_ID, {
+  let { getVariantID } = useGetProductVariantIdQuery({
     onCompleted: ({ productByHandle }) => {
       if (productByHandle && productByHandle.variantBySelectedOptions) {
         let { id } = productByHandle.variantBySelectedOptions;
@@ -348,7 +306,7 @@ export default function ProductDetailsScene() {
     },
   });
 
-  let { data: wishlistData } = useQuery<GetWishlist>(GET_WISHLIST, {
+  let { data: wishlistData } = useWishlistQuery({
     onCompleted: ({ wishlist }) => {
       if (wishlist.find((item) => item.handle === product.handle)) {
         setWishlistActive(true);
@@ -361,15 +319,9 @@ export default function ProductDetailsScene() {
     getVariantID({
       variables: { selectedOptions: queryVariantID, handle: product.handle },
     });
-
-    // addToCart({ variables: { variantId, quantity } });
   };
 
-  let { loading, data: productData } = useQuery<
-    GetProductByHandle,
-    GetProductByHandleVariables
-  >(GET_PRODUCT_BY_HANDLE, {
-    fetchPolicy: 'network-only',
+  let { loading, data: productData } = useProductByHandleQuery(product.handle, {
     onCompleted({ productByHandle }) {
       if (productByHandle) {
         let newOptions = [...options, ...productByHandle.options];
@@ -387,9 +339,6 @@ export default function ProductDetailsScene() {
     onError(error) {
       let newError = error.message.split(':');
       Alert.alert(newError[1]);
-    },
-    variables: {
-      productHandle: product.handle,
     },
   });
 
@@ -442,6 +391,9 @@ const styles = StyleSheet.create({
   padding: {
     padding: 24,
   },
+  paddingHorizontal: {
+    paddingHorizontal: 24,
+  },
   flexRow: {
     flexDirection: 'row',
   },
@@ -469,11 +421,20 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   bottomIconContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
   },
   icon: {
     marginRight: 14,
+  },
+  quantityText: {
+    opacity: 0.6,
+    fontSize: FONT_SIZE.small,
+    marginBottom: 12,
+  },
+  textInputStyle: {
+    width: 80,
+    height: 48,
   },
 });

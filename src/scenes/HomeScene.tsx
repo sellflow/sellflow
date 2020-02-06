@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@apollo/react-hooks';
 
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { Carousel, CategoryList } from '../core-ui';
@@ -10,19 +9,15 @@ import { ProductList, SearchBar } from '../components';
 import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
-import { GetCategoriesAndFeaturedProducts } from '../generated/server/GetCategoriesAndFeaturedProducts';
-import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../graphql/server/categoriesAndFeaturedProducts';
 import { useColumns } from '../helpers/columns';
+import { useCollectionAndProductQuery } from '../helpers/queries';
 
 export default function HomeScene() {
   let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
   let numColumns = useColumns();
 
-  let { loading, data } = useQuery<GetCategoriesAndFeaturedProducts>(
-    GET_CATEGORIES_AND_FEATURED_PRODUCTS,
-    { fetchPolicy: 'network-only' },
-  );
+  let { loading, data } = useCollectionAndProductQuery();
 
   if (loading || !data) {
     return (

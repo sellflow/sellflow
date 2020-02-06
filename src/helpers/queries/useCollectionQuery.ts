@@ -3,10 +3,10 @@ import { useQuery } from '@apollo/react-hooks';
 import {
   GetCollection,
   GetCollectionVariables,
-} from '../generated/server/GetCollection';
-import { Product } from '../types/types';
-import { GET_COLLECTION } from '../graphql/server/productCollection';
-import { ProductCollectionSortKeys } from '../generated/server/globalTypes';
+} from '../../generated/server/GetCollection';
+import { Product } from '../../types/types';
+import { GET_COLLECTION } from '../../graphql/server/productCollection';
+import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 
 function getProducts(
   collectionData: GetCollection | undefined,

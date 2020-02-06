@@ -17,7 +17,7 @@ import { useColumns } from '../../helpers/columns';
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
-import { useCollectionQuery } from '../../helpers/useCollectionQuery';
+import { useCollectionQuery } from '../../helpers/queries';
 
 const DEFAULT_MAX_PRICE = 1000;
 
