@@ -15,6 +15,7 @@ import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import PaymentRadioButton from './components/PaymentRadioButton';
 import { masterCard, visa } from '../../../assets/images';
 import formatExpiryDate from '../../helpers/formatExpiryDate';
+import formatCardNumber from '../../helpers/formatCardNumber';
 
 export default function PaymentScene() {
   let { screenSize, isLandscape } = useDimensions();
@@ -40,7 +41,6 @@ export default function PaymentScene() {
 
   // TODO: Probably should factor this out
   let creditCardPayment = () => {
-    // TODO: Tokenize payment by sending credit card detail to Shopify Card Vault
     // TODO: Validate credit card input
     return (
       <PaymentRadioButton
@@ -64,17 +64,19 @@ export default function PaymentScene() {
             keyboardType="number-pad"
             label={t('Card Number')}
             value={creditCardInfo.cardNumber}
-            onChangeText={(cardNumber: string) =>
-              // TODO: Mask credit card number
-              setCreditCardInfo({ ...creditCardInfo, cardNumber })
-            }
+            onChangeText={(cardNumber) => {
+              setCreditCardInfo({
+                ...creditCardInfo,
+                cardNumber: formatCardNumber(cardNumber),
+              });
+            }}
           />
           <TextInput
             mode="flat"
             label={t('Name on Card')}
             autoCapitalize="words"
             value={creditCardInfo.name}
-            onChangeText={(name: string) =>
+            onChangeText={(name) =>
               setCreditCardInfo({ ...creditCardInfo, name })
             }
           />
@@ -99,7 +101,7 @@ export default function PaymentScene() {
               keyboardType="number-pad"
               label={t('CVV')}
               value={creditCardInfo.cvv}
-              onChangeText={(cvv: string) =>
+              onChangeText={(cvv) =>
                 setCreditCardInfo({ ...creditCardInfo, cvv })
               }
             />
