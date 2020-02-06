@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, ScrollView, Alert } from 'react-native';
-import { Text, IconButton, Button, ActivityIndicator } from 'exoflex';
+import {
+  Text,
+  IconButton,
+  Button,
+  ActivityIndicator,
+  TextInput,
+} from 'exoflex';
 import { useRoute } from '@react-navigation/native';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -11,7 +17,7 @@ import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import formatCurrency from '../helpers/formatCurrency';
 import { TabView, RichRadioGroup } from '../core-ui';
 import { TabRoute } from '../core-ui/TabView';
-import { Product } from '../types/types';
+import { Product, VariantQueryData } from '../types/types';
 import { StackRouteProp } from '../types/Navigation';
 import {
   GetProductByHandle,
@@ -21,7 +27,10 @@ import {
   AddToWishlist,
   AddToWishlistVariables,
 } from '../generated/client/AddToWishlist';
-import { GET_PRODUCT_BY_HANDLE } from '../graphql/server/productByHandle';
+import {
+  GET_PRODUCT_BY_HANDLE,
+  GET_PRODUCT_VARIANT_ID,
+} from '../graphql/server/productByHandle';
 import {
   ADD_TO_WISHLIST,
   GET_WISHLIST,
@@ -39,13 +48,22 @@ import {
   AddToShoppingCart,
   AddToShoppingCartVariables,
 } from '../generated/client/AddToShoppingCart';
+import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
+import {
+  GetProductVariantID,
+  GetProductVariantIDVariables,
+} from '../generated/server/GetProductVariantID';
 
 type ProductDetailsProps = {
+  onSelectionOptionChange: (key: string, value: string) => void;
+  selectedOptions: OptionsData;
+  quantity: number;
+  onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
   product: Product;
   options?: Options;
   infoTabs?: Tabs;
   isWishlistActive: boolean;
-  onAddToCartPress: (variantId: string, quantity: number) => void;
+  onAddToCartPress: () => void;
   onWishlistPress: (value: boolean) => void;
 };
 
@@ -69,26 +87,37 @@ function TabPane(props: { content: string }) {
   );
 }
 
-function RadioGroupWithState(props: { name: string; values: Array<string> }) {
-  let { name, values } = props;
-  let [selectedValue, setSelectedValue] = useState(values[0]);
-  return (
-    <RichRadioGroup
-      name={name}
-      values={values}
-      selectedValue={selectedValue}
-      onSelect={(value) => setSelectedValue(value)}
-    />
-  );
-}
-
 function ProductInfo(props: {
+  onSelectionOptionChange: (key: string, value: string) => void;
+  selectedOptions: OptionsData;
+  quantity: number;
+  onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
   product: Product;
   options: Options;
   infoTabs: Tabs;
 }) {
-  let { product, options, infoTabs } = props;
-
+  let {
+    product,
+    options,
+    infoTabs,
+    quantity,
+    selectedOptions,
+    onChangeQuantity,
+    onSelectionOptionChange,
+  } = props;
+  let radioGroupRenderView = options.map(({ name, values }) => {
+    return (
+      <RichRadioGroup
+        key={name}
+        name={name}
+        values={values}
+        selectedValue={selectedOptions[name]}
+        onSelect={(value) => {
+          onSelectionOptionChange(name, value);
+        }}
+      />
+    );
+  });
   return (
     <>
       <View style={styles.padding}>
@@ -98,14 +127,26 @@ function ProductInfo(props: {
         </Text>
       </View>
 
-      {options.map((item, index) => (
-        <RadioGroupWithState
-          key={index}
-          name={item.name}
-          values={item.values}
+      {radioGroupRenderView}
+      <View style={{ paddingHorizontal: 24 }}>
+        <Text
+          style={{ opacity: 0.6, fontSize: FONT_SIZE.small, marginBottom: 12 }}
+        >
+          Quantity
+        </Text>
+        <TextInput
+          containerStyle={{ width: 80, height: 48 }}
+          value={quantity.toString()}
+          onBlur={() => {
+            if (quantity === 0) {
+              onChangeQuantity(1);
+            }
+          }}
+          onChangeText={(value) =>
+            onChangeQuantity(valueBetweenZeroToMax(parseInt(value, 10), 100))
+          }
         />
-      ))}
-
+      </View>
       <TabView routes={infoTabRoutes(infoTabs)} />
     </>
   );
@@ -158,7 +199,7 @@ function BottomActionBar(props: ProductDetailsProps) {
         style={[defaultButton, styles.flex]}
         labelStyle={defaultButtonLabel}
         onPress={() => {
-          onAddToCartPress(product.id, 10);
+          onAddToCartPress();
         }}
       >
         {t('Add to Cart')}
@@ -168,7 +209,15 @@ function BottomActionBar(props: ProductDetailsProps) {
 }
 
 function ProductDetailsLandscape(props: ProductDetailsProps) {
-  let { product, options, infoTabs } = props;
+  let {
+    product,
+    options,
+    infoTabs,
+    quantity,
+    onChangeQuantity,
+    onSelectionOptionChange,
+    selectedOptions,
+  } = props;
 
   return (
     <View style={[styles.flex, styles.flexRow]}>
@@ -186,6 +235,10 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
           contentContainerStyle={styles.flexColumn}
         >
           <ProductInfo
+            selectedOptions={selectedOptions}
+            onSelectionOptionChange={onSelectionOptionChange}
+            quantity={quantity}
+            onChangeQuantity={onChangeQuantity}
             product={product}
             options={options ? options : []}
             infoTabs={infoTabs ? infoTabs : []}
@@ -200,7 +253,15 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
 }
 
 function ProductDetailsPortrait(props: ProductDetailsProps) {
-  let { product, options, infoTabs } = props;
+  let {
+    product,
+    options,
+    infoTabs,
+    quantity,
+    selectedOptions,
+    onChangeQuantity,
+    onSelectionOptionChange,
+  } = props;
   let dimensions = useDimensions();
 
   return (
@@ -215,6 +276,10 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
         />
         <View style={styles.flex}>
           <ProductInfo
+            selectedOptions={selectedOptions}
+            onSelectionOptionChange={onSelectionOptionChange}
+            quantity={quantity}
+            onChangeQuantity={onChangeQuantity}
             product={product}
             options={options ? options : []}
             infoTabs={infoTabs ? infoTabs : []}
@@ -229,6 +294,10 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
   );
 }
 
+type OptionsData = {
+  [id: string]: string;
+};
+
 export default function ProductDetailsScene() {
   let dimensions = useDimensions();
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
@@ -238,15 +307,46 @@ export default function ProductDetailsScene() {
     ADD_TO_SHOPPING_CART,
   );
 
-  let onAddToCart = (variantId: string, quantity: number) => {
-    addToCart({ variables: { variantId, quantity } });
-  };
-
   let [isWishlistActive, setWishlistActive] = useState(false);
   let [options, setOptions] = useState<Options>([]);
+  let [quantity, setQuantity] = useState(1);
+  let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
   let [infoTabs, setInfoTabs] = useState<Tabs>([
     { title: 'Description', content: '' },
   ]);
+
+  let extractOptionsData = (
+    optionsData: OptionsData,
+  ): Array<VariantQueryData> => {
+    let result: Array<VariantQueryData> = [];
+
+    for (let option in optionsData) {
+      if (option) {
+        let processedForm: VariantQueryData = {
+          name: option,
+          value: optionsData[option],
+        };
+        result.push(processedForm);
+      }
+    }
+    return result;
+  };
+
+  let changeSelectedOptions = (key: string, value: string) => {
+    setSelectedOptions({ ...selectedOptions, [key]: value });
+  };
+
+  let [getVariantID] = useLazyQuery<
+    GetProductVariantID,
+    GetProductVariantIDVariables
+  >(GET_PRODUCT_VARIANT_ID, {
+    onCompleted: ({ productByHandle }) => {
+      if (productByHandle && productByHandle.variantBySelectedOptions) {
+        let { id } = productByHandle.variantBySelectedOptions;
+        addToCart({ variables: { variantId: id, quantity } });
+      }
+    },
+  });
 
   let { data: wishlistData } = useQuery<GetWishlist>(GET_WISHLIST, {
     onCompleted: ({ wishlist }) => {
@@ -256,6 +356,15 @@ export default function ProductDetailsScene() {
     },
   });
 
+  let onAddToCart = () => {
+    let queryVariantID = extractOptionsData(selectedOptions);
+    getVariantID({
+      variables: { selectedOptions: queryVariantID, handle: product.handle },
+    });
+
+    // addToCart({ variables: { variantId, quantity } });
+  };
+
   let { loading, data: productData } = useQuery<
     GetProductByHandle,
     GetProductByHandleVariables
@@ -263,10 +372,16 @@ export default function ProductDetailsScene() {
     fetchPolicy: 'network-only',
     onCompleted({ productByHandle }) {
       if (productByHandle) {
-        setOptions([...options, ...productByHandle.options]);
+        let newOptions = [...options, ...productByHandle.options];
+        setOptions(newOptions);
         setInfoTabs([
           ...[{ title: 'Description', content: productByHandle.description }],
         ]);
+        let defaultOptions: OptionsData = {};
+        for (let { name, values } of newOptions) {
+          defaultOptions[name] = values[0];
+        }
+        setSelectedOptions(defaultOptions);
       }
     },
     onError(error) {
@@ -284,6 +399,10 @@ export default function ProductDetailsScene() {
     </View>
   ) : dimensions.screenSize === ScreenSize.Large ? (
     <ProductDetailsLandscape
+      selectedOptions={selectedOptions}
+      onSelectionOptionChange={changeSelectedOptions}
+      quantity={quantity}
+      onChangeQuantity={setQuantity}
       onAddToCartPress={onAddToCart}
       product={product}
       options={options}
@@ -295,6 +414,10 @@ export default function ProductDetailsScene() {
     />
   ) : (
     <ProductDetailsPortrait
+      selectedOptions={selectedOptions}
+      onSelectionOptionChange={changeSelectedOptions}
+      quantity={quantity}
+      onChangeQuantity={setQuantity}
       onAddToCartPress={onAddToCart}
       product={product}
       options={options}

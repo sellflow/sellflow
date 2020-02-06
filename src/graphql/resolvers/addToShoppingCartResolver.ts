@@ -17,14 +17,37 @@ function addToShoppingCartResolver(
     return;
   }
 
-  let newItem = { __typename: 'LineItem', quantity, variantId };
+  let newItem: {
+    __typename: 'LineItem';
+    quantity: number;
+    variantId: string;
+  } = {
+    __typename: 'LineItem',
+    quantity,
+    variantId,
+  };
+
+  let alreadyInCart = false;
+
+  let newItems = cartData.shoppingCart.items.map((item) => {
+    if (item.variantId === variantId) {
+      alreadyInCart = true;
+      return { ...item, quantity: item.quantity + quantity };
+    } else {
+      return item;
+    }
+  });
+
+  if (!alreadyInCart) {
+    newItems.push(newItem);
+  }
 
   cache.writeData({
     data: {
       shoppingCart: {
         __typename: 'ShoppingCart',
         id: cartData.shoppingCart.id,
-        items: [...cartData.shoppingCart.items, newItem],
+        items: newItems,
       },
     },
   });

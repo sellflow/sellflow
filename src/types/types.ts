@@ -70,3 +70,7 @@ export type LocalData = {
 export type LocalCache = {
   data: LocalData;
 };
+export type VariantQueryData = {
+  name: string;
+  value: string;
+};
