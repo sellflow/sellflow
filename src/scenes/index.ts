@@ -12,7 +12,7 @@ import ForgotPasswordScene from './ForgotPasswordScene';
 import ShoppingCartScene from './ShoppingCartScene';
 import CheckoutScene from './CheckoutScene';
 import EditProfileScene from './EditProfileScene';
-import PaymentScene from './PaymentScene';
+import PaymentScene from './Payment/PaymentScene';
 
 export {
   HomeScene,
