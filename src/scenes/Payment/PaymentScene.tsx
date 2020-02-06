@@ -14,6 +14,7 @@ import formatCurrency from '../../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import PaymentRadioButton from './components/PaymentRadioButton';
 import { masterCard, visa } from '../../../assets/images';
+import formatExpiryDate from '../../helpers/formatExpiryDate';
 
 export default function PaymentScene() {
   let { screenSize, isLandscape } = useDimensions();
@@ -85,7 +86,10 @@ export default function PaymentScene() {
               label={t('Expiration Date (MM/YY)')}
               value={creditCardInfo.expirationDate}
               onChangeText={(expirationDate) =>
-                setCreditCardInfo({ ...creditCardInfo, expirationDate })
+                setCreditCardInfo({
+                  ...creditCardInfo,
+                  expirationDate: formatExpiryDate(expirationDate),
+                })
               }
             />
             <TextInput

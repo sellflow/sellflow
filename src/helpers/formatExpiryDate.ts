@@ -1,0 +1,18 @@
+export default function formatExpiryDate(expiryDate: string) {
+  let cleanString = (expiryDate: string) => {
+    let nonNumberRemoved = expiryDate.replace(/[^\d]/g, '');
+    return nonNumberRemoved.slice(0, 4);
+  };
+  let cleaned = cleanString(expiryDate);
+
+  if (cleaned.match(/^[2-9]$/)) {
+    return `0${cleaned}`;
+  }
+  if (cleaned.match(/^1[^012]$/)) {
+    return `01/${cleaned.slice(-1)}`;
+  }
+  if (cleaned.length > 2) {
+    return `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
+  }
+  return cleaned;
+}
