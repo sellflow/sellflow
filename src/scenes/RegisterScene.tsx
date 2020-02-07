@@ -17,19 +17,10 @@ import {
   validatePassword,
 } from '../helpers/validation';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
-import { useMutation } from '@apollo/react-hooks';
-import { CUSTOMER_REGISTER } from '../graphql/server/auth';
-import { SET_AUTHENTICATED_USER } from '../graphql/client/clientQueries';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavProp } from '../types/Navigation';
-import {
-  CustomerRegister,
-  CustomerRegisterVariables,
-} from '../generated/server/CustomerRegister';
-import {
-  SetAuthenticatedUser,
-  SetAuthenticatedUserVariables,
-} from '../generated/client/SetAuthenticatedUser';
+import { useSetAuthenticatedUser } from '../helpers/queriesAndMutations/useAuthenticatedUser';
+import { useCustomerRegister } from '../helpers/queriesAndMutations/useCustomer';
 
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
@@ -40,7 +31,14 @@ export default function RegisterScene() {
   let [confirmPassword, setConfirmPassword] = useState('');
   let dimensions = useDimensions();
   let onSubmit = () => {
-    register();
+    register({
+      variables: {
+        email,
+        password,
+        firstName,
+        lastName,
+      },
+    });
   };
   let onTermsPressed = () => {
     Alert.alert('Terms & Condition');
@@ -77,16 +75,7 @@ export default function RegisterScene() {
     !isConfirmPasswordValid ||
     password !== confirmPassword;
 
-  let [register, { loading: registerLoading }] = useMutation<
-    CustomerRegister,
-    CustomerRegisterVariables
-  >(CUSTOMER_REGISTER, {
-    variables: {
-      email,
-      password,
-      firstName,
-      lastName,
-    },
+  let { register, loading: registerLoading } = useCustomerRegister({
     onError: (error) => {
       Alert.alert('Error ocurred!', error.message);
     },
@@ -104,7 +93,7 @@ export default function RegisterScene() {
         } = customerAccessTokenCreate.customerAccessToken;
         AsyncStorage.setItem('accessToken', accessToken);
         if (email && firstName && lastName) {
-          setAuthenticatedUser({
+          setUser({
             variables: {
               user: {
                 id,
@@ -120,10 +109,10 @@ export default function RegisterScene() {
     },
   });
 
-  let [setAuthenticatedUser, { loading: localStateLoading }] = useMutation<
-    SetAuthenticatedUser,
-    SetAuthenticatedUserVariables
-  >(SET_AUTHENTICATED_USER, {
+  let {
+    setUser,
+    loading: setAuthenticatedUserLoading,
+  } = useSetAuthenticatedUser({
     onCompleted: () => {
       navigation.reset({
         index: 0,
@@ -132,7 +121,7 @@ export default function RegisterScene() {
     },
   });
 
-  let isLoading = localStateLoading || registerLoading;
+  let isLoading = setAuthenticatedUserLoading || registerLoading;
   return (
     <View style={containerStyle()}>
       <View>

@@ -26,15 +26,12 @@ import {
 } from '../helpers/validation';
 import { profile } from '../../assets/images';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
-import { GET_AUTHENTICATED_USER } from '../graphql/client/clientQueries';
-import { GetAuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { UPDATE_CUSTOMER_DATA } from '../graphql/server/auth';
-import {
-  UpdateCustomerData,
-  UpdateCustomerDataVariables,
-} from '../generated/server/UpdateCustomerData';
 import { StackNavProp } from '../types/Navigation';
+import { useUpdateCustomer } from '../helpers/queriesAndMutations/useCustomer';
+import {
+  useGetAuthenticatedUser,
+  useSetAuthenticatedUser,
+} from '../helpers/queriesAndMutations/useAuthenticatedUser';
 
 export default function EditProfileScene() {
   let [profilePicture, setProfilePicture] = useState(profile);
@@ -45,6 +42,7 @@ export default function EditProfileScene() {
   let [password, setPassword] = useState('');
   let [isEmailValid, setIsEmailValid] = useState(true);
   let [isPasswordValid, setIsPasswordValid] = useState(true);
+  let [expiresAt, setExpiresAt] = useState('');
   let lastNameRef = useRef<TextInputType>(null);
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
@@ -108,28 +106,34 @@ export default function EditProfileScene() {
     });
   };
 
-  let [updateCustomerData, { loading: saving }] = useMutation<
-    UpdateCustomerData,
-    UpdateCustomerDataVariables
-  >(UPDATE_CUSTOMER_DATA, {
-    onCompleted() {
-      // TODO: Update locally stored authenticatedUser
+  let { setUser } = useSetAuthenticatedUser();
+  let { loading: saving, updateCustomerData } = useUpdateCustomer({
+    onCompleted: ({ customerUpdate }) => {
+      if (customerUpdate && customerUpdate.customer) {
+        let { email, firstName, id, lastName } = customerUpdate.customer;
+        if (email && firstName && lastName) {
+          setUser({
+            variables: { user: { email, expiresAt, lastName, id, firstName } },
+          });
+        }
+      }
       goBack();
     },
   });
 
-  let { loading } = useQuery<GetAuthenticatedUser>(GET_AUTHENTICATED_USER, {
+  let { loading: getAuthenticatedUserLoading } = useGetAuthenticatedUser({
     fetchPolicy: 'cache-only',
     notifyOnNetworkStatusChange: true,
     onCompleted({ authenticatedUser }) {
-      let { email, firstName, lastName } = authenticatedUser;
+      let { email, firstName, lastName, expiresAt } = authenticatedUser;
       setFirstName(firstName);
       setLastName(lastName);
       setEmail(email);
+      setExpiresAt(expiresAt);
     },
   });
 
-  if (loading) {
+  if (getAuthenticatedUserLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />

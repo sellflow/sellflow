@@ -76,10 +76,6 @@ export const UPDATE_CUSTOMER_DATA = gql`
         firstName
         lastName
       }
-      customerAccessToken {
-        accessToken
-        expiresAt
-      }
     }
   }
 `;

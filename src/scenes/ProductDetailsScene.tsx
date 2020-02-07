@@ -18,14 +18,18 @@ import { TabView, RichRadioGroup } from '../core-ui';
 import { TabRoute } from '../core-ui/TabView';
 import { Product, VariantQueryData } from '../types/types';
 import { StackRouteProp } from '../types/Navigation';
+
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
-import { useWishlistQuery, useProductByHandleQuery } from '../helpers/queries';
+import { useAddToCart } from '../helpers/queriesAndMutations/useShoppingCart';
 import {
-  useAddToCartMutation,
-  useAddToWishlistMutation,
-  useRemoveFromWishlistMutation,
-} from '../helpers/mutations';
-import { useGetProductVariantIdQuery } from '../helpers/queries/useGetProductVariantIdQuery';
+  useGetProductByHandle,
+  useGetProductVariantID,
+} from '../helpers/queriesAndMutations/useProduct';
+import {
+  useAddItemToWishlist,
+  useRemoveItemFromWishlist,
+  useGetWishlistData,
+} from '../helpers/queriesAndMutations/useWishlist';
 
 type ProductDetailsProps = {
   onSelectionOptionChange: (key: string, value: string) => void;
@@ -122,8 +126,9 @@ function ProductInfo(props: {
 }
 
 function BottomActionBar(props: ProductDetailsProps) {
-  let { addToWishlist } = useAddToWishlistMutation();
-  let { removeFromWishlist } = useRemoveFromWishlistMutation();
+  let { addToWishlist } = useAddItemToWishlist();
+  let { removeFromWishlist } = useRemoveItemFromWishlist();
+  //remove
   let { isWishlistActive, onWishlistPress, onAddToCartPress, product } = props;
 
   let onPressWishlist = () => {
@@ -266,7 +271,7 @@ export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
   let { product } = route.params;
 
-  let { addToCart } = useAddToCartMutation();
+  let { addToCart } = useAddToCart();
 
   let [isWishlistActive, setWishlistActive] = useState(false);
   let [options, setOptions] = useState<Options>([]);
@@ -297,7 +302,7 @@ export default function ProductDetailsScene() {
     setSelectedOptions({ ...selectedOptions, [key]: value });
   };
 
-  let { getVariantID } = useGetProductVariantIdQuery({
+  let { getVariantID } = useGetProductVariantID({
     onCompleted: ({ productByHandle }) => {
       if (productByHandle && productByHandle.variantBySelectedOptions) {
         let { id } = productByHandle.variantBySelectedOptions;
@@ -305,8 +310,7 @@ export default function ProductDetailsScene() {
       }
     },
   });
-
-  let { data: wishlistData } = useWishlistQuery({
+  let { wishlistData } = useGetWishlistData({
     onCompleted: ({ wishlist }) => {
       if (wishlist.find((item) => item.handle === product.handle)) {
         setWishlistActive(true);
@@ -321,7 +325,11 @@ export default function ProductDetailsScene() {
     });
   };
 
-  let { loading, data: productData } = useProductByHandleQuery(product.handle, {
+  let {
+    productData,
+    loading: getProductByHandleLoading,
+  } = useGetProductByHandle({
+    fetchPolicy: 'network-only',
     onCompleted({ productByHandle }) {
       if (productByHandle) {
         let newOptions = [...options, ...productByHandle.options];
@@ -342,7 +350,7 @@ export default function ProductDetailsScene() {
     },
   });
 
-  return loading || !productData || !wishlistData ? (
+  return getProductByHandleLoading || !productData || !wishlistData ? (
     <View style={styles.centered}>
       <ActivityIndicator size="large" />
     </View>

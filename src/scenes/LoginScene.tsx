@@ -15,24 +15,11 @@ import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
+import { useSetAuthenticatedUser } from '../helpers/queriesAndMutations/useAuthenticatedUser';
 import {
-  CUSTOMER_CREATE_TOKEN,
-  GET_CUSTOMER_DATA,
-} from '../graphql/server/auth';
-import { useMutation, useLazyQuery } from '@apollo/react-hooks';
-import {
-  CustomerCreateToken,
-  CustomerCreateTokenVariables,
-} from '../generated/server/CustomerCreateToken';
-import {
-  GetCustomerData,
-  GetCustomerDataVariables,
-} from '../generated/server/GetCustomerData';
-import { SET_AUTHENTICATED_USER } from '../graphql/client/clientQueries';
-import {
-  SetAuthenticatedUser,
-  SetAuthenticatedUserVariables,
-} from '../generated/client/SetAuthenticatedUser';
+  useCustomerCreateToken,
+  useGetCustomerData,
+} from '../helpers/queriesAndMutations/useCustomer';
 
 export default function ProfileScene() {
   let navigation = useNavigation<StackNavProp<'Login'>>();
@@ -65,10 +52,10 @@ export default function ProfileScene() {
     return styleApplied;
   };
 
-  let [setAuthenticatedUser, { loading: setLocalStateLoading }] = useMutation<
-    SetAuthenticatedUser,
-    SetAuthenticatedUserVariables
-  >(SET_AUTHENTICATED_USER, {
+  let {
+    setUser,
+    loading: setAuthenticatedUserLoading,
+  } = useSetAuthenticatedUser({
     onCompleted: () => {
       // Note: I'm not sure if this is correct.
       navigation.reset({
@@ -78,10 +65,7 @@ export default function ProfileScene() {
     },
   });
 
-  let [createToken, { loading: createTokenLoading }] = useMutation<
-    CustomerCreateToken,
-    CustomerCreateTokenVariables
-  >(CUSTOMER_CREATE_TOKEN, {
+  let { createToken, createTokenLoading } = useCustomerCreateToken({
     variables: { email, password },
     onCompleted: ({ customerAccessTokenCreate }) => {
       if (
@@ -104,15 +88,12 @@ export default function ProfileScene() {
     },
   });
 
-  let [login, { loading: getDataLoading }] = useLazyQuery<
-    GetCustomerData,
-    GetCustomerDataVariables
-  >(GET_CUSTOMER_DATA, {
+  let { getCustomer: login, getCustomerLoading } = useGetCustomerData({
     onCompleted: ({ customer }) => {
       if (customer) {
         let { email, id, firstName, lastName } = customer;
         if (email && firstName && lastName) {
-          setAuthenticatedUser({
+          setUser({
             variables: {
               user: {
                 email,
@@ -136,7 +117,8 @@ export default function ProfileScene() {
     navigation.navigate('ForgotPassword');
   };
 
-  let isLoading = createTokenLoading || getDataLoading || setLocalStateLoading;
+  let isLoading =
+    createTokenLoading || getCustomerLoading || setAuthenticatedUserLoading;
 
   return (
     <View style={[containerStyle(), styles.container]}>

@@ -13,58 +13,37 @@ import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { profile } from '../../assets/images';
 import { StackNavProp } from '../types/Navigation';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
-  SET_AUTHENTICATED_USER,
-  GET_AUTHENTICATED_USER,
-} from '../graphql/client/clientQueries';
-import {
-  SetAuthenticatedUser,
-  SetAuthenticatedUserVariables,
-} from '../generated/client/SetAuthenticatedUser';
-import { GetAuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
-
-import { RESET_SHOPPING_CART } from '../graphql/client/shoppingCartQueries';
-import { ResetShoppingCart } from '../generated/client/ResetShoppingCart';
+  useGetAuthenticatedUser,
+  useSetAuthenticatedUser,
+} from '../helpers/queriesAndMutations/useAuthenticatedUser';
+import { useResetCart } from '../helpers/queriesAndMutations/useShoppingCart';
 
 export default function ProfileScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Profile'>>();
 
-  let [logout] = useMutation<
-    SetAuthenticatedUser,
-    SetAuthenticatedUserVariables
-  >(SET_AUTHENTICATED_USER, {
-    variables: {
-      user: {
-        email: '',
-        expiresAt: '',
-        id: '',
-        firstName: '',
-        lastName: '',
-      },
-    },
+  let { setUser: logout } = useSetAuthenticatedUser({
     onCompleted: () => {
       AsyncStorage.setItem('accessToken', '');
       resetShoppingCart();
-      // TODO: We probably don't want to navigate anywhere. Customer can
-      // continue shopping as guest, right?
       reset({
         index: 0,
         routes: [{ name: 'Login' }],
       });
     },
   });
-  let { loading, data } = useQuery<GetAuthenticatedUser>(
-    GET_AUTHENTICATED_USER,
-    {
-      fetchPolicy: 'cache-only',
-      notifyOnNetworkStatusChange: true,
-    },
-  );
 
-  let [resetShoppingCart] = useMutation<ResetShoppingCart>(RESET_SHOPPING_CART);
+  let {
+    authenticatedUser,
+    loading: getAuthenticatedUserLoading,
+  } = useGetAuthenticatedUser({
+    fetchPolicy: 'cache-only',
+    notifyOnNetworkStatusChange: true,
+  });
 
-  if (loading || !data) {
+  let { resetShoppingCart } = useResetCart();
+
+  if (getAuthenticatedUserLoading || !authenticatedUser) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
@@ -72,7 +51,7 @@ export default function ProfileScene() {
     );
   }
 
-  let { email, firstName, lastName } = data.authenticatedUser;
+  let { email, firstName, lastName } = authenticatedUser.authenticatedUser;
 
   return (
     <View style={styles.container}>
@@ -115,7 +94,17 @@ export default function ProfileScene() {
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => {
-            logout();
+            logout({
+              variables: {
+                user: {
+                  id: '',
+                  email: '',
+                  expiresAt: '',
+                  firstName: '',
+                  lastName: '',
+                },
+              },
+            });
           }}
         >
           <Text style={[styles.buttonLabelStyle, styles.redTextColor]}>
