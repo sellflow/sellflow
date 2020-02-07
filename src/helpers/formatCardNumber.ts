@@ -1,12 +1,15 @@
-import valid from 'card-validator';
+import { Card } from 'card-validator';
+import { cleanNumber, limitLength } from './utilities';
 
-export default function formatCardNumber(cardNumber: string) {
-  let nonNumberRemoved = cardNumber.replace(/[^\d]/g, '');
-  let { card } = valid.number(nonNumberRemoved);
+export default function formatCardNumber(
+  cardNumber: string,
+  card: Card | null,
+) {
+  let formattedCardNumber = cleanNumber(cardNumber);
 
   if (card) {
     let maxLength = card.lengths[card.lengths.length - 1];
-    let cleaned = nonNumberRemoved.slice(0, maxLength);
+    let cleaned = limitLength(formattedCardNumber, maxLength);
 
     let addGaps = (cardNumber: string, gaps: Array<number>) => {
       let offsets = [0, ...gaps, cardNumber.length];
@@ -22,7 +25,8 @@ export default function formatCardNumber(cardNumber: string) {
         .join(' ')
         .trim();
     };
-    return addGaps(cleaned, card.gaps);
+    formattedCardNumber = addGaps(cleaned, card.gaps);
   }
-  return nonNumberRemoved;
+
+  return formattedCardNumber;
 }

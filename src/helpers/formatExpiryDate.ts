@@ -1,9 +1,7 @@
+import { limitLength, cleanNumber } from './utilities';
+
 export default function formatExpiryDate(expiryDate: string) {
-  let cleanString = (expiryDate: string) => {
-    let nonNumberRemoved = expiryDate.replace(/[^\d]/g, '');
-    return nonNumberRemoved.slice(0, 4);
-  };
-  let cleaned = cleanString(expiryDate);
+  let cleaned = limitLength(cleanNumber(expiryDate), 4);
 
   if (cleaned.match(/^[2-9]$/)) {
     return `0${cleaned}`;

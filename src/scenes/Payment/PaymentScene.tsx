@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet, Image } from 'react-native';
 import { Button, RadioButton, Text, TextInput } from 'exoflex';
+import valid from 'card-validator';
 
 import { Surface } from '../../core-ui';
 import { OrderItem } from '../../components';
@@ -16,6 +17,11 @@ import PaymentRadioButton from './components/PaymentRadioButton';
 import { masterCard, visa } from '../../../assets/images';
 import formatExpiryDate from '../../helpers/formatExpiryDate';
 import formatCardNumber from '../../helpers/formatCardNumber';
+import {
+  INVALID_CARD_NUMBER_MESSAGE,
+  INVALID_EXPIRATION_DATE_MESSAGE,
+} from '../../helpers/validation';
+import { cleanNumber, limitLength } from '../../helpers/utilities';
 
 export default function PaymentScene() {
   let { screenSize, isLandscape } = useDimensions();
@@ -26,6 +32,9 @@ export default function PaymentScene() {
     expirationDate: '',
     cvv: '',
   });
+  let [isCardNumberValid, setIsCardNumberValid] = useState(true);
+  let [isExpirationDateValid, setIsExpirationDateValid] = useState(true);
+
   let subtotal = 77;
   let shipping = 0;
   let total = subtotal + shipping;
@@ -41,7 +50,6 @@ export default function PaymentScene() {
 
   // TODO: Probably should factor this out
   let creditCardPayment = () => {
-    // TODO: Validate credit card input
     return (
       <PaymentRadioButton
         label={
@@ -65,10 +73,23 @@ export default function PaymentScene() {
             label={t('Card Number')}
             value={creditCardInfo.cardNumber}
             onChangeText={(cardNumber) => {
+              let { card, isPotentiallyValid } = valid.number(
+                cleanNumber(cardNumber),
+              );
+
               setCreditCardInfo({
                 ...creditCardInfo,
-                cardNumber: formatCardNumber(cardNumber),
+                cardNumber: formatCardNumber(cardNumber, card),
               });
+              setIsCardNumberValid(isPotentiallyValid);
+            }}
+            errorMessage={
+              !isCardNumberValid ? INVALID_CARD_NUMBER_MESSAGE : undefined
+            }
+            errorMessageStyle={styles.errorMessage}
+            onBlur={() => {
+              let { isValid } = valid.number(creditCardInfo.cardNumber);
+              setIsCardNumberValid(isValid);
             }}
           />
           <TextInput
@@ -81,30 +102,54 @@ export default function PaymentScene() {
             }
           />
           <View style={styles.flexRow}>
-            <TextInput
-              containerStyle={styles.expirationDate}
-              mode="flat"
-              keyboardType="number-pad"
-              label={t('Expiration Date (MM/YY)')}
-              value={creditCardInfo.expirationDate}
-              onChangeText={(expirationDate) =>
-                setCreditCardInfo({
-                  ...creditCardInfo,
-                  expirationDate: formatExpiryDate(expirationDate),
-                })
-              }
-            />
-            <TextInput
-              containerStyle={styles.flex}
-              mode="flat"
-              secureTextEntry={true}
-              keyboardType="number-pad"
-              label={t('CVV')}
-              value={creditCardInfo.cvv}
-              onChangeText={(cvv) =>
-                setCreditCardInfo({ ...creditCardInfo, cvv })
-              }
-            />
+            <View style={styles.expirationDate}>
+              <TextInput
+                mode="flat"
+                keyboardType="number-pad"
+                label={t('Expiration Date (MM/YY)')}
+                value={creditCardInfo.expirationDate}
+                onChangeText={(expirationDate) => {
+                  let { isPotentiallyValid } = valid.expirationDate(
+                    expirationDate,
+                  );
+                  setCreditCardInfo({
+                    ...creditCardInfo,
+                    expirationDate: formatExpiryDate(expirationDate),
+                  });
+                  setIsExpirationDateValid(isPotentiallyValid);
+                }}
+                errorMessage={
+                  !isExpirationDateValid
+                    ? INVALID_EXPIRATION_DATE_MESSAGE
+                    : undefined
+                }
+                errorMessageStyle={styles.errorMessage}
+                onBlur={() => {
+                  let { isValid } = valid.expirationDate(
+                    creditCardInfo.expirationDate,
+                  );
+                  setIsExpirationDateValid(isValid);
+                }}
+              />
+            </View>
+            <View style={styles.flex}>
+              <TextInput
+                mode="flat"
+                secureTextEntry={true}
+                keyboardType="number-pad"
+                label={t('CVV')}
+                value={creditCardInfo.cvv}
+                onChangeText={(cvv) => {
+                  let { card } = valid.number(creditCardInfo.cardNumber);
+                  let maxLength = card ? card.code.size : 3;
+
+                  setCreditCardInfo({
+                    ...creditCardInfo,
+                    cvv: limitLength(cleanNumber(cvv), maxLength),
+                  });
+                }}
+              />
+            </View>
           </View>
         </View>
       </PaymentRadioButton>
@@ -281,7 +326,11 @@ const styles = StyleSheet.create({
     marginBottom: 22,
   },
   expirationDate: {
-    flex: 1,
+    flex: 2,
     marginRight: 16,
+  },
+  errorMessage: {
+    padding: 0,
+    marginTop: 0,
   },
 });
