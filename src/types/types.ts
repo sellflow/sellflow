@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { GetAuthenticatedUser_authenticatedUser as AuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
 import { GetWishlist_wishlist as Wishlist } from '../generated/client/GetWishlist';
 import { GetShoppingCart_shoppingCart as ShoppingCart } from '../generated/client/GetShoppingCart';
+import { GetRecentSearch_recentSearch as RecentSearch } from '../generated/client/GetRecentSearch';
 
 export type CarouselItem = {
   render: () => ReactNode;
@@ -65,6 +66,7 @@ export type LocalData = {
   authenticatedUser: AuthenticatedUser;
   wishlist: Array<Wishlist>;
   shoppingCart: ShoppingCart;
+  recentSearch: Array<RecentSearch>;
 };
 
 export type LocalCache = {

@@ -329,6 +329,7 @@ export default function ProductDetailsScene() {
     productData,
     loading: getProductByHandleLoading,
   } = useGetProductByHandle({
+    variables: { productHandle: product.handle },
     fetchPolicy: 'network-only',
     onCompleted({ productByHandle }) {
       if (productByHandle) {

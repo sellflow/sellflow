@@ -24,6 +24,22 @@ export const GET_AUTHENTICATED_USER = gql`
   }
 `;
 
+export const SET_RECENT_SEARCH = gql`
+  mutation SetRecentSearch($search: String!) {
+    setRecentSearch(search: $search) @client {
+      title
+    }
+  }
+`;
+
+export const GET_RECENT_SEARCH = gql`
+  query GetRecentSearch {
+    recentSearch @client {
+      title
+    }
+  }
+`;
+
 export const REMOVE_FROM_WISHLIST = gql`
   mutation RemoveFromWishlist($productHandle: String!) {
     removeFromWishlist(productHandle: $productHandle) @client {

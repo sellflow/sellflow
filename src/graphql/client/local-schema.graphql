@@ -13,6 +13,7 @@ input AuthenticatedUserInput {
   email: String!
   expiresAt: String!
 }
+
 type ShoppingCart {
   id: String!
   items: [LineItem!]!
@@ -39,10 +40,23 @@ input WishlistProductInput {
   price: Int!
 }
 
+type SearchDetail {
+  title: String!
+}
+
+type ProductDetail {
+  id: String!
+  title: String!
+  productType: String!
+  price: Int!
+  image: String!
+}
+
 type Query {
   authenticatedUser: AuthenticatedUser!
   wishlist: [WishlistProduct!]!
   shoppingCart: ShoppingCart!
+  recentSearch: [SearchDetail!]!
 }
 
 type Mutation {
@@ -52,4 +66,5 @@ type Mutation {
   addToShoppingCart(quantity: Int!, variantId: String!): ShoppingCart!
   resetShoppingCart: ShoppingCart!
   setShoppingCartID(id: String!): ShoppingCart!
+  setRecentSearch(search: String!): [SearchDetail]!
 }

@@ -30,7 +30,7 @@ export type StackParamList = {
   AddressManagement: undefined;
   Wishlist: undefined;
   Profile: undefined;
-  ProductCollection: { collection: CategoryItem };
+  ProductCollection: CollectionParams;
   Register: undefined;
   Login: undefined;
   ForgotPassword: undefined;
@@ -46,6 +46,11 @@ export type TabParamList = {
   HomeTab: undefined;
   WishlistTab: undefined;
   ProfileTab: undefined;
+};
+
+export type CollectionParams = {
+  collection?: CategoryItem;
+  searchKeyword?: string;
 };
 
 export type StackRouteName = keyof StackParamList;

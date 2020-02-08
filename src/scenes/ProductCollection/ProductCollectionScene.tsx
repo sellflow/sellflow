@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Button, ActivityIndicator } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -14,10 +14,12 @@ import {
   FilterModal,
 } from './components';
 import { useColumns } from '../../helpers/columns';
-import { StackNavProp, StackRouteProp } from '../../types/Navigation';
-import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { useCollectionQuery } from '../../helpers/queries';
+
+import { StackNavProp, StackRouteProp } from '../../types/Navigation';
+import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
+import { useSearchProductsQuery } from '../../helpers/queries/useSearchProductsQuery';
 
 const DEFAULT_MAX_PRICE = 1000;
 
@@ -33,10 +35,24 @@ export default function ProductCollectionScene() {
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
-  const collectionHandle = params.collection.handle;
+
+  const collectionHandle =
+    (params.collection && params.collection.handle) || '';
+
+  let searchKeyword = (params.searchKeyword && params.searchKeyword) || '';
+
   let { data: collection, loading, refetch } = useCollectionQuery(
     collectionHandle,
   );
+
+  let { searchProducts, data: results } = useSearchProductsQuery();
+
+  useEffect(() => {
+    searchProducts({
+      variables: { searchText: searchKeyword },
+    });
+  }, [searchKeyword, searchProducts]);
+
   let isScreenSizeLarge = screenSize === ScreenSize.Large;
 
   let containerStyle = [
@@ -145,10 +161,12 @@ export default function ProductCollectionScene() {
       {isScreenSizeLarge ? <SideBarMenu /> : <TopBarMenu />}
       <View style={styles.productsContainer}>
         <Text style={styles.count}>
-          {t('Showing {count} item(s)', { count: collection.length })}
+          {t('Showing {count} item(s)', {
+            count: collection.length || results.length,
+          })}
         </Text>
         <ProductList
-          data={collection}
+          data={collection.length !== 0 ? collection : results}
           numColumns={isScreenSizeLarge ? numColumns - 2 : numColumns}
           contentContainerStyle={styles.productList}
           onItemPress={(product) => navigate('ProductDetails', { product })}

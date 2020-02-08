@@ -15,6 +15,7 @@ import { initialData } from './initialData';
 import { addToShoppingCartResolver } from './resolvers/addToShoppingCartResolver';
 import { setShoppingCartIDResolver } from './resolvers/setShoppingCartIDResolver';
 import { resetShoppingCartResolver } from './resolvers/resetShoppingCartResolver';
+import { recentSearchResolver } from './resolvers/recentSearchResolver';
 
 const cache = new InMemoryCache();
 
@@ -54,6 +55,7 @@ function setupApolloClient() {
         addToShoppingCart: addToShoppingCartResolver,
         setShoppingCartID: setShoppingCartIDResolver,
         resetShoppingCart: resetShoppingCartResolver,
+        setRecentSearch: recentSearchResolver,
       },
     },
     cache,

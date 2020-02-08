@@ -58,7 +58,9 @@ export default function HomeScene() {
         <CategoryList
           categories={categoryData}
           onSelect={(collection) => {
-            navigate('ProductCollection', { collection });
+            navigate('ProductCollection', {
+              collection,
+            });
           }}
         />
       </View>

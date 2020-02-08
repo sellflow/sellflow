@@ -15,4 +15,5 @@ export const initialData: LocalData = {
     id: '',
     items: [],
   },
+  recentSearch: [],
 };
