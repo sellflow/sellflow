@@ -40,18 +40,20 @@ jobs:
       - run:
           name: Prepare for mirroring
           command: |
-            # Need to create .ssh dir in case it doesn't exists
+            # Need to create .ssh dir in case it doesn't exist
             mkdir -p ~/.ssh
             # This too
             touch ~/.ssh/known_hosts
             # To avoid prompt when doing ssh connection
             ssh-keyscan 'github.com' >> ~/.ssh/known_hosts
       - run:
-          name: Mirroring repo
+          name: Mirror repo
           command: |
-            git clone --bare $source_repo
-            cd sellflow.git
-            git push --mirror git@github.com:sellflow/sellflow.git
+            if [[ $source_repo && $destination_repo ]]; then
+              git clone --bare $source_repo
+              cd sellflow.git
+              git push --mirror $destination_repo
+            fi
 
 workflows:
   main:
