@@ -27,8 +27,8 @@ export default function OrderHistoryItem(props: Props) {
       style={[styles.container, containerStyle]}
       onPress={() => onPress(order)}
     >
-      <Text weight="medium" style={styles.orderID}>
-        {t('Order {orderID}', { orderID: order.orderID })}
+      <Text weight="medium" style={styles.orderNumber}>
+        {t('Order {orderID}', { orderID: order.orderNumber })}
       </Text>
       <View style={styles.textStyle}>
         <Text>{t('Ordered')}</Text>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: COLORS.white,
   },
-  orderID: {
+  orderNumber: {
     fontSize: FONT_SIZE.medium,
     color: COLORS.primaryColor,
     marginBottom: 8,

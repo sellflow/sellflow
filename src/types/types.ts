@@ -29,6 +29,7 @@ export type IndicatorItem = {
 
 export type OrderRecord = {
   orderID: string;
+  orderNumber: string;
   orderTime: string;
   totalPayment: number;
 };
