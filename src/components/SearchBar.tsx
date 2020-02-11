@@ -16,11 +16,11 @@ import { FONT_SIZE } from '../constants/fonts';
 import { SearchInput } from '../core-ui';
 import { StackNavProp } from '../types/Navigation';
 import { Product } from '../types/types';
-import { useSearchProductsQuery } from '../helpers/queries/useSearchProductsQuery';
 import {
+  useSearchProductsQuery,
   useGetRecentSearch,
   useSetRecentSearch,
-} from '../helpers/queriesAndMutations/useSearch';
+} from '../hooks/api/useSearchProduct';
 
 export default function SearchBar() {
   let [searchText, setSearchText] = useState('');

@@ -16,6 +16,11 @@ import {
 } from '../../graphql/client/clientQueries';
 
 import { GetAuthenticatedUser } from '../../generated/client/GetAuthenticatedUser';
+import {
+  InitiatePasswordReset,
+  InitiatePasswordResetVariables,
+} from '../../generated/server/InitiatePasswordReset';
+import { INITIATE_PASSWORD_RESET } from '../../graphql/server/auth';
 
 function useSetAuthenticatedUser(
   options?: MutationHookOptions<
@@ -34,13 +39,33 @@ function useSetAuthenticatedUser(
 function useGetAuthenticatedUser(
   options?: QueryHookOptions<GetAuthenticatedUser>,
 ) {
-  let { loading, data: authenticatedUser } = useQuery<GetAuthenticatedUser>(
+  let { loading, data } = useQuery<GetAuthenticatedUser>(
     GET_AUTHENTICATED_USER,
     {
       ...options,
     },
   );
-  return { authenticatedUser, loading };
+  return { data, loading };
 }
 
-export { useSetAuthenticatedUser, useGetAuthenticatedUser };
+function useForgotPasswordMutation(
+  options?: MutationHookOptions<
+    InitiatePasswordReset,
+    InitiatePasswordResetVariables
+  >,
+) {
+  let [resetPassword, { loading }] = useMutation<
+    InitiatePasswordReset,
+    InitiatePasswordResetVariables
+  >(INITIATE_PASSWORD_RESET, {
+    ...options,
+  });
+
+  return { resetPassword, loading };
+}
+
+export {
+  useSetAuthenticatedUser,
+  useGetAuthenticatedUser,
+  useForgotPasswordMutation,
+};

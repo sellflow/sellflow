@@ -10,7 +10,14 @@ function ManageAddressList() {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={addressItemData}
-        renderItem={({ item }) => <ManageAddress data={item} />}
+        renderItem={({ item }) => (
+          <ManageAddress
+            data={item}
+            onPressSetPrimary={() => {}}
+            onPressEdit={() => {}}
+            onPressDelete={() => {}}
+          />
+        )}
         keyExtractor={(data) => data.id}
       />
     </SafeAreaView>

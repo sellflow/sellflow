@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   TextInput as TextInputType,
   Alert,
-  AsyncStorage,
 } from 'react-native';
 import { Text, TextInput, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
@@ -15,11 +14,12 @@ import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
-import { useSetAuthenticatedUser } from '../helpers/queriesAndMutations/useAuthenticatedUser';
+import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import {
   useCustomerCreateToken,
   useGetCustomerData,
-} from '../helpers/queriesAndMutations/useCustomer';
+} from '../hooks/api/useCustomer';
+import * as authToken from '../helpers/authToken';
 
 export default function ProfileScene() {
   let navigation = useNavigation<StackNavProp<'Login'>>();
@@ -65,7 +65,7 @@ export default function ProfileScene() {
     },
   });
 
-  let { createToken, createTokenLoading } = useCustomerCreateToken({
+  let { createToken, loading: createTokenLoading } = useCustomerCreateToken({
     variables: { email, password },
     onCompleted: ({ customerAccessTokenCreate }) => {
       if (
@@ -77,7 +77,7 @@ export default function ProfileScene() {
           expiresAt,
         } = customerAccessTokenCreate.customerAccessToken;
         setExpiresDate(expiresAt);
-        AsyncStorage.setItem('accessToken', accessToken);
+        authToken.saveToken(accessToken);
         login({ variables: { accessToken } });
       } else {
         Alert.alert(
@@ -88,7 +88,7 @@ export default function ProfileScene() {
     },
   });
 
-  let { getCustomer: login, getCustomerLoading } = useGetCustomerData({
+  let { getCustomer: login, loading: getCustomerLoading } = useGetCustomerData({
     onCompleted: ({ customer }) => {
       if (customer) {
         let { email, id, firstName, lastName } = customer;

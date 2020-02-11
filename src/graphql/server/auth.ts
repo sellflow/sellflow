@@ -49,6 +49,30 @@ export const GET_CUSTOMER_DATA = gql`
       firstName
       lastName
       email
+      addresses(first: 5) {
+        edges {
+          node {
+            id
+            name
+            phone
+            city
+            province
+            address1
+            zip
+            country
+          }
+        }
+      }
+      defaultAddress {
+        id
+        name
+        phone
+        city
+        province
+        address1
+        zip
+        country
+      }
     }
   }
 `;

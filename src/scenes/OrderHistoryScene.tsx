@@ -5,7 +5,7 @@ import { ActivityIndicator, Text } from 'exoflex';
 
 import { OrderHistoryItem } from '../components';
 import { StackNavProp } from '../types/Navigation';
-import { useOrderHistoryQuery } from '../helpers/queries';
+import { useOrderHistoryQuery } from '../hooks/api/useOrderHistory';
 
 export default function OrderHistoryScene() {
   let { navigate } = useNavigation<StackNavProp<'OrderHistory'>>();

@@ -56,11 +56,15 @@ export default function CheckoutAddress({
             </Text>
           </TouchableOpacity>
         </View>
-        {formatAddress(data).map((item) => (
-          <Text key={item} style={[styles.address, styles.opacity]}>
-            {item}
-          </Text>
-        ))}
+        {formatAddress(data).map((item) =>
+          item ? (
+            <Text key={item} style={[styles.address, styles.opacity]}>
+              {item}
+            </Text>
+          ) : (
+            <Text>{t('No Addresses To Display')}</Text>
+          ),
+        )}
         <Text style={[styles.opacity, styles.phone]}>
           {t('Phone: {phone}', { phone })}
         </Text>

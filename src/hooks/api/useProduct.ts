@@ -28,11 +28,11 @@ function useGetProductVariantID(
 function useGetProductByHandle(
   options?: QueryHookOptions<GetProductByHandle, GetProductByHandleVariables>,
 ) {
-  let { loading, data: productData } = useQuery<
+  let { loading, data } = useQuery<
     GetProductByHandle,
     GetProductByHandleVariables
   >(GET_PRODUCT_BY_HANDLE, { ...options });
-  return { loading, productData };
+  return { data, loading };
 }
 
 export { useGetProductByHandle, useGetProductVariantID };

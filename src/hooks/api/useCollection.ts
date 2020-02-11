@@ -1,12 +1,14 @@
 import { useQuery } from '@apollo/react-hooks';
 
+import { Product } from '../../types/types';
+import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import {
   GetCollection,
   GetCollectionVariables,
 } from '../../generated/server/GetCollection';
-import { Product } from '../../types/types';
-import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
+import { GetCategoriesAndFeaturedProducts } from '../../generated/server/GetCategoriesAndFeaturedProducts';
+import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../../graphql/server/categoriesAndFeaturedProducts';
 
 function getProducts(
   collectionData: GetCollection | undefined,
@@ -33,7 +35,7 @@ function getProducts(
   return [];
 }
 
-export function useCollectionQuery(collectionHandle: string) {
+function useCollectionQuery(collectionHandle: string) {
   let { data: collectionData, loading, refetch } = useQuery<
     GetCollection,
     GetCollectionVariables
@@ -44,5 +46,17 @@ export function useCollectionQuery(collectionHandle: string) {
     },
   });
   let data = getProducts(collectionData);
+
   return { data, loading, refetch };
 }
+
+function useCollectionAndProductQuery() {
+  let { loading, data } = useQuery<GetCategoriesAndFeaturedProducts>(
+    GET_CATEGORIES_AND_FEATURED_PRODUCTS,
+    { fetchPolicy: 'cache-and-network' },
+  );
+
+  return { data, loading };
+}
+
+export { useCollectionQuery, useCollectionAndProductQuery };

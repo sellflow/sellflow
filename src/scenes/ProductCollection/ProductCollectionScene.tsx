@@ -15,11 +15,11 @@ import {
 } from './components';
 import { useColumns } from '../../helpers/columns';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
-import { useCollectionQuery } from '../../helpers/queries';
+import { useCollectionQuery } from '../../hooks/api/useCollection';
 
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
-import { useSearchProductsQuery } from '../../helpers/queries/useSearchProductsQuery';
+import { useSearchProductsQuery } from '../../hooks/api/useSearchProduct';
 
 const DEFAULT_MAX_PRICE = 1000;
 

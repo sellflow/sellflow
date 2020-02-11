@@ -35,22 +35,22 @@ function useCustomerCreateToken(
     CustomerCreateTokenVariables
   >,
 ) {
-  let [createToken, { loading: createTokenLoading }] = useMutation<
+  let [createToken, { loading }] = useMutation<
     CustomerCreateToken,
     CustomerCreateTokenVariables
   >(CUSTOMER_CREATE_TOKEN, { ...options });
-  return { createToken, createTokenLoading };
+  return { createToken, loading };
 }
 
 function useGetCustomerData(
   options?: QueryHookOptions<GetCustomerData, GetCustomerDataVariables>,
 ) {
-  let [getCustomer, { loading: getCustomerLoading }] = useLazyQuery<
+  let [getCustomer, { data, loading, refetch }] = useLazyQuery<
     GetCustomerData,
     GetCustomerDataVariables
   >(GET_CUSTOMER_DATA, { ...options });
 
-  return { getCustomer, getCustomerLoading };
+  return { getCustomer, data, loading, refetch };
 }
 
 function useCustomerRegister(

@@ -1,7 +1,15 @@
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useQuery, useMutation } from '@apollo/react-hooks';
 
 import { Product } from '../../types/types';
 import { SEARCH_RESULTS } from '../../graphql/server/searchProduct';
+import {
+  GET_RECENT_SEARCH,
+  SET_RECENT_SEARCH,
+} from '../../graphql/client/clientQueries';
+import {
+  SetRecentSearch,
+  SetRecentSearchVariables,
+} from '../../generated/client/SetRecentSearch';
 import { SearchResults } from '../../generated/server/SearchResults';
 
 export default function getProducts(
@@ -35,10 +43,25 @@ export default function getProducts(
   ];
 }
 
-export function useSearchProductsQuery() {
+function useSearchProductsQuery() {
   let [searchProducts, { data: resultsData, loading, refetch }] = useLazyQuery<
     SearchResults
   >(SEARCH_RESULTS);
   let data = getProducts(resultsData);
   return { searchProducts, data, loading, refetch };
 }
+
+function useGetRecentSearch() {
+  let { data, loading, refetch } = useQuery(GET_RECENT_SEARCH);
+  return { data, loading, refetch };
+}
+
+function useSetRecentSearch() {
+  let [setRecentSearch, { data, loading }] = useMutation<
+    SetRecentSearch,
+    SetRecentSearchVariables
+  >(SET_RECENT_SEARCH);
+  return { setRecentSearch, data, loading };
+}
+
+export { useSearchProductsQuery, useGetRecentSearch, useSetRecentSearch };

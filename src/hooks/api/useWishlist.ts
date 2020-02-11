@@ -34,10 +34,10 @@ function useRemoveItemFromWishlist() {
 }
 
 function useGetWishlistData(options?: QueryHookOptions<GetWishlist>) {
-  let { data: wishlistData, loading } = useQuery<GetWishlist>(GET_WISHLIST, {
+  let { data, loading } = useQuery<GetWishlist>(GET_WISHLIST, {
     ...options,
   });
-  return { wishlistData, loading };
+  return { data, loading };
 }
 
 export { useAddItemToWishlist, useRemoveItemFromWishlist, useGetWishlistData };

@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  AsyncStorage,
   ActivityIndicator,
 } from 'react-native';
 import { Text, Avatar } from 'exoflex';
@@ -16,15 +15,16 @@ import { StackNavProp } from '../types/Navigation';
 import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
-} from '../helpers/queriesAndMutations/useAuthenticatedUser';
-import { useResetCart } from '../helpers/queriesAndMutations/useShoppingCart';
+} from '../hooks/api/useAuthenticatedUser';
+import { useResetCart } from '../hooks/api/useShoppingCart';
+import * as authToken from '../helpers/authToken';
 
 export default function ProfileScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Profile'>>();
 
   let { setUser: logout } = useSetAuthenticatedUser({
-    onCompleted: () => {
-      AsyncStorage.setItem('accessToken', '');
+    onCompleted: async () => {
+      authToken.removeToken();
       resetShoppingCart();
       reset({
         index: 0,
@@ -34,7 +34,7 @@ export default function ProfileScene() {
   });
 
   let {
-    authenticatedUser,
+    data: authenticatedUser,
     loading: getAuthenticatedUserLoading,
   } = useGetAuthenticatedUser({
     fetchPolicy: 'cache-only',

@@ -181,11 +181,15 @@ export default function PaymentScene() {
       </Text>
       <Surface containerStyle={styles.surfaceAddress}>
         <Text style={styles.mediumText}>{address.name}</Text>
-        {formatAddress(address).map((item) => (
-          <Text key={item} style={[styles.address, styles.opacity]}>
-            {item}
-          </Text>
-        ))}
+        {formatAddress(address).map((item) =>
+          item ? (
+            <Text key={item} style={[styles.address, styles.opacity]}>
+              {item}
+            </Text>
+          ) : (
+            <Text>{t('No Addresses To Display')}</Text>
+          ),
+        )}
         <Text style={[styles.address, styles.opacity]}>
           {t('Phone: {phone}', { phone: address.phone })}
         </Text>

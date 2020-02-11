@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
   TextInput as TextInputType,
   ActivityIndicator,
-  AsyncStorage,
 } from 'react-native';
 import { Text, Button, Avatar, TextInput } from 'exoflex';
 import * as ImagePicker from 'expo-image-picker';
@@ -27,11 +26,12 @@ import {
 import { profile } from '../../assets/images';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
-import { useUpdateCustomer } from '../helpers/queriesAndMutations/useCustomer';
+import { useUpdateCustomer } from '../hooks/api/useCustomer';
 import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
-} from '../helpers/queriesAndMutations/useAuthenticatedUser';
+} from '../hooks/api/useAuthenticatedUser';
+import * as authToken from '../helpers/authToken';
 
 export default function EditProfileScene() {
   let [profilePicture, setProfilePicture] = useState(profile);
@@ -80,7 +80,7 @@ export default function EditProfileScene() {
     }
   };
   let saveChanges = () => {
-    AsyncStorage.getItem('accessToken').then((customerAccessToken) => {
+    authToken.getToken().then((customerAccessToken) => {
       if (customerAccessToken) {
         if (password === '') {
           updateCustomerData({

@@ -15,7 +15,7 @@ import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { StackNavProp } from '../types/Navigation';
-import { useForgotPasswordMutation } from '../helpers/mutations/useForgotPasswordMutation';
+import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
 
 export default function ForgotPasswordScene() {
   let { navigate } = useNavigation<StackNavProp<'ForgotPassword'>>();

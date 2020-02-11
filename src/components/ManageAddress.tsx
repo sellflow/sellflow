@@ -5,7 +5,6 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
-  Alert,
 } from 'react-native';
 import { Text, IconButton } from 'exoflex';
 import { Menu } from 'react-native-paper';
@@ -18,16 +17,16 @@ import formatAddress from '../helpers/formatAddress';
 type Props = {
   data: AddressItem;
   style?: StyleProp<ViewStyle>;
+  onPressSetPrimary: () => void;
+  onPressEdit: () => void;
+  onPressDelete: (addressId: string) => void;
 };
 
-export default function ManageAddress({ data, style }: Props) {
+export default function ManageAddress(props: Props) {
+  let { data, style, onPressSetPrimary, onPressEdit, onPressDelete } = props;
   let { id, name, default: primary, phone } = data;
-  let [showMenu, setShowMenu] = useState(false);
 
-  let onEdit = () => Alert.alert('Edit', 'Edit Address with ID ' + id); //TODO API WITH ID
-  let onDelete = () => Alert.alert('Delete', 'Delete Address with ID ' + id);
-  let onSetPrimary = () =>
-    Alert.alert('Set Primary', 'Set Primary Address with ID ' + id);
+  let [showMenu, setShowMenu] = useState(false);
 
   return (
     <TouchableOpacity style={[styles.container, style]}>
@@ -48,23 +47,27 @@ export default function ManageAddress({ data, style }: Props) {
             />
           }
         >
-          <TouchableOpacity onPress={onEdit}>
+          <TouchableOpacity onPress={onPressEdit}>
             <Text weight="medium" style={[styles.label, styles.padding]}>
               {t('Edit')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onDelete}>
+          <TouchableOpacity onPress={() => onPressDelete(id)}>
             <Text style={[styles.deleteLabel, styles.padding]} weight="medium">
               {t('Delete')}
             </Text>
           </TouchableOpacity>
         </Menu>
       </View>
-      {formatAddress(data).map((item) => (
-        <Text key={item} style={[styles.address, styles.opacity]}>
-          {item}
-        </Text>
-      ))}
+      {formatAddress(data).map((item) =>
+        item ? (
+          <Text key={item} style={[styles.address, styles.opacity]}>
+            {item}
+          </Text>
+        ) : (
+          <Text>{t('No Addresses To Display')}</Text>
+        ),
+      )}
       <Text style={[styles.opacity, styles.phone]}>
         {t('Phone: {phone}', { phone })}
       </Text>
@@ -85,7 +88,10 @@ export default function ManageAddress({ data, style }: Props) {
             </Text>
           </View>
         ) : (
-          <TouchableOpacity style={styles.setPrimary} onPress={onSetPrimary}>
+          <TouchableOpacity
+            style={styles.setPrimary}
+            onPress={onPressSetPrimary}
+          >
             <Text style={[styles.label, styles.blueText]} weight="medium">
               {t('Set as Primary Address')}
             </Text>

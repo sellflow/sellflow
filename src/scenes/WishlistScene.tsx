@@ -7,13 +7,13 @@ import { ProductList } from '../components';
 import { FONT_SIZE } from '../constants/fonts';
 import { StackNavProp } from '../types/Navigation';
 import { useColumns } from '../helpers/columns';
-import { useWishlistQuery } from '../helpers/queries';
+import { useGetWishlistData } from '../hooks/api/useWishlist';
 
 export default function WishlistScene() {
   let { navigate } = useNavigation<StackNavProp<'Wishlist'>>();
   let numColumns = useColumns();
 
-  let { data: wishlistData } = useWishlistQuery();
+  let { data: wishlistData } = useGetWishlistData();
 
   if (!wishlistData || wishlistData.wishlist.length === 0) {
     return (

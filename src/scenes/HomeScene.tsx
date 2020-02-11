@@ -10,16 +10,16 @@ import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
 import { useColumns } from '../helpers/columns';
-import { useCollectionAndProductQuery } from '../helpers/queries';
+import { useCollectionAndProductQuery } from '../hooks/api/useCollection';
 
 export default function HomeScene() {
   let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
   let numColumns = useColumns();
 
-  let { loading, data } = useCollectionAndProductQuery();
+  let { loading, data: homeData } = useCollectionAndProductQuery();
 
-  if (loading || !data) {
+  if (loading || !homeData) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
@@ -27,7 +27,7 @@ export default function HomeScene() {
     );
   }
 
-  let categoryData: Array<CategoryItem> = data.collections.edges.map(
+  let categoryData: Array<CategoryItem> = homeData.collections.edges.map(
     (item) => ({
       id: item.node.id,
       title: item.node.title,
@@ -36,7 +36,7 @@ export default function HomeScene() {
   );
 
   // TODO: What about discount?
-  let productData: Array<Product> = data.products.edges.map((item) => ({
+  let productData: Array<Product> = homeData.products.edges.map((item) => ({
     id: item.node.id,
     image: item.node.images.edges[0].node.originalSrc,
     title: item.node.title,

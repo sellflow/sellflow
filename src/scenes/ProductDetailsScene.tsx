@@ -20,16 +20,16 @@ import { Product, VariantQueryData } from '../types/types';
 import { StackRouteProp } from '../types/Navigation';
 
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
-import { useAddToCart } from '../helpers/queriesAndMutations/useShoppingCart';
+import { useAddToCart } from '../hooks/api/useShoppingCart';
 import {
   useGetProductByHandle,
   useGetProductVariantID,
-} from '../helpers/queriesAndMutations/useProduct';
+} from '../hooks/api/useProduct';
 import {
   useAddItemToWishlist,
   useRemoveItemFromWishlist,
   useGetWishlistData,
-} from '../helpers/queriesAndMutations/useWishlist';
+} from '../hooks/api/useWishlist';
 
 type ProductDetailsProps = {
   onSelectionOptionChange: (key: string, value: string) => void;
@@ -128,7 +128,7 @@ function ProductInfo(props: {
 function BottomActionBar(props: ProductDetailsProps) {
   let { addToWishlist } = useAddItemToWishlist();
   let { removeFromWishlist } = useRemoveItemFromWishlist();
-  //remove
+
   let { isWishlistActive, onWishlistPress, onAddToCartPress, product } = props;
 
   let onPressWishlist = () => {
@@ -310,7 +310,7 @@ export default function ProductDetailsScene() {
       }
     },
   });
-  let { wishlistData } = useGetWishlistData({
+  let { data: wishlistData } = useGetWishlistData({
     onCompleted: ({ wishlist }) => {
       if (wishlist.find((item) => item.handle === product.handle)) {
         setWishlistActive(true);
@@ -326,7 +326,7 @@ export default function ProductDetailsScene() {
   };
 
   let {
-    productData,
+    data: productData,
     loading: getProductByHandleLoading,
   } = useGetProductByHandle({
     variables: { productHandle: product.handle },

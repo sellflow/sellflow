@@ -25,7 +25,7 @@ function getOrders(
   return [];
 }
 
-export function useOrderHistoryQuery(
+function useOrderHistoryQuery(
   options?: QueryHookOptions<GetOrderHistory, GetOrderHistoryVariables>,
 ) {
   let [getOrderHistory, { data }] = useLazyQuery<
@@ -35,3 +35,5 @@ export function useOrderHistoryQuery(
 
   return { getOrderHistory, orders: getOrders(data) };
 }
+
+export { useOrderHistoryQuery };

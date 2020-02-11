@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Alert,
   TextInput as TextInputType,
-  AsyncStorage,
 } from 'react-native';
 import { Text, TextInput, Button } from 'exoflex';
 
@@ -19,8 +18,9 @@ import {
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavProp } from '../types/Navigation';
-import { useSetAuthenticatedUser } from '../helpers/queriesAndMutations/useAuthenticatedUser';
-import { useCustomerRegister } from '../helpers/queriesAndMutations/useCustomer';
+import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
+import { useCustomerRegister } from '../hooks/api/useCustomer';
+import * as authToken from '../helpers/authToken';
 
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
@@ -91,7 +91,7 @@ export default function RegisterScene() {
           accessToken,
           expiresAt,
         } = customerAccessTokenCreate.customerAccessToken;
-        AsyncStorage.setItem('accessToken', accessToken);
+        authToken.saveToken(accessToken);
         if (email && firstName && lastName) {
           setUser({
             variables: {
