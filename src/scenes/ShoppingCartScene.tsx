@@ -1,68 +1,245 @@
-import React from 'react';
-import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  SafeAreaView,
+  Image,
+} from 'react-native';
 import { Text, Button, TextInput } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { Surface } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
-import { CheckoutData as checkoutData } from '../fixtures/OrderItemData';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../generated/server/ShoppingCartCreate';
+import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../generated/server/ShoppingCartReplaceItem';
+import { Cart, LineItem, OrderItem as OrderItemType } from '../types/types';
 import {
-  GET_SHOPPING_CART,
-  SET_SHOPPING_CART_ID,
-} from '../graphql/client/shoppingCartQueries';
-import { GetShoppingCart } from '../generated/client/GetShoppingCart';
-import { SHOPPING_CART_CREATE } from '../graphql/server/shoppingCart';
+  useGetCart,
+  useSetShoppingCartID,
+  useSetShoppingCart,
+} from '../hooks/api/useShoppingCart';
 import {
-  ShoppingCartCreate,
-  ShoppingCartCreateVariables,
-} from '../generated/server/ShoppingCartCreate';
-import {
-  SetShoppingCartID,
-  SetShoppingCartIDVariables,
-} from '../generated/client/SetShoppingCartID';
+  useShopifyCreateCheckout,
+  useShopifyShoppingCartReplaceItems,
+} from '../helpers/queriesAndMutations/useShopifyCart';
+import { cartPlaceholder } from '../../assets/images';
 
-let paymentData: PaymentData = {
-  subtotal: 77,
-  discount: 0,
+function extractDataCheckout(checkout: CheckoutCreate | CheckoutReplace): Cart {
+  let id = checkout.id;
+  let lineItemsPrice = parseFloat(checkout.lineItemsSubtotalPrice.amount);
+  let subtotalPrice = parseFloat(checkout.subtotalPriceV2.amount);
+  let totalPrice = parseFloat(checkout.paymentDueV2.amount);
+  let lineItems: Array<LineItem> = checkout.lineItems.edges.map(
+    ({ node }): LineItem => {
+      let { quantity, discountAllocations, title, variant } = node;
+      let images = '';
+      let priceAfterDiscount = 0;
+      let originalPrice = 0;
+      let variantID = '';
+      let variants = '';
+      if (variant) {
+        let { compareAtPriceV2, image, priceV2, id, selectedOptions } = variant;
+        variantID = id;
+        let index = 0;
+        for (let option in selectedOptions) {
+          if (index % 2 === 1) {
+            variants += `, ${selectedOptions[option].name} ${selectedOptions[option].value}`;
+            index += 1;
+          } else {
+            variants += `${selectedOptions[option].name} ${selectedOptions[option].value}`;
+            index += 1;
+          }
+        }
+        if (image) {
+          images = image.transformedSrc;
+          if (discountAllocations.length === 0) {
+            priceAfterDiscount = compareAtPriceV2
+              ? parseFloat(priceV2.amount)
+              : 0;
+          } else {
+            priceAfterDiscount = parseFloat(
+              discountAllocations[0].allocatedAmount.amount,
+            );
+          }
+        }
+        if (compareAtPriceV2) {
+          originalPrice = parseFloat(compareAtPriceV2.amount);
+        } else {
+          originalPrice = parseFloat(priceV2.amount);
+        }
+      }
+
+      return {
+        variant: variants,
+        variantID,
+        title,
+        image: images,
+        originalPrice,
+        priceAfterDiscount,
+        quantity,
+      };
+    },
+  );
+  return {
+    id,
+    lineItems,
+    lineItemsPrice,
+    subtotalPrice,
+    totalPrice,
+  };
+}
+
+function mapLineItemsToOrder(
+  items: Array<LineItem>,
+  onChangeQuantity: (variantIDSearched: string, amount: number) => void,
+  onRemovePress: (variantID: string) => void,
+): Array<OrderItemType> {
+  let result: Array<OrderItemType> = items.map(
+    ({
+      image,
+      title,
+      quantity,
+      priceAfterDiscount,
+      originalPrice,
+      variant,
+      variantID,
+    }): OrderItemType => {
+      return {
+        cardType: 'checkout',
+        imageURL: image,
+        itemName: title,
+        itemPrice: originalPrice,
+        priceAfterDiscount,
+        quantity,
+        onChangeQuantity,
+        onRemovePress,
+        variant,
+        variantID,
+      };
+    },
+  );
+  return result;
+}
+
+type BottomButtonProps = {
+  label: string;
+  onPressAction: () => void;
 };
+function BottomButton(props: BottomButtonProps) {
+  let { label, onPressAction } = props;
+  return (
+    <Button
+      style={defaultButton}
+      labelStyle={defaultButtonLabel}
+      onPress={onPressAction}
+    >
+      {t(label)}
+    </Button>
+  );
+}
 
 export default function ShoppingCartScene() {
   let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
-  let shoppingCartData: Array<{ variantId: string; quantity: number }> = [];
-  useQuery<GetShoppingCart>(GET_SHOPPING_CART, {
+  let shoppingCartItems: Array<{ variantId: string; quantity: number }> = [];
+  let [cartData, setCartData] = useState<Cart>({
+    id: '',
+    lineItemsPrice: 0,
+    subtotalPrice: 0,
+    totalPrice: 0,
+    lineItems: [],
+  });
+  let [cartID, setCartID] = useState('');
+
+  let paymentData: PaymentData = {
+    subtotal: cartData.lineItemsPrice,
+    total: cartData.subtotalPrice,
+  };
+
+  let changeItemQuantity = (variantIDSearched: string, amount: number) => {
+    let newLineItemsData = cartData.lineItems.map((item) => {
+      if (item.variantID === variantIDSearched) {
+        return { ...item, quantity: amount };
+      } else {
+        return item;
+      }
+    });
+    let newCartData = { ...cartData, lineItems: newLineItemsData };
+    setCartData(newCartData);
+    shoppingCartItems = newCartData.lineItems.map(({ variantID, quantity }) => {
+      return { variantId: variantID, quantity };
+    });
+    setShoppingCart({ variables: { items: shoppingCartItems } });
+    shoppingCartReplaceItems({
+      variables: {
+        lineItems: shoppingCartItems,
+        checkoutID: cartID,
+      },
+    });
+  };
+
+  let removeSelectedItem = (variantID: string) => {
+    shoppingCartItems = cartData.lineItems
+      .filter((item) => item.variantID !== variantID)
+      .map(({ variantID, quantity }) => {
+        return { variantId: variantID, quantity };
+      });
+    setShoppingCart({ variables: { items: shoppingCartItems } });
+    shoppingCartReplaceItems({
+      variables: {
+        lineItems: shoppingCartItems,
+        checkoutID: cartID,
+      },
+    });
+  };
+
+  useGetCart({
+    fetchPolicy: 'cache-only',
+    notifyOnNetworkStatusChange: true,
     onCompleted({ shoppingCart }) {
+      setCartID(shoppingCart.id);
       if (shoppingCart.id === '') {
         createCheckout();
       } else {
-        shoppingCartData = shoppingCart.items.map(({ variantId, quantity }) => {
-          return { variantId, quantity };
+        shoppingCartItems = shoppingCart.items.map(
+          ({ variantId, quantity }) => {
+            return { variantId, quantity };
+          },
+        );
+        shoppingCartReplaceItems({
+          variables: {
+            checkoutID: shoppingCart.id,
+            lineItems: shoppingCartItems,
+          },
         });
       }
     },
   });
+  let { setShoppingCart } = useSetShoppingCart();
+  let { setShoppingCartID } = useSetShoppingCartID();
 
-  let [setShoppingCartID] = useMutation<
-    SetShoppingCartID,
-    SetShoppingCartIDVariables
-  >(SET_SHOPPING_CART_ID);
+  let { shoppingCartReplaceItems } = useShopifyShoppingCartReplaceItems({
+    onCompleted: ({ checkoutLineItemsReplace }) => {
+      if (checkoutLineItemsReplace && checkoutLineItemsReplace.checkout) {
+        setCartData(extractDataCheckout(checkoutLineItemsReplace.checkout));
+      }
+    },
+  });
 
-  let [createCheckout] = useMutation<
-    ShoppingCartCreate,
-    ShoppingCartCreateVariables
-  >(SHOPPING_CART_CREATE, {
+  let { createCheckout } = useShopifyCreateCheckout({
     variables: {
-      checkoutCreateInput: { lineItems: shoppingCartData },
+      checkoutCreateInput: { lineItems: shoppingCartItems },
     },
     onCompleted({ checkoutCreate }) {
       if (checkoutCreate && checkoutCreate.checkout) {
+        setCartData(extractDataCheckout(checkoutCreate.checkout));
         setShoppingCartID({ variables: { id: checkoutCreate.checkout.id } });
       }
     },
@@ -71,7 +248,11 @@ export default function ShoppingCartScene() {
   let renderCartView = () => (
     <View style={styles.cartContainer}>
       <View style={styles.orderItemContainer}>
-        {checkoutData.map((item, index) => (
+        {mapLineItemsToOrder(
+          cartData.lineItems,
+          changeItemQuantity,
+          removeSelectedItem,
+        ).map((item, index) => (
           <View key={item.variantID}>
             {index > 0 ? <View style={styles.productSeparator} /> : null}
             <OrderItem
@@ -86,17 +267,33 @@ export default function ShoppingCartScene() {
   );
 
   let renderPaymentView = () => <Payment data={paymentData} />;
-  let renderButton = () => (
-    <Button
-      style={defaultButton}
-      labelStyle={defaultButtonLabel}
-      onPress={() => {
-        navigate('Checkout');
-      }}
-    >
-      {t('Checkout')}
-    </Button>
-  );
+
+  if (cartData.lineItems.length <= 0) {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Image
+            source={cartPlaceholder}
+            width={100}
+            height={100}
+            style={{ maxWidth: 360, maxHeight: 270, marginBottom: 24 }}
+          />
+          <Text style={{ fontSize: FONT_SIZE.small, opacity: 0.6 }}>
+            {t('Shopping cart is empty. Please add item to the cart.')}
+          </Text>
+        </View>
+        <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
+          <BottomButton
+            label={t('Back to home')}
+            onPressAction={() => navigate('Home')}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return screenSize === ScreenSize.Large ? (
     <View style={styles.horizontalLayout}>
       <ScrollView
@@ -109,7 +306,10 @@ export default function ShoppingCartScene() {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ paddingTop: 15, paddingHorizontal: 15 }}>
           {renderPaymentView()}
-          {renderButton()}
+          <BottomButton
+            label={t('checkout')}
+            onPressAction={() => navigate('Checkout')}
+          />
         </View>
       </SafeAreaView>
     </View>
@@ -127,7 +327,10 @@ export default function ShoppingCartScene() {
         {renderPaymentView()}
       </ScrollView>
       <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
-        {renderButton()}
+        <BottomButton
+          label={t('checkout')}
+          onPressAction={() => navigate('Checkout')}
+        />
       </View>
     </SafeAreaView>
   );
@@ -137,12 +340,12 @@ type PaymentProps = {
   data: PaymentData;
 };
 type PaymentData = {
+  total: number;
   subtotal: number;
-  discount: number;
 };
 
 function Payment(props: PaymentProps) {
-  let { discount, subtotal } = props.data;
+  let { total, subtotal } = props.data;
   return (
     <>
       <View style={styles.voucherCodeContainer}>
@@ -169,7 +372,9 @@ function Payment(props: PaymentProps) {
         </View>
         <View style={styles.innerPaymentDetailsContainer}>
           <Text style={styles.paymentDetailLabel}>{t('Discount')}</Text>
-          <Text style={styles.mediumText}>-{formatCurrency(discount)}</Text>
+          <Text style={styles.mediumText}>
+            -{formatCurrency(total - subtotal)}
+          </Text>
         </View>
         <View
           style={[
@@ -182,7 +387,7 @@ function Payment(props: PaymentProps) {
         >
           <Text style={styles.paymentDetailLabel}>{t('Total')}</Text>
           <Text weight="bold" style={styles.mediumText}>
-            {formatCurrency(subtotal - discount)}
+            {formatCurrency(total)}
           </Text>
         </View>
       </Surface>

@@ -32,6 +32,18 @@ export const SET_SHOPPING_CART_ID = gql`
   }
 `;
 
+export const SET_SHOPPING_CART = gql`
+  mutation SetShoppingCart($items: [LineItemInput!]!) {
+    setShoppingCart(items: $items) @client {
+      id
+      items {
+        quantity
+        variantId
+      }
+    }
+  }
+`;
+
 export const RESET_SHOPPING_CART = gql`
   mutation ResetShoppingCart {
     resetShoppingCart @client {

@@ -30,6 +30,7 @@ export default function OrderItem(props: Props) {
     cardType,
     onRemovePress,
     variantID,
+    onChangeQuantity,
   } = props.orderItem;
   let { containerStyle } = props;
   let [quantity, setQuantity] = useState(props.orderItem.quantity);
@@ -79,6 +80,14 @@ export default function OrderItem(props: Props) {
             keyboardType="number-pad"
             returnKeyType="done"
             value={quantity.toString()}
+            onBlur={() => {
+              if (quantity <= 0) {
+                setQuantity(1);
+              }
+              onChangeQuantity
+                ? onChangeQuantity(variantID, quantity <= 0 ? 1 : quantity)
+                : null;
+            }}
             onChangeText={(value) => {
               setQuantity(valueBetweenZeroToMax(parseInt(value, 10), 999));
             }}

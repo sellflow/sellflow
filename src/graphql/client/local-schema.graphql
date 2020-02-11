@@ -24,6 +24,11 @@ type LineItem {
   variantId: String!
 }
 
+input LineItemInput {
+  quantity: Int!
+  variantId: String!
+}
+
 type WishlistProduct {
   id: String!
   handle: String!
@@ -67,4 +72,5 @@ type Mutation {
   resetShoppingCart: ShoppingCart!
   setShoppingCartID(id: String!): ShoppingCart!
   setRecentSearch(search: String!): [SearchDetail]!
+  setShoppingCart(items: [LineItemInput!]!): ShoppingCart!
 }

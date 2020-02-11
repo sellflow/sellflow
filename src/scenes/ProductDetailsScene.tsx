@@ -39,6 +39,7 @@ type ProductDetailsProps = {
   product: Product;
   options?: Options;
   infoTabs?: Tabs;
+  isLoading: boolean;
   isWishlistActive: boolean;
   onAddToCartPress: () => void;
   onWishlistPress: (value: boolean) => void;
@@ -128,8 +129,13 @@ function ProductInfo(props: {
 function BottomActionBar(props: ProductDetailsProps) {
   let { addToWishlist } = useAddItemToWishlist();
   let { removeFromWishlist } = useRemoveItemFromWishlist();
-
-  let { isWishlistActive, onWishlistPress, onAddToCartPress, product } = props;
+  let {
+    isWishlistActive,
+    onWishlistPress,
+    onAddToCartPress,
+    product,
+    isLoading,
+  } = props;
 
   let onPressWishlist = () => {
     onWishlistPress(!isWishlistActive);
@@ -166,6 +172,8 @@ function BottomActionBar(props: ProductDetailsProps) {
       <Button
         style={[defaultButton, styles.flex]}
         labelStyle={defaultButtonLabel}
+        disabled={isLoading}
+        loading={isLoading}
         onPress={() => {
           onAddToCartPress();
         }}
@@ -271,7 +279,7 @@ export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
   let { product } = route.params;
 
-  let { addToCart } = useAddToCart();
+  let { addToCart, loading: addToCartLoading } = useAddToCart();
 
   let [isWishlistActive, setWishlistActive] = useState(false);
   let [options, setOptions] = useState<Options>([]);
@@ -302,7 +310,7 @@ export default function ProductDetailsScene() {
     setSelectedOptions({ ...selectedOptions, [key]: value });
   };
 
-  let { getVariantID } = useGetProductVariantID({
+  let { getVariantID, loading: getVariantIDLoading } = useGetProductVariantID({
     onCompleted: ({ productByHandle }) => {
       if (productByHandle && productByHandle.variantBySelectedOptions) {
         let { id } = productByHandle.variantBySelectedOptions;
@@ -310,6 +318,7 @@ export default function ProductDetailsScene() {
       }
     },
   });
+  let isLoading = getVariantIDLoading || addToCartLoading;
   let { data: wishlistData } = useGetWishlistData({
     onCompleted: ({ wishlist }) => {
       if (wishlist.find((item) => item.handle === product.handle)) {
@@ -364,6 +373,7 @@ export default function ProductDetailsScene() {
       onAddToCartPress={onAddToCart}
       product={product}
       options={options}
+      isLoading={isLoading}
       infoTabs={infoTabs}
       isWishlistActive={isWishlistActive}
       onWishlistPress={(isActive) => {
@@ -379,6 +389,7 @@ export default function ProductDetailsScene() {
       onAddToCartPress={onAddToCart}
       product={product}
       options={options}
+      isLoading={isLoading}
       infoTabs={infoTabs}
       isWishlistActive={isWishlistActive}
       onWishlistPress={(isActive) => {

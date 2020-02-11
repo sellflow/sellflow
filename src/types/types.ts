@@ -20,6 +20,7 @@ export type OrderItem = {
   imageURL: string;
   cardType: 'checkout' | 'order';
   onRemovePress?: (variantID: string) => void;
+  onChangeQuantity?: (variantIDSearched: string, amount: number) => void;
 };
 
 export type IndicatorItem = {
@@ -76,4 +77,22 @@ export type LocalCache = {
 export type VariantQueryData = {
   name: string;
   value: string;
+};
+
+export type Cart = {
+  id: string;
+  subtotalPrice: number;
+  totalPrice: number;
+  lineItemsPrice: number;
+  lineItems: Array<LineItem>;
+};
+
+export type LineItem = {
+  variantID: string;
+  variant: string;
+  title: string;
+  priceAfterDiscount: number;
+  originalPrice: number;
+  image: string;
+  quantity: number;
 };

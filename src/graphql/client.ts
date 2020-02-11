@@ -16,6 +16,7 @@ import { addToShoppingCartResolver } from './resolvers/addToShoppingCartResolver
 import { setShoppingCartIDResolver } from './resolvers/setShoppingCartIDResolver';
 import { resetShoppingCartResolver } from './resolvers/resetShoppingCartResolver';
 import { recentSearchResolver } from './resolvers/recentSearchResolver';
+import { setShoppingCartResolver } from './resolvers/setShoppingCart';
 
 const cache = new InMemoryCache();
 
@@ -53,6 +54,7 @@ function setupApolloClient() {
         addToWishlist: addToWishlistResolver,
         removeFromWishlist: removeFromWishlistResolver,
         addToShoppingCart: addToShoppingCartResolver,
+        setShoppingCart: setShoppingCartResolver,
         setShoppingCartID: setShoppingCartIDResolver,
         resetShoppingCart: resetShoppingCartResolver,
         setRecentSearch: recentSearchResolver,
