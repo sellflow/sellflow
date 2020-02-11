@@ -50,8 +50,8 @@ jobs:
           name: Mirror repo
           command: |
             if [[ $source_repo && $destination_repo ]]; then
-              git clone --bare $source_repo
-              cd sellflow.git
+              git clone -b master --single-branch $source_repo
+              cd sellflow
               git push --mirror $destination_repo
             fi
 
