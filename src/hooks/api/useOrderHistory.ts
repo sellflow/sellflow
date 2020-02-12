@@ -1,4 +1,4 @@
-import { useLazyQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 
 import {
   GetOrderHistory,
@@ -28,12 +28,12 @@ function getOrders(
 function useOrderHistoryQuery(
   options?: QueryHookOptions<GetOrderHistory, GetOrderHistoryVariables>,
 ) {
-  let [getOrderHistory, { data }] = useLazyQuery<
-    GetOrderHistory,
-    GetOrderHistoryVariables
-  >(GET_ORDER_HISTORY, options);
+  let { data } = useQuery<GetOrderHistory, GetOrderHistoryVariables>(
+    GET_ORDER_HISTORY,
+    options,
+  );
 
-  return { getOrderHistory, orders: getOrders(data) };
+  return getOrders(data);
 }
 
 export { useOrderHistoryQuery };

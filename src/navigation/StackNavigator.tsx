@@ -76,7 +76,7 @@ export default function StackNavigator({
   } else if (route.name === 'WishlistTab') {
     initialRouteName = 'Wishlist';
   } else {
-    initialRouteName = 'Login';
+    initialRouteName = 'Profile';
   }
 
   return (

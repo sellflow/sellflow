@@ -25,9 +25,9 @@ export type TabRouteProp<T extends keyof TabParamList> = RoutePropBase<
 
 export type StackParamList = {
   Home: undefined;
-  OrderHistory: undefined;
+  OrderHistory: { customerAccessToken: string };
   OrderDetails: { orderID: string };
-  AddressManagement: undefined;
+  AddressManagement: { customerAccessToken: string };
   Wishlist: undefined;
   Profile: undefined;
   ProductCollection: CollectionParams;
@@ -38,7 +38,7 @@ export type StackParamList = {
   ProductDetails: { product: Product };
   ShoppingCart: undefined;
   Search: undefined;
-  EditProfile: undefined;
+  EditProfile: { customerAccessToken: string };
   Payment: undefined;
 };
 

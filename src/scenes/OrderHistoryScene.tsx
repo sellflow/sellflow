@@ -1,27 +1,18 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, FlatList, AsyncStorage, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { StyleSheet, FlatList, View } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { ActivityIndicator, Text } from 'exoflex';
 
 import { OrderHistoryItem } from '../components';
-import { StackNavProp } from '../types/Navigation';
+import { StackNavProp, StackRouteProp } from '../types/Navigation';
 import { useOrderHistoryQuery } from '../hooks/api/useOrderHistory';
 
 export default function OrderHistoryScene() {
   let { navigate } = useNavigation<StackNavProp<'OrderHistory'>>();
-  let { getOrderHistory, orders } = useOrderHistoryQuery();
-
-  // TODO: Refactor this as a helper or pass down the access token from Profile Scene
-  useEffect(() => {
-    let fetchOrderHistory = async () => {
-      let customerAccessToken = await AsyncStorage.getItem('accessToken');
-      if (!customerAccessToken) {
-        return;
-      }
-      getOrderHistory({ variables: { customerAccessToken } });
-    };
-    fetchOrderHistory();
-  }, [getOrderHistory]);
+  let { params } = useRoute<StackRouteProp<'OrderHistory'>>();
+  let orders = useOrderHistoryQuery({
+    variables: { customerAccessToken: params.customerAccessToken },
+  });
 
   if (orders.length < 1) {
     return <ActivityIndicator style={styles.center} />;

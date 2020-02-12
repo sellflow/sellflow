@@ -12,7 +12,7 @@ import {
 import { Text, Button, Avatar, TextInput } from 'exoflex';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
@@ -25,13 +25,12 @@ import {
 } from '../helpers/validation';
 import { profile } from '../../assets/images';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
-import { StackNavProp } from '../types/Navigation';
+import { StackNavProp, StackRouteProp } from '../types/Navigation';
 import { useUpdateCustomer } from '../hooks/api/useCustomer';
 import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/api/useAuthenticatedUser';
-import * as authToken from '../helpers/authToken';
 
 export default function EditProfileScene() {
   let [profilePicture, setProfilePicture] = useState(profile);
@@ -48,6 +47,7 @@ export default function EditProfileScene() {
   let passwordRef = useRef<TextInputType>(null);
   let dimensions = useDimensions();
   let { goBack } = useNavigation<StackNavProp<'EditProfile'>>();
+  let { params } = useRoute<StackRouteProp<'EditProfile'>>();
 
   let togglePickerVisible = () => {
     setIsPickerVisible(!isPickerVisible);
@@ -80,30 +80,26 @@ export default function EditProfileScene() {
     }
   };
   let saveChanges = () => {
-    authToken.getToken().then((customerAccessToken) => {
-      if (customerAccessToken) {
-        if (password === '') {
-          updateCustomerData({
-            variables: {
-              email,
-              customerAccessToken,
-              firstName,
-              lastName,
-            },
-          });
-        } else {
-          updateCustomerData({
-            variables: {
-              email,
-              customerAccessToken,
-              firstName,
-              lastName,
-              password,
-            },
-          });
-        }
-      }
-    });
+    if (password === '') {
+      updateCustomerData({
+        variables: {
+          email,
+          customerAccessToken: params.customerAccessToken,
+          firstName,
+          lastName,
+        },
+      });
+    } else {
+      updateCustomerData({
+        variables: {
+          email,
+          customerAccessToken: params.customerAccessToken,
+          firstName,
+          lastName,
+          password,
+        },
+      });
+    }
   };
 
   let { setUser } = useSetAuthenticatedUser();
@@ -249,17 +245,15 @@ export default function EditProfileScene() {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-        <View style={styles.buttonSaveContainer}>
-          <Button
-            disabled={isDisabled}
-            onPress={saveChanges}
-            loading={saving}
-            style={defaultButton}
-            labelStyle={defaultButtonLabel}
-          >
-            {t('Save Changes')}
-          </Button>
-        </View>
+        <Button
+          disabled={isDisabled}
+          onPress={saveChanges}
+          loading={saving}
+          style={[defaultButton, styles.buttonSaveContainer]}
+          labelStyle={defaultButtonLabel}
+        >
+          {t('Save Changes')}
+        </Button>
       </View>
     </ScrollView>
   );
@@ -298,7 +292,6 @@ const styles = StyleSheet.create({
   buttonSaveContainer: {
     marginTop: 12,
     marginBottom: 24,
-    backgroundColor: COLORS.red,
   },
   textInputContainer: {
     marginTop: 16,
