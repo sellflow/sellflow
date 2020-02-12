@@ -11,7 +11,9 @@ export default function orderItemStory() {
       <FlatList
         style={{ marginHorizontal: 10, flex: 1 }}
         data={OrderData}
-        renderItem={({ item }) => <OrderItem orderItem={item} />}
+        renderItem={({ item }) => (
+          <OrderItem cardType="checkout" orderItem={item} />
+        )}
         keyExtractor={({ variantID }) => variantID}
       />
     </View>

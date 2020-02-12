@@ -6,19 +6,18 @@ import { OrderItem as OrderItemType } from '../../types/types';
 
 let initialData: OrderItemType = {
   variantID: '1162321131111',
-  itemName: 'Basic T Shirt',
-  imageURL:
+  title: 'Basic T Shirt',
+  image:
     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UNIQLO_logo.svg/1200px-UNIQLO_logo.svg.png',
-  itemPrice: 79,
+  originalPrice: 79,
   priceAfterDiscount: 12.13,
   quantity: 2,
   variant: 'Size M Grey',
-  cardType: 'checkout',
 };
 
 test('should render normally', () => {
   let { getByText, getByDisplayValue } = render(
-    <OrderItem orderItem={initialData} />,
+    <OrderItem cardType="checkout" orderItem={initialData} />,
   );
   let textInput = getByDisplayValue('2');
   let discount = getByText('$24.26');
@@ -33,7 +32,7 @@ test('should render normally', () => {
 
 test('should multiply the value correctly', () => {
   let { getByText, getByDisplayValue, getAllByText } = render(
-    <OrderItem orderItem={initialData} />,
+    <OrderItem cardType="checkout" orderItem={initialData} />,
   );
 
   let textInput = getByDisplayValue('2');
@@ -59,7 +58,9 @@ test('should multiply the value correctly', () => {
 });
 
 test('should never go above 999 the value and below zero', () => {
-  let { getByDisplayValue } = render(<OrderItem orderItem={initialData} />);
+  let { getByDisplayValue } = render(
+    <OrderItem cardType="checkout" orderItem={initialData} />,
+  );
   let textInput = getByDisplayValue('2');
   fireEvent.changeText(textInput, 1111);
   textInput = getByDisplayValue('999');

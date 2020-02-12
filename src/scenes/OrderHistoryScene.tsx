@@ -17,14 +17,13 @@ export default function OrderHistoryScene() {
   if (orders.length < 1) {
     return <ActivityIndicator style={styles.center} />;
   }
-
   return (
     <FlatList
       data={orders}
       renderItem={({ item }) => (
         <OrderHistoryItem
           order={item}
-          onPress={({ orderID }) => navigate('OrderDetails', { orderID })}
+          onPress={() => navigate('OrderDetails', { order: item })}
         />
       )}
       keyExtractor={(item) => item.orderID}

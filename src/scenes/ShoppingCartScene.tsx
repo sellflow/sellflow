@@ -28,65 +28,16 @@ import {
 import {
   useShopifyCreateCheckout,
   useShopifyShoppingCartReplaceItems,
-} from '../helpers/queriesAndMutations/useShopifyCart';
+} from '../hooks/api/useShopifyCart';
 import { cartPlaceholder } from '../../assets/images';
+import { mapToLineItems } from '../helpers/mapToLineItems';
 
 function extractDataCheckout(checkout: CheckoutCreate | CheckoutReplace): Cart {
   let id = checkout.id;
-  let lineItemsPrice = parseFloat(checkout.lineItemsSubtotalPrice.amount);
-  let subtotalPrice = parseFloat(checkout.subtotalPriceV2.amount);
-  let totalPrice = parseFloat(checkout.paymentDueV2.amount);
-  let lineItems: Array<LineItem> = checkout.lineItems.edges.map(
-    ({ node }): LineItem => {
-      let { quantity, discountAllocations, title, variant } = node;
-      let images = '';
-      let priceAfterDiscount = 0;
-      let originalPrice = 0;
-      let variantID = '';
-      let variants = '';
-      if (variant) {
-        let { compareAtPriceV2, image, priceV2, id, selectedOptions } = variant;
-        variantID = id;
-        let index = 0;
-        for (let option in selectedOptions) {
-          if (index % 2 === 1) {
-            variants += `, ${selectedOptions[option].name} ${selectedOptions[option].value}`;
-            index += 1;
-          } else {
-            variants += `${selectedOptions[option].name} ${selectedOptions[option].value}`;
-            index += 1;
-          }
-        }
-        if (image) {
-          images = image.transformedSrc;
-          if (discountAllocations.length === 0) {
-            priceAfterDiscount = compareAtPriceV2
-              ? parseFloat(priceV2.amount)
-              : 0;
-          } else {
-            priceAfterDiscount = parseFloat(
-              discountAllocations[0].allocatedAmount.amount,
-            );
-          }
-        }
-        if (compareAtPriceV2) {
-          originalPrice = parseFloat(compareAtPriceV2.amount);
-        } else {
-          originalPrice = parseFloat(priceV2.amount);
-        }
-      }
-
-      return {
-        variant: variants,
-        variantID,
-        title,
-        image: images,
-        originalPrice,
-        priceAfterDiscount,
-        quantity,
-      };
-    },
-  );
+  let lineItemsPrice = Number(checkout.lineItemsSubtotalPrice.amount);
+  let subtotalPrice = Number(checkout.subtotalPriceV2.amount);
+  let totalPrice = Number(checkout.paymentDueV2.amount);
+  let lineItems: Array<LineItem> = mapToLineItems(checkout.lineItems);
   return {
     id,
     lineItems,
@@ -102,27 +53,8 @@ function mapLineItemsToOrder(
   onRemovePress: (variantID: string) => void,
 ): Array<OrderItemType> {
   let result: Array<OrderItemType> = items.map(
-    ({
-      image,
-      title,
-      quantity,
-      priceAfterDiscount,
-      originalPrice,
-      variant,
-      variantID,
-    }): OrderItemType => {
-      return {
-        cardType: 'checkout',
-        imageURL: image,
-        itemName: title,
-        itemPrice: originalPrice,
-        priceAfterDiscount,
-        quantity,
-        onChangeQuantity,
-        onRemovePress,
-        variant,
-        variantID,
-      };
+    (item): OrderItemType => {
+      return { ...item, onChangeQuantity, onRemovePress };
     },
   );
   return result;
@@ -256,6 +188,7 @@ export default function ShoppingCartScene() {
           <View key={item.variantID}>
             {index > 0 ? <View style={styles.productSeparator} /> : null}
             <OrderItem
+              cardType="checkout"
               orderItem={item}
               containerStyle={styles.orderItem}
               key={item.variantID}

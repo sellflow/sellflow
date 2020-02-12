@@ -11,14 +11,13 @@ export type CarouselItem = {
 };
 
 export type OrderItem = {
+  image: string;
+  title: string;
+  originalPrice: number;
   variantID: string;
-  itemName: string;
   quantity: number;
-  itemPrice: number;
   priceAfterDiscount?: number;
   variant: string;
-  imageURL: string;
-  cardType: 'checkout' | 'order';
   onRemovePress?: (variantID: string) => void;
   onChangeQuantity?: (variantIDSearched: string, amount: number) => void;
 };
@@ -33,6 +32,10 @@ export type OrderRecord = {
   orderNumber: string;
   orderTime: string;
   totalPayment: number;
+  subtotalPayment: number;
+  shippingPrice: number;
+  address: AddressItem;
+  lineItems: Array<LineItem>;
 };
 
 export type AddressItem = {
@@ -44,7 +47,7 @@ export type AddressItem = {
   zip: string | null;
   country: string | null;
   phone: string | null;
-  default: boolean;
+  default?: boolean;
 };
 
 export type Product = {

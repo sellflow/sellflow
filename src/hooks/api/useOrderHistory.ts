@@ -5,7 +5,9 @@ import {
   GetOrderHistoryVariables,
 } from '../../generated/server/GetOrderHistory';
 import { GET_ORDER_HISTORY } from '../../graphql/server/orderHistory';
-import { OrderRecord } from '../../types/types';
+import { OrderRecord, AddressItem } from '../../types/types';
+import { defaultAddress } from '../../constants/defaultValue';
+import { mapToLineItems } from '../../helpers/mapToLineItems';
 
 function getOrders(
   customerData: GetOrderHistory | undefined,
@@ -13,11 +15,42 @@ function getOrders(
   if (customerData) {
     if (customerData.customer) {
       return customerData.customer.orders.edges.map((order) => {
+        let {
+          shippingAddress,
+          lineItems,
+          orderNumber,
+          totalPriceV2,
+          processedAt,
+          subtotalPriceV2,
+          totalShippingPriceV2,
+          id,
+        } = order.node;
+        let address: AddressItem = defaultAddress;
+        let newLineItems = mapToLineItems(lineItems);
+        if (shippingAddress) {
+          address = {
+            address1: shippingAddress.address1,
+            city: shippingAddress.city,
+            country: shippingAddress.country,
+            id: shippingAddress.id,
+            name: shippingAddress.name,
+            phone: shippingAddress.phone,
+            province: shippingAddress.province,
+            zip: shippingAddress.zip,
+          };
+        }
+        let subtotalPaymentAmount = subtotalPriceV2
+          ? subtotalPriceV2.amount
+          : '0.00';
         return {
-          orderID: order.node.id,
-          orderNumber: `#${order.node.orderNumber.toString()}`,
-          orderTime: order.node.processedAt,
-          totalPayment: Number(order.node.totalPriceV2.amount),
+          subtotalPayment: Number(subtotalPaymentAmount),
+          shippingPrice: Number(totalShippingPriceV2.amount),
+          orderID: id,
+          orderNumber: `#${orderNumber.toString()}`,
+          orderTime: processedAt,
+          totalPayment: Number(totalPriceV2.amount),
+          lineItems: newLineItems,
+          address,
         };
       });
     }

@@ -19,29 +19,30 @@ import { OrderItem as OrderItemType } from '../types/types';
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;
   orderItem: OrderItemType;
+  cardType: 'checkout' | 'order';
 };
 
 export default function OrderItem(props: Props) {
   let {
-    itemName,
+    title,
     variant,
-    imageURL,
+    image,
     priceAfterDiscount,
-    cardType,
     onRemovePress,
     variantID,
+    originalPrice,
     onChangeQuantity,
   } = props.orderItem;
-  let { containerStyle } = props;
+  let { containerStyle, cardType } = props;
   let [quantity, setQuantity] = useState(props.orderItem.quantity);
-  let [itemPrice] = useState(props.orderItem.itemPrice);
+  let [itemPrice] = useState(originalPrice);
 
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.imageContainer}>
         <Image
           source={{
-            uri: imageURL,
+            uri: image,
           }}
           style={styles.image}
         />
@@ -49,7 +50,7 @@ export default function OrderItem(props: Props) {
 
       <View style={styles.infoContainer}>
         <Text weight="normal" style={styles.fontSmall}>
-          {itemName} {cardType === 'order' ? ` × ${quantity}` : ''}
+          {title} {cardType === 'order' ? ` × ${quantity}` : ''}
         </Text>
         <View style={styles.price}>
           <View>

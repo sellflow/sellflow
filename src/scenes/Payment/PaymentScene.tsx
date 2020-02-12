@@ -198,7 +198,7 @@ export default function PaymentScene() {
         {t('Order Summary')}
       </Text>
       {OrderData2.map((item) => (
-        <OrderItem orderItem={item} key={item.variantID} />
+        <OrderItem cardType="order" orderItem={item} key={item.variantID} />
       ))}
     </View>
   );

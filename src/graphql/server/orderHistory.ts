@@ -10,8 +10,54 @@ export const GET_ORDER_HISTORY = gql`
             id
             orderNumber
             processedAt
+            subtotalPriceV2 {
+              amount
+            }
+            totalShippingPriceV2 {
+              amount
+            }
             totalPriceV2 {
               amount
+            }
+            shippingAddress {
+              id
+              name
+              phone
+              city
+              province
+              address1
+              zip
+              country
+            }
+            lineItems(first: 20) {
+              edges {
+                node {
+                  discountAllocations {
+                    allocatedAmount {
+                      amount
+                    }
+                  }
+                  title
+                  quantity
+                  variant {
+                    id
+                    selectedOptions {
+                      name
+                      value
+                    }
+                    image {
+                      originalSrc
+                      transformedSrc
+                    }
+                    compareAtPriceV2 {
+                      amount
+                    }
+                    priceV2 {
+                      amount
+                    }
+                  }
+                }
+              }
             }
           }
         }

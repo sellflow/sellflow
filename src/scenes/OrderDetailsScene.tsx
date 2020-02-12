@@ -6,7 +6,6 @@ import { Text, Button } from 'exoflex';
 import { Surface } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
-import { OrderData2 } from '../fixtures/OrderItemData';
 import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
@@ -14,20 +13,20 @@ import { StackRouteProp } from '../types/Navigation';
 import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
-const sampleData = {
-  date: '2019-01-08T06:24:00.000Z',
-  fullName: 'Anna Belle',
-  shipmentAddress: '400 Concar Dr, San Mateo, CA 94402',
-  phoneNumber: '650-555-1212',
-  subtotal: 77,
-  shippingCost: 0,
-};
-
 export default function OrderDetailsScene() {
   let route = useRoute<StackRouteProp<'OrderDetails'>>();
-  let { orderID } = route.params;
+  let { order } = route.params;
   let { screenSize } = useDimensions();
-  let data = sampleData;
+  let {
+    address,
+    lineItems,
+    orderNumber,
+    orderTime,
+    totalPayment,
+    shippingPrice,
+    subtotalPayment,
+  } = order;
+  let { address1, city, country, name, phone, province, zip } = address;
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
@@ -42,13 +41,15 @@ export default function OrderDetailsScene() {
             <Text weight="500" style={styles.mediumText}>
               {t('Order No.')}
             </Text>
-            <Text style={[styles.greyText, styles.smallText]}>{orderID}</Text>
+            <Text style={[styles.greyText, styles.smallText]}>
+              {orderNumber}
+            </Text>
           </Surface>
           <Surface containerStyle={styles.surfaceOrderContainer}>
             <Text weight="500" style={styles.mediumText}>
               {t('Ordered')}
             </Text>
-            <Text style={styles.mediumText}>{formatDateTime(data.date)}</Text>
+            <Text style={styles.mediumText}>{formatDateTime(orderTime)}</Text>
           </Surface>
         </View>
         <View style={styles.productDetailsContainer}>
@@ -56,8 +57,9 @@ export default function OrderDetailsScene() {
             {t('Product Details')}
           </Text>
           <View style={styles.orderItemContainer}>
-            {OrderData2.map((item) => (
+            {lineItems.map((item) => (
               <OrderItem
+                cardType="order"
                 orderItem={item}
                 containerStyle={styles.orderItem}
                 key={item.variantID}
@@ -71,13 +73,16 @@ export default function OrderDetailsScene() {
           </Text>
           <Surface containerStyle={styles.surfaceShippingContainer}>
             <Text weight="400" style={[styles.mediumText, { marginBottom: 6 }]}>
-              {data.fullName}
+              {name}
             </Text>
+            <Text style={[styles.greyText, styles.smallText]}>{address1}</Text>
             <Text style={[styles.greyText, styles.smallText]}>
-              {data.shipmentAddress}
+              {`${city}, ${province} ${zip}`}
             </Text>
+            <Text style={[styles.greyText, styles.smallText]}>{country}</Text>
             <Text style={[styles.greyText, styles.smallText]}>
-              {data.phoneNumber}
+              {t('Phone : ')}
+              {phone}
             </Text>
           </Surface>
         </View>
@@ -94,7 +99,7 @@ export default function OrderDetailsScene() {
                 {t('Subtotal')}
               </Text>
               <Text style={styles.mediumText}>
-                {formatCurrency(data.subtotal)}
+                {formatCurrency(subtotalPayment)}
               </Text>
             </View>
             <View style={styles.innerPaymentDetailsContainer}>
@@ -105,9 +110,9 @@ export default function OrderDetailsScene() {
                 {t('Shipping')}
               </Text>
               <Text style={[styles.mediumText, { textTransform: 'uppercase' }]}>
-                {data.shippingCost === 0
+                {shippingPrice === 0
                   ? t('Free')
-                  : formatCurrency(data.shippingCost)}
+                  : formatCurrency(shippingPrice)}
               </Text>
             </View>
             <View style={[styles.innerPaymentDetailsContainer, styles.border]}>
@@ -118,7 +123,7 @@ export default function OrderDetailsScene() {
                 {t('Total')}
               </Text>
               <Text weight="bold" style={styles.mediumText}>
-                {formatCurrency(data.subtotal + data.shippingCost)}
+                {formatCurrency(totalPayment)}
               </Text>
             </View>
           </Surface>
