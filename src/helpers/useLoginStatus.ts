@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { AsyncStorage } from 'react-native';
 
 import { initialData } from '../graphql/initialData';
 import { useResetCart } from '../hooks/api/useShoppingCart';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
+import { getToken, removeToken } from './authToken';
 
 export default function useLoginStatus(navigate: () => void) {
   let [customerAccessToken, setCustomerAccessToken] = useState('');
@@ -20,7 +20,7 @@ export default function useLoginStatus(navigate: () => void) {
       let isActive = true;
 
       let checkUserAuth = async () => {
-        let token = await AsyncStorage.getItem('accessToken');
+        let token = await getToken();
         if (isActive) {
           if (token) {
             setCustomerAccessToken(token);
@@ -39,7 +39,7 @@ export default function useLoginStatus(navigate: () => void) {
 
   let logout = () => {
     setCustomerAccessToken('');
-    AsyncStorage.removeItem('accessToken');
+    removeToken();
     resetShoppingCart();
     setUser({
       variables: {
