@@ -20,10 +20,11 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavProp } from '../types/Navigation';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useCustomerRegister } from '../hooks/api/useCustomer';
-import * as authToken from '../helpers/authToken';
+import { useAuth } from '../helpers/useAuth';
 
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
+  let { setAuthToken } = useAuth();
   let [firstName, setFirstName] = useState('');
   let [lastName, setLastName] = useState('');
   let [email, setEmail] = useState('');
@@ -91,7 +92,7 @@ export default function RegisterScene() {
           accessToken,
           expiresAt,
         } = customerAccessTokenCreate.customerAccessToken;
-        authToken.saveToken(accessToken);
+        setAuthToken(accessToken);
         if (email && firstName && lastName) {
           setUser({
             variables: {

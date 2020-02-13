@@ -22,7 +22,7 @@ export default function HomeScene() {
   if (loading || !homeData) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator />
       </View>
     );
   }

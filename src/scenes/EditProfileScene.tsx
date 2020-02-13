@@ -118,8 +118,6 @@ export default function EditProfileScene() {
   });
 
   let { loading: getAuthenticatedUserLoading } = useGetAuthenticatedUser({
-    fetchPolicy: 'cache-only',
-    notifyOnNetworkStatusChange: true,
     onCompleted({ authenticatedUser }) {
       let { email, firstName, lastName, expiresAt } = authenticatedUser;
       setFirstName(firstName);

@@ -19,12 +19,13 @@ import {
   useCustomerCreateToken,
   useGetCustomerData,
 } from '../hooks/api/useCustomer';
-import * as authToken from '../helpers/authToken';
+import { useAuth } from '../helpers/useAuth';
 
 export default function ProfileScene() {
-  let navigation = useNavigation<StackNavProp<'Login'>>();
-  let [email, setEmail] = useState();
-  let [password, setPassword] = useState();
+  let { navigate, reset } = useNavigation<StackNavProp<'Login'>>();
+  let { setAuthToken } = useAuth();
+  let [email, setEmail] = useState('');
+  let [password, setPassword] = useState('');
 
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
@@ -57,8 +58,7 @@ export default function ProfileScene() {
     loading: setAuthenticatedUserLoading,
   } = useSetAuthenticatedUser({
     onCompleted: () => {
-      // Note: I'm not sure if this is correct.
-      navigation.reset({
+      reset({
         index: 0,
         routes: [{ name: 'Profile' }],
       });
@@ -77,7 +77,7 @@ export default function ProfileScene() {
           expiresAt,
         } = customerAccessTokenCreate.customerAccessToken;
         setExpiresDate(expiresAt);
-        authToken.saveToken(accessToken);
+        setAuthToken(accessToken);
         login({ variables: { accessToken } });
       } else {
         Alert.alert(
@@ -111,10 +111,6 @@ export default function ProfileScene() {
 
   let onSubmit = () => {
     createToken();
-  };
-
-  let onPressForgotPassword = () => {
-    navigation.navigate('ForgotPassword');
   };
 
   let isLoading =
@@ -151,13 +147,9 @@ export default function ProfileScene() {
         />
         <TouchableOpacity
           style={styles.forgetPassword}
-          onPress={() => navigation.navigate('ForgotPassword')}
+          onPress={() => navigate('ForgotPassword')}
         >
-          <Text
-            onPress={onPressForgotPassword}
-            style={[styles.colorPrimary, styles.textSize]}
-            weight="medium"
-          >
+          <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
             {t('Forgot Password?')}
           </Text>
         </TouchableOpacity>

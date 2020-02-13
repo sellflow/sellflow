@@ -42,6 +42,8 @@ function useGetAuthenticatedUser(
   let { loading, data } = useQuery<GetAuthenticatedUser>(
     GET_AUTHENTICATED_USER,
     {
+      fetchPolicy: 'cache-only',
+      notifyOnNetworkStatusChange: true,
       ...options,
     },
   );

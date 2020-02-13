@@ -8,20 +8,16 @@ import { COLORS } from '../constants/colors';
 import { profile } from '../../assets/images';
 import { StackNavProp } from '../types/Navigation';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
-import useLoginStatus from '../helpers/useLoginStatus';
+import { useAuth } from '../helpers/useAuth';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<StackNavProp<'Profile'>>();
-  let onLogout = () => navigate('Login');
-  let { customerAccessToken, logout } = useLoginStatus(onLogout);
+  let { authToken, setAuthToken } = useAuth();
 
   let {
     data: authenticatedUser,
     loading: getAuthenticatedUserLoading,
-  } = useGetAuthenticatedUser({
-    fetchPolicy: 'cache-only',
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useGetAuthenticatedUser();
 
   if (getAuthenticatedUserLoading || !authenticatedUser) {
     return (
@@ -30,10 +26,16 @@ export default function ProfileScene() {
       </View>
     );
   }
+  let onLogout = () => {
+    setAuthToken(null);
+    navigate('Login');
+  };
 
   let { email, firstName, lastName } = authenticatedUser.authenticatedUser;
 
-  if (!customerAccessToken) {
+  if (!authToken) {
+    // TODO: Render LockedFeature Scene
+    navigate('Login');
     return <View />;
   }
 
@@ -41,7 +43,9 @@ export default function ProfileScene() {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.profileContainer}
-        onPress={() => navigate('EditProfile', { customerAccessToken })}
+        onPress={() =>
+          navigate('EditProfile', { customerAccessToken: authToken })
+        }
       >
         <Avatar.Image source={profile} size={84} />
         <View style={styles.profile}>
@@ -54,7 +58,9 @@ export default function ProfileScene() {
       <View style={[styles.menuContainer, styles.divider]}>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigate('EditProfile', { customerAccessToken })}
+          onPress={() =>
+            navigate('EditProfile', { customerAccessToken: authToken })
+          }
         >
           <Text style={styles.buttonLabelStyle}>{t('Edit Profile')}</Text>
         </TouchableOpacity>
@@ -66,7 +72,9 @@ export default function ProfileScene() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigate('OrderHistory', { customerAccessToken })}
+          onPress={() =>
+            navigate('OrderHistory', { customerAccessToken: authToken })
+          }
         >
           <Text style={styles.buttonLabelStyle}>{t('Order History')}</Text>
         </TouchableOpacity>
@@ -75,12 +83,7 @@ export default function ProfileScene() {
         </TouchableOpacity>
       </View>
       <View style={styles.menuContainer}>
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => {
-            logout();
-          }}
-        >
+        <TouchableOpacity style={styles.menuItem} onPress={onLogout}>
           <Text style={[styles.buttonLabelStyle, styles.redTextColor]}>
             {t('Log Out')}
           </Text>
