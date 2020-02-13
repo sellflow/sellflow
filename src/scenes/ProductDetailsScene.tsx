@@ -30,6 +30,7 @@ import {
   useRemoveItemFromWishlist,
   useGetWishlistData,
 } from '../hooks/api/useWishlist';
+import Toast from '../core-ui/Toast';
 
 type ProductDetailsProps = {
   onSelectionOptionChange: (key: string, value: string) => void;
@@ -37,6 +38,7 @@ type ProductDetailsProps = {
   quantity: number;
   onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
   product: Product;
+  isToastVisible: boolean;
   options?: Options;
   infoTabs?: Tabs;
   isLoading: boolean;
@@ -192,39 +194,51 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
     quantity,
     onChangeQuantity,
     onSelectionOptionChange,
+    isToastVisible,
     selectedOptions,
   } = props;
 
   return (
-    <View style={[styles.flex, styles.flexRow]}>
-      <View style={styles.flex}>
-        <Image
-          source={{ uri: product.image }}
-          style={styles.flex}
-          resizeMode="cover"
-        />
-      </View>
-
-      <View style={styles.flex}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flexColumn}
-        >
-          <ProductInfo
-            selectedOptions={selectedOptions}
-            onSelectionOptionChange={onSelectionOptionChange}
-            quantity={quantity}
-            onChangeQuantity={onChangeQuantity}
-            product={product}
-            options={options ? options : []}
-            infoTabs={infoTabs ? infoTabs : []}
+    <>
+      <View style={[styles.flex, styles.flexRow]}>
+        <View style={styles.flex}>
+          <Image
+            source={{ uri: product.image }}
+            style={styles.flex}
+            resizeMode="cover"
           />
-        </ScrollView>
-        <View style={[styles.bottomContainer, styles.bottomLandscapeContainer]}>
-          <BottomActionBar {...props} />
+        </View>
+
+        <View style={styles.flex}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flexColumn}
+          >
+            <ProductInfo
+              selectedOptions={selectedOptions}
+              onSelectionOptionChange={onSelectionOptionChange}
+              quantity={quantity}
+              onChangeQuantity={onChangeQuantity}
+              product={product}
+              options={options ? options : []}
+              infoTabs={infoTabs ? infoTabs : []}
+            />
+          </ScrollView>
+          <View
+            style={[styles.bottomContainer, styles.bottomLandscapeContainer]}
+          >
+            <BottomActionBar {...props} />
+          </View>
         </View>
       </View>
-    </View>
+      <Toast
+        data={{
+          message: t('Item successfully added'),
+          isVisible: isToastVisible,
+          mode: 'success',
+        }}
+      />
+    </>
   );
 }
 
@@ -237,6 +251,7 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
     selectedOptions,
     onChangeQuantity,
     onSelectionOptionChange,
+    isToastVisible,
   } = props;
   let dimensions = useDimensions();
 
@@ -250,6 +265,7 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
           }}
           resizeMode="cover"
         />
+
         <View style={styles.flex}>
           <ProductInfo
             selectedOptions={selectedOptions}
@@ -266,6 +282,13 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
       <View style={styles.bottomContainer}>
         <BottomActionBar {...props} />
       </View>
+      <Toast
+        data={{
+          message: t('Item successfully added'),
+          isVisible: isToastVisible,
+          mode: 'success',
+        }}
+      />
     </>
   );
 }
@@ -279,8 +302,7 @@ export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
   let { product } = route.params;
 
-  let { addToCart, loading: addToCartLoading } = useAddToCart();
-
+  let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
   let [isWishlistActive, setWishlistActive] = useState(false);
   let [options, setOptions] = useState<Options>([]);
   let [quantity, setQuantity] = useState(1);
@@ -288,6 +310,13 @@ export default function ProductDetailsScene() {
   let [infoTabs, setInfoTabs] = useState<Tabs>([
     { title: 'Description', content: '' },
   ]);
+
+  let showToast = (duration: number) => {
+    setIsToastVisible(true);
+    setTimeout(() => {
+      setIsToastVisible(false);
+    }, duration);
+  };
 
   let extractOptionsData = (
     optionsData: OptionsData,
@@ -309,6 +338,12 @@ export default function ProductDetailsScene() {
   let changeSelectedOptions = (key: string, value: string) => {
     setSelectedOptions({ ...selectedOptions, [key]: value });
   };
+
+  let { addToCart, loading: addToCartLoading } = useAddToCart({
+    onCompleted: () => {
+      showToast(1100);
+    },
+  });
 
   let { getVariantID, loading: getVariantIDLoading } = useGetProductVariantID({
     onCompleted: ({ productByHandle }) => {
@@ -366,6 +401,7 @@ export default function ProductDetailsScene() {
     </View>
   ) : dimensions.screenSize === ScreenSize.Large ? (
     <ProductDetailsLandscape
+      isToastVisible={isToastVisible}
       selectedOptions={selectedOptions}
       onSelectionOptionChange={changeSelectedOptions}
       quantity={quantity}
@@ -382,6 +418,7 @@ export default function ProductDetailsScene() {
     />
   ) : (
     <ProductDetailsPortrait
+      isToastVisible={isToastVisible}
       selectedOptions={selectedOptions}
       onSelectionOptionChange={changeSelectedOptions}
       quantity={quantity}

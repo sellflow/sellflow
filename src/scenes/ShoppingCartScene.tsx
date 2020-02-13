@@ -31,6 +31,7 @@ import {
 } from '../hooks/api/useShopifyCart';
 import { cartPlaceholder } from '../../assets/images';
 import { mapToLineItems } from '../helpers/mapToLineItems';
+import Toast from '../core-ui/Toast';
 
 function extractDataCheckout(checkout: CheckoutCreate | CheckoutReplace): Cart {
   let id = checkout.id;
@@ -90,9 +91,18 @@ export default function ShoppingCartScene() {
   });
   let [cartID, setCartID] = useState('');
 
+  let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
+
   let paymentData: PaymentData = {
     subtotal: cartData.lineItemsPrice,
     total: cartData.subtotalPrice,
+  };
+
+  let showToast = (duration: number) => {
+    setIsToastVisible(true);
+    setTimeout(() => {
+      setIsToastVisible(false);
+    }, duration);
   };
 
   let changeItemQuantity = (variantIDSearched: string, amount: number) => {
@@ -130,6 +140,7 @@ export default function ShoppingCartScene() {
         checkoutID: cartID,
       },
     });
+    showToast(1100);
   };
 
   useGetCart({
@@ -228,44 +239,63 @@ export default function ShoppingCartScene() {
   }
 
   return screenSize === ScreenSize.Large ? (
-    <View style={styles.horizontalLayout}>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        {renderCartView()}
-      </ScrollView>
+    <>
+      <View style={styles.horizontalLayout}>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+          contentInsetAdjustmentBehavior="automatic"
+        >
+          {renderCartView()}
+        </ScrollView>
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ paddingTop: 15, paddingHorizontal: 15 }}>
+            {renderPaymentView()}
+            <BottomButton
+              label={t('checkout')}
+              onPressAction={() => navigate('Checkout')}
+            />
+          </View>
+        </SafeAreaView>
+      </View>
+      <Toast
+        data={{
+          message: t('Item successfully removed'),
+          isVisible: isToastVisible,
+          mode: 'success',
+        }}
+      />
+    </>
+  ) : (
+    <>
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ paddingTop: 15, paddingHorizontal: 15 }}>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={
+            screenSize === ScreenSize.Small
+              ? styles.scrollContentSmall
+              : styles.scrollContentMedium
+          }
+        >
+          {renderCartView()}
           {renderPaymentView()}
+        </ScrollView>
+        <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
           <BottomButton
             label={t('checkout')}
             onPressAction={() => navigate('Checkout')}
           />
         </View>
       </SafeAreaView>
-    </View>
-  ) : (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={
-          screenSize === ScreenSize.Small
-            ? styles.scrollContentSmall
-            : styles.scrollContentMedium
-        }
-      >
-        {renderCartView()}
-        {renderPaymentView()}
-      </ScrollView>
-      <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
-        <BottomButton
-          label={t('checkout')}
-          onPressAction={() => navigate('Checkout')}
-        />
-      </View>
-    </SafeAreaView>
+
+      <Toast
+        data={{
+          message: t('Item successfully removed'),
+          isVisible: isToastVisible,
+          mode: 'success',
+        }}
+      />
+    </>
   );
 }
 
