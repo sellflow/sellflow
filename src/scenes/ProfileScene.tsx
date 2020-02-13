@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, Avatar, ActivityIndicator } from 'exoflex';
+import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
-import { profile } from '../../assets/images';
 import { StackNavProp } from '../types/Navigation';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useAuth } from '../helpers/useAuth';
+import { Avatar } from '../core-ui';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<StackNavProp<'Profile'>>();
@@ -47,7 +47,7 @@ export default function ProfileScene() {
           navigate('EditProfile', { customerAccessToken: authToken })
         }
       >
-        <Avatar.Image source={profile} size={84} />
+        <Avatar firstName={firstName} lastName={lastName} size={84} />
         <View style={styles.profile}>
           <Text style={styles.nameTextStyle}>
             {firstName} {lastName}

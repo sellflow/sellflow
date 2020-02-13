@@ -3,15 +3,11 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Alert,
-  TouchableOpacity,
   KeyboardAvoidingView,
   TextInput as TextInputType,
   ActivityIndicator,
 } from 'react-native';
-import { Text, Button, Avatar, TextInput } from 'exoflex';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+import { Button, TextInput } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
@@ -23,7 +19,6 @@ import {
   validateEmail,
   validatePassword,
 } from '../helpers/validation';
-import { profile } from '../../assets/images';
 import { defaultButtonLabel, defaultButton } from '../constants/theme';
 import { StackNavProp, StackRouteProp } from '../types/Navigation';
 import { useUpdateCustomer } from '../hooks/api/useCustomer';
@@ -31,46 +26,24 @@ import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/api/useAuthenticatedUser';
+import { Avatar } from '../core-ui';
 
 export default function EditProfileScene() {
-  let [profilePicture, setProfilePicture] = useState(profile);
-  let [isPickerVisible, setIsPickerVisible] = useState(false);
   let [firstName, setFirstName] = useState('');
   let [lastName, setLastName] = useState('');
   let [email, setEmail] = useState('');
+  let [phoneNumber, setPhoneNumber] = useState('');
   let [password, setPassword] = useState('');
   let [isEmailValid, setIsEmailValid] = useState(true);
   let [isPasswordValid, setIsPasswordValid] = useState(true);
   let [expiresAt, setExpiresAt] = useState('');
   let lastNameRef = useRef<TextInputType>(null);
   let emailRef = useRef<TextInputType>(null);
+  let phoneNumberRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
   let dimensions = useDimensions();
   let { goBack } = useNavigation<StackNavProp<'EditProfile'>>();
   let { params } = useRoute<StackRouteProp<'EditProfile'>>();
-
-  let togglePickerVisible = () => {
-    setIsPickerVisible(!isPickerVisible);
-  };
-
-  let openGallery = async () => {
-    await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    let { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
-    if (status !== 'granted') {
-      Alert.alert(t('Camera Roll permission not granted.'));
-    } else {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-
-      if (!result.cancelled) {
-        setProfilePicture({ uri: result.uri });
-      }
-    }
-  };
 
   let containerStyle = () => {
     if (dimensions.screenSize === ScreenSize.Small) {
@@ -147,15 +120,12 @@ export default function EditProfileScene() {
       <View style={containerStyle()}>
         <KeyboardAvoidingView behavior="position">
           <ScrollView showsVerticalScrollIndicator={false}>
-            <TouchableOpacity
-              style={styles.profilePictureEditContainer}
-              onPress={openGallery}
-            >
-              <Avatar.Image source={profilePicture} size={92} />
-              <Text style={styles.changePictureClickable}>
-                {t('Change Profile Picture')}
-              </Text>
-            </TouchableOpacity>
+            <Avatar
+              firstName={firstName}
+              lastName={lastName}
+              size={92}
+              containerStyle={styles.avatarContainer}
+            />
             <View style={styles.formsContainer}>
               <TextInput
                 label={t('First Name')}
@@ -211,6 +181,22 @@ export default function EditProfileScene() {
                 errorMessageStyle={styles.errorMessage}
                 returnKeyType="next"
                 onSubmitEditing={() => {
+                  phoneNumberRef.current && phoneNumberRef.current.focus();
+                }}
+              />
+              <TextInput
+                clearTextOnFocus={false}
+                ref={phoneNumberRef}
+                label={t('Phone Number')}
+                labelStyle={styles.textInputLabel}
+                textContentType="telephoneNumber"
+                keyboardType="number-pad"
+                mode="flat"
+                value={phoneNumber}
+                containerStyle={styles.textInputContainer}
+                onChangeText={setPhoneNumber}
+                returnKeyType="next"
+                onSubmitEditing={() => {
                   passwordRef.current && passwordRef.current.focus();
                 }}
               />
@@ -237,8 +223,7 @@ export default function EditProfileScene() {
                 onChangeText={setPassword}
                 containerStyle={styles.textInputContainer}
                 errorMessageStyle={styles.errorMessage}
-                returnKeyType="next"
-                onSubmitEditing={togglePickerVisible}
+                returnKeyType="done"
               />
             </View>
           </ScrollView>
@@ -272,15 +257,10 @@ const styles = StyleSheet.create({
   textInputLabel: {
     fontSize: FONT_SIZE.small,
   },
-  profilePictureEditContainer: {
+  avatarContainer: {
     marginTop: 24,
     marginBottom: 16,
-    alignItems: 'center',
-  },
-  changePictureClickable: {
-    paddingTop: 16,
-    fontSize: FONT_SIZE.medium,
-    color: COLORS.primaryColor,
+    alignSelf: 'center',
   },
   formsContainer: {
     marginVertical: 12,

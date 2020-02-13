@@ -8,6 +8,7 @@ import Surface from './Surface';
 import TabView from './TabView';
 import ModalBottomSheet from './ModalBottomSheet';
 import CategoryList from './CategoryList';
+import Avatar from './Avatar';
 
 export {
   Carousel,
@@ -20,4 +21,5 @@ export {
   TabView,
   ModalBottomSheet,
   CategoryList,
+  Avatar,
 };
