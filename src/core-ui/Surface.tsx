@@ -27,7 +27,6 @@ export default function Surface(props: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
     width: '100%',
     backgroundColor: COLORS.darkWhite,
     justifyContent: 'space-between',

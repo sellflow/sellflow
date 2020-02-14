@@ -40,13 +40,14 @@ export type OrderRecord = {
 
 export type AddressItem = {
   id: string;
-  name: string | null;
-  address1: string | null;
-  city: string | null;
-  province: string | null;
-  zip: string | null;
-  country: string | null;
-  phone: string | null;
+  name: string;
+  address1: string;
+  address2?: string;
+  city: string;
+  province: string;
+  zip: string;
+  country: string;
+  phone: string;
   default?: boolean;
 };
 

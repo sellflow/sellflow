@@ -28,15 +28,25 @@ function getOrders(
         let address: AddressItem = defaultAddress;
         let newLineItems = mapToLineItems(lineItems);
         if (shippingAddress) {
+          let {
+            address1,
+            city,
+            country,
+            id,
+            name,
+            phone,
+            province,
+            zip,
+          } = shippingAddress;
           address = {
-            address1: shippingAddress.address1,
-            city: shippingAddress.city,
-            country: shippingAddress.country,
-            id: shippingAddress.id,
-            name: shippingAddress.name,
-            phone: shippingAddress.phone,
-            province: shippingAddress.province,
-            zip: shippingAddress.zip,
+            address1: address1 ? address1 : '',
+            city: city ? city : '',
+            country: country ? country : '',
+            id: id,
+            name: name ? name : '',
+            phone: phone ? phone : '',
+            province: province ? province : '',
+            zip: zip ? zip : '',
           };
         }
         let subtotalPaymentAmount = subtotalPriceV2

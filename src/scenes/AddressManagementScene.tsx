@@ -25,17 +25,29 @@ export default function AddressManagementScene() {
         let defaultAddress = customer.defaultAddress;
 
         let newCustomerData: Array<AddressItem> = customer.addresses.edges.map(
-          (item) => ({
-            id: item.node.id,
-            name: item.node.name,
-            address1: item.node.address1,
-            city: item.node.city,
-            province: item.node.province,
-            zip: item.node.zip,
-            country: item.node.country,
-            phone: item.node.phone,
-            default: item.node.id === defaultAddress?.id && true,
-          }),
+          (item) => {
+            let {
+              id,
+              name,
+              address1,
+              city,
+              province,
+              zip,
+              country,
+              phone,
+            } = item.node;
+            return {
+              id: id,
+              name: name ? name : '',
+              address1: address1 ? address1 : '',
+              city: city ? city : '',
+              province: province ? province : '',
+              zip: zip ? zip : '',
+              country: country ? country : '',
+              phone: phone ? phone : '',
+              default: id === defaultAddress?.id && true,
+            };
+          },
         );
 
         setCustomerData(newCustomerData);
