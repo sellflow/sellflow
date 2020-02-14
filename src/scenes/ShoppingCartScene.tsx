@@ -73,7 +73,7 @@ function BottomButton(props: BottomButtonProps) {
       labelStyle={defaultButtonLabel}
       onPress={onPressAction}
     >
-      {t(label)}
+      {label}
     </Button>
   );
 }
@@ -188,49 +188,46 @@ export default function ShoppingCartScene() {
     },
   });
 
-  let renderCartView = () => (
-    <View style={styles.cartContainer}>
-      <View style={styles.orderItemContainer}>
-        {mapLineItemsToOrder(
-          cartData.lineItems,
-          changeItemQuantity,
-          removeSelectedItem,
-        ).map((item, index) => (
-          <View key={item.variantID}>
-            {index > 0 ? <View style={styles.productSeparator} /> : null}
-            <OrderItem
-              cardType="checkout"
-              orderItem={item}
-              containerStyle={styles.orderItem}
-              key={item.variantID}
-            />
-          </View>
-        ))}
-      </View>
-    </View>
-  );
+  let renderCartView = () => {
+    return mapLineItemsToOrder(
+      cartData.lineItems,
+      changeItemQuantity,
+      removeSelectedItem,
+    ).map((item, index) => (
+      <OrderItem
+        cardType="checkout"
+        orderItem={item}
+        containerStyle={[styles.orderItem, index > 0 && styles.border]}
+        key={item.variantID}
+      />
+    ));
+  };
 
   let renderPaymentView = () => <Payment data={paymentData} />;
 
   if (cartData.lineItems.length <= 0) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
+      <SafeAreaView style={styles.flex}>
+        <View style={styles.center}>
           <Image
             source={cartPlaceholder}
             width={100}
             height={100}
-            style={{ maxWidth: 360, maxHeight: 270, marginBottom: 24 }}
+            style={styles.emptyCartImage}
           />
-          <Text style={{ fontSize: FONT_SIZE.small, opacity: 0.6 }}>
+          <Text style={styles.opacity}>
             {t('Shopping cart is empty. Please add item to the cart.')}
           </Text>
         </View>
-        <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
+        <View
+          style={
+            screenSize === ScreenSize.Small
+              ? styles.scrollContentSmall
+              : styles.scrollContentMedium
+          }
+        >
           <BottomButton
-            label={t('Back to home')}
+            label={t('Back To Home')}
             onPressAction={() => navigate('Home')}
           />
         </View>
@@ -238,56 +235,47 @@ export default function ShoppingCartScene() {
     );
   }
 
-  return screenSize === ScreenSize.Large ? (
+  return (
     <>
-      <View style={styles.horizontalLayout}>
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingHorizontal: 15 }}
-          contentInsetAdjustmentBehavior="automatic"
-        >
-          {renderCartView()}
-        </ScrollView>
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={{ paddingTop: 15, paddingHorizontal: 15 }}>
+      {screenSize === ScreenSize.Large ? (
+        <SafeAreaView style={styles.horizontalLayout}>
+          <ScrollView
+            style={styles.flex}
+            contentContainerStyle={styles.horizontalCart}
+            contentInsetAdjustmentBehavior="automatic"
+          >
+            {renderCartView()}
+          </ScrollView>
+          <View style={styles.horizontalPaymentView}>
             {renderPaymentView()}
             <BottomButton
-              label={t('checkout')}
+              label={t('Checkout')}
               onPressAction={() => navigate('Checkout')}
             />
           </View>
         </SafeAreaView>
-      </View>
-      <Toast
-        data={{
-          message: t('Item successfully removed'),
-          isVisible: isToastVisible,
-          mode: 'success',
-        }}
-      />
-    </>
-  ) : (
-    <>
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={
-            screenSize === ScreenSize.Small
-              ? styles.scrollContentSmall
-              : styles.scrollContentMedium
-          }
-        >
-          {renderCartView()}
-          {renderPaymentView()}
-        </ScrollView>
-        <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
-          <BottomButton
-            label={t('checkout')}
-            onPressAction={() => navigate('Checkout')}
-          />
-        </View>
-      </SafeAreaView>
-
+      ) : (
+        <SafeAreaView style={styles.flex}>
+          <ScrollView
+            style={styles.flex}
+            contentContainerStyle={[
+              screenSize === ScreenSize.Small
+                ? styles.scrollContentSmall
+                : styles.scrollContentMedium,
+              styles.flexGrow,
+            ]}
+          >
+            {renderCartView()}
+            <View style={styles.verticalPaymentView}>
+              {renderPaymentView()}
+              <BottomButton
+                label={t('checkout')}
+                onPressAction={() => navigate('Checkout')}
+              />
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      )}
       <Toast
         data={{
           message: t('Item successfully removed'),
@@ -312,7 +300,7 @@ function Payment(props: PaymentProps) {
   return (
     <>
       <View style={styles.voucherCodeContainer}>
-        <Text style={styles.textLabel}>{t('Voucher code or giftcard')}</Text>
+        <Text style={styles.opacity}>{t('Voucher code or giftcard')}</Text>
         <View style={styles.voucherInputButtonContainer}>
           <TextInput
             containerStyle={styles.voucherTextInputContainer}
@@ -329,26 +317,18 @@ function Payment(props: PaymentProps) {
         </View>
       </View>
       <Surface containerStyle={styles.surfacePaymentDetails}>
-        <View style={styles.innerPaymentDetailsContainer}>
-          <Text style={styles.paymentDetailLabel}>{t('Subtotal')}</Text>
+        <View style={styles.paymentDetailsContainer}>
+          <Text style={styles.mediumText}>{t('Subtotal')}</Text>
           <Text style={styles.mediumText}>{formatCurrency(subtotal)}</Text>
         </View>
-        <View style={styles.innerPaymentDetailsContainer}>
-          <Text style={styles.paymentDetailLabel}>{t('Discount')}</Text>
+        <View style={styles.paymentDetailsContainer}>
+          <Text style={styles.mediumText}>{t('Discount')}</Text>
           <Text style={styles.mediumText}>
             -{formatCurrency(total - subtotal)}
           </Text>
         </View>
-        <View
-          style={[
-            styles.innerPaymentDetailsContainer,
-            {
-              borderTopWidth: 1,
-              borderColor: COLORS.lightGrey,
-            },
-          ]}
-        >
-          <Text style={styles.paymentDetailLabel}>{t('Total')}</Text>
+        <View style={[styles.paymentDetailsContainer, styles.border]}>
+          <Text style={styles.mediumText}>{t('Total')}</Text>
           <Text weight="bold" style={styles.mediumText}>
             {formatCurrency(total)}
           </Text>
@@ -359,10 +339,30 @@ function Payment(props: PaymentProps) {
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  flexGrow: {
+    flexGrow: 1,
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  opacity: {
+    opacity: 0.6,
+  },
   horizontalLayout: {
     flexDirection: 'row',
-    paddingHorizontal: 15,
-    alignItems: 'stretch',
+    marginHorizontal: 36,
+  },
+  horizontalCart: {
+    marginRight: 24,
+  },
+  horizontalPaymentView: {
+    flex: 1,
+    paddingTop: 24,
   },
   scrollContentSmall: {
     paddingHorizontal: 24,
@@ -372,30 +372,22 @@ const styles = StyleSheet.create({
   },
   voucherCodeContainer: {
     padding: 12,
-    borderWidth: 0.5,
-    borderColor: COLORS.grey,
-    marginVertical: 2,
+    borderWidth: 1,
+    borderColor: COLORS.lightGrey,
   },
   voucherTextInputContainer: {
-    flexGrow: 2,
+    flexGrow: 1,
     height: 48,
-    borderRadius: 0,
-    borderColor: COLORS.grey,
-    borderWidth: 0.5,
-    marginRight: 24,
+    borderColor: COLORS.lightGrey,
+    borderWidth: 1,
+    marginRight: 16,
   },
   voucherInputButtonContainer: {
+    marginTop: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  cartContainer: {
-    flexDirection: 'column',
-    marginVertical: 2,
-  },
-  orderItemContainer: {
-    marginVertical: 7,
-  },
-  innerPaymentDetailsContainer: {
+  paymentDetailsContainer: {
     paddingVertical: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -406,26 +398,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   orderItem: {
-    paddingVertical: 7,
-  },
-  textLabel: {
-    color: COLORS.grey,
-    fontSize: FONT_SIZE.small,
-    marginBottom: 12,
+    paddingVertical: 24,
   },
   mediumText: {
     fontSize: FONT_SIZE.medium,
-  },
-  paymentDetailLabel: {
-    fontSize: FONT_SIZE.medium,
-    marginBottom: 6,
   },
   addButton: {
     maxWidth: 88,
     minWidth: 88,
   },
-  productSeparator: {
-    borderWidth: 0.5,
-    borderColor: COLORS.lightGrey,
+  border: {
+    borderTopWidth: 1,
+    borderTopColor: COLORS.lightGrey,
+  },
+  verticalPaymentView: {
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
+  emptyCartImage: {
+    maxWidth: 360,
+    maxHeight: 270,
+    marginBottom: 24,
   },
 });
