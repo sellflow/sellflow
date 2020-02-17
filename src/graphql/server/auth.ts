@@ -113,3 +113,12 @@ export const INITIATE_PASSWORD_RESET = gql`
     }
   }
 `;
+
+export const REMOVE_ACCESS_TOKEN = gql`
+  mutation RemoveAccessToken($customerAccessToken: String!) {
+    customerAccessTokenDelete(customerAccessToken: $customerAccessToken) {
+      deletedAccessToken
+      deletedCustomerAccessTokenId
+    }
+  }
+`;

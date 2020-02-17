@@ -15,6 +15,7 @@ import {
   GET_CUSTOMER_DATA,
   CUSTOMER_REGISTER,
   UPDATE_CUSTOMER_DATA,
+  REMOVE_ACCESS_TOKEN,
 } from '../../graphql/server/auth';
 import {
   GetCustomerData,
@@ -28,6 +29,10 @@ import {
   UpdateCustomerData,
   UpdateCustomerDataVariables,
 } from '../../generated/server/UpdateCustomerData';
+import {
+  RemoveAccessToken,
+  RemoveAccessTokenVariables,
+} from '../../generated/server/RemoveAccessToken';
 
 function useCustomerCreateToken(
   options?: MutationHookOptions<
@@ -76,9 +81,20 @@ function useUpdateCustomer(
   return { updateCustomerData, loading };
 }
 
+function useDeactivateCustomerToken(
+  options: MutationHookOptions<RemoveAccessToken, RemoveAccessTokenVariables>,
+) {
+  let [deactivateCustomerToken, { loading }] = useMutation<
+    RemoveAccessToken,
+    RemoveAccessTokenVariables
+  >(REMOVE_ACCESS_TOKEN, { ...options });
+  return { deactivateCustomerToken, loading };
+}
+
 export {
   useCustomerCreateToken,
   useCustomerRegister,
   useGetCustomerData,
   useUpdateCustomer,
+  useDeactivateCustomerToken,
 };

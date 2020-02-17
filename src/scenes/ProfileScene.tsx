@@ -9,6 +9,7 @@ import { StackNavProp } from '../types/Navigation';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useAuth } from '../helpers/useAuth';
 import { Avatar } from '../core-ui';
+import { useDeactivateCustomerToken } from '../hooks/api/useCustomer';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<StackNavProp<'Profile'>>();
@@ -19,6 +20,11 @@ export default function ProfileScene() {
     loading: getAuthenticatedUserLoading,
   } = useGetAuthenticatedUser();
 
+  let { deactivateCustomerToken } = useDeactivateCustomerToken({
+    variables: { customerAccessToken: authToken },
+    onCompleted: () => onLogout(),
+  });
+
   if (getAuthenticatedUserLoading || !authenticatedUser) {
     return (
       <View style={styles.centered}>
@@ -26,6 +32,7 @@ export default function ProfileScene() {
       </View>
     );
   }
+
   let onLogout = () => {
     setAuthToken(null);
     navigate('Login');
@@ -83,7 +90,10 @@ export default function ProfileScene() {
         </TouchableOpacity>
       </View>
       <View style={styles.menuContainer}>
-        <TouchableOpacity style={styles.menuItem} onPress={onLogout}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => deactivateCustomerToken()}
+        >
           <Text style={[styles.buttonLabelStyle, styles.redTextColor]}>
             {t('Log Out')}
           </Text>
