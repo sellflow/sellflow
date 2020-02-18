@@ -30,17 +30,7 @@ export default function getProducts(
       };
     });
   }
-  return [
-    {
-      id: '',
-      title: '',
-      productType: '',
-      price: 0,
-      image:
-        'https://cdn.shopify.com/s/files/1/0281/8303/6043/files/WhatsApp_Image_2020-01-27_at_12.45.06.jpeg?v=1580104374',
-      handle: '',
-    },
-  ];
+  return [];
 }
 
 function useSearchProductsQuery() {

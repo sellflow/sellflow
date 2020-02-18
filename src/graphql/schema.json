@@ -2074,31 +2074,31 @@
         "enumValues": [
           {
             "name": "CENTER",
-            "description": "Keep the center of the image",
+            "description": "Keep the center of the image.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "TOP",
-            "description": "Keep the top of the image",
+            "description": "Keep the top of the image.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "BOTTOM",
-            "description": "Keep the bottom of the image",
+            "description": "Keep the bottom of the image.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "LEFT",
-            "description": "Keep the left of the image",
+            "description": "Keep the left of the image.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RIGHT",
-            "description": "Keep the right of the image",
+            "description": "Keep the right of the image.",
             "isDeprecated": false,
             "deprecationReason": null
           }

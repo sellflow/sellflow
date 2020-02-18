@@ -31,7 +31,10 @@ export default function ProductCollectionScene() {
   let [isSortModalVisible, setSortModalVisible] = useState(false);
   let [isFilterModalVisible, setFilterModalVisible] = useState(false);
   let [radioButtonValue, setRadioButtonValue] = useState('');
-  let [priceRange, setPriceRange] = useState([0, DEFAULT_MAX_PRICE]);
+  let [priceRange, setPriceRange] = useState<[number, number]>([
+    0,
+    DEFAULT_MAX_PRICE,
+  ]);
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
@@ -43,15 +46,21 @@ export default function ProductCollectionScene() {
 
   let { data: collection, loading, refetch } = useCollectionQuery(
     collectionHandle,
+    priceRange,
   );
 
   let { searchProducts, data: results } = useSearchProductsQuery();
 
+  let filterProductPrice = (props: Array<number>) => {
+    let [minPrice, maxPrice] = props;
+    return ` variants.price:>${minPrice} variants.price:<${maxPrice}`;
+  };
+
   useEffect(() => {
     searchProducts({
-      variables: { searchText: searchKeyword },
+      variables: { searchText: searchKeyword + filterProductPrice(priceRange) },
     });
-  }, [searchKeyword, searchProducts]);
+  }, [priceRange, searchKeyword, searchProducts]);
 
   let isScreenSizeLarge = screenSize === ScreenSize.Large;
 
@@ -63,7 +72,11 @@ export default function ProductCollectionScene() {
   let onClear = () => setPriceRange([0, DEFAULT_MAX_PRICE]);
   let toggleSortModal = () => setSortModalVisible(!isSortModalVisible);
   let toggleFilterModal = () => setFilterModalVisible(!isFilterModalVisible);
-  let onSetFilter = (values: Array<number>) => setPriceRange(values);
+  let onSetFilter = (values: [number, number]) => {
+    setPriceRange(values);
+    toggleFilterModal();
+  };
+
   let onPressRadioButton = (newValue: string) => {
     setRadioButtonValue(newValue);
     toggleSortModal();
@@ -162,11 +175,11 @@ export default function ProductCollectionScene() {
       <View style={styles.productsContainer}>
         <Text style={styles.count}>
           {t('Showing {count} item(s)', {
-            count: collection.length || results.length,
+            count: !params.searchKeyword ? collection.length : results.length,
           })}
         </Text>
         <ProductList
-          data={collection.length !== 0 ? collection : results}
+          data={!params.searchKeyword ? collection : results}
           numColumns={isScreenSizeLarge ? numColumns - 2 : numColumns}
           contentContainerStyle={styles.productList}
           onItemPress={(product) => navigate('ProductDetails', { product })}

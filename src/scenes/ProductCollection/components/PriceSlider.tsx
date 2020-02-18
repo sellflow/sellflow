@@ -9,10 +9,10 @@ import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
 export type PriceSliderProps = {
   minPrice: number;
   maxPrice: number;
-  initialSliderValues: Array<number>;
+  initialSliderValues: [number, number];
   sliderStep?: number;
   submitButtonText: string;
-  onSubmit: (values: Array<number>) => void;
+  onSubmit: (values: [number, number]) => void;
   onValuesChangeStart?: () => void;
   onValuesChangeFinish?: () => void;
 };
@@ -33,7 +33,9 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
     onValuesChangeFinish = () => {},
   } = props;
   let [sliderLength, setSliderLength] = useState(280); // default slider length
-  let [priceRange, setPriceRange] = useState(initialSliderValues);
+  let [priceRange, setPriceRange] = useState<[number, number]>(
+    initialSliderValues,
+  );
 
   useImperativeHandle(ref, () => ({
     clear: () => {
@@ -86,7 +88,7 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
         max={maxPrice}
         step={sliderStep}
         onValuesChangeStart={onValuesChangeStart}
-        onValuesChangeFinish={(values: Array<number>) => {
+        onValuesChangeFinish={(values: [number, number]) => {
           setPriceRange(values);
           onValuesChangeFinish();
         }}

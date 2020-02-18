@@ -12,14 +12,20 @@ import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../../graphql/server/categ
 
 function getProducts(
   collectionData: GetCollection | undefined,
+  priceRange: [number, number],
 ): Array<Product> {
-  if (collectionData) {
-    if (collectionData.collectionByHandle) {
-      return collectionData.collectionByHandle.products.edges.map((item) => {
-        let product = item.node;
-        let firstImage = product.images.edges[0];
-        let priceRangeMin = product.presentmentPriceRanges.edges[0];
-        return {
+  let [minPrice, maxPrice] = priceRange;
+  if (collectionData && collectionData.collectionByHandle) {
+    let filteredData: Array<Product> = [];
+    collectionData.collectionByHandle.products.edges.forEach((item) => {
+      let product = item.node;
+      let firstImage = product.images.edges[0];
+      let priceRangeMin = product.presentmentPriceRanges.edges[0];
+      if (
+        Number(priceRangeMin.node.minVariantPrice.amount) < maxPrice &&
+        Number(priceRangeMin.node.minVariantPrice.amount) > minPrice
+      ) {
+        filteredData.push({
           id: product.id,
           image: firstImage ? firstImage.node.transformedSrc.toString() : '',
           title: product.title,
@@ -28,14 +34,18 @@ function getProducts(
           price: priceRangeMin
             ? Number(priceRangeMin.node.minVariantPrice.amount)
             : 0,
-        };
-      });
-    }
+        });
+      }
+    });
+    return filteredData;
   }
   return [];
 }
 
-function useCollectionQuery(collectionHandle: string) {
+function useCollectionQuery(
+  collectionHandle: string,
+  priceRange: [number, number],
+) {
   let { data: collectionData, loading, refetch } = useQuery<
     GetCollection,
     GetCollectionVariables
@@ -45,7 +55,7 @@ function useCollectionQuery(collectionHandle: string) {
       sortKey: ProductCollectionSortKeys.BEST_SELLING,
     },
   });
-  let data = getProducts(collectionData);
+  let data = getProducts(collectionData, priceRange);
 
   return { data, loading, refetch };
 }
