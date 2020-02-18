@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "format:generated": "prettier --write \"src/generated/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
-    "lint": "eslint --max-warnings 0 \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint --rulesdir eslint_rules --rule 'translate: 2' --max-warnings 0 \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit -p .",
     "jest": "jest --coverage --passWithNoTests",
     "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest",
