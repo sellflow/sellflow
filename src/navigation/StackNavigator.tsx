@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { IconButton, Text } from 'exoflex';
+import { IconButton } from 'exoflex';
 import { Route } from '@react-navigation/native';
 
 import {
@@ -12,14 +12,13 @@ import {
   OrderHistoryScene,
   ProductDetailsScene,
   ProductCollectionScene,
-  RegisterScene,
-  LoginScene,
   ForgotPasswordScene,
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
   EditProfileScene,
   PaymentScene,
+  AuthScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -28,17 +27,11 @@ import {
   StackRouteName,
   TabRouteName,
 } from '../types/Navigation';
-import { FONT_SIZE } from '../constants/fonts';
 
 const Stack = createStackNavigator<StackParamList>();
 
 type HeaderIconButtonProps = {
   icon: string;
-  onPress: () => void;
-};
-
-type HeaderTextButtonProps = {
-  text: string;
   onPress: () => void;
 };
 
@@ -51,17 +44,6 @@ function HeaderIconButton(props: HeaderIconButtonProps) {
       color={COLORS.primaryColor}
       style={styles.headerButton}
     />
-  );
-}
-
-function HeaderTextButton(props: HeaderTextButtonProps) {
-  let { text, onPress } = props;
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.headerTextButton}>
-      <Text weight="500" style={styles.headerRightText}>
-        {text}
-      </Text>
-    </TouchableOpacity>
   );
 }
 
@@ -105,16 +87,11 @@ export default function StackNavigator({
       <Stack.Screen name="Wishlist" component={WishlistScene} />
       <Stack.Screen name="Profile" component={ProfileScene} />
       <Stack.Screen
-        name="Login"
-        component={LoginScene}
-        options={({ navigation }) => ({
-          title: t('Log In'),
-          headerRight: () => (
-            <HeaderTextButton
-              text={t('Register')}
-              onPress={() => navigation.replace('Register')}
-            />
-          ),
+        name="Auth"
+        component={AuthScene}
+        options={() => ({
+          title: t('Welcome'),
+          headerLeft: undefined,
         })}
       />
       <Stack.Screen
@@ -127,19 +104,7 @@ export default function StackNavigator({
           },
         })}
       />
-      <Stack.Screen
-        name="Register"
-        component={RegisterScene}
-        options={({ navigation }) => ({
-          title: t('Register'),
-          headerRight: () => (
-            <HeaderTextButton
-              text={t('Log In')}
-              onPress={() => navigation.replace('Login')}
-            />
-          ),
-        })}
-      />
+
       <Stack.Screen
         name="AddressManagement"
         component={AddressManagementScene}
@@ -225,14 +190,6 @@ export default function StackNavigator({
 }
 
 const styles = StyleSheet.create({
-  headerTextButton: {
-    marginRight: 16,
-  },
-  headerRightText: {
-    fontSize: FONT_SIZE.medium,
-    color: COLORS.primaryColor,
-    textAlign: 'right',
-  },
   headerButton: {
     marginRight: 8,
   },

@@ -21,7 +21,7 @@ import {
 } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
 
-export default function ProfileScene() {
+export default function LoginScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Login'>>();
   let { setAuthToken } = useAuth();
   let [email, setEmail] = useState('');

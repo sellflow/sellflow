@@ -15,6 +15,8 @@ export type TabRoute = {
 };
 
 type Props = {
+  initialRouteKey?: string;
+  isScrollEnabled: boolean;
   routes: Array<TabRoute>;
   containerStyle?: StyleProp<ViewStyle>;
 };
@@ -22,14 +24,23 @@ type Props = {
 export default function TabView(props: Props) {
   let dimensions = useDimensions();
   const initialLayout = { width: dimensions.width };
-  const { routes, containerStyle } = props;
-  const [index, setIndex] = useState(0);
+  const { routes, containerStyle, isScrollEnabled, initialRouteKey } = props;
+
+  let indexInitialRoute = 0;
+
   let allRoutes = routes;
+  if (initialRouteKey) {
+    indexInitialRoute = allRoutes.findIndex(
+      ({ key }) => key === initialRouteKey,
+    );
+  }
   let data: { [key: string]: Scene } = {};
   for (let { key, scene } of allRoutes) {
     data[key] = scene;
   }
   const renderScene = SceneMap(data);
+
+  const [index, setIndex] = useState(indexInitialRoute);
   return (
     <Tab
       renderTabBar={(props) => (
@@ -40,8 +51,8 @@ export default function TabView(props: Props) {
               {route.title}
             </Text>
           )}
-          scrollEnabled={true}
-          tabStyle={styles.tabStyle}
+          scrollEnabled={isScrollEnabled}
+          tabStyle={[styles.tabStyle, isScrollEnabled ? { width: 'auto' } : {}]}
           indicatorStyle={styles.indicatorStyle}
           inactiveColor={COLORS.grey}
           activeColor={COLORS.primaryColor}
@@ -59,7 +70,6 @@ export default function TabView(props: Props) {
 
 const styles = StyleSheet.create({
   tabStyle: {
-    width: 'auto',
     marginHorizontal: 6,
   },
   indicatorStyle: {

@@ -34,7 +34,11 @@ function TabStory() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TabView routes={routes} containerStyle={styles.tabContainerStyle} />
+      <TabView
+        isScrollEnabled={true}
+        routes={routes}
+        containerStyle={styles.tabContainerStyle}
+      />
     </SafeAreaView>
   );
 }

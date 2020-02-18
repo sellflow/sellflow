@@ -40,6 +40,7 @@ export type StackParamList = {
   Search: undefined;
   EditProfile: { customerAccessToken: string };
   Payment: undefined;
+  Auth: { initialRouteKey: string };
 };
 
 export type TabParamList = {

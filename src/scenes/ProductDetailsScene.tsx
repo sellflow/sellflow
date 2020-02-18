@@ -123,7 +123,7 @@ function ProductInfo(props: {
           }
         />
       </View>
-      <TabView routes={infoTabRoutes(infoTabs)} />
+      <TabView isScrollEnabled={true} routes={infoTabRoutes(infoTabs)} />
     </>
   );
 }
