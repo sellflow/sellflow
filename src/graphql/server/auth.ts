@@ -54,6 +54,8 @@ export const GET_CUSTOMER_DATA = gql`
           node {
             id
             name
+            firstName
+            lastName
             phone
             city
             province
@@ -66,6 +68,8 @@ export const GET_CUSTOMER_DATA = gql`
       defaultAddress {
         id
         name
+        firstName
+        lastName
         phone
         city
         province

@@ -6,7 +6,7 @@ import {
 } from '../../generated/server/GetOrderHistory';
 import { GET_ORDER_HISTORY } from '../../graphql/server/orderHistory';
 import { OrderRecord, AddressItem } from '../../types/types';
-import { defaultAddress } from '../../constants/defaultValue';
+import { defaultAddress } from '../../constants/defaultValues';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
 
 function getOrders(
@@ -34,19 +34,23 @@ function getOrders(
             country,
             id,
             name,
+            firstName,
+            lastName,
             phone,
             province,
             zip,
           } = shippingAddress;
           address = {
-            address1: address1 ? address1 : '',
-            city: city ? city : '',
-            country: country ? country : '',
+            address1: address1 ?? '',
+            city: city ?? '',
+            country: country ?? '',
             id: id,
-            name: name ? name : '',
-            phone: phone ? phone : '',
-            province: province ? province : '',
-            zip: zip ? zip : '',
+            name: name ?? '',
+            firstName: firstName ?? '',
+            lastName: lastName ?? '',
+            phone: phone ?? '',
+            province: province ?? '',
+            zip: zip ?? '',
           };
         }
         let subtotalPaymentAmount = subtotalPriceV2

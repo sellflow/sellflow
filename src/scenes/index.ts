@@ -1,7 +1,8 @@
 import HomeScene from './HomeScene';
 import WishlistScene from './WishlistScene';
 import ProfileScene from './ProfileScene';
-import AddressManagementScene from './AddressManagementScene';
+import AddressManagementScene from './AddressManagement/AddressManagementScene';
+import AddEditAddressScene from './AddressManagement/AddEditAddressScene';
 import OrderHistoryScene from './OrderHistoryScene';
 import OrderDetailsScene from './OrderDetailsScene';
 import ProductDetailsScene from './ProductDetailsScene';
@@ -29,6 +30,7 @@ export {
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
+  AddEditAddressScene,
   EditProfileScene,
   PaymentScene,
   AuthScene,

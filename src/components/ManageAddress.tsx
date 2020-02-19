@@ -17,21 +17,21 @@ import formatAddress from '../helpers/formatAddress';
 type Props = {
   data: AddressItem;
   style?: StyleProp<ViewStyle>;
-  onPressSetPrimary: () => void;
+  onPressSetPrimary: (addressId: string) => void;
   onPressEdit: () => void;
-  onPressDelete: (addressId: string) => void;
+  onPressDelete: () => void;
 };
 
 export default function ManageAddress(props: Props) {
   let { data, style, onPressSetPrimary, onPressEdit, onPressDelete } = props;
-  let { id, name, default: primary, phone } = data;
+  let { id, firstName, lastName, default: primary, phone } = data;
 
   let [showMenu, setShowMenu] = useState(false);
 
   return (
     <TouchableOpacity style={[styles.container, style]}>
       <View style={styles.header}>
-        <Text style={styles.label}>{name}</Text>
+        <Text style={styles.label}>{firstName + ' ' + lastName}</Text>
         <Menu
           style={[styles.menuBox, styles.padding]}
           visible={showMenu}
@@ -47,12 +47,22 @@ export default function ManageAddress(props: Props) {
             />
           }
         >
-          <TouchableOpacity onPress={onPressEdit}>
+          <TouchableOpacity
+            onPress={() => {
+              setShowMenu(false);
+              onPressEdit();
+            }}
+          >
             <Text weight="medium" style={[styles.label, styles.padding]}>
               {t('Edit')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => onPressDelete(id)}>
+          <TouchableOpacity
+            onPress={() => {
+              setShowMenu(false);
+              onPressDelete();
+            }}
+          >
             <Text style={[styles.deleteLabel, styles.padding]} weight="medium">
               {t('Delete')}
             </Text>
@@ -90,7 +100,7 @@ export default function ManageAddress(props: Props) {
         ) : (
           <TouchableOpacity
             style={styles.setPrimary}
-            onPress={onPressSetPrimary}
+            onPress={() => onPressSetPrimary(id)}
           >
             <Text style={[styles.label, styles.blueText]} weight="medium">
               {t('Set as Primary Address')}

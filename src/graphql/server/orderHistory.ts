@@ -22,6 +22,8 @@ export const GET_ORDER_HISTORY = gql`
             shippingAddress {
               id
               name
+              firstName
+              lastName
               phone
               city
               province

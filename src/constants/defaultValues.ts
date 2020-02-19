@@ -6,6 +6,8 @@ export const defaultAddress: AddressItem = {
   country: '',
   id: '',
   name: '',
+  firstName: '',
+  lastName: '',
   phone: '',
   province: '',
   zip: '',

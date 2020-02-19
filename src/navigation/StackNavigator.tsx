@@ -16,6 +16,7 @@ import {
   ShoppingCartScene,
   CheckoutScene,
   AddressManagementScene,
+  AddEditAddressScene,
   EditProfileScene,
   PaymentScene,
   AuthScene,
@@ -112,6 +113,7 @@ export default function StackNavigator({
           title: t('Manage Addresses'),
         })}
       />
+      <Stack.Screen name="AddEditAddress" component={AddEditAddressScene} />
       <Stack.Screen
         name="EditProfile"
         component={EditProfileScene}

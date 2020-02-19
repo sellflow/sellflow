@@ -33,6 +33,35 @@ import {
   RemoveAccessToken,
   RemoveAccessTokenVariables,
 } from '../../generated/server/RemoveAccessToken';
+import { AddressItem } from '../../types/types';
+
+function getCustomerAddresses(
+  customerAddressData: GetCustomerData | undefined,
+) {
+  let oldAddressData = customerAddressData?.customer?.addresses;
+  let defaultAddress = customerAddressData?.customer?.defaultAddress;
+
+  if (oldAddressData) {
+    return oldAddressData.edges.map((item) => {
+      let address = item.node;
+      return {
+        id: address.id,
+        name: address.name ?? '',
+        firstName: address.firstName ?? '',
+        lastName: address.lastName ?? '',
+        address1: address.address1 ?? '',
+        country: address.country ?? '',
+        province: address.province ?? '',
+        city: address.city ?? '',
+        zip: address.zip ?? '',
+        phone: address.phone ?? '',
+        default: address.id === defaultAddress?.id,
+      };
+    });
+  } else {
+    return [];
+  }
+}
 
 function useCustomerCreateToken(
   options?: MutationHookOptions<
@@ -55,7 +84,9 @@ function useGetCustomerData(
     GetCustomerDataVariables
   >(GET_CUSTOMER_DATA, { ...options });
 
-  return { getCustomer, data, loading, refetch };
+  let customerAddressData: Array<AddressItem> = getCustomerAddresses(data);
+
+  return { getCustomer, data, loading, refetch, customerAddressData };
 }
 
 function useCustomerRegister(

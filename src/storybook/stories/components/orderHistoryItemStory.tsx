@@ -25,6 +25,8 @@ export default function orderHistoryItemStory() {
           id:
             'Z2lkOi8vc2hvcGlmeS9NYWlsaW5nQWRkcmVzcy81NTgzNjQ2OTE2NzQ0P21vZGVsX25hbWU9QWRkcmVzcw==',
           name: 'Vincent Dharma',
+          firstName: 'Vincent',
+          lastName: 'Dharma',
           phone: '0896-5136-1203',
           province: 'Banten',
           zip: '15111',

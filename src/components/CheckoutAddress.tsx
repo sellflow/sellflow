@@ -27,7 +27,7 @@ export default function CheckoutAddress({
   onSelect,
   data,
 }: Props) {
-  let { id, name, phone } = data;
+  let { id, firstName, lastName, phone } = data;
 
   let onEdit = () => Alert.alert('Edit Clicked', 'Edit Address with ID ' + id);
 
@@ -49,7 +49,7 @@ export default function CheckoutAddress({
       />
       <View style={styles.textContainer}>
         <View style={styles.nameText}>
-          <Text style={styles.label}>{name}</Text>
+          <Text style={styles.label}>{firstName + ' ' + lastName}</Text>
           <TouchableOpacity onPress={onEdit}>
             <Text style={[styles.label, styles.textCapitalized]}>
               {t('Edit')}

@@ -21,6 +21,7 @@ export const SHOPPING_CART_CREATE = gql`
         lineItems(first: 20) {
           edges {
             node {
+              id
               discountAllocations {
                 allocatedAmount {
                   amount

@@ -20,7 +20,7 @@ import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { useAuth } from '../helpers/useAuth';
-import { defaultAddress } from '../constants/defaultValue';
+import { defaultAddress } from '../constants/defaultValues';
 
 export default function CheckoutScene() {
   let [selectedAddress, setSelectedAddress] = useState(addressItemData[0].id);

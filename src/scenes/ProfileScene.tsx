@@ -83,7 +83,9 @@ export default function ProfileScene() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigate('AddressManagement')}
+          onPress={() =>
+            navigate('AddressManagement', { customerAccessToken: authToken })
+          }
         >
           <Text style={styles.buttonLabelStyle}>{t('Manage Addresses')}</Text>
         </TouchableOpacity>

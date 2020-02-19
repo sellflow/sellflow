@@ -12,6 +12,8 @@ export const orders: Array<OrderRecord> = [
     address: {
       id: '1',
       name: 'Anna Belle',
+      firstName: 'Anna',
+      lastName: 'Belle',
       phone: '920-292-3383',
       city: 'San Mateo',
       province: 'California',
@@ -46,6 +48,8 @@ export const orders: Array<OrderRecord> = [
     address: {
       id: '2',
       name: 'Anna Belle',
+      firstName: 'Anna',
+      lastName: 'Belle',
       phone: '920-292-3383',
       city: 'San Mateo',
       province: 'California',
@@ -79,6 +83,8 @@ export const orders: Array<OrderRecord> = [
     address: {
       id: '3',
       name: 'Anna Belle',
+      firstName: 'Anna',
+      lastName: 'Belle',
       phone: '920-292-3383',
       city: 'San Mateo',
       province: 'California',
@@ -112,6 +118,8 @@ export const orders: Array<OrderRecord> = [
     address: {
       id: '4',
       name: 'Anna Belle',
+      firstName: 'Anna',
+      lastName: 'Belle',
       phone: '920-292-3383',
       city: 'San Mateo',
       province: 'California',

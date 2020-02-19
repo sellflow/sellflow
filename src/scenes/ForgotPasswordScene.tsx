@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, Image } from 'react-native';
 import {
   TextInput,
   Button,
@@ -7,7 +7,6 @@ import {
   Portal,
   Modal,
   Text,
-  IconButton,
 } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
@@ -19,20 +18,28 @@ import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
 
 export default function ForgotPasswordScene() {
   let { navigate } = useNavigation<StackNavProp<'ForgotPassword'>>();
+
   let [emailValue, setEmailValue] = useState('');
   let [isVisible, setVisible] = useState(false);
+  let [error, setError] = useState('');
+
+  const isError = error !== '';
 
   let { resetPassword, loading } = useForgotPasswordMutation({
-    onCompleted() {
+    onCompleted({ customerRecover }) {
       if (emailValue === '') {
-        Alert.alert(t('Please enter your email'));
+        Alert.alert(t('Please Enter Your Email'));
       } else {
+        if (customerRecover && customerRecover.customerUserErrors.length > 0) {
+          setError(customerRecover.customerUserErrors[0].message);
+          setVisible(!isVisible);
+        }
         setVisible(!isVisible);
       }
     },
     onError(error) {
-      let newError = error.message.split(':');
-      Alert.alert(newError[1] || error.message);
+      setError(error.message);
+      setVisible(!isVisible);
     },
   });
 
@@ -66,20 +73,34 @@ export default function ForgotPasswordScene() {
         >
           <View style={styles.modalTitleContainer}>
             <Text weight="medium" style={styles.modalTitle}>
-              {t('Email has been sent!')}
+              {isError ? t('An Error Occurred') : t('Email Has Been Sent!')}
             </Text>
           </View>
           <View style={styles.iconContainer}>
-            <IconButton
-              icon="check"
-              style={styles.icon}
-              color={COLORS.orderStatusDelivered}
-              size={50}
-            />
+            {isError ? (
+              <Image
+                source={require('../../assets/images/errorImage.png')}
+                style={styles.image}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/images/successImage.png')}
+                style={styles.image}
+              />
+            )}
           </View>
+          <Text style={styles.message}>
+            {isError
+              ? t(
+                  'Sorry, an error occurred on this process. Please try again later.',
+                )
+              : t(
+                  'Please check your email, An email has been sent to reset your password.',
+                )}
+          </Text>
           <Button style={styles.buttonStyle} onPress={onPressModalButton}>
             <Text weight="medium" style={styles.buttonText}>
-              {t('Back lo Login')}
+              {isError ? t('Try Again') : t('Back To Login')}
             </Text>
           </Button>
         </Modal>
@@ -116,6 +137,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  image: {
+    width: 84,
+    height: 84,
+  },
   modal: {
     backgroundColor: COLORS.white,
     position: 'absolute',
@@ -138,9 +163,6 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 16,
   },
-  icon: {
-    backgroundColor: COLORS.lightGreen,
-  },
   textInputContainer: {
     flex: 1,
     marginHorizontal: 24,
@@ -148,9 +170,12 @@ const styles = StyleSheet.create({
   textInput: {
     marginTop: 8,
   },
+  message: {
+    textAlign: 'center',
+  },
   buttonStyle: {
+    marginVertical: 24,
     marginHorizontal: 24,
-    marginBottom: 24,
   },
   buttonText: {
     color: COLORS.white,

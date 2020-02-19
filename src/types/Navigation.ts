@@ -1,7 +1,7 @@
 import { RouteProp as RoutePropBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { CategoryItem, Product, OrderRecord } from './types';
+import { CategoryItem, Product, OrderRecord, AddressItem } from './types';
 
 export type StackNavProp<T extends keyof StackParamList> = StackNavigationProp<
   StackParamList,
@@ -28,6 +28,10 @@ export type StackParamList = {
   OrderHistory: { customerAccessToken: string };
   OrderDetails: { order: OrderRecord };
   AddressManagement: { customerAccessToken: string };
+  AddEditAddress: {
+    address?: AddressItem;
+    customerAccessToken: string;
+  };
   Wishlist: undefined;
   Profile: undefined;
   ProductCollection: CollectionParams;

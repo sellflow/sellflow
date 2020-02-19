@@ -5,8 +5,8 @@ it('should format and combine the address ', () => {
   let address = {
     id: '207119551',
     customer_id: 207119551,
-    first_name: null,
-    last_name: null,
+    firstName: '',
+    lastName: '',
     company: null,
     address1: 'Chestnut Street 92',
     address2: '',

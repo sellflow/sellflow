@@ -4,6 +4,8 @@ export let addressItemData: Array<AddressItem> = [
   {
     id: '1',
     name: 'Anna Belle',
+    firstName: 'Anna',
+    lastName: 'Belle',
     phone: '920-292-3383',
     city: 'San Mateo',
     province: 'California',
@@ -15,6 +17,8 @@ export let addressItemData: Array<AddressItem> = [
   {
     id: '2',
     name: 'Flora Lockett',
+    firstName: 'Flora',
+    lastName: 'Lockett',
     phone: '518-523-1990',
     city: 'San Mateo',
     province: 'California',
@@ -26,6 +30,8 @@ export let addressItemData: Array<AddressItem> = [
   {
     id: '3',
     name: 'Charles Barnes',
+    firstName: 'Charles',
+    lastName: 'Barnes',
     phone: '801-429-4555',
     city: 'Palo Alto',
     province: 'California',
@@ -37,6 +43,8 @@ export let addressItemData: Array<AddressItem> = [
   {
     id: '4',
     name: 'Robert Winslow',
+    firstName: 'Robert',
+    lastName: 'Winslow',
     phone: '410-516-2143',
     city: 'San Francisco',
     province: 'California',

@@ -4,7 +4,54 @@ import {
   CustomerAddressDelete,
   CustomerAddressDeleteVariables,
 } from '../../generated/server/CustomerAddressDelete';
-import { CUSTOMER_ADDRESS_DELETE } from '../../graphql/server/customerAddress';
+import {
+  CUSTOMER_ADDRESS_DELETE,
+  CUSTOMER_ADD_NEW_ADDRESS,
+  CUSTOMER_EDIT_ADDRESS,
+  CUSTOMER_SET_DEFAULT_ADDRESS,
+} from '../../graphql/server/customerAddress';
+import {
+  CustomerAddNewAddress,
+  CustomerAddNewAddressVariables,
+} from '../../generated/server/CustomerAddNewAddress';
+import {
+  CustomerEditAddress,
+  CustomerEditAddressVariables,
+} from '../../generated/server/CustomerEditAddress';
+import {
+  CustomerSetDefaultAddress,
+  CustomerSetDefaultAddressVariables,
+} from '../../generated/server/CustomerSetDefaultAddress';
+
+function useCustomerAddNewAddress(
+  options?: MutationHookOptions<
+    CustomerAddNewAddress,
+    CustomerAddNewAddressVariables
+  >,
+) {
+  let [addNewAddress, { loading }] = useMutation<
+    CustomerAddNewAddress,
+    CustomerAddNewAddressVariables
+  >(CUSTOMER_ADD_NEW_ADDRESS, { ...options });
+
+  return { addNewAddress, loading };
+}
+
+function useCustomerEditAddress(
+  options?: MutationHookOptions<
+    CustomerEditAddress,
+    CustomerEditAddressVariables
+  >,
+) {
+  let [editAddress, { loading }] = useMutation<
+    CustomerEditAddress,
+    CustomerEditAddressVariables
+  >(CUSTOMER_EDIT_ADDRESS, {
+    ...options,
+  });
+
+  return { editAddress, loading };
+}
 
 function useCustomerAddressDelete(
   options?: MutationHookOptions<
@@ -20,4 +67,23 @@ function useCustomerAddressDelete(
   return { customerAddressDelete, loading };
 }
 
-export { useCustomerAddressDelete };
+function useCustomerSetDefaultAddress(
+  options?: MutationHookOptions<
+    CustomerSetDefaultAddress,
+    CustomerSetDefaultAddressVariables
+  >,
+) {
+  let [setDefaultAddress, { loading }] = useMutation<
+    CustomerSetDefaultAddress,
+    CustomerSetDefaultAddressVariables
+  >(CUSTOMER_SET_DEFAULT_ADDRESS, { ...options });
+
+  return { setDefaultAddress, loading };
+}
+
+export {
+  useCustomerAddNewAddress,
+  useCustomerEditAddress,
+  useCustomerAddressDelete,
+  useCustomerSetDefaultAddress,
+};
