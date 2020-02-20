@@ -26,7 +26,6 @@ import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/api/useAuthenticatedUser';
-import { Avatar } from '../core-ui';
 
 export default function EditProfileScene() {
   let [firstName, setFirstName] = useState('');
@@ -120,12 +119,6 @@ export default function EditProfileScene() {
       <View style={containerStyle()}>
         <KeyboardAvoidingView behavior="position">
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Avatar
-              firstName={firstName}
-              lastName={lastName}
-              size={92}
-              containerStyle={styles.avatarContainer}
-            />
             <View style={styles.formsContainer}>
               <TextInput
                 label={t('First Name')}
@@ -256,11 +249,6 @@ const styles = StyleSheet.create({
   },
   textInputLabel: {
     fontSize: FONT_SIZE.small,
-  },
-  avatarContainer: {
-    marginTop: 24,
-    marginBottom: 16,
-    alignSelf: 'center',
   },
   formsContainer: {
     marginVertical: 12,

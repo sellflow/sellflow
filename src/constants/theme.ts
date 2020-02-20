@@ -62,20 +62,17 @@ export const headerOptions: StackNavigationOptions = {
   headerStyle: {
     elevation: 1,
   },
+  headerTitleAlign: 'center',
 };
 
 export const tabBarOptions: BottomTabBarOptions = {
   activeTintColor: COLORS.primaryColor,
   inactiveTintColor: COLORS.inactive,
-  tabStyle: {
-    paddingTop: 12,
-    paddingBottom: 8,
-    height: 60,
-  },
   labelPosition: 'below-icon',
   labelStyle: {
     fontFamily: FONT_FAMILY.REGULAR,
   },
+  tabStyle: { flex: 1, marginTop: 8, paddingVertical: 6 },
 };
 
 export const defaultButton: StyleProp<ViewStyle> = {

@@ -160,19 +160,19 @@ export default function AddressManagementScene() {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.contentContainer}
           />
-          <Button
-            onPress={addNewAddress}
-            style={[defaultButton, styles.bottomButton]}
-            labelStyle={defaultButtonLabel}
-          >
-            {t('Add New Address')}
-          </Button>
         </>
       ) : (
         <View style={styles.centered}>
           <Text>{t('No Addresses To Display')}</Text>
         </View>
       )}
+      <Button
+        onPress={addNewAddress}
+        style={[defaultButton, styles.bottomButton]}
+        labelStyle={defaultButtonLabel}
+      >
+        {t('Add New Address')}
+      </Button>
     </SafeAreaView>
   );
 }
