@@ -7,6 +7,7 @@ import {
   SHOPPING_CART_REPLACE_ITEMS,
   SHOPPING_CART_CREATE,
   SHOPPING_CART_UPDATE_ADDRESS,
+  SHOPPING_CART_CUSTOMER_ASSOCIATE,
 } from '../../graphql/server/shoppingCart';
 import {
   ShoppingCartCreate,
@@ -16,6 +17,10 @@ import {
   ShoppingCartUpdateAddress,
   ShoppingCartUpdateAddressVariables,
 } from '../../generated/server/ShoppingCartUpdateAddress';
+import {
+  ShoppingCartCustomerAssociate,
+  ShoppingCartCustomerAssociateVariables,
+} from '../../generated/server/ShoppingCartCustomerAssociate';
 
 function useShopifyShoppingCartReplaceItems(
   options: MutationHookOptions<
@@ -52,9 +57,27 @@ function useShopifyCartUpdateAddress(
   >(SHOPPING_CART_UPDATE_ADDRESS, { ...options });
   return { updateCartAddress, data, loading };
 }
+function useShopifyCartCustomerAssociate(
+  options?: MutationHookOptions<
+    ShoppingCartCustomerAssociate,
+    ShoppingCartCustomerAssociateVariables
+  >,
+) {
+  let [shoppingCartCustomerAssociate, { data, loading }] = useMutation<
+    ShoppingCartCustomerAssociate,
+    ShoppingCartCustomerAssociateVariables
+  >(SHOPPING_CART_CUSTOMER_ASSOCIATE, { ...options });
+
+  return {
+    shoppingCartCustomerAssociate,
+    data,
+    loading,
+  };
+}
 
 export {
   useShopifyCreateCheckout,
   useShopifyShoppingCartReplaceItems,
   useShopifyCartUpdateAddress,
+  useShopifyCartCustomerAssociate,
 };

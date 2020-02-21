@@ -33,8 +33,8 @@ export const SET_SHOPPING_CART_ID = gql`
 `;
 
 export const SET_SHOPPING_CART = gql`
-  mutation SetShoppingCart($items: [LineItemInput!]!) {
-    setShoppingCart(items: $items) @client {
+  mutation SetShoppingCart($items: [LineItemInput!]!, $id: String!) {
+    setShoppingCart(items: $items, id: $id) @client {
       id
       items {
         quantity

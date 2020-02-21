@@ -10,10 +10,13 @@ import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useAuth } from '../helpers/useAuth';
 import { Avatar } from '../core-ui';
 import { useDeactivateCustomerToken } from '../hooks/api/useCustomer';
+import { useResetCart } from '../hooks/api/useShoppingCart';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<StackNavProp<'Profile'>>();
   let { authToken, setAuthToken } = useAuth();
+
+  let { resetShoppingCart } = useResetCart();
 
   let {
     data: authenticatedUser,
@@ -104,7 +107,10 @@ export default function ProfileScene() {
       <View style={styles.menuContainer}>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => deactivateCustomerToken()}
+          onPress={async () => {
+            await resetShoppingCart();
+            deactivateCustomerToken();
+          }}
         >
           <Text style={[styles.buttonLabelStyle, styles.redTextColor]}>
             {t('Log Out')}

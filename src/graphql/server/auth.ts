@@ -49,6 +49,19 @@ export const GET_CUSTOMER_DATA = gql`
       firstName
       lastName
       email
+      lastIncompleteCheckout {
+        id
+        lineItems(first: 100) {
+          edges {
+            node {
+              variant {
+                id
+              }
+              quantity
+            }
+          }
+        }
+      }
       addresses(first: 20) {
         edges {
           node {

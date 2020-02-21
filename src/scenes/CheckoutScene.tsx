@@ -166,15 +166,16 @@ export default function CheckoutScene() {
       await updateAddress(address, () => navigate('Payment'));
     }
   };
-  let isDisabled =
-    !address.address1 ||
-    !address.city ||
-    !address.country ||
-    !address.firstName ||
-    !address.lastName ||
-    !address.phone ||
-    !address.province ||
-    !address.zip;
+  let isDisabled = authToken
+    ? false
+    : !address.address1 ||
+      !address.city ||
+      !address.country ||
+      !address.firstName ||
+      !address.lastName ||
+      !address.phone ||
+      !address.province ||
+      !address.zip;
 
   let renderShippingAddress = () => {
     if (authToken) {

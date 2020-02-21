@@ -20,6 +20,7 @@ import {
   useGetCustomerData,
 } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
+import { useSetShoppingCart } from '../hooks/api/useShoppingCart';
 
 export default function LoginScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Login'>>();
@@ -52,6 +53,11 @@ export default function LoginScene() {
     }
     return styleApplied;
   };
+
+  let {
+    setShoppingCart,
+    loading: setShoppingCartLoading,
+  } = useSetShoppingCart();
 
   let {
     setUser,
@@ -89,9 +95,31 @@ export default function LoginScene() {
   });
 
   let { getCustomer: login, loading: getCustomerLoading } = useGetCustomerData({
-    onCompleted: ({ customer }) => {
+    onCompleted: async ({ customer }) => {
       if (customer) {
-        let { email, id, firstName, lastName } = customer;
+        let {
+          email,
+          id,
+          firstName,
+          lastName,
+          lastIncompleteCheckout,
+        } = customer;
+        let items: Array<{ quantity: number; variantId: string }> = [];
+        if (lastIncompleteCheckout) {
+          let { id: cartID } = lastIncompleteCheckout;
+          items = lastIncompleteCheckout.lineItems.edges.map(({ node }): {
+            quantity: number;
+            variantId: string;
+          } => {
+            let { quantity, variant } = node;
+            let variantId = '';
+            if (variant) {
+              variantId = variant.id;
+            }
+            return { quantity, variantId };
+          });
+          await setShoppingCart({ variables: { items, id: cartID } });
+        }
         if (email && firstName && lastName) {
           setUser({
             variables: {
@@ -114,7 +142,10 @@ export default function LoginScene() {
   };
 
   let isLoading =
-    createTokenLoading || getCustomerLoading || setAuthenticatedUserLoading;
+    createTokenLoading ||
+    getCustomerLoading ||
+    setAuthenticatedUserLoading ||
+    setShoppingCartLoading;
 
   return (
     <View style={[containerStyle(), styles.container]}>

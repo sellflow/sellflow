@@ -186,3 +186,35 @@ export const SHOPPING_CART_UPDATE_ADDRESS = gql`
     }
   }
 `;
+
+export const SHOPPING_CART_CUSTOMER_ASSOCIATE = gql`
+  mutation ShoppingCartCustomerAssociate(
+    $checkoutId: ID!
+    $customerAccessToken: String!
+  ) {
+    checkoutCustomerAssociateV2(
+      checkoutId: $checkoutId
+      customerAccessToken: $customerAccessToken
+    ) {
+      checkout {
+        id
+        lineItems(first: 19) {
+          edges {
+            node {
+              title
+              quantity
+            }
+          }
+        }
+      }
+      customer {
+        id
+        firstName
+        lastName
+      }
+      checkoutUserErrors {
+        message
+      }
+    }
+  }
+`;

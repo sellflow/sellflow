@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Image,
 } from 'react-native';
-import { Text, Button, TextInput } from 'exoflex';
+import { Text, Button, TextInput, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { Surface } from '../core-ui';
@@ -28,10 +28,12 @@ import {
 import {
   useShopifyCreateCheckout,
   useShopifyShoppingCartReplaceItems,
+  useShopifyCartCustomerAssociate,
 } from '../hooks/api/useShopifyCart';
 import { cartPlaceholder } from '../../assets/images';
 import { mapToLineItems } from '../helpers/mapToLineItems';
 import Toast from '../core-ui/Toast';
+import { useAuth } from '../helpers/useAuth';
 
 function extractDataCheckout(checkout: CheckoutCreate | CheckoutReplace): Cart {
   let id = checkout.id;
@@ -79,6 +81,8 @@ function BottomButton(props: BottomButtonProps) {
 }
 
 export default function ShoppingCartScene() {
+  let [firstLoading, setFirstLoading] = useState<boolean>(true);
+  let { authToken } = useAuth();
   let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
   let shoppingCartItems: Array<{ variantId: string; quantity: number }> = [];
@@ -118,7 +122,7 @@ export default function ShoppingCartScene() {
     shoppingCartItems = newCartData.lineItems.map(({ variantID, quantity }) => {
       return { variantId: variantID, quantity };
     });
-    setShoppingCart({ variables: { items: shoppingCartItems } });
+    setShoppingCart({ variables: { items: shoppingCartItems, id: cartID } });
     shoppingCartReplaceItems({
       variables: {
         lineItems: shoppingCartItems,
@@ -133,7 +137,7 @@ export default function ShoppingCartScene() {
       .map(({ variantID, quantity }) => {
         return { variantId: variantID, quantity };
       });
-    setShoppingCart({ variables: { items: shoppingCartItems } });
+    setShoppingCart({ variables: { items: shoppingCartItems, id: cartID } });
     shoppingCartReplaceItems({
       variables: {
         lineItems: shoppingCartItems,
@@ -143,10 +147,18 @@ export default function ShoppingCartScene() {
     showToast(1100);
   };
 
+  let associateCustomerWithCart = async () => {
+    if (authToken) {
+      await shoppingCartCustomerAssociate({
+        variables: { checkoutId: cartID, customerAccessToken: authToken },
+      });
+    }
+  };
+
   useGetCart({
     fetchPolicy: 'cache-only',
     notifyOnNetworkStatusChange: true,
-    onCompleted({ shoppingCart }) {
+    onCompleted: async ({ shoppingCart }) => {
       setCartID(shoppingCart.id);
       if (shoppingCart.id === '') {
         createCheckout();
@@ -156,12 +168,13 @@ export default function ShoppingCartScene() {
             return { variantId, quantity };
           },
         );
-        shoppingCartReplaceItems({
+        await shoppingCartReplaceItems({
           variables: {
             checkoutID: shoppingCart.id,
             lineItems: shoppingCartItems,
           },
         });
+        setFirstLoading(false);
       }
     },
   });
@@ -177,14 +190,20 @@ export default function ShoppingCartScene() {
     },
   });
 
+  let { shoppingCartCustomerAssociate } = useShopifyCartCustomerAssociate();
+
   let { createCheckout } = useShopifyCreateCheckout({
     variables: {
       checkoutCreateInput: { lineItems: shoppingCartItems },
     },
-    onCompleted({ checkoutCreate }) {
+    onCompleted: async ({ checkoutCreate }) => {
       if (checkoutCreate && checkoutCreate.checkout) {
+        await associateCustomerWithCart();
         setCartData(extractDataCheckout(checkoutCreate.checkout));
-        setShoppingCartID({ variables: { id: checkoutCreate.checkout.id } });
+        await setShoppingCartID({
+          variables: { id: checkoutCreate.checkout.id },
+        });
+        setFirstLoading(false);
       }
     },
   });
@@ -205,6 +224,14 @@ export default function ShoppingCartScene() {
   };
 
   let renderPaymentView = () => <Payment data={paymentData} />;
+
+  if (firstLoading) {
+    return (
+      <SafeAreaView style={styles.centered}>
+        <ActivityIndicator />
+      </SafeAreaView>
+    );
+  }
 
   if (cartData.lineItems.length <= 0) {
     return (
@@ -420,5 +447,10 @@ const styles = StyleSheet.create({
     maxWidth: 360,
     maxHeight: 270,
     marginBottom: 24,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

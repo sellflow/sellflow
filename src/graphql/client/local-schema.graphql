@@ -72,5 +72,5 @@ type Mutation {
   resetShoppingCart: ShoppingCart!
   setShoppingCartID(id: String!): ShoppingCart!
   setRecentSearch(search: String!): [SearchDetail]!
-  setShoppingCart(items: [LineItemInput!]!): ShoppingCart!
+  setShoppingCart(items: [LineItemInput!]!, id: String!): ShoppingCart!
 }
