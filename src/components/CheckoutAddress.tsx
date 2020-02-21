@@ -5,7 +5,6 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
-  Alert,
 } from 'react-native';
 import { Text, RadioButton } from 'exoflex';
 
@@ -19,6 +18,7 @@ type Props = {
   isSelected: boolean;
   onSelect: () => void;
   data: AddressItem;
+  onEditPressed: () => void;
 };
 
 export default function CheckoutAddress({
@@ -26,10 +26,9 @@ export default function CheckoutAddress({
   isSelected,
   onSelect,
   data,
+  onEditPressed,
 }: Props) {
-  let { id, firstName, lastName, phone } = data;
-
-  let onEdit = () => Alert.alert('Edit Clicked', 'Edit Address with ID ' + id);
+  let { firstName, lastName, phone } = data;
 
   return (
     <TouchableOpacity
@@ -50,7 +49,7 @@ export default function CheckoutAddress({
       <View style={styles.textContainer}>
         <View style={styles.nameText}>
           <Text style={styles.label}>{firstName + ' ' + lastName}</Text>
-          <TouchableOpacity onPress={onEdit}>
+          <TouchableOpacity onPress={onEditPressed}>
             <Text style={[styles.label, styles.textCapitalized]}>
               {t('Edit')}
             </Text>

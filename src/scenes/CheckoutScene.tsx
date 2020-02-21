@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   FlatList,
@@ -6,9 +6,14 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import { Text, RadioButton, IconButton, Button, TextInput } from 'exoflex';
-import { useNavigation } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from '@react-navigation/native';
 
 import { CheckoutAddress } from '../components';
 import { Surface } from '../core-ui';
@@ -18,22 +23,119 @@ import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
-import { StackNavProp } from '../types/Navigation';
+import { StackNavProp, StackRouteProp } from '../types/Navigation';
 import { useAuth } from '../helpers/useAuth';
-import { defaultAddress } from '../constants/defaultValues';
+import { emptyAddress } from '../constants/defaultValues';
+import { AddressItem, PaymentInfo, ShippingLine } from '../types/types';
+import { useGetCustomerData } from '../hooks/api/useCustomer';
+import { useShopifyCartUpdateAddress } from '../hooks/api/useShopifyCart';
 
 export default function CheckoutScene() {
-  let [selectedAddress, setSelectedAddress] = useState(addressItemData[0].id);
   let { navigate } = useNavigation<StackNavProp<'Checkout'>>();
+  let { params } = useRoute<StackRouteProp<'Checkout'>>();
+  let { id: cartId } = params.cartData;
+  let [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
+    subtotalPrice: params.cartData.subtotalPrice,
+    totalPrice: params.cartData.totalPrice,
+    shippingLines: [],
+  });
+  let { subtotalPrice, totalPrice } = paymentInfo;
   let { authToken } = useAuth();
-  let [address, setAddress] = useState(defaultAddress);
+  let [address, setAddress] = useState<AddressItem>(emptyAddress); // can be used to do the update
+  let [addressAvailable, setAddressAvailable] = useState<Array<AddressItem>>(
+    [],
+  );
+  let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
+    addressItemData[0],
+  );
+
+  let {
+    updateCartAddress,
+    data: updateAddressData,
+  } = useShopifyCartUpdateAddress({
+    onCompleted: ({ checkoutShippingAddressUpdateV2 }) => {
+      if (
+        checkoutShippingAddressUpdateV2 &&
+        checkoutShippingAddressUpdateV2.checkout
+      ) {
+        let {
+          totalPriceV2,
+          availableShippingRates,
+          subtotalPriceV2,
+        } = checkoutShippingAddressUpdateV2.checkout;
+        let allShippingLine: Array<ShippingLine> = [];
+        if (availableShippingRates && availableShippingRates.shippingRates) {
+          allShippingLine = availableShippingRates.shippingRates.map(
+            ({ title, handle, priceV2 }): ShippingLine => {
+              return {
+                amount: Number(priceV2.amount),
+                handle,
+                title,
+              };
+            },
+          );
+        }
+
+        setPaymentInfo({
+          ...paymentInfo,
+          subtotalPrice: Number(subtotalPriceV2.amount),
+          totalPrice: Number(totalPriceV2.amount),
+          shippingLines: allShippingLine,
+        });
+      }
+    },
+  });
+
+  let { getCustomer, customerAddressData } = useGetCustomerData({
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+    onCompleted: ({ customer }) => {
+      if (customer && customer.defaultAddress) {
+        let addresses = customerAddressData;
+        setAddressAvailable(addresses);
+      }
+    },
+  });
+
+  let focusEffect = useCallback(() => {
+    getCustomer({
+      variables: { accessToken: authToken },
+    });
+
+    return undefined;
+  }, [getCustomer, authToken]);
+  useFocusEffect(focusEffect);
 
   useEffect(() => {
     let defaultAddress =
-      addressItemData.find((item) => item.default === true) ||
+      addressAvailable.find((item) => item.default === true) ||
       addressItemData[0];
-    setSelectedAddress(defaultAddress.id);
-  }, []);
+    setSelectedAddress(defaultAddress);
+  }, [addressAvailable]);
+
+  let updateAddress = async (
+    address: AddressItem,
+    doWhenSuccess?: () => void,
+  ) => {
+    let { id, name, default: defaultStatus, ...usedAddress } = address;
+    await updateCartAddress({
+      variables: { checkoutId: cartId, shippingAddress: { ...usedAddress } },
+    });
+    if (
+      doWhenSuccess &&
+      updateAddressData &&
+      updateAddressData.checkoutShippingAddressUpdateV2
+    ) {
+      let {
+        checkoutUserErrors,
+      } = updateAddressData.checkoutShippingAddressUpdateV2;
+      if (checkoutUserErrors.length === 0) {
+        doWhenSuccess();
+      } else {
+        Alert.alert(t('Please insert a valid address'));
+      }
+    }
+  };
 
   let { screenSize } = useDimensions();
 
@@ -44,6 +146,35 @@ export default function CheckoutScene() {
       return styles.tab;
     }
   };
+  let addNewAddress = () => {
+    navigate('AddEditAddress', { rootScene: 'Checkout' });
+  };
+
+  let onPressEdit = (address: AddressItem) => {
+    navigate('AddEditAddress', { address, rootScene: 'Checkout' });
+  };
+
+  let onSelect = async (item: AddressItem) => {
+    setSelectedAddress(item);
+    await updateAddress(item);
+  };
+
+  let onProceedPressed = async () => {
+    if (authToken) {
+      await updateAddress(selectedAddress, () => navigate('Payment'));
+    } else {
+      await updateAddress(address, () => navigate('Payment'));
+    }
+  };
+  let isDisabled =
+    !address.address1 ||
+    !address.city ||
+    !address.country ||
+    !address.firstName ||
+    !address.lastName ||
+    !address.phone ||
+    !address.province ||
+    !address.zip;
 
   let renderShippingAddress = () => {
     if (authToken) {
@@ -52,19 +183,20 @@ export default function CheckoutScene() {
           <Text style={styles.opacity}>{t('Shipping Address')}</Text>
           <RadioButton.Group value="Address List">
             <FlatList
-              data={addressItemData}
+              data={addressAvailable}
               renderItem={({ item }) => (
                 <CheckoutAddress
                   data={item}
                   style={styles.checkoutAddress}
-                  isSelected={selectedAddress === item.id}
-                  onSelect={() => setSelectedAddress(item.id)}
+                  isSelected={selectedAddress.id === item.id}
+                  onSelect={() => onSelect(item)}
+                  onEditPressed={() => onPressEdit(item)}
                 />
               )}
               keyExtractor={(data) => data.id.toString()}
               ListFooterComponent={() => (
                 <TouchableOpacity
-                  onPress={() => {}}
+                  onPress={addNewAddress}
                   style={styles.newAddressButton}
                 >
                   <IconButton icon="plus" color={COLORS.primaryColor} />
@@ -86,14 +218,26 @@ export default function CheckoutScene() {
             {t('Shipping Information')}
           </Text>
           <TextInput
-            label={t('Name')}
+            label={t('First name')}
             autoFocus={true}
             clearTextOnFocus={false}
             autoCapitalize="words"
             textContentType="name"
             mode="flat"
-            value={address.name}
-            onChangeText={(name) => setAddress({ name, ...address })}
+            value={address.firstName}
+            onChangeText={(firstName) => setAddress({ ...address, firstName })}
+            returnKeyType="next"
+            labelStyle={styles.textInputLabel}
+            containerStyle={styles.textInput}
+          />
+          <TextInput
+            label={t('Last Name')}
+            clearTextOnFocus={false}
+            autoCapitalize="words"
+            textContentType="name"
+            mode="flat"
+            value={address.lastName}
+            onChangeText={(lastName) => setAddress({ ...address, lastName })}
             returnKeyType="next"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -105,7 +249,7 @@ export default function CheckoutScene() {
             textContentType="streetAddressLine1"
             mode="flat"
             value={address.address1}
-            onChangeText={(address1) => setAddress({ address1, ...address })}
+            onChangeText={(address1) => setAddress({ ...address, address1 })}
             returnKeyType="next"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -117,7 +261,7 @@ export default function CheckoutScene() {
             textContentType="streetAddressLine2"
             mode="flat"
             value={address.address2}
-            onChangeText={(address2) => setAddress({ address2, ...address })}
+            onChangeText={(address2) => setAddress({ ...address, address2 })}
             returnKeyType="next"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -129,7 +273,7 @@ export default function CheckoutScene() {
             textContentType="addressCity"
             mode="flat"
             value={address.city}
-            onChangeText={(city) => setAddress({ city, ...address })}
+            onChangeText={(city) => setAddress({ ...address, city })}
             returnKeyType="next"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -141,7 +285,7 @@ export default function CheckoutScene() {
             textContentType="addressState"
             mode="flat"
             value={address.province}
-            onChangeText={(province) => setAddress({ province, ...address })}
+            onChangeText={(province) => setAddress({ ...address, province })}
             returnKeyType="next"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -153,7 +297,7 @@ export default function CheckoutScene() {
             textContentType="countryName"
             mode="flat"
             value={address.country}
-            onChangeText={(country) => setAddress({ country, ...address })}
+            onChangeText={(country) => setAddress({ ...address, country })}
             returnKeyType="next"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -165,7 +309,7 @@ export default function CheckoutScene() {
             keyboardType="number-pad"
             mode="flat"
             value={address.zip}
-            onChangeText={(zip) => setAddress({ zip, ...address })}
+            onChangeText={(zip) => setAddress({ ...address, zip })}
             returnKeyType="next"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -176,7 +320,7 @@ export default function CheckoutScene() {
             textContentType="telephoneNumber"
             mode="flat"
             value={address.phone}
-            onChangeText={(phone) => setAddress({ phone, ...address })}
+            onChangeText={(phone) => setAddress({ ...address, phone })}
             returnKeyType="done"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
@@ -191,23 +335,24 @@ export default function CheckoutScene() {
       <Surface containerStyle={styles.surfacePaymentDetails}>
         <View style={styles.paymentDetailsContainer}>
           <Text style={styles.paymentDetailLabel}>{t('Subtotal')}</Text>
-          <Text style={styles.mediumText}>{formatCurrency(123)}</Text>
+          <Text style={styles.mediumText}>{formatCurrency(subtotalPrice)}</Text>
         </View>
         <View style={styles.paymentDetailsContainer}>
           <Text style={styles.paymentDetailLabel}>{t('Shipping')}</Text>
-          <Text style={styles.mediumText}>{formatCurrency(123)}</Text>
+          <Text style={styles.mediumText}>{t('Calculated at next step')}</Text>
         </View>
         <View style={[styles.paymentDetailsContainer, styles.totalBorder]}>
           <Text style={styles.paymentDetailLabel}>{t('Total')}</Text>
           <Text weight="bold" style={styles.mediumText}>
-            {formatCurrency(246)}
+            {formatCurrency(totalPrice)}
           </Text>
         </View>
       </Surface>
       <Button
         style={[defaultButton, styles.verticalMargin]}
         labelStyle={defaultButtonLabel}
-        onPress={() => navigate('Payment')}
+        onPress={onProceedPressed}
+        disabled={isDisabled}
       >
         {t('Proceed to payment')}
       </Button>

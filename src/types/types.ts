@@ -102,3 +102,15 @@ export type LineItem = {
   image: string;
   quantity: number;
 };
+
+export type PaymentInfo = {
+  totalPrice: number;
+  subtotalPrice: number;
+  shippingLines: Array<ShippingLine>;
+};
+
+export type ShippingLine = {
+  handle: string;
+  amount: number;
+  title: string;
+};

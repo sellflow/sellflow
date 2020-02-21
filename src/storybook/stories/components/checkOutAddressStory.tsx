@@ -15,6 +15,7 @@ function CheckoutAddressList() {
           data={addressItemData}
           renderItem={({ item }) => (
             <CheckoutAddress
+              onEditPressed={() => {}}
               data={item}
               style={styles.addressItem}
               isSelected={selectedIndex === item.id}

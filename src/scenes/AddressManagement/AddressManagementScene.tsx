@@ -73,11 +73,11 @@ export default function AddressManagementScene() {
   useFocusEffect(focusEffect);
 
   let addNewAddress = () => {
-    navigate('AddEditAddress', { customerAccessToken });
+    navigate('AddEditAddress', { rootScene: 'AddressManagement' });
   };
 
   let onPressEdit = (address: AddressItem) => {
-    navigate('AddEditAddress', { address, customerAccessToken });
+    navigate('AddEditAddress', { address, rootScene: 'AddressManagement' });
   };
 
   let onPressCancel = () => {

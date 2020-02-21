@@ -1,7 +1,8 @@
 import { AddressItem } from '../types/types';
 
-export const defaultAddress: AddressItem = {
+export const emptyAddress: AddressItem = {
   address1: '',
+  address2: '',
   city: '',
   country: '',
   id: '',

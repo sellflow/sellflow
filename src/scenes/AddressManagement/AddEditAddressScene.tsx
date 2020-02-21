@@ -26,14 +26,15 @@ import {
   useCustomerAddressDelete,
 } from '../../hooks/api/useCustomerAddress';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
+import { useAuth } from '../../helpers/useAuth';
 
 export default function AddEditAddressScene() {
+  let { authToken: customerAccessToken } = useAuth();
   let { navigate, setOptions } = useNavigation<
     StackNavProp<'AddEditAddress'>
   >();
   let route = useRoute<StackRouteProp<'AddEditAddress'>>();
-  let { address, customerAccessToken } = route.params;
-
+  let { address, rootScene } = route.params;
   let [isVisible, setVisible] = useState(false);
   let [addressData, setAddressData] = useState({
     firstName: '',
@@ -64,6 +65,9 @@ export default function AddEditAddressScene() {
   });
 
   let { editAddress, loading: loadingEditAddress } = useCustomerEditAddress({
+    onCompleted: () => {
+      navigate(rootScene);
+    },
     onError: (error) => {
       Alert.alert(error.message);
     },
@@ -77,7 +81,7 @@ export default function AddEditAddressScene() {
       Alert.alert(error.message);
     },
     onCompleted: () => {
-      navigate('AddressManagement');
+      navigate(rootScene);
     },
   });
 
@@ -115,14 +119,13 @@ export default function AddEditAddressScene() {
           address: addressData,
         },
       });
-
       let customerUserErrors =
         result?.data?.customerAddressCreate?.customerUserErrors;
 
       if (customerUserErrors && customerUserErrors.length > 0) {
         Alert.alert(customerUserErrors[0].message);
       } else {
-        navigate('AddressManagement');
+        navigate(rootScene);
       }
     } else {
       let result = await editAddress({
@@ -139,7 +142,7 @@ export default function AddEditAddressScene() {
       if (customerUserErrors && customerUserErrors.length > 0) {
         Alert.alert(customerUserErrors[0].message);
       } else {
-        navigate('AddressManagement');
+        navigate(rootScene);
       }
     }
   };

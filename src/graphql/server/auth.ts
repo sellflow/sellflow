@@ -49,7 +49,7 @@ export const GET_CUSTOMER_DATA = gql`
       firstName
       lastName
       email
-      addresses(first: 5) {
+      addresses(first: 20) {
         edges {
           node {
             id

@@ -37,27 +37,30 @@ import { AddressItem } from '../../types/types';
 
 function getCustomerAddresses(
   customerAddressData: GetCustomerData | undefined,
-) {
+): Array<AddressItem> {
   let oldAddressData = customerAddressData?.customer?.addresses;
   let defaultAddress = customerAddressData?.customer?.defaultAddress;
 
   if (oldAddressData) {
-    return oldAddressData.edges.map((item) => {
-      let address = item.node;
-      return {
-        id: address.id,
-        name: address.name ?? '',
-        firstName: address.firstName ?? '',
-        lastName: address.lastName ?? '',
-        address1: address.address1 ?? '',
-        country: address.country ?? '',
-        province: address.province ?? '',
-        city: address.city ?? '',
-        zip: address.zip ?? '',
-        phone: address.phone ?? '',
-        default: address.id === defaultAddress?.id,
-      };
-    });
+    return oldAddressData.edges.map(
+      (item): AddressItem => {
+        let address = item.node;
+        let { firstName, lastName } = address;
+        return {
+          id: address.id,
+          name: address.name ?? '',
+          firstName: firstName ?? '',
+          lastName: lastName ?? '',
+          address1: address.address1 ?? '',
+          country: address.country ?? '',
+          province: address.province ?? '',
+          city: address.city ?? '',
+          zip: address.zip ?? '',
+          phone: address.phone ?? '',
+          default: address.id === defaultAddress?.id,
+        };
+      },
+    );
   } else {
     return [];
   }
@@ -82,11 +85,21 @@ function useGetCustomerData(
   let [getCustomer, { data, loading, refetch }] = useLazyQuery<
     GetCustomerData,
     GetCustomerDataVariables
-  >(GET_CUSTOMER_DATA, { ...options });
+  >(GET_CUSTOMER_DATA, {
+    ...options,
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+  });
 
   let customerAddressData: Array<AddressItem> = getCustomerAddresses(data);
 
-  return { getCustomer, data, loading, refetch, customerAddressData };
+  return {
+    getCustomer,
+    data,
+    loading,
+    refetch,
+    customerAddressData,
+  };
 }
 
 function useCustomerRegister(

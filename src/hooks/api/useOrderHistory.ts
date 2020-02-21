@@ -6,7 +6,7 @@ import {
 } from '../../generated/server/GetOrderHistory';
 import { GET_ORDER_HISTORY } from '../../graphql/server/orderHistory';
 import { OrderRecord, AddressItem } from '../../types/types';
-import { defaultAddress } from '../../constants/defaultValues';
+import { emptyAddress } from '../../constants/defaultValues';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
 
 function getOrders(
@@ -25,7 +25,7 @@ function getOrders(
           totalShippingPriceV2,
           id,
         } = order.node;
-        let address: AddressItem = defaultAddress;
+        let address: AddressItem = emptyAddress;
         let newLineItems = mapToLineItems(lineItems);
         if (shippingAddress) {
           let {
@@ -34,12 +34,13 @@ function getOrders(
             country,
             id,
             name,
-            firstName,
-            lastName,
             phone,
             province,
             zip,
+            firstName,
+            lastName,
           } = shippingAddress;
+
           address = {
             address1: address1 ?? '',
             city: city ?? '',

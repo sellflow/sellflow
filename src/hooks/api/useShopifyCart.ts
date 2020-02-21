@@ -6,11 +6,16 @@ import {
 import {
   SHOPPING_CART_REPLACE_ITEMS,
   SHOPPING_CART_CREATE,
+  SHOPPING_CART_UPDATE_ADDRESS,
 } from '../../graphql/server/shoppingCart';
 import {
   ShoppingCartCreate,
   ShoppingCartCreateVariables,
 } from '../../generated/server/ShoppingCartCreate';
+import {
+  ShoppingCartUpdateAddress,
+  ShoppingCartUpdateAddressVariables,
+} from '../../generated/server/ShoppingCartUpdateAddress';
 
 function useShopifyShoppingCartReplaceItems(
   options: MutationHookOptions<
@@ -35,4 +40,21 @@ function useShopifyCreateCheckout(
   return { createCheckout, loading };
 }
 
-export { useShopifyCreateCheckout, useShopifyShoppingCartReplaceItems };
+function useShopifyCartUpdateAddress(
+  options: MutationHookOptions<
+    ShoppingCartUpdateAddress,
+    ShoppingCartUpdateAddressVariables
+  >,
+) {
+  let [updateCartAddress, { data, loading }] = useMutation<
+    ShoppingCartUpdateAddress,
+    ShoppingCartUpdateAddressVariables
+  >(SHOPPING_CART_UPDATE_ADDRESS, { ...options });
+  return { updateCartAddress, data, loading };
+}
+
+export {
+  useShopifyCreateCheckout,
+  useShopifyShoppingCartReplaceItems,
+  useShopifyCartUpdateAddress,
+};

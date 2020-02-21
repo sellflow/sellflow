@@ -165,6 +165,7 @@ export default function ShoppingCartScene() {
       }
     },
   });
+
   let { setShoppingCart } = useSetShoppingCart();
   let { setShoppingCartID } = useSetShoppingCartID();
 
@@ -250,7 +251,7 @@ export default function ShoppingCartScene() {
             {renderPaymentView()}
             <BottomButton
               label={t('Checkout')}
-              onPressAction={() => navigate('Checkout')}
+              onPressAction={() => navigate('Checkout', { cartData })}
             />
           </View>
         </SafeAreaView>
@@ -270,7 +271,7 @@ export default function ShoppingCartScene() {
               {renderPaymentView()}
               <BottomButton
                 label={t('checkout')}
-                onPressAction={() => navigate('Checkout')}
+                onPressAction={() => navigate('Checkout', { cartData })}
               />
             </View>
           </ScrollView>
