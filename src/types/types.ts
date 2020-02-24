@@ -114,3 +114,8 @@ export type ShippingLine = {
   amount: number;
   title: string;
 };
+
+export type Payment = {
+  id: string;
+  name: string;
+};

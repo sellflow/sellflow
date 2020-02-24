@@ -35,7 +35,7 @@
     "apollo-link-context": "^1.0.19",
     "apollo-link-http": "^1.5.16",
     "card-validator": "^6.2.0",
-    "exoflex": "^3.0.1",
+    "exoflex": "^3.2.0",
     "expo": "^36.0.2",
     "expo-image-picker": "^8.0.2",
     "expo-localization": "^8.0.0",

@@ -29,7 +29,7 @@ export default function CheckoutAddress({
   data,
   onEditPressed,
 }: Props) {
-  let { firstName, lastName, phone } = data;
+  let { id, firstName, lastName, phone } = data;
 
   let fullName = getFullName(firstName, lastName);
 
@@ -41,13 +41,14 @@ export default function CheckoutAddress({
         isSelected ? styles.selectedBorder : styles.greyBorder,
         style,
       ]}
-      onPress={() => onSelect()}
+      onPress={onSelect}
     >
       <RadioButton
+        value={id}
         size={18}
         style={styles.radioButton}
         checked={isSelected}
-        onPress={() => onSelect()}
+        onPress={onSelect}
       />
       <View style={styles.textContainer}>
         <View style={styles.nameText}>

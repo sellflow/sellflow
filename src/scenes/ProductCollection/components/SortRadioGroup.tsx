@@ -24,6 +24,7 @@ export default function SortRadioGroup(props: Props) {
   return (
     <RadioButton.Group value={radioButtonValue} onValueChange={onValueChange}>
       <RadioButton
+        value={PRODUCT_SORT_VALUES.POPULARITY}
         label={PRODUCT_SORT_VALUES.POPULARITY}
         {...(!radioButtonValue && { checked: true })}
         style={styles.radioButton}
@@ -34,11 +35,13 @@ export default function SortRadioGroup(props: Props) {
         }
       />
       <RadioButton
+        value={PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW}
         label={PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW}
         style={styles.radioButton}
         textStyle={textStyle(PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW)}
       />
       <RadioButton
+        value={PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH}
         label={PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH}
         style={styles.radioButton}
         textStyle={textStyle(PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH)}

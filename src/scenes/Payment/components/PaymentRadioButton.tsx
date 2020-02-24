@@ -13,17 +13,19 @@ import { COLORS } from '../../../constants/colors';
 type Props = {
   style?: StyleProp<ViewStyle>;
   isSelected: boolean;
-  onSelect: () => void;
+  onSelect: (value: string) => void;
   label: ReactNode;
   children?: ReactNode;
+  value: string;
 };
 
 export default function PaymentRadioButton(props: Props) {
-  let { style, isSelected, children, label, onSelect } = props;
+  let { style, isSelected, children, label, value, onSelect } = props;
   return isSelected ? (
     <View style={[styles.container, style]}>
       <View style={styles.flexRow}>
         <RadioButton
+          value={value}
           size={18}
           style={styles.radioButton}
           checked={isSelected}
@@ -33,9 +35,10 @@ export default function PaymentRadioButton(props: Props) {
       {children}
     </View>
   ) : (
-    <TouchableWithoutFeedback onPress={onSelect}>
+    <TouchableWithoutFeedback onPress={() => onSelect(value)}>
       <View style={[styles.container, styles.flexRow, style]}>
         <RadioButton
+          value={value}
           size={18}
           style={styles.radioButton}
           checked={isSelected}
