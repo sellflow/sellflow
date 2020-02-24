@@ -12,6 +12,7 @@ import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { AddressItem } from '../types/types';
 import formatAddress from '../helpers/formatAddress';
+import { getFullName } from '../helpers/getFullName';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -29,6 +30,8 @@ export default function CheckoutAddress({
   onEditPressed,
 }: Props) {
   let { firstName, lastName, phone } = data;
+
+  let fullName = getFullName(firstName, lastName);
 
   return (
     <TouchableOpacity
@@ -48,7 +51,7 @@ export default function CheckoutAddress({
       />
       <View style={styles.textContainer}>
         <View style={styles.nameText}>
-          <Text style={styles.label}>{firstName + ' ' + lastName}</Text>
+          <Text style={styles.label}>{fullName}</Text>
           <TouchableOpacity onPress={onEditPressed}>
             <Text style={[styles.label, styles.textCapitalized]}>
               {t('Edit')}

@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, ScrollView, Alert } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+  Alert,
+  FlatList,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import {
   Text,
   IconButton,
@@ -8,6 +17,7 @@ import {
   TextInput,
 } from 'exoflex';
 import { useRoute } from '@react-navigation/native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -38,6 +48,7 @@ type ProductDetailsProps = {
   quantity: number;
   onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
   product: Product;
+  productImages: Array<string>;
   isToastVisible: boolean;
   options?: Options;
   infoTabs?: Tabs;
@@ -189,6 +200,7 @@ function BottomActionBar(props: ProductDetailsProps) {
 function ProductDetailsLandscape(props: ProductDetailsProps) {
   let {
     product,
+    productImages,
     options,
     infoTabs,
     quantity,
@@ -197,17 +209,64 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
     isToastVisible,
     selectedOptions,
   } = props;
+  let dimensions = useDimensions();
+
+  let [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  let [activeIndex, setActiveIndex] = useState(0);
+
+  let onPressImage = (index: number) => {
+    setIsImageModalVisible(!isImageModalVisible);
+    setActiveIndex(index);
+  };
+
+  let renderHeader = () => (
+    <IconButton
+      icon="chevron-left"
+      color={COLORS.white}
+      size={35}
+      onPress={() => setIsImageModalVisible(false)}
+    />
+  );
+
+  let images = productImages.map((url) => ({ url }));
 
   return (
     <>
       <View style={[styles.flex, styles.flexRow]}>
-        <View style={styles.flex}>
-          <Image
-            source={{ uri: product.image }}
-            style={styles.flex}
-            resizeMode="cover"
+        <Modal
+          visible={isImageModalVisible}
+          transparent={true}
+          onDismiss={() => setIsImageModalVisible(false)}
+        >
+          <ImageViewer
+            index={activeIndex}
+            imageUrls={images}
+            enableSwipeDown
+            onSwipeDown={() => setIsImageModalVisible(false)}
+            renderHeader={renderHeader}
           />
-        </View>
+        </Modal>
+        <FlatList
+          style={styles.flex}
+          horizontal
+          pagingEnabled
+          data={productImages}
+          renderItem={({ item, index }) => {
+            return (
+              <TouchableOpacity
+                style={styles.flex}
+                onPress={() => onPressImage(index)}
+              >
+                <Image
+                  source={{ uri: item }}
+                  style={{ width: dimensions.width / 2, height: '100%' }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(item) => item}
+        />
 
         <View style={styles.flex}>
           <ScrollView
@@ -233,7 +292,7 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
       </View>
       <Toast
         data={{
-          message: t('Item successfully added'),
+          message: t('Item Successfully Added'),
           isVisible: isToastVisible,
           mode: 'success',
         }}
@@ -245,6 +304,7 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
 function ProductDetailsPortrait(props: ProductDetailsProps) {
   let {
     product,
+    productImages,
     options,
     infoTabs,
     quantity,
@@ -255,15 +315,64 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
   } = props;
   let dimensions = useDimensions();
 
+  let [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  let [activeIndex, setActiveIndex] = useState(0);
+
+  let onPressImage = (index: number) => {
+    setIsImageModalVisible(!isImageModalVisible);
+    setActiveIndex(index);
+  };
+
+  let renderHeader = () => (
+    <IconButton
+      icon="chevron-left"
+      color={COLORS.white}
+      size={35}
+      onPress={() => setIsImageModalVisible(false)}
+    />
+  );
+
+  let images = productImages.map((url) => ({ url }));
+
   return (
     <>
       <ScrollView style={styles.flex}>
-        <Image
-          source={{ uri: product.image }}
-          style={{
-            height: dimensions.screenSize === ScreenSize.Small ? 320 : 576,
+        <Modal
+          visible={isImageModalVisible}
+          onDismiss={() => setIsImageModalVisible(false)}
+        >
+          <ImageViewer
+            index={activeIndex}
+            imageUrls={images}
+            enableSwipeDown
+            onSwipeDown={() => setIsImageModalVisible(false)}
+            renderHeader={renderHeader}
+          />
+        </Modal>
+        <FlatList
+          style={styles.flex}
+          pagingEnabled
+          horizontal
+          data={productImages}
+          renderItem={({ item, index }) => {
+            return (
+              <TouchableOpacity
+                style={styles.flex}
+                onPress={() => onPressImage(index)}
+              >
+                <Image
+                  source={{ uri: item }}
+                  style={{
+                    width: dimensions.width,
+                    height:
+                      dimensions.screenSize === ScreenSize.Small ? 320 : 576,
+                  }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            );
           }}
-          resizeMode="cover"
+          keyExtractor={(item) => item}
         />
 
         <View style={styles.flex}>
@@ -284,7 +393,7 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
       </View>
       <Toast
         data={{
-          message: t('Item successfully added'),
+          message: t('Item Successfully Added'),
           isVisible: isToastVisible,
           mode: 'success',
         }}
@@ -308,8 +417,9 @@ export default function ProductDetailsScene() {
   let [quantity, setQuantity] = useState(1);
   let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
   let [infoTabs, setInfoTabs] = useState<Tabs>([
-    { title: 'Description', content: '' },
+    { title: t('Description'), content: '' },
   ]);
+  let [productImages, setProductImages] = useState<Array<string>>([]);
 
   let showToast = (duration: number) => {
     setIsToastVisible(true);
@@ -380,8 +490,19 @@ export default function ProductDetailsScene() {
         let newOptions = [...options, ...productByHandle.options];
         setOptions(newOptions);
         setInfoTabs([
-          ...[{ title: 'Description', content: productByHandle.description }],
+          ...[
+            {
+              title: t('Description'),
+              content:
+                productByHandle.description !== ''
+                  ? productByHandle.description
+                  : t('No Description Yet'),
+            },
+          ],
         ]);
+        setProductImages(
+          productByHandle.images.edges.map((item) => item.node.originalSrc),
+        );
         let defaultOptions: OptionsData = {};
         for (let { name, values } of newOptions) {
           defaultOptions[name] = values[0];
@@ -408,6 +529,7 @@ export default function ProductDetailsScene() {
       onChangeQuantity={setQuantity}
       onAddToCartPress={onAddToCart}
       product={product}
+      productImages={productImages}
       options={options}
       isLoading={isLoading}
       infoTabs={infoTabs}
@@ -425,6 +547,7 @@ export default function ProductDetailsScene() {
       onChangeQuantity={setQuantity}
       onAddToCartPress={onAddToCart}
       product={product}
+      productImages={productImages}
       options={options}
       isLoading={isLoading}
       infoTabs={infoTabs}

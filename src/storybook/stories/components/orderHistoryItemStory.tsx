@@ -18,18 +18,17 @@ export default function orderHistoryItemStory() {
         subtotalPayment: 24,
         totalPayment: 58.27,
         address: {
-          address1:
-            'Jl. AR. Hakim No.12 RT.005/RW.002, Sukaasih Kec. Tangerang Kota Tangerang Banten 15111',
-          city: 'Tangerang',
-          country: 'Indonesia',
+          address1: '3101 Park Blvd',
+          city: 'Palo Alto',
+          country: 'United States',
           id:
             'Z2lkOi8vc2hvcGlmeS9NYWlsaW5nQWRkcmVzcy81NTgzNjQ2OTE2NzQ0P21vZGVsX25hbWU9QWRkcmVzcw==',
-          name: 'Vincent Dharma',
-          firstName: 'Vincent',
-          lastName: 'Dharma',
-          phone: '0896-5136-1203',
-          province: 'Banten',
-          zip: '15111',
+          name: 'Charles Barnes',
+          firstName: 'Charles',
+          lastName: 'Barnes',
+          phone: '801-429-4555',
+          province: 'California',
+          zip: '94301',
         },
         lineItems: [
           {

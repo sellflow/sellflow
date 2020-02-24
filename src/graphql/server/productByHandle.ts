@@ -10,6 +10,16 @@ export const GET_PRODUCT_BY_HANDLE = gql`
         name
         values
       }
+      images(first: 5) {
+        edges {
+          node {
+            id
+            originalSrc
+            transformedSrc
+            altText
+          }
+        }
+      }
     }
   }
 `;

@@ -45,6 +45,7 @@
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-gesture-handler": "^1.5.3",
+    "react-native-image-zoom-viewer": "^2.2.27",
     "react-native-paper": "^3.4.0",
     "react-native-reanimated": "^1.4.0",
     "react-native-safe-area-context": "0.6.0",

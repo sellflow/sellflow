@@ -13,6 +13,7 @@ import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { AddressItem } from '../types/types';
 import formatAddress from '../helpers/formatAddress';
+import { getFullName } from '../helpers/getFullName';
 
 type Props = {
   data: AddressItem;
@@ -26,12 +27,14 @@ export default function ManageAddress(props: Props) {
   let { data, style, onPressSetPrimary, onPressEdit, onPressDelete } = props;
   let { id, firstName, lastName, default: primary, phone } = data;
 
+  let fullName = getFullName(firstName, lastName);
+
   let [showMenu, setShowMenu] = useState(false);
 
   return (
     <TouchableOpacity style={[styles.container, style]}>
       <View style={styles.header}>
-        <Text style={styles.label}>{firstName + ' ' + lastName}</Text>
+        <Text style={styles.label}>{fullName}</Text>
         <Menu
           style={[styles.menuBox, styles.padding]}
           visible={showMenu}
