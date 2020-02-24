@@ -6,6 +6,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   TextInput as TextInputType,
+  Platform,
 } from 'react-native';
 import {
   Text,
@@ -169,10 +170,9 @@ export default function AddEditAddressScene() {
   return (
     <View style={styles.flex}>
       <KeyboardAvoidingView
-        enabled
-        behavior="padding"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.flex}
-        keyboardVerticalOffset={60}
+        keyboardVerticalOffset={Platform.select({ ios: 60, android: 0 })}
       >
         <Portal>
           <Modal
@@ -318,17 +318,17 @@ export default function AddEditAddressScene() {
             containerStyle={styles.textInput}
           />
         </ScrollView>
-        <Button
-          style={[defaultButton, styles.buttonStyle]}
-          labelStyle={defaultButtonLabel}
-          onPress={onPressSaveAddress}
-          loading={loadingAddNewAddress || loadingEditAddress}
-        >
-          <Text weight="medium" style={styles.buttonText}>
-            {t('Save Address')}
-          </Text>
-        </Button>
       </KeyboardAvoidingView>
+      <Button
+        style={[defaultButton, styles.buttonStyle]}
+        labelStyle={defaultButtonLabel}
+        onPress={onPressSaveAddress}
+        loading={loadingAddNewAddress || loadingEditAddress}
+      >
+        <Text weight="medium" style={styles.buttonText}>
+          {t('Save Address')}
+        </Text>
+      </Button>
     </View>
   );
 }
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    flex: 1,
+    // flex: 1,
     paddingHorizontal: 24,
   },
   headerRightText: {

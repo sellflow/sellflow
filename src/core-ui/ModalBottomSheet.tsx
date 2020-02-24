@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Keyboard, Animated } from 'react-native';
 import { Modal, Portal, Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
@@ -44,9 +44,42 @@ export default function ModalBottomSheet(props: Props) {
     children,
   } = props;
 
+  let keyboardHeight = new Animated.Value(0);
+
+  useEffect(() => {
+    let keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => {
+      Animated.timing(keyboardHeight, {
+        duration: event.duration,
+        toValue: event.endCoordinates.height,
+      }).start();
+    });
+    let keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => {
+      Animated.timing(keyboardHeight, {
+        duration: event.duration,
+        toValue: 0,
+      }).start();
+    });
+
+    return () => {
+      keyboardWillShow.remove();
+      keyboardWillHide.remove();
+    };
+  }, [keyboardHeight]);
+
   let modalStyle = () => {
     if (dimensions.screenSize === ScreenSize.Small) {
-      return [styles.modalPhone];
+      return styles.modalPhone;
+    } else {
+      return [styles.modalTablet, { width, height }];
+    }
+  };
+  let animatedViewStyle = () => {
+    if (dimensions.screenSize === ScreenSize.Small) {
+      return [
+        {
+          paddingBottom: keyboardHeight,
+        },
+      ];
     } else {
       return [styles.modalTablet, { width, height }];
     }
@@ -57,14 +90,16 @@ export default function ModalBottomSheet(props: Props) {
       <Modal
         visible={isModalVisible}
         onDismiss={toggleModal}
-        contentContainerStyle={[styles.defaultModal, modalStyle()]}
+        contentContainerStyle={modalStyle()}
       >
-        <ModalHeader
-          title={title}
-          headerLeft={headerLeft}
-          headerRight={headerRight}
-        />
-        {children}
+        <Animated.View style={[styles.defaultModal, animatedViewStyle()]}>
+          <ModalHeader
+            title={title}
+            headerLeft={headerLeft}
+            headerRight={headerRight}
+          />
+          {children}
+        </Animated.View>
       </Modal>
     </Portal>
   );
@@ -73,7 +108,6 @@ export default function ModalBottomSheet(props: Props) {
 const styles = StyleSheet.create({
   defaultModal: {
     backgroundColor: COLORS.white,
-    justifyContent: 'flex-start',
   },
   modalPhone: {
     position: 'absolute',

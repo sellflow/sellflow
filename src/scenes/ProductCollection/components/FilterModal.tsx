@@ -25,7 +25,7 @@ export default function FilterModal(props: Props) {
     maxPrice,
     initialSliderValues,
     onClear,
-    sliderStep,
+    sliderStep = 5,
   } = props;
 
   let priceSliderRef = useRef<PriceSliderRefObject>(null);
