@@ -5,6 +5,7 @@ import {
   ScrollView,
   SafeAreaView,
   Image,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Text, Button, TextInput, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
@@ -19,6 +20,7 @@ import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../generated/server/ShoppingCartCreate';
 import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../generated/server/ShoppingCartReplaceItem';
+import { ShoppingCartDiscountCodeApply_checkoutDiscountCodeApplyV2_checkout as CheckoutDiscountApply } from '../generated/server/ShoppingCartDiscountCodeApply';
 import { Cart, LineItem, OrderItem as OrderItemType } from '../types/types';
 import {
   useGetCart,
@@ -29,18 +31,23 @@ import {
   useShopifyCreateCheckout,
   useShopifyShoppingCartReplaceItems,
   useShopifyCartCustomerAssociate,
+  useShopifyCartDiscountApply,
+  useShopifyCartDiscountRemove,
 } from '../hooks/api/useShopifyCart';
 import { cartPlaceholder } from '../../assets/images';
 import { mapToLineItems } from '../helpers/mapToLineItems';
 import Toast from '../core-ui/Toast';
 import { useAuth } from '../helpers/useAuth';
 
-function extractDataCheckout(checkout: CheckoutCreate | CheckoutReplace): Cart {
+function extractDataCheckout(
+  checkout: CheckoutCreate | CheckoutReplace | CheckoutDiscountApply,
+): Cart {
   let id = checkout.id;
   let lineItemsPrice = Number(checkout.lineItemsSubtotalPrice.amount);
   let subtotalPrice = Number(checkout.subtotalPriceV2.amount);
   let totalPrice = Number(checkout.paymentDueV2.amount);
   let lineItems: Array<LineItem> = mapToLineItems(checkout.lineItems);
+
   return {
     id,
     lineItems,
@@ -81,7 +88,6 @@ function BottomButton(props: BottomButtonProps) {
 }
 
 export default function ShoppingCartScene() {
-  let [firstLoading, setFirstLoading] = useState<boolean>(true);
   let { authToken } = useAuth();
   let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'ShoppingCart'>>();
@@ -94,8 +100,32 @@ export default function ShoppingCartScene() {
     lineItems: [],
   });
   let [cartID, setCartID] = useState('');
-
+  let [firstLoading, setFirstLoading] = useState<boolean>(true);
+  let [voucherCode, setVoucherCode] = useState<string>('');
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
+
+  let setVoucherCodeValue = (value: string) => {
+    setVoucherCode(value);
+  };
+
+  let {
+    shoppingCartDiscountApply,
+    loading: DiscountCodeApplyLoading,
+  } = useShopifyCartDiscountApply({
+    onCompleted: ({ checkoutDiscountCodeApplyV2 }) => {
+      if (checkoutDiscountCodeApplyV2 && checkoutDiscountCodeApplyV2.checkout) {
+        setCartData(extractDataCheckout(checkoutDiscountCodeApplyV2.checkout));
+      }
+    },
+  });
+
+  let { shoppingCartDiscountRemove } = useShopifyCartDiscountRemove();
+
+  let onAddVoucherCode = () => {
+    shoppingCartDiscountApply({
+      variables: { checkoutId: cartID, discountCode: voucherCode },
+    });
+  };
 
   let paymentData: PaymentData = {
     subtotal: cartData.lineItemsPrice,
@@ -168,6 +198,9 @@ export default function ShoppingCartScene() {
             return { variantId, quantity };
           },
         );
+        await shoppingCartDiscountRemove({
+          variables: { checkoutId: shoppingCart.id },
+        });
         await shoppingCartReplaceItems({
           variables: {
             checkoutID: shoppingCart.id,
@@ -223,7 +256,15 @@ export default function ShoppingCartScene() {
     ));
   };
 
-  let renderPaymentView = () => <Payment data={paymentData} />;
+  let renderPaymentView = () => (
+    <Payment
+      data={paymentData}
+      onVoucherCodeChange={setVoucherCodeValue}
+      voucherCode={voucherCode}
+      onAddCode={onAddVoucherCode}
+      applyLoading={DiscountCodeApplyLoading}
+    />
+  );
 
   if (firstLoading) {
     return (
@@ -284,24 +325,31 @@ export default function ShoppingCartScene() {
         </SafeAreaView>
       ) : (
         <SafeAreaView style={styles.flex}>
-          <ScrollView
+          <KeyboardAvoidingView
+            enabled
+            behavior="padding"
             style={styles.flex}
-            contentContainerStyle={[
-              screenSize === ScreenSize.Small
-                ? styles.scrollContentSmall
-                : styles.scrollContentMedium,
-              styles.flexGrow,
-            ]}
+            keyboardVerticalOffset={100}
           >
-            {renderCartView()}
-            <View style={styles.verticalPaymentView}>
-              {renderPaymentView()}
-              <BottomButton
-                label={t('checkout')}
-                onPressAction={() => navigate('Checkout', { cartData })}
-              />
-            </View>
-          </ScrollView>
+            <ScrollView
+              style={styles.flex}
+              contentContainerStyle={[
+                screenSize === ScreenSize.Small
+                  ? styles.scrollContentSmall
+                  : styles.scrollContentMedium,
+                styles.flexGrow,
+              ]}
+            >
+              {renderCartView()}
+              <View style={styles.verticalPaymentView}>
+                {renderPaymentView()}
+                <BottomButton
+                  label={t('checkout')}
+                  onPressAction={() => navigate('Checkout', { cartData })}
+                />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </SafeAreaView>
       )}
       <Toast
@@ -317,6 +365,10 @@ export default function ShoppingCartScene() {
 
 type PaymentProps = {
   data: PaymentData;
+  voucherCode: string;
+  onVoucherCodeChange: (value: string) => void;
+  onAddCode: () => void;
+  applyLoading: boolean;
 };
 type PaymentData = {
   total: number;
@@ -324,7 +376,15 @@ type PaymentData = {
 };
 
 function Payment(props: PaymentProps) {
-  let { total, subtotal } = props.data;
+  let {
+    data,
+    onVoucherCodeChange,
+    voucherCode,
+    onAddCode,
+    applyLoading,
+  } = props;
+  let { total, subtotal } = data;
+
   return (
     <>
       <View style={styles.voucherCodeContainer}>
@@ -334,11 +394,15 @@ function Payment(props: PaymentProps) {
             containerStyle={styles.voucherTextInputContainer}
             autoCapitalize="none"
             returnKeyType="done"
+            value={voucherCode}
+            onChangeText={onVoucherCodeChange}
           />
           <Button
             style={defaultButton}
+            disabled={applyLoading}
             contentStyle={styles.addButton}
             labelStyle={defaultButtonLabel}
+            onPress={onAddCode}
           >
             {t('Add')}
           </Button>
@@ -352,7 +416,7 @@ function Payment(props: PaymentProps) {
         <View style={styles.paymentDetailsContainer}>
           <Text style={styles.mediumText}>{t('Discount')}</Text>
           <Text style={styles.mediumText}>
-            -{formatCurrency(total - subtotal)}
+            -{formatCurrency(subtotal - total)}
           </Text>
         </View>
         <View style={[styles.paymentDetailsContainer, styles.border]}>

@@ -218,3 +218,96 @@ export const SHOPPING_CART_CUSTOMER_ASSOCIATE = gql`
     }
   }
 `;
+
+export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
+  mutation ShoppingCartDiscountCodeApply(
+    $checkoutId: ID!
+    $discountCode: String!
+  ) {
+    checkoutDiscountCodeApplyV2(
+      checkoutId: $checkoutId
+      discountCode: $discountCode
+    ) {
+      checkout {
+        webUrl
+        lineItemsSubtotalPrice {
+          amount
+        }
+        id
+        subtotalPriceV2 {
+          amount
+          currencyCode
+        }
+        paymentDueV2 {
+          amount
+        }
+        totalPriceV2 {
+          amount
+        }
+        shippingLine {
+          priceV2 {
+            amount
+          }
+        }
+        requiresShipping
+        availableShippingRates {
+          ready
+          shippingRates {
+            handle
+            priceV2 {
+              amount
+            }
+            title
+          }
+        }
+        taxesIncluded
+        lineItems(first: 20) {
+          edges {
+            node {
+              discountAllocations {
+                allocatedAmount {
+                  amount
+                }
+              }
+              title
+              quantity
+              variant {
+                id
+                selectedOptions {
+                  name
+                  value
+                }
+                image {
+                  originalSrc
+                  transformedSrc
+                }
+                compareAtPriceV2 {
+                  amount
+                }
+                priceV2 {
+                  amount
+                }
+              }
+            }
+          }
+        }
+      }
+      checkoutUserErrors {
+        message
+      }
+    }
+  }
+`;
+
+export const SHOPPING_CART_DISCOUNT_CODE_REMOVE = gql`
+  mutation ShoppingCartDiscountCodeRemove($checkoutId: ID!) {
+    checkoutDiscountCodeRemove(checkoutId: $checkoutId) {
+      checkout {
+        id
+      }
+      checkoutUserErrors {
+        message
+      }
+    }
+  }
+`;

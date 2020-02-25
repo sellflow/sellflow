@@ -8,6 +8,8 @@ import {
   SHOPPING_CART_CREATE,
   SHOPPING_CART_UPDATE_ADDRESS,
   SHOPPING_CART_CUSTOMER_ASSOCIATE,
+  SHOPPING_CART_DISCOUNT_CODE_APPLY,
+  SHOPPING_CART_DISCOUNT_CODE_REMOVE,
 } from '../../graphql/server/shoppingCart';
 import {
   ShoppingCartCreate,
@@ -21,6 +23,14 @@ import {
   ShoppingCartCustomerAssociate,
   ShoppingCartCustomerAssociateVariables,
 } from '../../generated/server/ShoppingCartCustomerAssociate';
+import {
+  ShoppingCartDiscountCodeApply,
+  ShoppingCartDiscountCodeApplyVariables,
+} from '../../generated/server/ShoppingCartDiscountCodeApply';
+import {
+  ShoppingCartDiscountCodeRemove,
+  ShoppingCartDiscountCodeRemoveVariables,
+} from '../../generated/server/ShoppingCartDiscountCodeRemove';
 
 function useShopifyShoppingCartReplaceItems(
   options: MutationHookOptions<
@@ -75,9 +85,51 @@ function useShopifyCartCustomerAssociate(
   };
 }
 
+function useShopifyCartDiscountApply(
+  options?: MutationHookOptions<
+    ShoppingCartDiscountCodeApply,
+    ShoppingCartDiscountCodeApplyVariables
+  >,
+) {
+  let [shoppingCartDiscountApply, { data, loading }] = useMutation<
+    ShoppingCartDiscountCodeApply,
+    ShoppingCartDiscountCodeApplyVariables
+  >(SHOPPING_CART_DISCOUNT_CODE_APPLY, {
+    ...options,
+  });
+
+  return {
+    shoppingCartDiscountApply,
+    data,
+    loading,
+  };
+}
+
+function useShopifyCartDiscountRemove(
+  options?: MutationHookOptions<
+    ShoppingCartDiscountCodeRemove,
+    ShoppingCartDiscountCodeRemoveVariables
+  >,
+) {
+  let [shoppingCartDiscountRemove, { data, loading }] = useMutation<
+    ShoppingCartDiscountCodeRemove,
+    ShoppingCartDiscountCodeRemoveVariables
+  >(SHOPPING_CART_DISCOUNT_CODE_REMOVE, {
+    ...options,
+  });
+
+  return {
+    shoppingCartDiscountRemove,
+    data,
+    loading,
+  };
+}
+
 export {
   useShopifyCreateCheckout,
   useShopifyShoppingCartReplaceItems,
   useShopifyCartUpdateAddress,
   useShopifyCartCustomerAssociate,
+  useShopifyCartDiscountApply,
+  useShopifyCartDiscountRemove,
 };

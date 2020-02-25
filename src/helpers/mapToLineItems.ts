@@ -19,7 +19,7 @@ function getEdges(i: CompatibleType): Array<MyEdge> {
 export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
   return getEdges(lineItems).map(
     ({ node }): LineItem => {
-      let { quantity, discountAllocations, title, variant } = node;
+      let { quantity, title, variant } = node;
       let image = '';
       let priceAfterDiscount = 0;
       let originalPrice = 0;
@@ -27,6 +27,10 @@ export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
       let variants = '';
       if (variant) {
         let { compareAtPriceV2, priceV2, id, selectedOptions } = variant;
+
+        let price = Number(priceV2.amount);
+        let compareAtPrice = Number(priceV2.amount);
+
         variantID = id;
         let allVariant = selectedOptions.map(
           ({ name, value }) => `${name} ${value}`,
@@ -34,18 +38,12 @@ export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
         variants = allVariant.join(', ');
         if (variant.image) {
           image = variant.image.transformedSrc;
-          if (discountAllocations.length === 0) {
-            priceAfterDiscount = compareAtPriceV2 ? Number(priceV2.amount) : 0;
-          } else {
-            priceAfterDiscount = Number(
-              discountAllocations[0].allocatedAmount.amount,
-            );
-          }
+          priceAfterDiscount = compareAtPriceV2 ? price : 0;
         }
         if (compareAtPriceV2) {
-          originalPrice = Number(compareAtPriceV2.amount);
+          originalPrice = compareAtPrice;
         } else {
-          originalPrice = Number(priceV2.amount);
+          originalPrice = price;
         }
       }
 
