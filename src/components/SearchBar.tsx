@@ -9,12 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Text, Button, IconButton, ActivityIndicator } from 'exoflex';
-import { useNavigation } from '@react-navigation/native';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { SearchInput } from '../core-ui';
-import { StackNavProp } from '../types/Navigation';
 import { Product } from '../types/types';
 import {
   useSearchProductsQuery,
@@ -22,11 +20,16 @@ import {
   useSetRecentSearch,
 } from '../hooks/api/useSearchProduct';
 
-export default function SearchBar() {
+type Props = {
+  onItemPress: (product: Product) => void;
+  onSubmit: (searchKeyword: string) => void;
+};
+
+export default function SearchBar(props: Props) {
+  let { onItemPress, onSubmit } = props;
   let [searchText, setSearchText] = useState('');
   let [debouncedSearchText, setDebouncedSearchtext] = useState('');
   let [isVisible, setVisible] = useState(false);
-  let { navigate } = useNavigation<StackNavProp<'Search'>>();
 
   let {
     searchProducts,
@@ -65,7 +68,7 @@ export default function SearchBar() {
 
     let onClickRecent = (item: Product) => setSearchText(item.title);
     let onClickResult = (item: Product) => {
-      navigate('ProductDetails', { product: item as Product });
+      onItemPress(item);
       setVisible(false);
     };
 
@@ -113,9 +116,7 @@ export default function SearchBar() {
                     },
                   });
                   setVisible(false);
-                  navigate('ProductCollection', {
-                    searchKeyword: searchText,
-                  });
+                  onSubmit(searchText);
                 }
               }}
             />

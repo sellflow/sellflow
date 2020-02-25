@@ -20,6 +20,7 @@ import {
   EditProfileScene,
   PaymentScene,
   AuthScene,
+  SearchResultsScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -161,15 +162,20 @@ export default function StackNavigator({
       <Stack.Screen
         name="ProductCollection"
         component={ProductCollectionScene}
-        options={({ navigation, route }) => ({
-          title:
-            (route.params.collection && route.params.collection.title) ||
-            'Search Results',
+        options={({ route }) => ({
+          title: route.params.collection.title,
           headerRight: () => (
-            <HeaderIconButton
-              icon="magnify"
-              onPress={() => navigation.navigate('Search')}
-            />
+            <HeaderIconButton icon="magnify" onPress={() => {}} />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="SearchResults"
+        component={SearchResultsScene}
+        options={() => ({
+          title: t('Search Results'),
+          headerRight: () => (
+            <HeaderIconButton icon="magnify" onPress={() => {}} />
           ),
         })}
       />

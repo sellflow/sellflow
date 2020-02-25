@@ -18,6 +18,13 @@ export default function HomeScene() {
   let numColumns = useColumns();
 
   let { loading, data: homeData } = useCollectionAndProductQuery();
+  let onItemPress = (product: Product) => {
+    navigate('ProductDetails', { product });
+  };
+  let onSubmit = (searchKeyword: string) =>
+    navigate('SearchResults', {
+      searchKeyword,
+    });
 
   if (loading || !homeData) {
     return (
@@ -73,7 +80,7 @@ export default function HomeScene() {
 
   return (
     <View style={styles.flex}>
-      <SearchBar />
+      <SearchBar onItemPress={onItemPress} onSubmit={onSubmit} />
       <ProductList
         ListHeaderComponent={renderHeader}
         data={productData}

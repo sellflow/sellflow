@@ -15,6 +15,7 @@ import CheckoutScene from './CheckoutScene';
 import EditProfileScene from './EditProfileScene';
 import PaymentScene from './Payment/PaymentScene';
 import AuthScene from './AuthScene';
+import SearchResultsScene from './ProductCollection/SearchResultsScene';
 
 export {
   HomeScene,
@@ -34,4 +35,5 @@ export {
   EditProfileScene,
   PaymentScene,
   AuthScene,
+  SearchResultsScene,
 };

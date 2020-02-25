@@ -34,14 +34,18 @@ export type StackParamList = {
   };
   Wishlist: undefined;
   Profile: undefined;
-  ProductCollection: CollectionParams;
+  ProductCollection: {
+    collection: CategoryItem;
+  };
+  SearchResults: {
+    searchKeyword: string;
+  };
   Register: undefined;
   Login: undefined;
   ForgotPassword: undefined;
   Checkout: { cartData: Cart };
   ProductDetails: { product: Product };
   ShoppingCart: undefined;
-  Search: undefined;
   EditProfile: { customerAccessToken: string };
   Payment: undefined;
   Auth: { initialRouteKey: string };
@@ -51,11 +55,6 @@ export type TabParamList = {
   HomeTab: undefined;
   WishlistTab: undefined;
   ProfileTab: undefined;
-};
-
-export type CollectionParams = {
-  collection?: CategoryItem;
-  searchKeyword?: string;
 };
 
 export type StackRouteName = keyof StackParamList;
