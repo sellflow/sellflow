@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'exoflex';
 import { Route } from '@react-navigation/native';
@@ -29,6 +29,7 @@ import {
   StackRouteName,
   TabRouteName,
 } from '../types/Navigation';
+import { useCartFilled } from '../helpers/cartFilled';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -39,6 +40,23 @@ type HeaderIconButtonProps = {
 
 function HeaderIconButton(props: HeaderIconButtonProps) {
   let { icon, onPress } = props;
+  let { isFilled, numOfItems } = useCartFilled();
+  if (icon === 'cart' && isFilled) {
+    return (
+      <View style={styles.flex}>
+        <IconButton
+          icon={icon}
+          onPress={onPress}
+          color={COLORS.primaryColor}
+          style={styles.headerButton}
+        />
+        <View style={styles.cartBadge}>
+          <Text style={styles.badgeText}>{numOfItems}</Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <IconButton
       icon={icon}
@@ -198,7 +216,25 @@ export default function StackNavigator({
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   headerButton: {
     marginRight: 8,
+  },
+  cartBadge: {
+    width: 14,
+    height: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.red,
+    borderRadius: 7,
+    position: 'absolute',
+    top: 5,
+    right: 12,
+  },
+  badgeText: {
+    fontSize: 10,
+    color: COLORS.white,
   },
 });
