@@ -54,6 +54,8 @@ export default function SearchResultsScene() {
     <ProductsView
       products={results}
       onItemPress={onItemPress}
+      hasMore={false}
+      onEndReached={() => {}}
       sortProps={{ radioButtonValue, onPressRadioButton }}
       filterProps={{
         priceRange,

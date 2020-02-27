@@ -17,6 +17,7 @@ export const SEARCH_RESULTS = gql`
   query SearchResults($searchText: String!) {
     products(first: 10, query: $searchText) {
       edges {
+        cursor
         node {
           id
           title

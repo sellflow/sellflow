@@ -3,7 +3,7 @@ import { useDimensions, ScreenSize } from './dimensions';
 export const NUM_COLUMNS = {
   SMALL: 2,
   MEDIUM: 4,
-  LARGE: 5,
+  LARGE: 3,
 };
 
 export function useColumns() {

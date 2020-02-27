@@ -10,6 +10,7 @@ import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { ProductsView } from './components';
 import { Product } from '../../types/types';
+import { useColumns } from '../../helpers/columns';
 
 const DEFAULT_MAX_PRICE = 1000;
 
@@ -17,40 +18,51 @@ export default function ProductCollectionScene() {
   let { navigate, setOptions } = useNavigation<
     StackNavProp<'ProductCollection'>
   >();
-  let [radioButtonValue, setRadioButtonValue] = useState('');
+  let [radioButtonValue, setRadioButtonValue] = useState<string>('');
   let [priceRange, setPriceRange] = useState<[number, number]>([
     0,
     DEFAULT_MAX_PRICE,
   ]);
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   const collectionHandle = params.collection.handle;
+  let numColumns = useColumns();
+  let first = numColumns * 5;
 
-  let { data: collection, loading, refetch } = useCollectionQuery(
-    collectionHandle,
-    priceRange,
-  );
+  let {
+    collection,
+    loading,
+    hasMore,
+    refetch,
+    isFetchingMore,
+  } = useCollectionQuery(collectionHandle, first, priceRange);
 
   let onClearFilter = () => setPriceRange([0, DEFAULT_MAX_PRICE]);
   let onSetFilter = (values: [number, number]) => setPriceRange(values);
   let onPressRadioButton = (newValue: string) => {
     setRadioButtonValue(newValue);
-
-    let sortKey = ProductCollectionSortKeys.BEST_SELLING;
-    let reverse = false;
-
-    if (newValue === PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH) {
-      sortKey = ProductCollectionSortKeys.PRICE;
-    } else if (newValue === PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW) {
-      sortKey = ProductCollectionSortKeys.PRICE;
-      reverse = true;
-    }
-
-    refetch({
+    let { sortKey, reverse } = getSortKeys(newValue);
+    refetch('sort', {
       collectionHandle,
+      first,
+      after: null,
       sortKey,
       reverse,
     });
   };
+  let getSortKeys = (value: string) => {
+    let sortKey = ProductCollectionSortKeys.BEST_SELLING;
+    let reverse = false;
+
+    if (value === PRODUCT_SORT_VALUES.PRICE_LOW_TO_HIGH) {
+      sortKey = ProductCollectionSortKeys.PRICE;
+    } else if (value === PRODUCT_SORT_VALUES.PRICE_HIGH_TO_LOW) {
+      sortKey = ProductCollectionSortKeys.PRICE;
+      reverse = true;
+    }
+
+    return { sortKey, reverse };
+  };
+
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { product });
   };
@@ -64,8 +76,17 @@ export default function ProductCollectionScene() {
       gestureEnabled: true,
     });
   };
+  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
+    if (distanceFromEnd > 0 && !isFetchingMore) {
+      refetch('scroll', {
+        collectionHandle,
+        first,
+        after: collection[collection.length - 1].cursor || null,
+      });
+    }
+  };
 
-  if (loading) {
+  if (loading && !isFetchingMore) {
     return <ActivityIndicator style={[styles.container, styles.center]} />;
   }
 
@@ -73,6 +94,8 @@ export default function ProductCollectionScene() {
     <ProductsView
       products={collection}
       onItemPress={onItemPress}
+      onEndReached={onEndReached}
+      hasMore={hasMore}
       sortProps={{ radioButtonValue, onPressRadioButton }}
       filterProps={{
         priceRange,

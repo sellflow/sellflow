@@ -55,6 +55,7 @@ export type AddressItem = {
 
 export type Product = {
   id: string;
+  cursor?: string;
   image: string;
   title: string;
   handle: string;

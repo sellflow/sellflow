@@ -13,6 +13,7 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
     }
     products(first: 10) {
       edges {
+        cursor
         node {
           id
           title

@@ -5,13 +5,21 @@ export const GET_COLLECTION = gql`
     $collectionHandle: String!
     $sortKey: ProductCollectionSortKeys
     $reverse: Boolean
+    $first: Int!
+    $after: String
   ) {
     collectionByHandle(handle: $collectionHandle) {
       id
       title
       handle
-      products(first: 10, sortKey: $sortKey, reverse: $reverse) {
+      products(
+        first: $first
+        after: $after
+        sortKey: $sortKey
+        reverse: $reverse
+      ) {
         edges {
+          cursor
           node {
             id
             title

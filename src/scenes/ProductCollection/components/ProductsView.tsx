@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Text, Button } from 'exoflex';
+import { Text, Button, ActivityIndicator } from 'exoflex';
 
 import SortModal from './SortModal';
 import FilterModal from './FilterModal';
@@ -28,7 +28,9 @@ type FilterProps = {
 
 type Props = {
   products: Array<Product>;
+  hasMore: boolean;
   onItemPress: (product: Product) => void;
+  onEndReached: (info: { distanceFromEnd: number }) => void;
   sortProps: SortProps;
   filterProps: FilterProps;
 };
@@ -36,7 +38,14 @@ type Props = {
 const DEFAULT_MAX_PRICE = 1000;
 
 export default function ProductsView(props: Props) {
-  let { onItemPress, products, sortProps, filterProps } = props;
+  let {
+    onItemPress,
+    products,
+    sortProps,
+    filterProps,
+    onEndReached,
+    hasMore,
+  } = props;
   let { radioButtonValue, onPressRadioButton } = sortProps;
   let {
     priceRange,
@@ -136,9 +145,14 @@ export default function ProductsView(props: Props) {
         </Text>
         <ProductList
           data={products}
-          numColumns={isScreenSizeLarge ? numColumns - 2 : numColumns}
+          numColumns={numColumns}
           contentContainerStyle={styles.productList}
           onItemPress={onItemPress}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.25}
+          ListFooterComponent={() => {
+            return hasMore ? <ActivityIndicator /> : null;
+          }}
         />
       </View>
       {!isScreenSizeLarge && (

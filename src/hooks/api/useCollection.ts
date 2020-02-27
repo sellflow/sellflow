@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { Product } from '../../types/types';
@@ -27,6 +28,7 @@ function getProducts(
       ) {
         filteredData.push({
           id: product.id,
+          cursor: item.cursor,
           image: firstImage ? firstImage.node.transformedSrc.toString() : '',
           title: product.title,
           handle: product.handle,
@@ -44,20 +46,68 @@ function getProducts(
 
 function useCollectionQuery(
   collectionHandle: string,
+  first: number,
   priceRange: [number, number],
 ) {
-  let { data: collectionData, loading, refetch } = useQuery<
+  let [isInitFetching, setInitFetching] = useState(true);
+  let [collection, setCollection] = useState<Array<Product>>([]);
+  let isFetchingMore = useRef(false);
+  let hasMore = useRef(true);
+
+  let { data, loading, refetch: refetchQuery } = useQuery<
     GetCollection,
     GetCollectionVariables
   >(GET_COLLECTION, {
     variables: {
       collectionHandle,
+      first,
       sortKey: ProductCollectionSortKeys.BEST_SELLING,
     },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
   });
-  let data = getProducts(collectionData, priceRange);
 
-  return { data, loading, refetch };
+  let refetch = async (
+    type: 'sort' | 'scroll',
+    variables: GetCollectionVariables | undefined,
+  ) => {
+    isFetchingMore.current = type === 'scroll';
+    let { data } = await refetchQuery(variables);
+    let moreCollection = getProducts(data, priceRange);
+
+    if (type === 'sort') {
+      setCollection(moreCollection);
+    } else {
+      if (moreCollection.length <= 0) {
+        hasMore.current = false;
+      } else {
+        hasMore.current = true;
+      }
+      setCollection([...collection, ...moreCollection]);
+    }
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      isFetchingMore.current = false;
+    }
+    if (isInitFetching && !!data) {
+      let newCollection = getProducts(data, priceRange);
+      if (newCollection.length < first) {
+        hasMore.current = false;
+      }
+      setCollection(newCollection);
+      setInitFetching(false);
+    }
+  }, [loading, isInitFetching]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return {
+    collection,
+    loading,
+    hasMore: hasMore.current,
+    isFetchingMore: isFetchingMore.current,
+    refetch,
+  };
 }
 
 function useCollectionAndProductQuery() {

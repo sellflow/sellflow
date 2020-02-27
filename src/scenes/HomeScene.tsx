@@ -45,6 +45,7 @@ export default function HomeScene() {
   // TODO: What about discount?
   let productData: Array<Product> = homeData.products.edges.map((item) => ({
     id: item.node.id,
+    cursor: item.cursor,
     image: item.node.images.edges[0].node.originalSrc,
     title: item.node.title,
     handle: item.node.handle,
@@ -84,7 +85,9 @@ export default function HomeScene() {
       <ProductList
         ListHeaderComponent={renderHeader}
         data={productData}
-        numColumns={numColumns}
+        numColumns={
+          screenSize === ScreenSize.Large ? numColumns + 2 : numColumns
+        }
         onItemPress={(product) => navigate('ProductDetails', { product })}
         columnWrapperStyle={styles.itemWrapperStyle}
       />

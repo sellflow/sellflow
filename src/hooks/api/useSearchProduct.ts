@@ -20,6 +20,7 @@ export default function getProducts(
       let product = item.node;
       return {
         id: product.id,
+        cursor: item.cursor,
         image: product.images.edges[0].node.transformedSrc.toString(),
         title: product.title,
         productType: product.productType,
