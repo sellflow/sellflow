@@ -177,10 +177,10 @@ export default function ShoppingCartScene() {
     showToast(1100);
   };
 
-  let associateCustomerWithCart = async () => {
+  let associateCustomerWithCart = async (id: string) => {
     if (authToken) {
       await shoppingCartCustomerAssociate({
-        variables: { checkoutId: cartID, customerAccessToken: authToken },
+        variables: { checkoutId: id, customerAccessToken: authToken },
       });
     }
   };
@@ -231,10 +231,12 @@ export default function ShoppingCartScene() {
     },
     onCompleted: async ({ checkoutCreate }) => {
       if (checkoutCreate && checkoutCreate.checkout) {
-        await associateCustomerWithCart();
+        let { id } = checkoutCreate.checkout;
+        setCartID(id);
+        await associateCustomerWithCart(id);
         setCartData(extractDataCheckout(checkoutCreate.checkout));
         await setShoppingCartID({
-          variables: { id: checkoutCreate.checkout.id },
+          variables: { id },
         });
         setFirstLoading(false);
       }
