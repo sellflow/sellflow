@@ -49,9 +49,7 @@ export default function HomeScene() {
     image: item.node.images.edges[0].node.originalSrc,
     title: item.node.title,
     handle: item.node.handle,
-    price: Number(
-      item.node.presentmentPriceRanges.edges[0].node.minVariantPrice.amount,
-    ),
+    price: Number(item.node.priceRange.minVariantPrice.amount),
   }));
 
   let renderHeader = () => (

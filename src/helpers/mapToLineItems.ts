@@ -29,13 +29,15 @@ export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
         let { compareAtPriceV2, priceV2, id, selectedOptions } = variant;
 
         let price = Number(priceV2.amount);
-        let compareAtPrice = Number(priceV2.amount);
+        let compareAtPrice = Number(
+          compareAtPriceV2 ? compareAtPriceV2.amount : 0,
+        );
 
         variantID = id;
-        let allVariant = selectedOptions.map(
+        let allVariants = selectedOptions.map(
           ({ name, value }) => `${name} ${value}`,
         );
-        variants = allVariant.join(', ');
+        variants = allVariants.join(', ');
         if (variant.image) {
           image = variant.image.transformedSrc;
           priceAfterDiscount = compareAtPriceV2 ? price : 0;

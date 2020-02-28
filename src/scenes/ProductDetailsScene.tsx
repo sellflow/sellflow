@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -24,7 +24,7 @@ import { FONT_SIZE } from '../constants/fonts';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import formatCurrency from '../helpers/formatCurrency';
-import { TabView, RichRadioGroup } from '../core-ui';
+import { TabView, RichRadioGroup, DiscountBadge } from '../core-ui';
 import { TabRoute } from '../core-ui/TabView';
 import { Product, VariantQueryData } from '../types/types';
 import { StackRouteProp } from '../types/Navigation';
@@ -33,7 +33,7 @@ import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
 import { useAddToCart } from '../hooks/api/useShoppingCart';
 import {
   useGetProductByHandle,
-  useGetProductVariantID,
+  useGetProductVariant,
 } from '../hooks/api/useProduct';
 import {
   useAddItemToWishlist,
@@ -49,6 +49,8 @@ type ProductDetailsProps = {
   onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
   product: Product;
   productImages: Array<string>;
+  productDiscount: number;
+  productOriginalPrice: number;
   isToastVisible: boolean;
   options?: Options;
   infoTabs?: Tabs;
@@ -81,6 +83,7 @@ function TabPane(props: { content: string }) {
 function ProductInfo(props: {
   onSelectionOptionChange: (key: string, value: string) => void;
   selectedOptions: OptionsData;
+  productOriginalPrice: number;
   quantity: number;
   onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
   product: Product;
@@ -89,6 +92,7 @@ function ProductInfo(props: {
 }) {
   let {
     product,
+    productOriginalPrice,
     options,
     infoTabs,
     quantity,
@@ -113,9 +117,20 @@ function ProductInfo(props: {
     <>
       <View style={styles.padding}>
         <Text style={styles.productInfoTitle}>{product.title}</Text>
-        <Text weight="bold" style={styles.productInfoPrice}>
-          {formatCurrency(product.price)}
-        </Text>
+        {productOriginalPrice && productOriginalPrice > 0 ? (
+          <View style={styles.flexRow}>
+            <Text weight="bold" style={styles.productInfoPrice}>
+              {formatCurrency(product.price)}
+            </Text>
+            <Text weight="bold" style={styles.productInfoOriginalPrice}>
+              {formatCurrency(productOriginalPrice)}
+            </Text>
+          </View>
+        ) : (
+          <Text weight="bold" style={styles.productInfoPrice}>
+            {formatCurrency(product.price)}
+          </Text>
+        )}
       </View>
 
       {radioGroupRenderView}
@@ -201,6 +216,8 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
   let {
     product,
     productImages,
+    productDiscount,
+    productOriginalPrice,
     options,
     infoTabs,
     quantity,
@@ -259,9 +276,22 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
               >
                 <Image
                   source={{ uri: item }}
-                  style={{ width: dimensions.width / 2, height: '100%' }}
-                  resizeMode="contain"
+                  style={{
+                    width: dimensions.width / 2,
+                    height: '100%',
+                  }}
+                  resizeMode="cover"
                 />
+                {productDiscount > 0 ? (
+                  <DiscountBadge
+                    value={productDiscount}
+                    containerStyle={[
+                      styles.discountBox,
+                      styles.discountBoxTablet,
+                    ]}
+                    textStyle={styles.discountBoxTabletText}
+                  />
+                ) : null}
               </TouchableOpacity>
             );
           }}
@@ -279,6 +309,7 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
               quantity={quantity}
               onChangeQuantity={onChangeQuantity}
               product={product}
+              productOriginalPrice={productOriginalPrice}
               options={options ? options : []}
               infoTabs={infoTabs ? infoTabs : []}
             />
@@ -305,6 +336,8 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
   let {
     product,
     productImages,
+    productDiscount,
+    productOriginalPrice,
     options,
     infoTabs,
     quantity,
@@ -333,6 +366,8 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
   );
 
   let images = productImages.map((url) => ({ url }));
+
+  let isTablet = dimensions.screenSize === ScreenSize.Medium;
 
   return (
     <>
@@ -369,6 +404,17 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
                   }}
                   resizeMode="contain"
                 />
+                {productDiscount > 0 ? (
+                  <DiscountBadge
+                    value={productDiscount}
+                    containerStyle={
+                      isTablet
+                        ? [styles.discountBox, styles.discountBoxTablet]
+                        : styles.discountBox
+                    }
+                    textStyle={isTablet && styles.discountBoxTabletText}
+                  />
+                ) : null}
               </TouchableOpacity>
             );
           }}
@@ -382,6 +428,7 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
             quantity={quantity}
             onChangeQuantity={onChangeQuantity}
             product={product}
+            productOriginalPrice={productOriginalPrice}
             options={options ? options : []}
             infoTabs={infoTabs ? infoTabs : []}
           />
@@ -420,6 +467,9 @@ export default function ProductDetailsScene() {
     { title: t('Description'), content: '' },
   ]);
   let [productImages, setProductImages] = useState<Array<string>>([]);
+  let [productDiscount, setProductDiscount] = useState<number>(0);
+  let [productOriginalPrice, setProductOriginalPrice] = useState<number>(0);
+  let [variantID, setVariantID] = useState<string>('');
 
   let showToast = (duration: number) => {
     setIsToastVisible(true);
@@ -455,15 +505,38 @@ export default function ProductDetailsScene() {
     },
   });
 
-  let { getVariantID, loading: getVariantIDLoading } = useGetProductVariantID({
+  let { getVariant, loading: getVariantIDLoading } = useGetProductVariant({
     onCompleted: ({ productByHandle }) => {
       if (productByHandle && productByHandle.variantBySelectedOptions) {
-        let { id } = productByHandle.variantBySelectedOptions;
-        addToCart({ variables: { variantId: id, quantity } });
+        let {
+          id,
+          compareAtPriceV2,
+          priceV2,
+        } = productByHandle.variantBySelectedOptions;
+        if (compareAtPriceV2) {
+          let originalPrice = compareAtPriceV2.amount;
+          let discount =
+            ((compareAtPriceV2.amount - priceV2.amount) /
+              compareAtPriceV2.amount) *
+            100;
+          setProductDiscount(discount);
+          setProductOriginalPrice(Math.round(originalPrice));
+        }
+
+        setVariantID(id);
       }
     },
   });
+
+  useEffect(() => {
+    let queryVariantID = extractOptionsData(selectedOptions);
+    getVariant({
+      variables: { selectedOptions: queryVariantID, handle: product.handle },
+    });
+  }, [selectedOptions, getVariant, product.handle]);
+
   let isLoading = getVariantIDLoading || addToCartLoading;
+
   let { data: wishlistData } = useGetWishlistData({
     onCompleted: ({ wishlist }) => {
       if (wishlist.find((item) => item.handle === product.handle)) {
@@ -473,10 +546,7 @@ export default function ProductDetailsScene() {
   });
 
   let onAddToCart = () => {
-    let queryVariantID = extractOptionsData(selectedOptions);
-    getVariantID({
-      variables: { selectedOptions: queryVariantID, handle: product.handle },
-    });
+    addToCart({ variables: { variantId: variantID, quantity } });
   };
 
   let {
@@ -530,6 +600,8 @@ export default function ProductDetailsScene() {
       onAddToCartPress={onAddToCart}
       product={product}
       productImages={productImages}
+      productDiscount={productDiscount}
+      productOriginalPrice={productOriginalPrice}
       options={options}
       isLoading={isLoading}
       infoTabs={infoTabs}
@@ -548,6 +620,8 @@ export default function ProductDetailsScene() {
       onAddToCartPress={onAddToCart}
       product={product}
       productImages={productImages}
+      productDiscount={productDiscount}
+      productOriginalPrice={productOriginalPrice}
       options={options}
       isLoading={isLoading}
       infoTabs={infoTabs}
@@ -587,6 +661,12 @@ const styles = StyleSheet.create({
   productInfoPrice: {
     fontSize: FONT_SIZE.large,
   },
+  productInfoOriginalPrice: {
+    paddingLeft: 8,
+    color: COLORS.priceGrey,
+    fontSize: FONT_SIZE.large,
+    textDecorationLine: 'line-through',
+  },
   bottomContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -616,5 +696,18 @@ const styles = StyleSheet.create({
   textInputStyle: {
     width: 80,
     height: 48,
+  },
+  discountBox: {
+    position: 'absolute',
+    top: 24,
+    right: 0,
+  },
+  discountBoxTablet: {
+    top: 36,
+    height: 42,
+    paddingHorizontal: 12,
+  },
+  discountBoxTabletText: {
+    fontSize: FONT_SIZE.large,
   },
 });

@@ -24,8 +24,8 @@ export const GET_PRODUCT_BY_HANDLE = gql`
   }
 `;
 
-export const GET_PRODUCT_VARIANT_ID = gql`
-  query GetProductVariantID(
+export const GET_PRODUCT_VARIANT = gql`
+  query GetProductVariant(
     $selectedOptions: [SelectedOptionInput!]!
     $handle: String!
   ) {
@@ -33,6 +33,14 @@ export const GET_PRODUCT_VARIANT_ID = gql`
       id
       variantBySelectedOptions(selectedOptions: $selectedOptions) {
         id
+        compareAtPriceV2 {
+          amount
+          currencyCode
+        }
+        priceV2 {
+          amount
+          currencyCode
+        }
       }
     }
   }

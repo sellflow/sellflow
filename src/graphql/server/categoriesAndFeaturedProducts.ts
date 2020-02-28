@@ -18,6 +18,12 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
           id
           title
           handle
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
           presentmentPriceRanges(first: 1) {
             edges {
               node {

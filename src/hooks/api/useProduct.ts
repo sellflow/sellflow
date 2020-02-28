@@ -1,12 +1,12 @@
 import { QueryHookOptions, useLazyQuery, useQuery } from '@apollo/react-hooks';
 
 import {
-  GetProductVariantID,
-  GetProductVariantIDVariables,
-} from '../../generated/server/GetProductVariantID';
+  GetProductVariant,
+  GetProductVariantVariables,
+} from '../../generated/server/GetProductVariant';
 
 import {
-  GET_PRODUCT_VARIANT_ID,
+  GET_PRODUCT_VARIANT,
   GET_PRODUCT_BY_HANDLE,
 } from '../../graphql/server/productByHandle';
 
@@ -15,14 +15,14 @@ import {
   GetProductByHandleVariables,
 } from '../../generated/server/GetProductByHandle';
 
-function useGetProductVariantID(
-  options?: QueryHookOptions<GetProductVariantID, GetProductVariantIDVariables>,
+function useGetProductVariant(
+  options?: QueryHookOptions<GetProductVariant, GetProductVariantVariables>,
 ) {
-  let [getVariantID, { loading }] = useLazyQuery<
-    GetProductVariantID,
-    GetProductVariantIDVariables
-  >(GET_PRODUCT_VARIANT_ID, { ...options });
-  return { getVariantID, loading };
+  let [getVariant, { data, loading }] = useLazyQuery<
+    GetProductVariant,
+    GetProductVariantVariables
+  >(GET_PRODUCT_VARIANT, { ...options });
+  return { getVariant, data, loading };
 }
 
 function useGetProductByHandle(
@@ -35,4 +35,4 @@ function useGetProductByHandle(
   return { data, loading };
 }
 
-export { useGetProductByHandle, useGetProductVariantID };
+export { useGetProductByHandle, useGetProductVariant };
