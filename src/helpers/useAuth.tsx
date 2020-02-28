@@ -10,24 +10,26 @@ import { getToken, removeToken, saveToken } from './authToken';
 
 type Context = {
   authToken: string;
-  setAuthToken: (token: string | null) => void;
+  setAuthToken: (token: string) => void;
 };
 
 type Props = {
   children: JSX.Element;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let AuthContext = createContext<Context>(null as any);
+let AuthContext = createContext<Context>({
+  authToken: '',
+  setAuthToken: () => {},
+});
 
 export function Provider(props: Props) {
-  let [token, setToken] = useState();
+  let [token, setToken] = useState('');
   let [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getToken().then((token) => {
       // TODO: Check token expiration date
-      setToken(token);
+      setToken(token || '');
       setLoading(false);
     });
   }, []);
@@ -35,9 +37,9 @@ export function Provider(props: Props) {
   let context = useMemo(
     () => ({
       authToken: token,
-      setAuthToken: (token: string | null) => {
+      setAuthToken: (token: string) => {
         setToken(token);
-        if (token == null) {
+        if (!token) {
           removeToken();
         } else {
           saveToken(token);

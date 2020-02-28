@@ -182,9 +182,6 @@ export default function StackNavigator({
         component={ProductCollectionScene}
         options={({ route }) => ({
           title: route.params.collection.title,
-          headerRight: () => (
-            <HeaderIconButton icon="magnify" onPress={() => {}} />
-          ),
         })}
       />
       <Stack.Screen

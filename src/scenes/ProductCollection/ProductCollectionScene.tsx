@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { ActivityIndicator } from 'exoflex';
+import { ActivityIndicator, IconButton } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+import { SearchModal } from '../../components';
+import { COLORS } from '../../constants/colors';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { useCollectionQuery } from '../../hooks/api/useCollection';
 
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
-import { ProductsView } from './components';
 import { Product } from '../../types/types';
 import { useColumns } from '../../helpers/columns';
+import { ProductsView } from './components';
 
 const DEFAULT_MAX_PRICE = 1000;
 
@@ -18,6 +20,8 @@ export default function ProductCollectionScene() {
   let { navigate, setOptions } = useNavigation<
     StackNavProp<'ProductCollection'>
   >();
+
+  let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
   let [priceRange, setPriceRange] = useState<[number, number]>([
     0,
@@ -66,6 +70,10 @@ export default function ProductCollectionScene() {
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { product });
   };
+  let onSubmit = (searchKeyword: string) =>
+    navigate('SearchResults', {
+      searchKeyword,
+    });
   let onValuesChangeStart = () => {
     setOptions({
       gestureEnabled: false,
@@ -86,25 +94,43 @@ export default function ProductCollectionScene() {
     }
   };
 
+  setOptions({
+    headerRight: () => (
+      <IconButton
+        icon="magnify"
+        onPress={() => setSearchModalVisible(true)}
+        color={COLORS.primaryColor}
+      />
+    ),
+  });
+
   if (loading && !isFetchingMore) {
     return <ActivityIndicator style={[styles.container, styles.center]} />;
   }
 
   return (
-    <ProductsView
-      products={collection}
-      onItemPress={onItemPress}
-      onEndReached={onEndReached}
-      hasMore={hasMore}
-      sortProps={{ radioButtonValue, onPressRadioButton }}
-      filterProps={{
-        priceRange,
-        onClearFilter,
-        onSetFilter,
-        onValuesChangeStart,
-        onValuesChangeFinish,
-      }}
-    />
+    <>
+      <ProductsView
+        products={collection}
+        onItemPress={onItemPress}
+        onEndReached={onEndReached}
+        hasMore={hasMore}
+        sortProps={{ radioButtonValue, onPressRadioButton }}
+        filterProps={{
+          priceRange,
+          onClearFilter,
+          onSetFilter,
+          onValuesChangeStart,
+          onValuesChangeFinish,
+        }}
+      />
+      <SearchModal
+        onItemPress={onItemPress}
+        onSubmit={onSubmit}
+        isVisible={isSearchModalVisible}
+        setVisible={setSearchModalVisible}
+      />
+    </>
   );
 }
 

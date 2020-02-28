@@ -8,7 +8,7 @@ import {
   BackHandler,
   TouchableOpacity,
 } from 'react-native';
-import { Text, Button, IconButton, ActivityIndicator } from 'exoflex';
+import { Text, IconButton, ActivityIndicator } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -23,13 +23,14 @@ import {
 type Props = {
   onItemPress: (product: Product) => void;
   onSubmit: (searchKeyword: string) => void;
+  isVisible: boolean;
+  setVisible: (visible: boolean) => void;
 };
 
-export default function SearchBar(props: Props) {
-  let { onItemPress, onSubmit } = props;
-  let [searchText, setSearchText] = useState('');
-  let [debouncedSearchText, setDebouncedSearchtext] = useState('');
-  let [isVisible, setVisible] = useState(false);
+export default function SearchModal(props: Props) {
+  let [searchText, setSearchText] = useState<string>('');
+  let [debouncedSearchText, setDebouncedSearchtext] = useState<string>('');
+  let { isVisible, setVisible, onItemPress, onSubmit } = props;
 
   let {
     searchProducts,
@@ -101,6 +102,15 @@ export default function SearchBar(props: Props) {
       <Modal visible={isVisible} animated={true} animationType="slide">
         <SafeAreaView style={styles.flex}>
           <View style={styles.searchInputContainer}>
+            <IconButton
+              icon="chevron-left"
+              style={styles.closeIcon}
+              color={COLORS.primaryColor}
+              onPress={() => {
+                setVisible(false);
+                setSearchText('');
+              }}
+            />
             <SearchInput
               placeholder={t('Find by brand, category, etc.')}
               style={styles.searchInput}
@@ -117,13 +127,9 @@ export default function SearchBar(props: Props) {
                   });
                   setVisible(false);
                   onSubmit(searchText);
+                  setSearchText('');
                 }
               }}
-            />
-            <IconButton
-              icon="close"
-              style={styles.closeIcon}
-              onPress={() => setVisible(false)}
             />
           </View>
           <View style={styles.searchResultList}>
@@ -140,17 +146,6 @@ export default function SearchBar(props: Props) {
           </View>
         </SafeAreaView>
       </Modal>
-
-      <Button
-        style={styles.buttonContainer}
-        contentStyle={styles.buttonContent}
-        onPress={() => {
-          setVisible(true);
-          setSearchText('');
-        }}
-      >
-        <Text style={styles.searchText}>{t('Search')}</Text>
-      </Button>
     </>
   );
 }
@@ -168,13 +163,14 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    marginLeft: 24,
+    marginRight: 24,
     marginVertical: 16,
   },
   closeIcon: {
     // The default marginTop is 8, but the icon appears a little off-center
     // vertically, so we're bumping it by two points.
     marginTop: 10,
+    marginLeft: 16,
   },
   labelText: {
     opacity: 0.6,
@@ -187,19 +183,5 @@ const styles = StyleSheet.create({
   searchResults: {
     fontSize: FONT_SIZE.medium,
     marginBottom: 16,
-  },
-  buttonContainer: {
-    marginBottom: 16,
-    marginHorizontal: 24,
-    backgroundColor: COLORS.darkWhite,
-  },
-  buttonContent: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 12,
-  },
-  searchText: {
-    opacity: 0.6,
-    color: COLORS.black,
-    fontSize: FONT_SIZE.medium,
   },
 });

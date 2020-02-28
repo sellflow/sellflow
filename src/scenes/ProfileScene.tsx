@@ -37,7 +37,7 @@ export default function ProfileScene() {
   }
 
   let onLogout = () => {
-    setAuthToken(null);
+    setAuthToken('');
     navigate('Profile');
   };
 

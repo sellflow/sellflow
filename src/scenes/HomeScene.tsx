@@ -1,18 +1,20 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { Carousel, CategoryList } from '../core-ui';
-import { ProductList, SearchBar } from '../components';
+import { Carousel, CategoryList, SearchInput } from '../core-ui';
+import { ProductList, SearchModal } from '../components';
 import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
 import { useColumns } from '../helpers/columns';
 import { useCollectionAndProductQuery } from '../hooks/api/useCollection';
+import { COLORS } from '../constants/colors';
 
 export default function HomeScene() {
+  let [isSearchModalVisible, setSearchModalVisible] = useState(false);
   let { screenSize } = useDimensions();
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
   let numColumns = useColumns();
@@ -79,14 +81,29 @@ export default function HomeScene() {
 
   return (
     <View style={styles.flex}>
-      <SearchBar onItemPress={onItemPress} onSubmit={onSubmit} />
+      <TouchableOpacity
+        onPress={() => setSearchModalVisible(true)}
+        activeOpacity={1}
+      >
+        <View style={styles.searchInputContainer}>
+          <SearchInput
+            pointerEvents="none"
+            placeholder={t('Search')}
+            style={styles.searchInput}
+          />
+        </View>
+      </TouchableOpacity>
+      <SearchModal
+        onItemPress={onItemPress}
+        onSubmit={onSubmit}
+        isVisible={isSearchModalVisible}
+        setVisible={setSearchModalVisible}
+      />
       <ProductList
         ListHeaderComponent={renderHeader}
         data={productData}
-        numColumns={
-          screenSize === ScreenSize.Large ? numColumns + 2 : numColumns
-        }
-        onItemPress={(product) => navigate('ProductDetails', { product })}
+        numColumns={numColumns}
+        onItemPress={onItemPress}
         columnWrapperStyle={styles.itemWrapperStyle}
       />
     </View>
@@ -111,5 +128,17 @@ const styles = StyleSheet.create({
   },
   itemWrapperStyle: {
     marginHorizontal: 24,
+  },
+  searchInputContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lightGrey,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    marginHorizontal: 24,
+    marginTop: 8,
+    marginBottom: 16,
   },
 });
