@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Keyboard, Animated } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Animated } from 'react-native';
 import { Modal, Portal, Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import { useKeyboardListener } from '../helpers/keyboardListener';
 
 type Props = {
   isModalVisible: boolean;
@@ -33,6 +34,7 @@ function ModalHeader(props: HeaderProps) {
 
 export default function ModalBottomSheet(props: Props) {
   let dimensions = useDimensions();
+
   let {
     isModalVisible,
     toggleModal,
@@ -44,27 +46,7 @@ export default function ModalBottomSheet(props: Props) {
     children,
   } = props;
 
-  let keyboardHeight = new Animated.Value(0);
-
-  useEffect(() => {
-    let keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => {
-      Animated.timing(keyboardHeight, {
-        duration: event.duration,
-        toValue: event.endCoordinates.height,
-      }).start();
-    });
-    let keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => {
-      Animated.timing(keyboardHeight, {
-        duration: event.duration,
-        toValue: 0,
-      }).start();
-    });
-
-    return () => {
-      keyboardWillShow.remove();
-      keyboardWillHide.remove();
-    };
-  }, [keyboardHeight]);
+  let { keyboardHeight } = useKeyboardListener();
 
   let modalStyle = () => {
     if (dimensions.screenSize === ScreenSize.Small) {
@@ -73,6 +55,7 @@ export default function ModalBottomSheet(props: Props) {
       return [styles.modalTablet, { width, height }];
     }
   };
+
   let animatedViewStyle = () => {
     if (dimensions.screenSize === ScreenSize.Small) {
       return [

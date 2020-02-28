@@ -1,6 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { View, SafeAreaView, FlatList, StyleSheet, Alert } from 'react-native';
-import { Text, Button, ActivityIndicator, Portal, Modal } from 'exoflex';
+import {
+  View,
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  Alert,
+  Image,
+} from 'react-native';
+import { Text, Button, ActivityIndicator } from 'exoflex';
 import {
   useNavigation,
   useFocusEffect,
@@ -16,8 +23,8 @@ import {
   useCustomerAddressDelete,
   useCustomerSetDefaultAddress,
 } from '../../hooks/api/useCustomerAddress';
-import { COLORS } from '../../constants/colors';
-import { FONT_SIZE } from '../../constants/fonts';
+import { DeleteAddressModal } from './components/DeleteAddressModal';
+import { emptyAddressImage } from '../../../assets/images';
 
 export default function AddressManagementScene() {
   let { navigate } = useNavigation<StackNavProp<'AddressManagement'>>();
@@ -25,7 +32,9 @@ export default function AddressManagementScene() {
   let { customerAccessToken } = route.params;
 
   let [addressId, setAddressId] = useState<string>('');
-  let [isVisible, setVisible] = useState<boolean>(false);
+  let [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
+    false,
+  );
 
   let {
     getCustomer,
@@ -72,6 +81,10 @@ export default function AddressManagementScene() {
 
   useFocusEffect(focusEffect);
 
+  let toggleDeleteModal = () => {
+    setIsDeleteModalVisible(!isDeleteModalVisible);
+  };
+
   let addNewAddress = () => {
     navigate('AddEditAddress', { rootScene: 'AddressManagement' });
   };
@@ -81,11 +94,11 @@ export default function AddressManagementScene() {
   };
 
   let onPressCancel = () => {
-    setVisible(!isVisible);
+    toggleDeleteModal();
   };
 
   let onPressDelete = async (id: string) => {
-    setVisible(!isVisible);
+    toggleDeleteModal();
     await customerAddressDelete({
       variables: {
         id,
@@ -105,65 +118,41 @@ export default function AddressManagementScene() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Portal>
-        <Modal
-          contentContainerStyle={styles.modal}
-          visible={isVisible}
-          onDismiss={() => setVisible(!isVisible)}
-        >
-          <View style={styles.modalTitleContainer}>
-            <Text weight="medium" style={styles.modalTitle}>
-              {t('Delete Address')}
-            </Text>
-          </View>
-          <Text style={styles.message}>
-            {t(
-              'Are you sure you want to delete this address? This action cannot be undone',
-            )}
-          </Text>
-          <View style={styles.modalOptionContainer}>
-            <Text
-              weight="medium"
-              style={styles.modalCancel}
-              onPress={onPressCancel}
-            >
-              {t('No, Cancel')}
-            </Text>
-
-            <Text
-              weight="medium"
-              style={styles.modalDelete}
-              onPress={() => onPressDelete(addressId)}
-            >
-              {t('Yes, Delete')}
-            </Text>
-          </View>
-        </Modal>
-      </Portal>
+    <SafeAreaView style={styles.flex}>
+      <DeleteAddressModal
+        deleteVisible={isDeleteModalVisible}
+        toggleModal={toggleDeleteModal}
+        onPressCancel={onPressCancel}
+        onPressDelete={() => onPressDelete(addressId)}
+      />
       {customerAddressData.length > 0 ? (
-        <>
-          <FlatList
-            data={customerAddressData}
-            renderItem={({ item }) => (
-              <ManageAddress
-                data={item}
-                style={styles.item}
-                onPressSetPrimary={onPressSetPrimary}
-                onPressEdit={() => onPressEdit(item)}
-                onPressDelete={() => {
-                  setAddressId(item.id);
-                  setVisible(!isVisible);
-                }}
-              />
-            )}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.contentContainer}
-          />
-        </>
+        <FlatList
+          data={customerAddressData}
+          renderItem={({ item }) => (
+            <ManageAddress
+              data={item}
+              style={styles.item}
+              onPressSetPrimary={onPressSetPrimary}
+              onPressEdit={() => onPressEdit(item)}
+              onPressDelete={() => {
+                setAddressId(item.id);
+                toggleDeleteModal();
+              }}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.contentContainer}
+        />
       ) : (
-        <View style={styles.centered}>
-          <Text>{t('No Addresses To Display')}</Text>
+        <View style={[styles.centered, styles.imageContainer]}>
+          <Image
+            source={emptyAddressImage}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.message}>
+            {t('Address is Empty. Please add new address')}
+          </Text>
         </View>
       )}
       <Button
@@ -178,7 +167,7 @@ export default function AddressManagementScene() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  flex: {
     flex: 1,
   },
   centered: {
@@ -186,40 +175,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  modal: {
-    backgroundColor: COLORS.white,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
+  imageContainer: {
+    marginHorizontal: 60,
   },
-  modalTitleContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightGrey,
-  },
-  modalTitle: {
-    paddingVertical: 16,
-    fontSize: FONT_SIZE.large,
-    textAlign: 'center',
+  image: {
+    width: '100%',
+    height: 180,
   },
   message: {
     textAlign: 'center',
     marginVertical: 24,
-  },
-  modalOptionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 38,
-  },
-  modalCancel: {
-    color: COLORS.primaryColor,
-    fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
-  },
-  modalDelete: {
-    color: COLORS.red,
-    fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
   },
   item: {
     marginTop: 16,

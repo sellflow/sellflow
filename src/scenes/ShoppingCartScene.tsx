@@ -78,7 +78,7 @@ function BottomButton(props: BottomButtonProps) {
   let { label, onPressAction } = props;
   return (
     <Button
-      style={defaultButton}
+      style={[defaultButton, styles.buttonStyle]}
       labelStyle={defaultButtonLabel}
       onPress={onPressAction}
     >
@@ -518,5 +518,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonStyle: {
+    marginBottom: 24,
   },
 });

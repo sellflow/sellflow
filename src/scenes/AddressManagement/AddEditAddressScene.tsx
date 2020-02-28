@@ -7,15 +7,9 @@ import {
   KeyboardAvoidingView,
   TextInput as TextInputType,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
-import {
-  Text,
-  TextInput,
-  Button,
-  ActivityIndicator,
-  Portal,
-  Modal,
-} from 'exoflex';
+import { Text, TextInput, Button, ActivityIndicator } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../../constants/fonts';
@@ -28,6 +22,7 @@ import {
 } from '../../hooks/api/useCustomerAddress';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
+import { DeleteAddressModal, DropdownCountry } from './components';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();
@@ -36,7 +31,13 @@ export default function AddEditAddressScene() {
   >();
   let route = useRoute<StackRouteProp<'AddEditAddress'>>();
   let { address, rootScene } = route.params;
-  let [isVisible, setVisible] = useState<boolean>(false);
+
+  let [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
+    false,
+  );
+  let [isCountryModalVisible, setIsCountryModalVisible] = useState<boolean>(
+    false,
+  );
   let [addressData, setAddressData] = useState({
     firstName: '',
     lastName: '',
@@ -50,7 +51,6 @@ export default function AddEditAddressScene() {
 
   let lastNameRef = useRef<TextInputType>(null);
   let address1Ref = useRef<TextInputType>(null);
-  let countryRef = useRef<TextInputType>(null);
   let provinceRef = useRef<TextInputType>(null);
   let cityRef = useRef<TextInputType>(null);
   let zipRef = useRef<TextInputType>(null);
@@ -101,15 +101,28 @@ export default function AddEditAddressScene() {
     }
   }, [address]);
 
+  let toggleDeleteModal = () => {
+    setIsDeleteModalVisible(!isDeleteModalVisible);
+  };
+
+  let toggleCountryModal = () => {
+    setIsCountryModalVisible(!isCountryModalVisible);
+  };
+
   let onPressCancel = () => {
-    setVisible(!isVisible);
+    toggleDeleteModal();
   };
 
   let onPressDelete = () => {
-    setVisible(!isVisible);
+    toggleDeleteModal();
     customerAddressDelete({
       variables: { id: address?.id ?? '', customerAccessToken },
     });
+  };
+
+  let onPressCountry = (country: string) => {
+    toggleCountryModal();
+    setAddressData({ ...addressData, country });
   };
 
   let onPressSaveAddress = async () => {
@@ -155,7 +168,7 @@ export default function AddEditAddressScene() {
         <Text
           weight="medium"
           style={styles.headerRightText}
-          onPress={() => setVisible(!isVisible)}
+          onPress={toggleDeleteModal}
         >
           {t('Delete')}
         </Text>
@@ -174,43 +187,19 @@ export default function AddEditAddressScene() {
         style={styles.flex}
         keyboardVerticalOffset={Platform.select({ ios: 60, android: 0 })}
       >
-        <Portal>
-          <Modal
-            contentContainerStyle={styles.modal}
-            visible={isVisible}
-            onDismiss={() => setVisible(!isVisible)}
-          >
-            <View style={styles.modalTitleContainer}>
-              <Text weight="medium" style={styles.modalTitle}>
-                {t('Delete Address')}
-              </Text>
-            </View>
-            <Text style={styles.message}>
-              {t(
-                'Are you sure you want to delete this address? This action cannot be undone',
-              )}
-            </Text>
-            <View style={styles.modalOptionContainer}>
-              <Text
-                weight="medium"
-                style={styles.modalCancel}
-                onPress={onPressCancel}
-              >
-                {t('No, Cancel')}
-              </Text>
-
-              <Text
-                weight="medium"
-                style={styles.modalDelete}
-                onPress={onPressDelete}
-              >
-                {t('Yes, Delete')}
-              </Text>
-            </View>
-          </Modal>
-        </Portal>
+        <DeleteAddressModal
+          deleteVisible={isDeleteModalVisible}
+          toggleModal={toggleDeleteModal}
+          onPressCancel={onPressCancel}
+          onPressDelete={onPressDelete}
+        />
+        <DropdownCountry
+          countryVisible={isCountryModalVisible}
+          toggleModal={toggleCountryModal}
+          onPressCountry={onPressCountry}
+        />
         <ScrollView
-          style={styles.container}
+          style={styles.paddingHorizontal}
           showsVerticalScrollIndicator={false}
         >
           <TextInput
@@ -242,7 +231,7 @@ export default function AddEditAddressScene() {
           />
           <TextInput
             onSubmitEditing={() => {
-              countryRef.current && countryRef.current.focus();
+              provinceRef.current && provinceRef.current.focus();
             }}
             returnKeyType="next"
             ref={address1Ref}
@@ -254,20 +243,15 @@ export default function AddEditAddressScene() {
             }
             containerStyle={styles.textInput}
           />
-          <TextInput
-            onSubmitEditing={() => {
-              provinceRef.current && provinceRef.current.focus();
-            }}
-            returnKeyType="next"
-            ref={countryRef}
-            mode="flat"
-            label={t('Country')}
-            value={addressData.country}
-            onChangeText={(country) =>
-              setAddressData({ ...addressData, country })
-            }
-            containerStyle={styles.textInput}
-          />
+          <TouchableOpacity onPress={toggleCountryModal}>
+            <TextInput
+              mode="flat"
+              label={t('Country')}
+              value={addressData.country}
+              pointerEvents="none"
+              containerStyle={styles.textInput}
+            />
+          </TouchableOpacity>
           <TextInput
             onSubmitEditing={() => {
               cityRef.current && cityRef.current.focus();
@@ -318,17 +302,18 @@ export default function AddEditAddressScene() {
             containerStyle={styles.textInput}
           />
         </ScrollView>
+        <Button
+          style={[defaultButton, styles.buttonStyle]}
+          labelStyle={defaultButtonLabel}
+          onPress={onPressSaveAddress}
+          loading={loadingAddNewAddress || loadingEditAddress}
+          disabled={loadingAddNewAddress || loadingEditAddress}
+        >
+          <Text weight="medium" style={styles.buttonText}>
+            {t('Save Address')}
+          </Text>
+        </Button>
       </KeyboardAvoidingView>
-      <Button
-        style={[defaultButton, styles.buttonStyle]}
-        labelStyle={defaultButtonLabel}
-        onPress={onPressSaveAddress}
-        loading={loadingAddNewAddress || loadingEditAddress}
-      >
-        <Text weight="medium" style={styles.buttonText}>
-          {t('Save Address')}
-        </Text>
-      </Button>
     </View>
   );
 }
@@ -342,49 +327,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  container: {
-    // flex: 1,
+  paddingHorizontal: {
     paddingHorizontal: 24,
   },
   headerRightText: {
     marginRight: 24,
     fontSize: FONT_SIZE.medium,
     color: COLORS.red,
-  },
-  modal: {
-    backgroundColor: COLORS.white,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  modalTitleContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightGrey,
-  },
-  modalTitle: {
-    paddingVertical: 16,
-    fontSize: FONT_SIZE.large,
-    textAlign: 'center',
-  },
-  message: {
-    textAlign: 'center',
-    marginVertical: 24,
-  },
-  modalOptionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 38,
-  },
-  modalCancel: {
-    color: COLORS.primaryColor,
-    fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
-  },
-  modalDelete: {
-    color: COLORS.red,
-    fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
   },
   textInput: {
     marginTop: 16,

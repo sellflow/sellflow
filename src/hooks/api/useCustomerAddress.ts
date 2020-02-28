@@ -1,4 +1,9 @@
-import { useMutation, MutationHookOptions } from '@apollo/react-hooks';
+import {
+  useMutation,
+  MutationHookOptions,
+  QueryHookOptions,
+  useQuery,
+} from '@apollo/react-hooks';
 
 import {
   CustomerAddressDelete,
@@ -22,6 +27,8 @@ import {
   CustomerSetDefaultAddress,
   CustomerSetDefaultAddressVariables,
 } from '../../generated/server/CustomerSetDefaultAddress';
+import { GetShop } from '../../generated/server/GetShop';
+import { GET_SHOP } from '../../graphql/server/shop';
 
 function useCustomerAddNewAddress(
   options?: MutationHookOptions<
@@ -81,9 +88,18 @@ function useCustomerSetDefaultAddress(
   return { setDefaultAddress, loading };
 }
 
+function useGetCountryCode(options?: QueryHookOptions<GetShop>) {
+  let { data, loading } = useQuery<GetShop>(GET_SHOP, {
+    ...options,
+  });
+
+  return { data, loading };
+}
+
 export {
   useCustomerAddNewAddress,
   useCustomerEditAddress,
   useCustomerAddressDelete,
   useCustomerSetDefaultAddress,
+  useGetCountryCode,
 };
