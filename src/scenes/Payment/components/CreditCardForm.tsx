@@ -27,8 +27,8 @@ type Props = {
 
 export default function CreditCardForm(props: Props) {
   let { creditCard, onCardValueChange } = props;
-  let [cardType, setCardType] = useState('');
-  let [isCardNumberFocus, setIsCardNumberFocus] = useState(false);
+  let [cardType, setCardType] = useState<string>('');
+  let [isCardNumberFocus, setIsCardNumberFocus] = useState<boolean>(false);
 
   let getBorderColor = () => {
     if (creditCard && !creditCard.cardNumber.isValid) {

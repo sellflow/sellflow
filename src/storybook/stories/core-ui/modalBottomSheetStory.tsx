@@ -9,7 +9,7 @@ import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
 
 export default function modalBottomSheetStory() {
   const ModalBottomSheetStory = () => {
-    let [isModalVisible, setModalVisible] = useState(false);
+    let [isModalVisible, setModalVisible] = useState<boolean>(false);
 
     return (
       <View>

@@ -36,7 +36,7 @@ export default function AddEditAddressScene() {
   >();
   let route = useRoute<StackRouteProp<'AddEditAddress'>>();
   let { address, rootScene } = route.params;
-  let [isVisible, setVisible] = useState(false);
+  let [isVisible, setVisible] = useState<boolean>(false);
   let [addressData, setAddressData] = useState({
     firstName: '',
     lastName: '',

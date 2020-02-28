@@ -6,6 +6,11 @@ type DeviceSize = {
   screen: ScaledSize;
 };
 
+type Dimension = {
+  width: number;
+  height: number;
+};
+
 export enum ScreenSize {
   Small = 1,
   Medium = 2,
@@ -16,7 +21,7 @@ const MAX_SMALL = 600;
 const MAX_MEDIUM = 900;
 
 export function useDimensions() {
-  let [dimensions, setDimensions] = useState(() => {
+  let [dimensions, setDimensions] = useState<Dimension>(() => {
     let { width, height } = Dimensions.get('screen');
     return { width, height };
   });

@@ -25,11 +25,11 @@ import { useAuth } from '../helpers/useAuth';
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
   let { setAuthToken } = useAuth();
-  let [firstName, setFirstName] = useState('');
-  let [lastName, setLastName] = useState('');
-  let [email, setEmail] = useState('');
-  let [password, setPassword] = useState('');
-  let [confirmPassword, setConfirmPassword] = useState('');
+  let [firstName, setFirstName] = useState<string>('');
+  let [lastName, setLastName] = useState<string>('');
+  let [email, setEmail] = useState<string>('');
+  let [password, setPassword] = useState<string>('');
+  let [confirmPassword, setConfirmPassword] = useState<string>('');
   let dimensions = useDimensions();
   let onSubmit = () => {
     register({
@@ -61,9 +61,11 @@ export default function RegisterScene() {
     }
     return styleApplied;
   };
-  let [isEmailValid, setIsEmailValid] = useState(true);
-  let [isPasswordValid, setIsPasswordValid] = useState(true);
-  let [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  let [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  let [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
+  let [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState<boolean>(
+    true,
+  );
 
   let isDisabled =
     !firstName ||

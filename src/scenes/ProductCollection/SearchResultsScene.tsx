@@ -11,7 +11,7 @@ const DEFAULT_MAX_PRICE = 1000;
 export default function SearchResultsScene() {
   let { navigate, setOptions } = useNavigation<StackNavProp<'SearchResults'>>();
 
-  let [radioButtonValue, setRadioButtonValue] = useState('');
+  let [radioButtonValue, setRadioButtonValue] = useState<string>('');
   let [priceRange, setPriceRange] = useState<[number, number]>([
     0,
     DEFAULT_MAX_PRICE,

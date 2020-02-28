@@ -7,7 +7,9 @@ import { CheckoutAddress } from '../../../components';
 import { RadioButton } from 'exoflex';
 
 function CheckoutAddressList() {
-  let [selectedIndex, setSelectedIndex] = useState(addressItemData[0].id);
+  let [selectedIndex, setSelectedIndex] = useState<string>(
+    addressItemData[0].id,
+  );
   return (
     <SafeAreaView style={styles.container}>
       <RadioButton.Group value="Address List">

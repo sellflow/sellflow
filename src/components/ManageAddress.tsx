@@ -29,7 +29,7 @@ export default function ManageAddress(props: Props) {
 
   let fullName = getFullName(firstName, lastName);
 
-  let [showMenu, setShowMenu] = useState(false);
+  let [showMenu, setShowMenu] = useState<boolean>(false);
 
   return (
     <TouchableOpacity style={[styles.container, style]}>

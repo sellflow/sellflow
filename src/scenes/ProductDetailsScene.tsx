@@ -211,8 +211,8 @@ function ProductDetailsLandscape(props: ProductDetailsProps) {
   } = props;
   let dimensions = useDimensions();
 
-  let [isImageModalVisible, setIsImageModalVisible] = useState(false);
-  let [activeIndex, setActiveIndex] = useState(0);
+  let [isImageModalVisible, setIsImageModalVisible] = useState<boolean>(false);
+  let [activeIndex, setActiveIndex] = useState<number>(0);
 
   let onPressImage = (index: number) => {
     setIsImageModalVisible(!isImageModalVisible);
@@ -315,8 +315,8 @@ function ProductDetailsPortrait(props: ProductDetailsProps) {
   } = props;
   let dimensions = useDimensions();
 
-  let [isImageModalVisible, setIsImageModalVisible] = useState(false);
-  let [activeIndex, setActiveIndex] = useState(0);
+  let [isImageModalVisible, setIsImageModalVisible] = useState<boolean>(false);
+  let [activeIndex, setActiveIndex] = useState<number>(0);
 
   let onPressImage = (index: number) => {
     setIsImageModalVisible(!isImageModalVisible);
@@ -412,9 +412,9 @@ export default function ProductDetailsScene() {
   let { product } = route.params;
 
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
-  let [isWishlistActive, setWishlistActive] = useState(false);
+  let [isWishlistActive, setWishlistActive] = useState<boolean>(false);
   let [options, setOptions] = useState<Options>([]);
-  let [quantity, setQuantity] = useState(1);
+  let [quantity, setQuantity] = useState<number>(1);
   let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
   let [infoTabs, setInfoTabs] = useState<Tabs>([
     { title: t('Description'), content: '' },

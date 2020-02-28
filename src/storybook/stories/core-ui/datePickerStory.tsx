@@ -6,8 +6,8 @@ import { DatePicker } from '../../../core-ui';
 
 export default function datePickerStory() {
   const DatepickerStory = () => {
-    let [isVisible, setIsVisible] = useState(false);
-    let [date, setDate] = useState('');
+    let [isVisible, setIsVisible] = useState<boolean>(false);
+    let [date, setDate] = useState<string>('');
 
     return (
       <View>

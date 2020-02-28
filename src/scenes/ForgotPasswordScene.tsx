@@ -19,9 +19,9 @@ import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
 export default function ForgotPasswordScene() {
   let { navigate } = useNavigation<StackNavProp<'ForgotPassword'>>();
 
-  let [emailValue, setEmailValue] = useState('');
-  let [isVisible, setVisible] = useState(false);
-  let [error, setError] = useState('');
+  let [emailValue, setEmailValue] = useState<string>('');
+  let [isVisible, setVisible] = useState<boolean>(false);
+  let [error, setError] = useState<string>('');
 
   const isError = error !== '';
 

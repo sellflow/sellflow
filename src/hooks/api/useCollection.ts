@@ -49,7 +49,7 @@ function useCollectionQuery(
   first: number,
   priceRange: [number, number],
 ) {
-  let [isInitFetching, setInitFetching] = useState(true);
+  let [isInitFetching, setInitFetching] = useState<boolean>(true);
   let [collection, setCollection] = useState<Array<Product>>([]);
   let isFetchingMore = useRef(false);
   let hasMore = useRef(true);

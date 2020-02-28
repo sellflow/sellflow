@@ -25,14 +25,14 @@ import { useSetShoppingCart } from '../hooks/api/useShoppingCart';
 export default function LoginScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Login'>>();
   let { setAuthToken } = useAuth();
-  let [email, setEmail] = useState('');
-  let [password, setPassword] = useState('');
+  let [email, setEmail] = useState<string>('');
+  let [password, setPassword] = useState<string>('');
 
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
 
   let dimensions = useDimensions();
-  let [expiresDate, setExpiresDate] = useState('');
+  let [expiresDate, setExpiresDate] = useState<string>('');
 
   let containerStyle = () => {
     let styleApplied;

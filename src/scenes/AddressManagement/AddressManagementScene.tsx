@@ -24,8 +24,8 @@ export default function AddressManagementScene() {
   let route = useRoute<StackRouteProp<'AddressManagement'>>();
   let { customerAccessToken } = route.params;
 
-  let [addressId, setAddressId] = useState('');
-  let [isVisible, setVisible] = useState(false);
+  let [addressId, setAddressId] = useState<string>('');
+  let [isVisible, setVisible] = useState<boolean>(false);
 
   let {
     getCustomer,

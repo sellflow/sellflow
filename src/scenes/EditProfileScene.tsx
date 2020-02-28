@@ -28,14 +28,14 @@ import {
 } from '../hooks/api/useAuthenticatedUser';
 
 export default function EditProfileScene() {
-  let [firstName, setFirstName] = useState('');
-  let [lastName, setLastName] = useState('');
-  let [email, setEmail] = useState('');
-  let [phoneNumber, setPhoneNumber] = useState('');
-  let [password, setPassword] = useState('');
-  let [isEmailValid, setIsEmailValid] = useState(true);
-  let [isPasswordValid, setIsPasswordValid] = useState(true);
-  let [expiresAt, setExpiresAt] = useState('');
+  let [firstName, setFirstName] = useState<string>('');
+  let [lastName, setLastName] = useState<string>('');
+  let [email, setEmail] = useState<string>('');
+  let [phoneNumber, setPhoneNumber] = useState<string>('');
+  let [password, setPassword] = useState<string>('');
+  let [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  let [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
+  let [expiresAt, setExpiresAt] = useState<string>('');
   let lastNameRef = useRef<TextInputType>(null);
   let emailRef = useRef<TextInputType>(null);
   let phoneNumberRef = useRef<TextInputType>(null);

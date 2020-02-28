@@ -55,8 +55,8 @@ export default function ProductsView(props: Props) {
     onValuesChangeFinish,
   } = filterProps;
 
-  let [isSortModalVisible, setSortModalVisible] = useState(false);
-  let [isFilterModalVisible, setFilterModalVisible] = useState(false);
+  let [isSortModalVisible, setSortModalVisible] = useState<boolean>(false);
+  let [isFilterModalVisible, setFilterModalVisible] = useState<boolean>(false);
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
 

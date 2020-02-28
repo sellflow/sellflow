@@ -19,7 +19,7 @@ type Props = {
 
 function RadioGroupWithState(props: Props) {
   let { name, values } = props;
-  let [selectedValue, setSelectedValue] = useState(values[0]);
+  let [selectedValue, setSelectedValue] = useState<string>(values[0]);
   return (
     <RichRadioGroup
       name={name}

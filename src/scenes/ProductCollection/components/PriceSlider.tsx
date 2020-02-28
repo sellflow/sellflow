@@ -32,7 +32,7 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
     onValuesChangeStart = () => {},
     onValuesChangeFinish = () => {},
   } = props;
-  let [sliderLength, setSliderLength] = useState(280); // default slider length
+  let [sliderLength, setSliderLength] = useState<number>(280); // default slider length
   let [priceRange, setPriceRange] = useState<[number, number]>(
     initialSliderValues,
   );

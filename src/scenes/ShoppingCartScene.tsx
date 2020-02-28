@@ -99,7 +99,7 @@ export default function ShoppingCartScene() {
     totalPrice: 0,
     lineItems: [],
   });
-  let [cartID, setCartID] = useState('');
+  let [cartID, setCartID] = useState<string>('');
   let [firstLoading, setFirstLoading] = useState<boolean>(true);
   let [voucherCode, setVoucherCode] = useState<string>('');
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);

@@ -14,10 +14,25 @@ import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { PaymentRadioGroup } from './components';
 import { Payment } from '../../types/types';
 
+type CreditCardInfo = {
+  cardNumber: {
+    number: string;
+    isValid: boolean;
+  };
+  name: string;
+  expirationDate: {
+    date: string;
+    isValid: boolean;
+  };
+  cvv: string;
+};
+
 export default function PaymentScene() {
   let { screenSize, isLandscape } = useDimensions();
-  let [selectedPaymentType, setSelectedPaymentType] = useState('CREDIT_CARD');
-  let [creditCardInfo, setCreditCardInfo] = useState({
+  let [selectedPaymentType, setSelectedPaymentType] = useState<string>(
+    'CREDIT_CARD',
+  );
+  let [creditCardInfo, setCreditCardInfo] = useState<CreditCardInfo>({
     cardNumber: {
       number: '',
       isValid: true,

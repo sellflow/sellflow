@@ -34,8 +34,8 @@ export default function OrderItem(props: Props) {
     onChangeQuantity,
   } = props.orderItem;
   let { containerStyle, cardType } = props;
-  let [quantity, setQuantity] = useState(props.orderItem.quantity);
-  let [itemPrice] = useState(originalPrice);
+  let [quantity, setQuantity] = useState<number>(props.orderItem.quantity);
+  let [itemPrice] = useState<number>(originalPrice);
 
   return (
     <View style={[styles.container, containerStyle]}>

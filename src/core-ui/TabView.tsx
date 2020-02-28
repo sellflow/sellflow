@@ -40,7 +40,7 @@ export default function TabView(props: Props) {
   }
   const renderScene = SceneMap(data);
 
-  const [index, setIndex] = useState(indexInitialRoute);
+  const [index, setIndex] = useState<number>(indexInitialRoute);
   return (
     <Tab
       renderTabBar={(props) => (
