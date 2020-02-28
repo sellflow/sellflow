@@ -57,11 +57,16 @@ type ProductDetail {
   image: String!
 }
 
+type DefaultCurrency {
+  currency: String!
+}
+
 type Query {
   authenticatedUser: AuthenticatedUser!
   wishlist: [WishlistProduct!]!
   shoppingCart: ShoppingCart!
   recentSearch: [SearchDetail!]!
+  defaultCurrency: DefaultCurrency!
 }
 
 type Mutation {
@@ -73,4 +78,5 @@ type Mutation {
   setShoppingCartID(id: String!): ShoppingCart!
   setRecentSearch(search: String!): [SearchDetail]!
   setShoppingCart(items: [LineItemInput!]!, id: String!): ShoppingCart!
+  setDefaultCurrency(currency: String!): DefaultCurrency!
 }

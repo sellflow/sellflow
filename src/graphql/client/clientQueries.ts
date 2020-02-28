@@ -75,3 +75,19 @@ export const GET_WISHLIST = gql`
     }
   }
 `;
+
+export const GET_DEFAULT_CURRENCY = gql`
+  query GetDefaultCurrency {
+    defaultCurrency @client {
+      currency
+    }
+  }
+`;
+
+export const SET_DEFAULT_CURRENCY = gql`
+  mutation SetDefaultCurrency($currency: String!) {
+    setDefaultCurrency(currency: $currency) @client {
+      currency
+    }
+  }
+`;

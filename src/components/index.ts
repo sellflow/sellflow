@@ -5,6 +5,7 @@ import CheckoutAddress from './CheckoutAddress';
 import ManageAddress from './ManageAddress';
 import ProductList from './ProductList';
 import SearchModal from './SearchModal';
+import CurrencyPicker from './CurrencyPicker';
 
 export {
   OrderItem,
@@ -14,4 +15,5 @@ export {
   ManageAddress,
   ProductList,
   SearchModal,
+  CurrencyPicker,
 };

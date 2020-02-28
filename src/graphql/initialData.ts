@@ -16,4 +16,5 @@ export const initialData: LocalData = {
     items: [],
   },
   recentSearch: [],
+  defaultCurrency: '',
 };

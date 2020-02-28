@@ -76,6 +76,7 @@ export type LocalData = {
   wishlist: Array<Wishlist>;
   shoppingCart: ShoppingCart;
   recentSearch: Array<RecentSearch>;
+  defaultCurrency: string;
 };
 
 export type LocalCache = {
