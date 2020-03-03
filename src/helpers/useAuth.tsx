@@ -5,7 +5,6 @@ import React, {
   createContext,
   useEffect,
 } from 'react';
-import { ActivityIndicator } from 'exoflex';
 import { getToken, removeToken, saveToken } from './authToken';
 
 type Context = {
@@ -24,13 +23,11 @@ let AuthContext = createContext<Context>({
 
 export function Provider(props: Props) {
   let [token, setToken] = useState('');
-  let [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getToken().then((token) => {
       // TODO: Check token expiration date
       setToken(token || '');
-      setLoading(false);
     });
   }, []);
 
@@ -50,7 +47,7 @@ export function Provider(props: Props) {
   );
   return (
     <AuthContext.Provider value={context}>
-      {loading ? <ActivityIndicator /> : props.children}
+      {props.children}
     </AuthContext.Provider>
   );
 }

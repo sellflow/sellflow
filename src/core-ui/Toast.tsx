@@ -22,6 +22,7 @@ export default function Toast(props: Props) {
   let { mode, isVisible, message } = data;
   return (
     <ExoToast
+      showIcon={false}
       visible={isVisible}
       mode={mode}
       textStyle={textStyle}

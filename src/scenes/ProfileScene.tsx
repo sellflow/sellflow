@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Text, ActivityIndicator, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
@@ -60,7 +60,7 @@ export default function ProfileScene() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <TouchableOpacity
         style={styles.profileContainer}
         onPress={() =>
@@ -100,8 +100,16 @@ export default function ProfileScene() {
         >
           <Text style={styles.buttonLabelStyle}>{t('Order History')}</Text>
         </TouchableOpacity>
+      </View>
+      <View style={[styles.menuContainer, styles.divider]}>
         <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
           <Text style={styles.buttonLabelStyle}>{t('About Us')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+          <Text style={styles.buttonLabelStyle}>{t('Terms & Conditions')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+          <Text style={styles.buttonLabelStyle}>{t('Privacy & Policy')}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.menuContainer}>
@@ -117,7 +125,7 @@ export default function ProfileScene() {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

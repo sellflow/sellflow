@@ -242,6 +242,7 @@ export default function AddEditAddressScene() {
               setAddressData({ ...addressData, address1 })
             }
             containerStyle={styles.textInput}
+            autoCapitalize="words"
           />
           <TouchableOpacity onPress={toggleCountryModal}>
             <TextInput

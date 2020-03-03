@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Text, RadioButton, IconButton, Button, TextInput } from 'exoflex';
 import {
@@ -214,7 +215,7 @@ export default function CheckoutScene() {
       );
     } else {
       return (
-        <View style={styles.flex}>
+        <View>
           <Text style={[styles.opacity, styles.shippingInfo]}>
             {t('Shipping Information')}
           </Text>
@@ -246,7 +247,7 @@ export default function CheckoutScene() {
           <TextInput
             label={t('Address 1')}
             clearTextOnFocus={false}
-            autoCapitalize="none"
+            autoCapitalize="words"
             textContentType="streetAddressLine1"
             mode="flat"
             value={address.address1}
@@ -258,7 +259,7 @@ export default function CheckoutScene() {
           <TextInput
             label={t('Address 2 (optional)')}
             clearTextOnFocus={false}
-            autoCapitalize="none"
+            autoCapitalize="words"
             textContentType="streetAddressLine2"
             mode="flat"
             value={address.address2}
@@ -325,6 +326,7 @@ export default function CheckoutScene() {
             returnKeyType="done"
             labelStyle={styles.textInputLabel}
             containerStyle={styles.textInput}
+            keyboardType="number-pad"
           />
         </View>
       );
@@ -350,7 +352,7 @@ export default function CheckoutScene() {
         </View>
       </Surface>
       <Button
-        style={[defaultButton, styles.verticalMargin]}
+        style={[defaultButton, styles.proceedButtonStyle]}
         labelStyle={defaultButtonLabel}
         onPress={onProceedPressed}
         disabled={isDisabled}
@@ -370,30 +372,39 @@ export default function CheckoutScene() {
   } else if (screenSize === ScreenSize.Large) {
     return (
       <SafeAreaView style={[styles.flex, styles.landscape, containerStyle()]}>
-        <ScrollView style={styles.flex} contentContainerStyle={styles.flexGrow}>
-          {renderShippingAddress()}
-        </ScrollView>
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={styles.flex}
+          keyboardVerticalOffset={60}
+        >
+          <ScrollView style={styles.flex}>{renderShippingAddress()}</ScrollView>
+        </KeyboardAvoidingView>
         {renderPaymentView()}
       </SafeAreaView>
     );
   } else {
     return (
-      <SafeAreaView style={styles.flex}>
-        <ScrollView
+      <View style={styles.flex}>
+        <KeyboardAvoidingView
+          behavior="padding"
           style={styles.flex}
-          contentContainerStyle={[containerStyle(), styles.flexGrow]}
+          keyboardVerticalOffset={60}
         >
-          {renderShippingAddress()}
-          {renderPaymentView()}
-        </ScrollView>
-      </SafeAreaView>
+          <ScrollView
+            style={styles.flex}
+            contentContainerStyle={containerStyle()}
+          >
+            {renderShippingAddress()}
+            {renderPaymentView()}
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  flexGrow: { flexGrow: 1 },
   mediumText: { fontSize: FONT_SIZE.medium },
   newAddressButton: {
     flexDirection: 'row',
@@ -413,25 +424,25 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   checkoutAddress: { marginBottom: 12 },
-  verticalMargin: { marginTop: 24 },
+  proceedButtonStyle: { marginBottom: 24 },
   container: {
     flex: 1,
     justifyContent: 'space-between',
   },
   normal: {
     marginHorizontal: 24,
-    marginTop: 16,
+    paddingTop: 16,
   },
   tab: {
     marginHorizontal: 36,
-    marginTop: 24,
+    paddingTop: 24,
   },
   landscape: { flexDirection: 'row' },
   priceViewLandscape: {
     flex: 1,
     marginLeft: 24,
   },
-  surfacePaymentDetails: { paddingHorizontal: 15 },
+  surfacePaymentDetails: { paddingHorizontal: 15, marginBottom: 24 },
   paymentDetailsContainer: {
     paddingVertical: 14,
     flexDirection: 'row',

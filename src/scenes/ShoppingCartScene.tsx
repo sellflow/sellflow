@@ -327,12 +327,7 @@ export default function ShoppingCartScene() {
         </SafeAreaView>
       ) : (
         <SafeAreaView style={styles.flex}>
-          <KeyboardAvoidingView
-            enabled
-            behavior="padding"
-            style={styles.flex}
-            keyboardVerticalOffset={100}
-          >
+          <KeyboardAvoidingView behavior="padding" style={styles.flex}>
             <ScrollView
               style={styles.flex}
               contentContainerStyle={[
@@ -460,9 +455,11 @@ const styles = StyleSheet.create({
   },
   scrollContentSmall: {
     paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   scrollContentMedium: {
     paddingHorizontal: 36,
+    paddingBottom: 24,
   },
   voucherCodeContainer: {
     padding: 12,
