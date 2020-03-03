@@ -11,7 +11,7 @@ import RegisterScene from './RegisterScene';
 import LoginScene from './LoginScene';
 import ForgotPasswordScene from './ForgotPasswordScene';
 import ShoppingCartScene from './ShoppingCartScene';
-import CheckoutScene from './CheckoutScene';
+import CheckoutScene from './Checkout/CheckoutScene';
 import EditProfileScene from './EditProfileScene';
 import PaymentScene from './Payment/PaymentScene';
 import AuthScene from './AuthScene';

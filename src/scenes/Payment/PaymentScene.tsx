@@ -49,13 +49,10 @@ export default function PaymentScene() {
   let shipping = 0;
   let total = subtotal + shipping;
   let address = addressItemData[0];
-  // TODO: Get Accepted Payment Types from the API
   let acceptedPaymentTypes: Array<Payment> = [
     { id: 'CREDIT_CARD', name: t('Credit Card') },
     { id: 'PAYPAL', name: 'PayPal' },
   ];
-
-  // TODO: Implement other payment method (Apple Pay, Google Pay)
 
   let orderSummary = (
     <View style={styles.flex}>

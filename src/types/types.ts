@@ -108,13 +108,6 @@ export type LineItem = {
 export type PaymentInfo = {
   totalPrice: number;
   subtotalPrice: number;
-  shippingLines: Array<ShippingLine>;
-};
-
-export type ShippingLine = {
-  handle: string;
-  amount: number;
-  title: string;
 };
 
 export type Payment = {

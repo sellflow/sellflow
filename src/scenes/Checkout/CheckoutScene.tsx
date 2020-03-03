@@ -8,37 +8,42 @@ import {
   SafeAreaView,
   Alert,
   KeyboardAvoidingView,
+  AppState,
+  AppStateStatus,
 } from 'react-native';
-import { Text, RadioButton, IconButton, Button, TextInput } from 'exoflex';
+import { Text, RadioButton, IconButton, Button } from 'exoflex';
 import {
   useNavigation,
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
+import { Linking } from 'expo';
 
-import { CheckoutAddress } from '../components';
-import { Surface } from '../core-ui';
-import { addressItemData } from '../fixtures/AddressItemData';
-import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { FONT_SIZE } from '../constants/fonts';
-import { COLORS } from '../constants/colors';
-import formatCurrency from '../helpers/formatCurrency';
-import { defaultButton, defaultButtonLabel } from '../constants/theme';
-import { StackNavProp, StackRouteProp } from '../types/Navigation';
-import { useAuth } from '../helpers/useAuth';
-import { emptyAddress } from '../constants/defaultValues';
-import { AddressItem, PaymentInfo, ShippingLine } from '../types/types';
-import { useGetCustomerData } from '../hooks/api/useCustomer';
-import { useShopifyCartUpdateAddress } from '../hooks/api/useShopifyCart';
+import { CheckoutAddress } from '../../components';
+import { Surface } from '../../core-ui';
+import { addressItemData } from '../../fixtures/AddressItemData';
+import { useDimensions, ScreenSize } from '../../helpers/dimensions';
+import { FONT_SIZE } from '../../constants/fonts';
+import { COLORS } from '../../constants/colors';
+import formatCurrency from '../../helpers/formatCurrency';
+import { defaultButton, defaultButtonLabel } from '../../constants/theme';
+import { StackNavProp, StackRouteProp } from '../../types/Navigation';
+import { useAuth } from '../../helpers/useAuth';
+import { emptyAddress } from '../../constants/defaultValues';
+import { AddressItem, PaymentInfo } from '../../types/types';
+import { useGetCustomerData } from '../../hooks/api/useCustomer';
+import { useShopifyCartUpdateAddress } from '../../hooks/api/useShopifyCart';
+import { ShippingAddressForm } from './components';
+import { useResetCart } from '../../hooks/api/useShoppingCart';
 
 export default function CheckoutScene() {
   let { navigate } = useNavigation<StackNavProp<'Checkout'>>();
   let { params } = useRoute<StackRouteProp<'Checkout'>>();
+
   let { id: cartId } = params.cartData;
   let [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     subtotalPrice: params.cartData.subtotalPrice,
     totalPrice: params.cartData.totalPrice,
-    shippingLines: [],
   });
   let { subtotalPrice, totalPrice } = paymentInfo;
   let { authToken } = useAuth();
@@ -49,6 +54,8 @@ export default function CheckoutScene() {
   let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
     addressItemData[0],
   );
+
+  let { resetShoppingCart } = useResetCart();
 
   let {
     updateCartAddress,
@@ -61,62 +68,68 @@ export default function CheckoutScene() {
       ) {
         let {
           totalPriceV2,
-          availableShippingRates,
           subtotalPriceV2,
         } = checkoutShippingAddressUpdateV2.checkout;
-        let allShippingLine: Array<ShippingLine> = [];
-        if (availableShippingRates && availableShippingRates.shippingRates) {
-          allShippingLine = availableShippingRates.shippingRates.map(
-            ({ title, handle, priceV2 }): ShippingLine => {
-              return {
-                amount: Number(priceV2.amount),
-                handle,
-                title,
-              };
-            },
-          );
-        }
 
         setPaymentInfo({
           ...paymentInfo,
           subtotalPrice: Number(subtotalPriceV2.amount),
           totalPrice: Number(totalPriceV2.amount),
-          shippingLines: allShippingLine,
         });
       }
     },
   });
 
-  let { getCustomer, customerAddressData } = useGetCustomerData({
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
+  let { getCustomer, data, customerAddressData } = useGetCustomerData({
     onCompleted: ({ customer }) => {
       if (customer && customer.defaultAddress) {
-        let addresses = customerAddressData;
-        setAddressAvailable(addresses);
+        setAddressAvailable(customerAddressData);
       }
     },
   });
 
-  let focusEffect = useCallback(() => {
-    getCustomer({
-      variables: { accessToken: authToken },
-    });
+  useFocusEffect(
+    useCallback(() => {
+      getCustomer({
+        variables: { accessToken: authToken },
+      });
 
-    return undefined;
-  }, [getCustomer, authToken]);
-  useFocusEffect(focusEffect);
+      return undefined;
+    }, [getCustomer, authToken]),
+  );
 
   useEffect(() => {
     let defaultAddress =
       addressAvailable.find((item) => item.default === true) ||
       addressItemData[0];
     setSelectedAddress(defaultAddress);
-  }, [addressAvailable]);
+
+    if (data && data.customer) {
+      if (!data.customer.lastIncompleteCheckout) {
+        resetShoppingCart();
+        navigate('Home'); // TODO: Navigate to Order Confirmation scene
+      }
+    }
+  }, [addressAvailable, data]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    let handleAppStateChange = (appState: AppStateStatus) => {
+      if (appState === 'active') {
+        getCustomer({
+          variables: { accessToken: authToken },
+        });
+      }
+    };
+    AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   let updateAddress = async (
     address: AddressItem,
-    doWhenSuccess?: () => void,
+    doWhenSuccess?: (webUrl: string) => void,
   ) => {
     let { id, name, default: defaultStatus, ...usedAddress } = address;
     await updateCartAddress({
@@ -131,7 +144,9 @@ export default function CheckoutScene() {
         checkoutUserErrors,
       } = updateAddressData.checkoutShippingAddressUpdateV2;
       if (checkoutUserErrors.length === 0) {
-        doWhenSuccess();
+        doWhenSuccess(
+          updateAddressData.checkoutShippingAddressUpdateV2.checkout?.webUrl,
+        );
       } else {
         Alert.alert(t('Please insert a valid address'));
       }
@@ -139,6 +154,10 @@ export default function CheckoutScene() {
   };
 
   let { screenSize } = useDimensions();
+
+  let navigateToPayment = (webUrl: string) => {
+    Linking.openURL(webUrl);
+  };
 
   let containerStyle = () => {
     if (screenSize === ScreenSize.Small) {
@@ -162,11 +181,12 @@ export default function CheckoutScene() {
 
   let onProceedPressed = async () => {
     if (authToken) {
-      await updateAddress(selectedAddress, () => navigate('Payment'));
+      await updateAddress(selectedAddress, navigateToPayment);
     } else {
-      await updateAddress(address, () => navigate('Payment'));
+      await updateAddress(address, navigateToPayment);
     }
   };
+
   let isDisabled = authToken
     ? false
     : !address.address1 ||
@@ -215,120 +235,7 @@ export default function CheckoutScene() {
       );
     } else {
       return (
-        <View>
-          <Text style={[styles.opacity, styles.shippingInfo]}>
-            {t('Shipping Information')}
-          </Text>
-          <TextInput
-            label={t('First name')}
-            autoFocus={true}
-            clearTextOnFocus={false}
-            autoCapitalize="words"
-            textContentType="name"
-            mode="flat"
-            value={address.firstName}
-            onChangeText={(firstName) => setAddress({ ...address, firstName })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('Last Name')}
-            clearTextOnFocus={false}
-            autoCapitalize="words"
-            textContentType="name"
-            mode="flat"
-            value={address.lastName}
-            onChangeText={(lastName) => setAddress({ ...address, lastName })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('Address 1')}
-            clearTextOnFocus={false}
-            autoCapitalize="words"
-            textContentType="streetAddressLine1"
-            mode="flat"
-            value={address.address1}
-            onChangeText={(address1) => setAddress({ ...address, address1 })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('Address 2 (optional)')}
-            clearTextOnFocus={false}
-            autoCapitalize="words"
-            textContentType="streetAddressLine2"
-            mode="flat"
-            value={address.address2}
-            onChangeText={(address2) => setAddress({ ...address, address2 })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('City')}
-            clearTextOnFocus={false}
-            autoCapitalize="words"
-            textContentType="addressCity"
-            mode="flat"
-            value={address.city}
-            onChangeText={(city) => setAddress({ ...address, city })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('Province')}
-            clearTextOnFocus={false}
-            autoCapitalize="words"
-            textContentType="addressState"
-            mode="flat"
-            value={address.province}
-            onChangeText={(province) => setAddress({ ...address, province })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('Country')}
-            clearTextOnFocus={false}
-            autoCapitalize="words"
-            textContentType="countryName"
-            mode="flat"
-            value={address.country}
-            onChangeText={(country) => setAddress({ ...address, country })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('Postal Code')}
-            clearTextOnFocus={false}
-            textContentType="postalCode"
-            keyboardType="number-pad"
-            mode="flat"
-            value={address.zip}
-            onChangeText={(zip) => setAddress({ ...address, zip })}
-            returnKeyType="next"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-          />
-          <TextInput
-            label={t('Phone Number')}
-            clearTextOnFocus={false}
-            textContentType="telephoneNumber"
-            mode="flat"
-            value={address.phone}
-            onChangeText={(phone) => setAddress({ ...address, phone })}
-            returnKeyType="done"
-            labelStyle={styles.textInputLabel}
-            containerStyle={styles.textInput}
-            keyboardType="number-pad"
-          />
-        </View>
+        <ShippingAddressForm address={address} onChangeAddress={setAddress} />
       );
     }
   };
@@ -452,11 +359,8 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
     marginBottom: 6,
   },
-  textInput: { marginBottom: 24 },
-  textInputLabel: { fontSize: FONT_SIZE.small },
   totalBorder: {
     borderTopWidth: 1,
     borderColor: COLORS.lightGrey,
   },
-  shippingInfo: { marginBottom: 16 },
 });
