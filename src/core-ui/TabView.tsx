@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { TabView as Tab, SceneMap, TabBar } from 'react-native-tab-view';
-import { COLORS } from '../constants/colors';
 import { Text } from 'exoflex';
+
+import { COLORS } from '../constants/colors';
 import { useDimensions } from '../helpers/dimensions';
 import { FONT_SIZE } from '../constants/fonts';
-
-type Scene = () => JSX.Element;
-
-export type TabRoute = {
-  key: string;
-  title: string;
-  scene: Scene;
-};
+import { TabRoute, Scene } from '../types/types';
 
 type Props = {
   initialRouteKey?: string;

@@ -5,7 +5,7 @@ import AddressManagementScene from './AddressManagement/AddressManagementScene';
 import AddEditAddressScene from './AddressManagement/AddEditAddressScene';
 import OrderHistoryScene from './OrderHistoryScene';
 import OrderDetailsScene from './OrderDetailsScene';
-import ProductDetailsScene from './ProductDetailsScene';
+import ProductDetailsScene from './ProductDetails/ProductDetailsScene';
 import ProductCollectionScene from './ProductCollection/ProductCollectionScene';
 import RegisterScene from './RegisterScene';
 import LoginScene from './LoginScene';

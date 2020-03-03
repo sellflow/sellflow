@@ -1,10 +1,11 @@
 import React from 'react';
 import { useRoute } from '@react-navigation/native';
 
-import TabView, { TabRoute } from '../core-ui/TabView';
+import TabView from '../core-ui/TabView';
 import LoginScene from './LoginScene';
 import RegisterScene from './RegisterScene';
 import { StackRouteProp } from '../types/Navigation';
+import { TabRoute } from '../types/types';
 
 export default function AuthScene() {
   const FirstRoute = LoginScene;

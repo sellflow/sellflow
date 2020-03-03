@@ -3,8 +3,8 @@ import { storiesOf } from '@storybook/react-native';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 
 import { TabView } from '../../../core-ui';
-import { TabRoute } from '../../../core-ui/TabView';
 import { useDimensions } from '../../../helpers/dimensions';
+import { TabRoute } from '../../../types/types';
 
 function TabStory() {
   let { width } = useDimensions();

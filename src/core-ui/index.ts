@@ -9,6 +9,7 @@ import TabView from './TabView';
 import ModalBottomSheet from './ModalBottomSheet';
 import CategoryList from './CategoryList';
 import Avatar from './Avatar';
+import Toast from './Toast';
 
 export {
   Carousel,
@@ -22,4 +23,5 @@ export {
   ModalBottomSheet,
   CategoryList,
   Avatar,
+  Toast,
 };
