@@ -30,7 +30,6 @@ import {
   TabRouteName,
 } from '../types/Navigation';
 import { useCartFilled } from '../helpers/cartFilled';
-import { CurrencyPicker } from '../components';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -99,7 +98,6 @@ export default function StackNavigator({
               onPress={() => navigation.navigate('ShoppingCart')}
             />
           ),
-          headerLeft: () => <CurrencyPicker />,
           headerStyle: {
             shadowColor: COLORS.transparent,
             elevation: 0,

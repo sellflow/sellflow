@@ -1,25 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { Carousel, CategoryList, SearchInput } from '../core-ui';
-import { ProductList, SearchModal } from '../components';
+import { ProductList, SearchModal, CurrencyPicker } from '../components';
 import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { CategoryItem, Product } from '../types/types';
 import { useColumns } from '../helpers/columns';
 import { useCollectionAndProductQuery } from '../hooks/api/useCollection';
 import { COLORS } from '../constants/colors';
+import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
+import { getDiscount } from '../helpers/getDiscount';
 
 export default function HomeScene() {
-  let [isSearchModalVisible, setSearchModalVisible] = useState(false);
+  let { navigate, setOptions } = useNavigation<StackNavProp<'Home'>>();
   let { screenSize } = useDimensions();
-  let { navigate } = useNavigation<StackNavProp<'Home'>>();
   let numColumns = useColumns();
 
-  let { loading, data: homeData } = useCollectionAndProductQuery();
+  let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
+  let [currencyCode, setCurrencyCode] = useState<string>('');
+
+  let {
+    loading: loadingHomeData,
+    data: homeData,
+  } = useCollectionAndProductQuery({
+    variables: { presentmentCurrencies: [currencyCode] },
+  });
+
+  let {
+    loading: loadingCurrency,
+    data: defaultCurrency,
+  } = useDefaultCurrency();
+
+  useEffect(() => {
+    if (defaultCurrency) {
+      setCurrencyCode(defaultCurrency);
+    }
+  }, [defaultCurrency]);
+
+  let onPressCurrency = (currency: string) => {
+    setCurrencyCode(currency);
+  };
+
+  setOptions({
+    headerLeft: () => <CurrencyPicker onPressCurrency={onPressCurrency} />,
+  });
+
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { product });
   };
@@ -28,7 +57,7 @@ export default function HomeScene() {
       searchKeyword,
     });
 
-  if (loading || !homeData) {
+  if (loadingHomeData || loadingCurrency || !homeData) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator />
@@ -44,15 +73,25 @@ export default function HomeScene() {
     }),
   );
 
-  // TODO: What about discount?
-  let productData: Array<Product> = homeData.products.edges.map((item) => ({
-    id: item.node.id,
-    cursor: item.cursor,
-    image: item.node.images.edges[0].node.originalSrc,
-    title: item.node.title,
-    handle: item.node.handle,
-    price: Number(item.node.priceRange.minVariantPrice.amount),
-  }));
+  let productData: Array<Product> = homeData.products.edges.map((item) => {
+    let originalProductPrice = ~~item.node.variants.edges[0].node
+      .presentmentPrices.edges[0].node.compareAtPrice?.amount;
+
+    let productPrice = ~~item.node.variants.edges[0].node.presentmentPrices
+      .edges[0].node.price.amount;
+
+    let { price, discount } = getDiscount(originalProductPrice, productPrice);
+
+    return {
+      id: item.node.id,
+      cursor: item.cursor,
+      image: item.node.images.edges[0].node.originalSrc,
+      title: item.node.title,
+      handle: item.node.handle,
+      price: price,
+      discount: discount,
+    };
+  });
 
   let renderHeader = () => (
     <>

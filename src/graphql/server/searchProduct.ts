@@ -14,7 +14,10 @@ export const SEARCH_PRODUCT = gql`
 `;
 
 export const SEARCH_RESULTS = gql`
-  query SearchResults($searchText: String!) {
+  query SearchResults(
+    $searchText: String!
+    $presentmentCurrencies: [CurrencyCode!]
+  ) {
     products(first: 10, query: $searchText) {
       edges {
         cursor
@@ -24,7 +27,10 @@ export const SEARCH_RESULTS = gql`
           availableForSale
           productType
           handle
-          presentmentPriceRanges(first: 1, presentmentCurrencies: USD) {
+          presentmentPriceRanges(
+            first: 1
+            presentmentCurrencies: $presentmentCurrencies
+          ) {
             edges {
               node {
                 minVariantPrice {
@@ -45,6 +51,29 @@ export const SEARCH_RESULTS = gql`
                 originalSrc
                 transformedSrc
                 altText
+              }
+            }
+          }
+          variants(first: 1) {
+            edges {
+              node {
+                presentmentPrices(
+                  first: 1
+                  presentmentCurrencies: $presentmentCurrencies
+                ) {
+                  edges {
+                    node {
+                      compareAtPrice {
+                        amount
+                        currencyCode
+                      }
+                      price {
+                        amount
+                        currencyCode
+                      }
+                    }
+                  }
+                }
               }
             }
           }

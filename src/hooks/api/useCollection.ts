@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 
 import { Product } from '../../types/types';
 import { GET_COLLECTION } from '../../graphql/server/productCollection';
@@ -7,9 +7,14 @@ import {
   GetCollection,
   GetCollectionVariables,
 } from '../../generated/server/GetCollection';
-import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
+import {
+  ProductCollectionSortKeys,
+  CurrencyCode,
+} from '../../generated/server/globalTypes';
 import { GetCategoriesAndFeaturedProducts } from '../../generated/server/GetCategoriesAndFeaturedProducts';
 import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../../graphql/server/categoriesAndFeaturedProducts';
+import useDefaultCurrency from './useDefaultCurrency';
+import { getDiscount } from '../../helpers/getDiscount';
 
 function getProducts(
   collectionData: GetCollection | undefined,
@@ -26,6 +31,17 @@ function getProducts(
         Number(priceRangeMin.node.minVariantPrice.amount) < maxPrice &&
         Number(priceRangeMin.node.minVariantPrice.amount) > minPrice
       ) {
+        let originalProductPrice = ~~product.variants.edges[0].node
+          .presentmentPrices.edges[0].node.compareAtPrice?.amount;
+
+        let productPrice = ~~product.variants.edges[0].node.presentmentPrices
+          .edges[0].node.price.amount;
+
+        let { price, discount } = getDiscount(
+          originalProductPrice,
+          productPrice,
+        );
+
         filteredData.push({
           id: product.id,
           cursor: item.cursor,
@@ -33,9 +49,8 @@ function getProducts(
           title: product.title,
           handle: product.handle,
           productType: product.productType,
-          price: priceRangeMin
-            ? Number(priceRangeMin.node.minVariantPrice.amount)
-            : 0,
+          price: price,
+          discount: discount,
         });
       }
     });
@@ -54,6 +69,9 @@ function useCollectionQuery(
   let isFetchingMore = useRef(false);
   let hasMore = useRef(true);
 
+  let defaultCurrency = useDefaultCurrency().data;
+  let currency: keyof typeof CurrencyCode = defaultCurrency;
+
   let { data, loading, refetch: refetchQuery } = useQuery<
     GetCollection,
     GetCollectionVariables
@@ -62,6 +80,7 @@ function useCollectionQuery(
       collectionHandle,
       first,
       sortKey: ProductCollectionSortKeys.BEST_SELLING,
+      presentmentCurrencies: [CurrencyCode[currency]],
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
@@ -110,10 +129,12 @@ function useCollectionQuery(
   };
 }
 
-function useCollectionAndProductQuery() {
+function useCollectionAndProductQuery(
+  options?: QueryHookOptions<GetCategoriesAndFeaturedProducts>,
+) {
   let { loading, data } = useQuery<GetCategoriesAndFeaturedProducts>(
     GET_CATEGORIES_AND_FEATURED_PRODUCTS,
-    { fetchPolicy: 'cache-and-network' },
+    { fetchPolicy: 'cache-and-network', ...options },
   );
 
   return { data, loading };

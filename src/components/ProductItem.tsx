@@ -37,19 +37,21 @@ export default function ProductItem(props: Props) {
       <View style={styles.imageContainer}>
         <Image style={[styles.image, imageStyle]} source={{ uri: image }} />
       </View>
-      {discount && (
+      {discount && discount > 0 ? (
         <DiscountBadge value={discount} containerStyle={styles.discountBox} />
-      )}
+      ) : null}
       <Text numberOfLines={1} style={styles.nameText}>
         {title}
       </Text>
       <View style={styles.priceContainer}>
         <Text style={styles.priceText} weight="bold">
-          {discount ? formatCurrency(afterDiscount) : formatCurrency(price)}
+          {discount && discount > 0
+            ? formatCurrency(afterDiscount)
+            : formatCurrency(price)}
         </Text>
-        {discount && (
+        {discount && discount > 0 ? (
           <Text style={styles.discountedPrice}>{formatCurrency(price)}</Text>
-        )}
+        ) : null}
       </View>
     </TouchableOpacity>
   );

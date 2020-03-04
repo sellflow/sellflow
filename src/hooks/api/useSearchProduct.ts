@@ -10,7 +10,13 @@ import {
   SetRecentSearch,
   SetRecentSearchVariables,
 } from '../../generated/client/SetRecentSearch';
-import { SearchResults } from '../../generated/server/SearchResults';
+import {
+  SearchResults,
+  SearchResultsVariables,
+} from '../../generated/server/SearchResults';
+import useDefaultCurrency from './useDefaultCurrency';
+import { CurrencyCode } from '../../generated/server/globalTypes';
+import { getDiscount } from '../../helpers/getDiscount';
 
 export default function getProducts(
   searchData: SearchResults | undefined,
@@ -18,15 +24,23 @@ export default function getProducts(
   if (searchData) {
     return searchData.products.edges.map((item) => {
       let product = item.node;
+
+      let originalProductPrice = ~~product.variants.edges[0].node
+        .presentmentPrices.edges[0].node.compareAtPrice?.amount;
+
+      let productPrice = ~~product.variants.edges[0].node.presentmentPrices
+        .edges[0].node.price.amount;
+
+      let { price, discount } = getDiscount(originalProductPrice, productPrice);
+
       return {
         id: product.id,
         cursor: item.cursor,
         image: product.images.edges[0].node.transformedSrc.toString(),
         title: product.title,
         productType: product.productType,
-        price: Number(
-          product.presentmentPriceRanges.edges[0].node.minVariantPrice.amount,
-        ),
+        price: price,
+        discount: discount,
         handle: product.handle,
       };
     });
@@ -35,9 +49,18 @@ export default function getProducts(
 }
 
 function useSearchProductsQuery() {
+  let defaultCurrency = useDefaultCurrency().data;
+  let currency: keyof typeof CurrencyCode = defaultCurrency;
+
   let [searchProducts, { data: resultsData, loading, refetch }] = useLazyQuery<
-    SearchResults
-  >(SEARCH_RESULTS);
+    SearchResults,
+    SearchResultsVariables
+  >(SEARCH_RESULTS, {
+    variables: {
+      searchText: '',
+      presentmentCurrencies: [CurrencyCode[currency]],
+    },
+  });
   let data = getProducts(resultsData);
   return { searchProducts, data, loading, refetch };
 }

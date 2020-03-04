@@ -7,6 +7,7 @@ export const GET_COLLECTION = gql`
     $reverse: Boolean
     $first: Int!
     $after: String
+    $presentmentCurrencies: [CurrencyCode!]
   ) {
     collectionByHandle(handle: $collectionHandle) {
       id
@@ -27,7 +28,10 @@ export const GET_COLLECTION = gql`
             availableForSale
             productType
             handle
-            presentmentPriceRanges(first: 1, presentmentCurrencies: USD) {
+            presentmentPriceRanges(
+              first: 1
+              presentmentCurrencies: $presentmentCurrencies
+            ) {
               edges {
                 node {
                   minVariantPrice {
@@ -48,6 +52,29 @@ export const GET_COLLECTION = gql`
                   originalSrc
                   transformedSrc
                   altText
+                }
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  presentmentPrices(
+                    first: 1
+                    presentmentCurrencies: $presentmentCurrencies
+                  ) {
+                    edges {
+                      node {
+                        compareAtPrice {
+                          amount
+                          currencyCode
+                        }
+                        price {
+                          amount
+                          currencyCode
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

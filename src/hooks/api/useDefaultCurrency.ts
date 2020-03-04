@@ -12,6 +12,7 @@ import {
 } from '../../generated/client/SetDefaultCurrency';
 import { GetShop } from '../../generated/server/GetShop';
 import { GET_SHOP } from '../../graphql/server/shop';
+import { CurrencyCode } from '../../generated/server/globalTypes';
 
 export default function useDefaultCurrency() {
   let { data: shopData } = useQuery<GetShop>(GET_SHOP);
@@ -19,10 +20,8 @@ export default function useDefaultCurrency() {
   let { data, loading, refetch, error } = useQuery<GetDefaultCurrency>(
     GET_DEFAULT_CURRENCY,
   );
-
-  let defaultCurrency = data?.defaultCurrency.currency;
-  let firstCurrency =
-    shopData?.shop.paymentSettings.enabledPresentmentCurrencies[0] || '';
+  let firstCurrency = shopData?.shop.paymentSettings.currencyCode || '';
+  let defaultCurrency = data?.defaultCurrency.currency || firstCurrency;
 
   let [setDefaultCurrency] = useMutation<
     SetDefaultCurrency,
@@ -39,5 +38,11 @@ export default function useDefaultCurrency() {
     }
   }, [defaultCurrency, firstCurrency, setDefaultCurrency]);
 
-  return { setDefaultCurrency, data: defaultCurrency, loading, refetch, error };
+  return {
+    setDefaultCurrency,
+    data: defaultCurrency as CurrencyCode,
+    loading,
+    refetch,
+    error,
+  };
 }

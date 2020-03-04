@@ -1,7 +1,9 @@
 import gql from 'graphql-tag';
 
 export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
-  query GetCategoriesAndFeaturedProducts {
+  query GetCategoriesAndFeaturedProducts(
+    $presentmentCurrencies: [CurrencyCode!]
+  ) {
     collections(first: 10) {
       edges {
         node {
@@ -18,27 +20,36 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
           id
           title
           handle
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          presentmentPriceRanges(first: 1) {
-            edges {
-              node {
-                minVariantPrice {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
           images(first: 1) {
             edges {
               node {
                 id
                 originalSrc
+                transformedSrc
+                altText
+              }
+            }
+          }
+          variants(first: 1) {
+            edges {
+              node {
+                presentmentPrices(
+                  first: 1
+                  presentmentCurrencies: $presentmentCurrencies
+                ) {
+                  edges {
+                    node {
+                      compareAtPrice {
+                        amount
+                        currencyCode
+                      }
+                      price {
+                        amount
+                        currencyCode
+                      }
+                    }
+                  }
+                }
               }
             }
           }

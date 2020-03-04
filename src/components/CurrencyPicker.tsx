@@ -17,7 +17,13 @@ import { GET_SHOP } from '../graphql/server/shop';
 import { GetShop } from '../generated/server/GetShop';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 
-export default function CurrencyPicker() {
+type Props = {
+  onPressCurrency: (currencyCode: string) => void;
+};
+
+export default function CurrencyPicker(props: Props) {
+  let { onPressCurrency } = props;
+
   let [visible, setVisible] = useState(false);
 
   let { setDefaultCurrency, data: defaultCurrency } = useDefaultCurrency();
@@ -77,6 +83,7 @@ export default function CurrencyPicker() {
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
+                  onPressCurrency(item);
                   setDefaultCurrency({ variables: { currency: item } });
                   setVisible(false);
                 }}

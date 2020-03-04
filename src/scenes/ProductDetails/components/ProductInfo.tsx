@@ -14,6 +14,7 @@ import {
 } from '../../../types/types';
 import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
 import { COLORS } from '../../../constants/colors';
+import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
 
 function infoTabRoutes(infoTabs: Tabs): Array<TabRoute> {
   return infoTabs.map(({ title, content }, i) => ({
@@ -51,6 +52,9 @@ export default function ProductInfo(props: {
     onChangeQuantity,
     onSelectionOptionChange,
   } = props;
+
+  let afterDiscount = priceAfterDiscount(product.price, product.discount || 0);
+
   let radioGroupRenderView = options.map(({ name, values }) => {
     return (
       <RichRadioGroup
@@ -71,10 +75,10 @@ export default function ProductInfo(props: {
         {productOriginalPrice && productOriginalPrice > 0 ? (
           <View style={styles.flexRow}>
             <Text weight="bold" style={styles.productInfoPrice}>
-              {formatCurrency(product.price)}
+              {formatCurrency(afterDiscount)}
             </Text>
             <Text weight="bold" style={styles.productInfoOriginalPrice}>
-              {formatCurrency(productOriginalPrice)}
+              {formatCurrency(product.price)}
             </Text>
           </View>
         ) : (
