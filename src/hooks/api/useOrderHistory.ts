@@ -8,6 +8,7 @@ import { GET_ORDER_HISTORY } from '../../graphql/server/orderHistory';
 import { OrderRecord, AddressItem } from '../../types/types';
 import { emptyAddress } from '../../constants/defaultValues';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
+import { useEffect, useState, useRef } from 'react';
 
 function getOrders(
   customerData: GetOrderHistory | undefined,
@@ -61,6 +62,7 @@ function getOrders(
           subtotalPayment: Number(subtotalPaymentAmount),
           shippingPrice: Number(totalShippingPriceV2.amount),
           orderID: id,
+          cursor: order.cursor,
           orderNumber: `#${orderNumber.toString()}`,
           orderTime: processedAt,
           totalPayment: Number(totalPriceV2.amount),
@@ -73,15 +75,63 @@ function getOrders(
   return [];
 }
 
-function useOrderHistoryQuery(
+function useOrderHistory(
+  first: number,
+  customerAccessToken: string,
   options?: QueryHookOptions<GetOrderHistory, GetOrderHistoryVariables>,
 ) {
-  let { data } = useQuery<GetOrderHistory, GetOrderHistoryVariables>(
-    GET_ORDER_HISTORY,
-    options,
-  );
+  let [isInitFetching, setInitFetching] = useState<boolean>(true);
+  let [orderHistory, setOrderHistory] = useState<Array<OrderRecord>>([]);
+  let isFetchingMore = useRef(false);
+  let hasMore = useRef(true);
 
-  return getOrders(data);
+  let { data, loading, refetch: refetchQuery } = useQuery<
+    GetOrderHistory,
+    GetOrderHistoryVariables
+  >(GET_ORDER_HISTORY, {
+    variables: {
+      customerAccessToken,
+      first,
+    },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+
+  let refetch = async (variables: GetOrderHistoryVariables | undefined) => {
+    isFetchingMore.current = true;
+    let { data } = await refetchQuery(variables);
+    let moreOrderHistory = getOrders(data);
+
+    if (moreOrderHistory.length <= 0) {
+      hasMore.current = false;
+    } else {
+      hasMore.current = true;
+    }
+    setOrderHistory([...orderHistory, ...moreOrderHistory]);
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      isFetchingMore.current = false;
+    }
+    if (isInitFetching && !!data) {
+      let newOrderHistory = getOrders(data);
+      if (newOrderHistory.length < first) {
+        hasMore.current = false;
+      }
+      setOrderHistory(newOrderHistory);
+      setInitFetching(false);
+    }
+  }, [loading, isInitFetching]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return {
+    orderHistory,
+    loading,
+    refetch,
+    isFetchingMore: isFetchingMore.current,
+    hasMore: hasMore.current,
+  };
 }
 
-export { useOrderHistoryQuery };
+export { useOrderHistory };

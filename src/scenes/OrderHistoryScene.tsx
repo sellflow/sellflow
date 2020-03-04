@@ -5,21 +5,39 @@ import { ActivityIndicator, Text } from 'exoflex';
 
 import { OrderHistoryItem } from '../components';
 import { StackNavProp, StackRouteProp } from '../types/Navigation';
-import { useOrderHistoryQuery } from '../hooks/api/useOrderHistory';
+import { useOrderHistory } from '../hooks/api/useOrderHistory';
 
 export default function OrderHistoryScene() {
   let { navigate } = useNavigation<StackNavProp<'OrderHistory'>>();
-  let { params } = useRoute<StackRouteProp<'OrderHistory'>>();
-  let orders = useOrderHistoryQuery({
-    variables: { customerAccessToken: params.customerAccessToken },
-  });
+  let {
+    params: { customerAccessToken },
+  } = useRoute<StackRouteProp<'OrderHistory'>>();
+  let first = 10;
+  let {
+    orderHistory,
+    loading,
+    refetch,
+    isFetchingMore,
+    hasMore,
+  } = useOrderHistory(first, customerAccessToken);
 
-  if (orders.length < 1) {
+  if (loading && !isFetchingMore) {
     return <ActivityIndicator style={styles.center} />;
   }
+
+  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
+    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+      refetch({
+        customerAccessToken,
+        first,
+        after: orderHistory[orderHistory.length - 1].cursor || null,
+      });
+    }
+  };
+
   return (
     <FlatList
-      data={orders}
+      data={orderHistory}
       renderItem={({ item }) => (
         <OrderHistoryItem
           order={item}
@@ -33,6 +51,11 @@ export default function OrderHistoryScene() {
           <Text>{t('No orders yet')}</Text>
         </View>
       )}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.25}
+      ListFooterComponent={() => {
+        return hasMore ? <ActivityIndicator /> : null;
+      }}
     />
   );
 }
