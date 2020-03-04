@@ -4,7 +4,7 @@ import { GET_SHOPPING_CART } from '../client/shoppingCartQueries';
 import { GetShoppingCart } from '../../generated/client/GetShoppingCart';
 import { AddToShoppingCartVariables } from '../../generated/client/AddToShoppingCart';
 
-function addToShoppingCartResolver(
+async function addToShoppingCartResolver(
   _: object,
   args: AddToShoppingCartVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
@@ -41,18 +41,19 @@ function addToShoppingCartResolver(
   if (!alreadyInCart) {
     newItems.push(newItem);
   }
+  let shoppingCart = {
+    __typename: 'ShoppingCart',
+    id: cartData.shoppingCart.id,
+    items: newItems,
+  };
 
   cache.writeData({
     data: {
-      shoppingCart: {
-        __typename: 'ShoppingCart',
-        id: cartData.shoppingCart.id,
-        items: newItems,
-      },
+      shoppingCart,
     },
   });
 
-  return null;
+  return shoppingCart;
 }
 
 export { addToShoppingCartResolver };

@@ -28,11 +28,11 @@ import {
   useSetShoppingCart,
 } from '../hooks/api/useShoppingCart';
 import {
-  useShopifyCreateCheckout,
-  useShopifyShoppingCartReplaceItems,
-  useShopifyCartCustomerAssociate,
-  useShopifyCartDiscountApply,
-  useShopifyCartDiscountRemove,
+  useCheckoutCreate,
+  useCheckoutCustomerAssociate,
+  useCheckoutDiscountApply,
+  useCheckoutDiscountRemove,
+  useCheckoutReplaceItem,
 } from '../hooks/api/useShopifyCart';
 import { cartPlaceholder } from '../../assets/images';
 import { mapToLineItems } from '../helpers/mapToLineItems';
@@ -111,7 +111,7 @@ export default function ShoppingCartScene() {
   let {
     shoppingCartDiscountApply,
     loading: DiscountCodeApplyLoading,
-  } = useShopifyCartDiscountApply({
+  } = useCheckoutDiscountApply({
     onCompleted: ({ checkoutDiscountCodeApplyV2 }) => {
       if (checkoutDiscountCodeApplyV2 && checkoutDiscountCodeApplyV2.checkout) {
         setCartData(extractDataCheckout(checkoutDiscountCodeApplyV2.checkout));
@@ -119,7 +119,7 @@ export default function ShoppingCartScene() {
     },
   });
 
-  let { shoppingCartDiscountRemove } = useShopifyCartDiscountRemove();
+  let { shoppingCartDiscountRemove } = useCheckoutDiscountRemove();
 
   let onAddVoucherCode = () => {
     shoppingCartDiscountApply({
@@ -215,7 +215,7 @@ export default function ShoppingCartScene() {
   let { setShoppingCart } = useSetShoppingCart();
   let { setShoppingCartID } = useSetShoppingCartID();
 
-  let { shoppingCartReplaceItems } = useShopifyShoppingCartReplaceItems({
+  let { shoppingCartReplaceItems } = useCheckoutReplaceItem({
     onCompleted: ({ checkoutLineItemsReplace }) => {
       if (checkoutLineItemsReplace && checkoutLineItemsReplace.checkout) {
         setCartData(extractDataCheckout(checkoutLineItemsReplace.checkout));
@@ -223,9 +223,9 @@ export default function ShoppingCartScene() {
     },
   });
 
-  let { shoppingCartCustomerAssociate } = useShopifyCartCustomerAssociate();
+  let { shoppingCartCustomerAssociate } = useCheckoutCustomerAssociate();
 
-  let { createCheckout } = useShopifyCreateCheckout({
+  let { createCheckout } = useCheckoutCreate({
     variables: {
       checkoutCreateInput: { lineItems: shoppingCartItems },
     },

@@ -32,7 +32,7 @@ import { useAuth } from '../../helpers/useAuth';
 import { emptyAddress } from '../../constants/defaultValues';
 import { AddressItem, PaymentInfo } from '../../types/types';
 import { useGetCustomerData } from '../../hooks/api/useCustomer';
-import { useShopifyCartUpdateAddress } from '../../hooks/api/useShopifyCart';
+import { useCheckoutUpdateAddress } from '../../hooks/api/useShopifyCart';
 import { ShippingAddressForm } from './components';
 import { useResetCart } from '../../hooks/api/useShoppingCart';
 
@@ -57,28 +57,27 @@ export default function CheckoutScene() {
 
   let { resetShoppingCart } = useResetCart();
 
-  let {
-    updateCartAddress,
-    data: updateAddressData,
-  } = useShopifyCartUpdateAddress({
-    onCompleted: ({ checkoutShippingAddressUpdateV2 }) => {
-      if (
-        checkoutShippingAddressUpdateV2 &&
-        checkoutShippingAddressUpdateV2.checkout
-      ) {
-        let {
-          totalPriceV2,
-          subtotalPriceV2,
-        } = checkoutShippingAddressUpdateV2.checkout;
+  let { updateCartAddress, data: updateAddressData } = useCheckoutUpdateAddress(
+    {
+      onCompleted: ({ checkoutShippingAddressUpdateV2 }) => {
+        if (
+          checkoutShippingAddressUpdateV2 &&
+          checkoutShippingAddressUpdateV2.checkout
+        ) {
+          let {
+            totalPriceV2,
+            subtotalPriceV2,
+          } = checkoutShippingAddressUpdateV2.checkout;
 
-        setPaymentInfo({
-          ...paymentInfo,
-          subtotalPrice: Number(subtotalPriceV2.amount),
-          totalPrice: Number(totalPriceV2.amount),
-        });
-      }
+          setPaymentInfo({
+            ...paymentInfo,
+            subtotalPrice: Number(subtotalPriceV2.amount),
+            totalPrice: Number(totalPriceV2.amount),
+          });
+        }
+      },
     },
-  });
+  );
 
   let { getCustomer, data, customerAddressData } = useGetCustomerData({
     onCompleted: ({ customer }) => {

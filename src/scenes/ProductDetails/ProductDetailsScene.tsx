@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import { ActivityIndicator } from 'exoflex';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 
 import {
   VariantQueryData,
@@ -12,13 +12,23 @@ import {
 import { useGetWishlistData } from '../../hooks/api/useWishlist';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { StackRouteProp } from '../../types/Navigation';
-import { useAddToCart } from '../../hooks/api/useShoppingCart';
+import {
+  useAddToCart,
+  useSetShoppingCartID,
+} from '../../hooks/api/useShoppingCart';
 import {
   useGetProductVariant,
   useGetProductByHandle,
 } from '../../hooks/api/useProduct';
 import ProductLandscape from './components/ProductLandscape';
 import ProductPortrait from './components/ProductPortrait';
+import { useGetCustomerData } from '../../hooks/api/useCustomer';
+import { useAuth } from '../../helpers/useAuth';
+import {
+  useCheckoutCreate,
+  useCheckoutCustomerAssociate,
+  useCheckoutReplaceItem,
+} from '../../hooks/api/useShopifyCart';
 
 export default function ProductDetailsScene() {
   let dimensions = useDimensions();
@@ -37,6 +47,45 @@ export default function ProductDetailsScene() {
   let [productDiscount, setProductDiscount] = useState<number>(0);
   let [productOriginalPrice, setProductOriginalPrice] = useState<number>(0);
   let [variantID, setVariantID] = useState<string>('');
+
+  let { authToken } = useAuth();
+  let { setShoppingCartID } = useSetShoppingCartID();
+  let {
+    shoppingCartCustomerAssociate,
+    loading: associateLoading,
+  } = useCheckoutCustomerAssociate();
+  let { createCheckout, loading: checkoutCreateLoading } = useCheckoutCreate({
+    fetchPolicy: 'network-only',
+    onCompleted: async ({ checkoutCreate }) => {
+      if (checkoutCreate && checkoutCreate.checkout) {
+        await setShoppingCartID({
+          variables: { id: checkoutCreate.checkout.id },
+        });
+        await shoppingCartCustomerAssociate({
+          variables: {
+            checkoutId: checkoutCreate.checkout.id,
+            customerAccessToken: authToken,
+          },
+        });
+      }
+    },
+  });
+  let { getCustomer } = useGetCustomerData({
+    onCompleted: async ({ customer }) => {
+      if (customer && customer.lastIncompleteCheckout) {
+        if (customer.lastIncompleteCheckout.id == null) {
+          await createCheckout();
+        }
+      }
+    },
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getCustomer({ variables: { accessToken: authToken } });
+      return undefined;
+    }, []), // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   let showToast = (duration: number) => {
     setIsToastVisible(true);
@@ -66,8 +115,21 @@ export default function ProductDetailsScene() {
     setSelectedOptions({ ...selectedOptions, [key]: value });
   };
 
+  let { shoppingCartReplaceItems } = useCheckoutReplaceItem();
+
   let { addToCart, loading: addToCartLoading } = useAddToCart({
-    onCompleted: () => {
+    onCompleted: async ({ addToShoppingCart }) => {
+      let shoppingCartItems = addToShoppingCart.items.map(
+        ({ variantId, quantity }) => {
+          return { variantId, quantity };
+        },
+      );
+      await shoppingCartReplaceItems({
+        variables: {
+          checkoutID: addToShoppingCart.id,
+          lineItems: shoppingCartItems,
+        },
+      });
       showToast(1100);
     },
   });
@@ -153,7 +215,15 @@ export default function ProductDetailsScene() {
     },
   });
 
-  return getProductByHandleLoading || !productData || !wishlistData ? (
+  let isFirstLoading =
+    getProductByHandleLoading ||
+    !productData ||
+    !wishlistData ||
+    addToCartLoading ||
+    associateLoading ||
+    checkoutCreateLoading;
+
+  return isFirstLoading ? (
     <View style={styles.centered}>
       <ActivityIndicator size="large" />
     </View>

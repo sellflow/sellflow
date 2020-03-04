@@ -32,8 +32,8 @@ import {
   ShoppingCartDiscountCodeRemoveVariables,
 } from '../../generated/server/ShoppingCartDiscountCodeRemove';
 
-function useShopifyShoppingCartReplaceItems(
-  options: MutationHookOptions<
+function useCheckoutReplaceItem(
+  options?: MutationHookOptions<
     ShoppingCartReplaceItem,
     ShoppingCartReplaceItemVariables
   >,
@@ -41,11 +41,11 @@ function useShopifyShoppingCartReplaceItems(
   let [shoppingCartReplaceItems, { loading }] = useMutation<
     ShoppingCartReplaceItem,
     ShoppingCartReplaceItemVariables
-  >(SHOPPING_CART_REPLACE_ITEMS, { ...options });
+  >(SHOPPING_CART_REPLACE_ITEMS, { fetchPolicy: 'no-cache', ...options });
   return { shoppingCartReplaceItems, loading };
 }
 
-function useShopifyCreateCheckout(
+function useCheckoutCreate(
   options: MutationHookOptions<ShoppingCartCreate, ShoppingCartCreateVariables>,
 ) {
   let [createCheckout, { loading }] = useMutation<
@@ -55,7 +55,7 @@ function useShopifyCreateCheckout(
   return { createCheckout, loading };
 }
 
-function useShopifyCartUpdateAddress(
+function useCheckoutUpdateAddress(
   options: MutationHookOptions<
     ShoppingCartUpdateAddress,
     ShoppingCartUpdateAddressVariables
@@ -67,7 +67,7 @@ function useShopifyCartUpdateAddress(
   >(SHOPPING_CART_UPDATE_ADDRESS, { ...options });
   return { updateCartAddress, data, loading };
 }
-function useShopifyCartCustomerAssociate(
+function useCheckoutCustomerAssociate(
   options?: MutationHookOptions<
     ShoppingCartCustomerAssociate,
     ShoppingCartCustomerAssociateVariables
@@ -85,7 +85,7 @@ function useShopifyCartCustomerAssociate(
   };
 }
 
-function useShopifyCartDiscountApply(
+function useCheckoutDiscountApply(
   options?: MutationHookOptions<
     ShoppingCartDiscountCodeApply,
     ShoppingCartDiscountCodeApplyVariables
@@ -105,7 +105,7 @@ function useShopifyCartDiscountApply(
   };
 }
 
-function useShopifyCartDiscountRemove(
+function useCheckoutDiscountRemove(
   options?: MutationHookOptions<
     ShoppingCartDiscountCodeRemove,
     ShoppingCartDiscountCodeRemoveVariables
@@ -126,10 +126,10 @@ function useShopifyCartDiscountRemove(
 }
 
 export {
-  useShopifyCreateCheckout,
-  useShopifyShoppingCartReplaceItems,
-  useShopifyCartUpdateAddress,
-  useShopifyCartCustomerAssociate,
-  useShopifyCartDiscountApply,
-  useShopifyCartDiscountRemove,
+  useCheckoutCreate,
+  useCheckoutCustomerAssociate,
+  useCheckoutDiscountApply,
+  useCheckoutDiscountRemove,
+  useCheckoutReplaceItem,
+  useCheckoutUpdateAddress,
 };
