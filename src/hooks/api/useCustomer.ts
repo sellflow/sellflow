@@ -3,6 +3,7 @@ import {
   MutationHookOptions,
   useLazyQuery,
   QueryHookOptions,
+  useQuery,
 } from '@apollo/react-hooks';
 
 import {
@@ -16,6 +17,7 @@ import {
   CUSTOMER_REGISTER,
   UPDATE_CUSTOMER_DATA,
   REMOVE_ACCESS_TOKEN,
+  GET_CUSTOMER_ADDRESSES,
 } from '../../graphql/server/auth';
 import {
   GetCustomerData,
@@ -34,9 +36,13 @@ import {
   RemoveAccessTokenVariables,
 } from '../../generated/server/RemoveAccessToken';
 import { AddressItem } from '../../types/types';
+import {
+  GetCustomerAddresses,
+  GetCustomerAddressesVariables,
+} from '../../generated/server/GetCustomerAddresses';
 
 function getCustomerAddresses(
-  customerAddressData: GetCustomerData | undefined,
+  customerAddressData: GetCustomerAddresses | undefined,
 ): Array<AddressItem> {
   let oldAddressData = customerAddressData?.customer?.addresses;
   let defaultAddress = customerAddressData?.customer?.defaultAddress;
@@ -82,23 +88,49 @@ function useCustomerCreateToken(
 function useGetCustomerData(
   options?: QueryHookOptions<GetCustomerData, GetCustomerDataVariables>,
 ) {
-  let [getCustomer, { data, loading, refetch }] = useLazyQuery<
+  let [getCustomer, { data, loading }] = useLazyQuery<
     GetCustomerData,
     GetCustomerDataVariables
   >(GET_CUSTOMER_DATA, {
-    ...options,
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
+    ...options,
   });
-
-  let customerAddressData: Array<AddressItem> = getCustomerAddresses(data);
 
   return {
     getCustomer,
     data,
     loading,
+  };
+}
+
+function useGetCustomerAddresses(
+  first: number,
+  customerAccessToken: string,
+  options?: QueryHookOptions<
+    GetCustomerAddresses,
+    GetCustomerAddressesVariables
+  >,
+) {
+  let { data, loading, refetch } = useQuery<
+    GetCustomerAddresses,
+    GetCustomerAddressesVariables
+  >(GET_CUSTOMER_ADDRESSES, {
+    variables: {
+      first,
+      customerAccessToken,
+    },
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+    ...options,
+  });
+
+  let customerAddressData: Array<AddressItem> = getCustomerAddresses(data);
+
+  return {
+    data: customerAddressData,
+    loading,
     refetch,
-    customerAddressData,
   };
 }
 
@@ -141,4 +173,5 @@ export {
   useGetCustomerData,
   useUpdateCustomer,
   useDeactivateCustomerToken,
+  useGetCustomerAddresses,
 };

@@ -62,7 +62,15 @@ export const GET_CUSTOMER_DATA = gql`
           }
         }
       }
-      addresses(first: 20) {
+    }
+  }
+`;
+
+export const GET_CUSTOMER_ADDRESSES = gql`
+  query GetCustomerAddresses($customerAccessToken: String!, $first: Int!) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+      addresses(first: $first) {
         edges {
           node {
             id
@@ -73,6 +81,7 @@ export const GET_CUSTOMER_DATA = gql`
             city
             province
             address1
+            address2
             zip
             country
           }

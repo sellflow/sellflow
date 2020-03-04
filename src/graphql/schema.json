@@ -829,7 +829,7 @@
       {
         "kind": "ENUM",
         "name": "ArticleSortKeys",
-        "description": "The set of valid sort keys for the articles query.",
+        "description": "The set of valid sort keys for the Article query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -2316,7 +2316,7 @@
       {
         "kind": "ENUM",
         "name": "BlogSortKeys",
-        "description": "The set of valid sort keys for the blogs query.",
+        "description": "The set of valid sort keys for the Blog query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -2699,7 +2699,7 @@
       {
         "kind": "ENUM",
         "name": "ProductCollectionSortKeys",
-        "description": "The set of valid sort keys for the products query.",
+        "description": "The set of valid sort keys for the ProductCollection query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -5787,7 +5787,7 @@
       {
         "kind": "ENUM",
         "name": "ProductImageSortKeys",
-        "description": "The set of valid sort keys for the images query.",
+        "description": "The set of valid sort keys for the ProductImage query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -6165,7 +6165,7 @@
       {
         "kind": "ENUM",
         "name": "ProductVariantSortKeys",
-        "description": "The set of valid sort keys for the variants query.",
+        "description": "The set of valid sort keys for the ProductVariant query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -6300,7 +6300,7 @@
       {
         "kind": "ENUM",
         "name": "CollectionSortKeys",
-        "description": "The set of valid sort keys for the collections query.",
+        "description": "The set of valid sort keys for the Collection query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -11005,7 +11005,7 @@
       {
         "kind": "ENUM",
         "name": "OrderSortKeys",
-        "description": "The set of valid sort keys for the orders query.",
+        "description": "The set of valid sort keys for the Order query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -11279,7 +11279,7 @@
       {
         "kind": "ENUM",
         "name": "PageSortKeys",
-        "description": "The set of valid sort keys for the pages query.",
+        "description": "The set of valid sort keys for the Page query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -11502,7 +11502,7 @@
       {
         "kind": "ENUM",
         "name": "ProductSortKeys",
-        "description": "The set of valid sort keys for the products query.",
+        "description": "The set of valid sort keys for the Product query.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,

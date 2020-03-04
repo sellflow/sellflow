@@ -31,7 +31,10 @@ import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { useAuth } from '../../helpers/useAuth';
 import { emptyAddress } from '../../constants/defaultValues';
 import { AddressItem, PaymentInfo } from '../../types/types';
-import { useGetCustomerData } from '../../hooks/api/useCustomer';
+import {
+  useGetCustomerData,
+  useGetCustomerAddresses,
+} from '../../hooks/api/useCustomer';
 import { useCheckoutUpdateAddress } from '../../hooks/api/useShopifyCart';
 import { ShippingAddressForm } from './components';
 import { useResetCart } from '../../hooks/api/useShoppingCart';
@@ -54,6 +57,7 @@ export default function CheckoutScene() {
   let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
     addressItemData[0],
   );
+  let { screenSize } = useDimensions();
 
   let { resetShoppingCart } = useResetCart();
 
@@ -79,7 +83,12 @@ export default function CheckoutScene() {
     },
   );
 
-  let { getCustomer, data, customerAddressData } = useGetCustomerData({
+  let { getCustomer, data: customerData } = useGetCustomerData();
+
+  let {
+    data: customerAddressData,
+    refetch: refetchAddress,
+  } = useGetCustomerAddresses(5, authToken, {
     onCompleted: ({ customer }) => {
       if (customer && customer.defaultAddress) {
         setAddressAvailable(customerAddressData);
@@ -89,12 +98,10 @@ export default function CheckoutScene() {
 
   useFocusEffect(
     useCallback(() => {
-      getCustomer({
-        variables: { accessToken: authToken },
-      });
+      refetchAddress();
 
       return undefined;
-    }, [getCustomer, authToken]),
+    }, []), // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   useEffect(() => {
@@ -103,13 +110,13 @@ export default function CheckoutScene() {
       addressItemData[0];
     setSelectedAddress(defaultAddress);
 
-    if (data && data.customer) {
-      if (!data.customer.lastIncompleteCheckout) {
+    if (customerData && customerData.customer) {
+      if (!customerData.customer.lastIncompleteCheckout) {
         resetShoppingCart();
         navigate('Home'); // TODO: Navigate to Order Confirmation scene
       }
     }
-  }, [addressAvailable, data]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [addressAvailable, customerData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     let handleAppStateChange = (appState: AppStateStatus) => {
@@ -151,8 +158,6 @@ export default function CheckoutScene() {
       }
     }
   };
-
-  let { screenSize } = useDimensions();
 
   let navigateToPayment = (webUrl: string) => {
     Linking.openURL(webUrl);

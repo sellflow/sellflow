@@ -16,7 +16,7 @@ import {
 
 import { ManageAddress } from '../../components';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
-import { useGetCustomerData } from '../../hooks/api/useCustomer';
+import { useGetCustomerAddresses } from '../../hooks/api/useCustomer';
 import { AddressItem } from '../../types/types';
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import {
@@ -25,26 +25,24 @@ import {
 } from '../../hooks/api/useCustomerAddress';
 import { DeleteAddressModal } from './components/DeleteAddressModal';
 import { emptyAddressImage } from '../../../assets/images';
+import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 
 export default function AddressManagementScene() {
   let { navigate } = useNavigation<StackNavProp<'AddressManagement'>>();
   let route = useRoute<StackRouteProp<'AddressManagement'>>();
   let { customerAccessToken } = route.params;
-
   let [addressId, setAddressId] = useState<string>('');
   let [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
     false,
   );
+  let { screenSize } = useDimensions();
+  let first = screenSize === ScreenSize.Medium ? 10 : 5;
 
   let {
-    getCustomer,
-    customerAddressData,
+    data: customerAddressData,
     loading: getCustomerLoading,
-    refetch: refetchGetCustomer,
-  } = useGetCustomerData({
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
-  });
+    refetch: refetchAddress,
+  } = useGetCustomerAddresses(first, customerAccessToken);
 
   let {
     customerAddressDelete,
@@ -54,7 +52,7 @@ export default function AddressManagementScene() {
       Alert.alert(error.message);
     },
     onCompleted: () => {
-      refetchGetCustomer();
+      refetchAddress();
     },
   });
 
@@ -66,20 +64,17 @@ export default function AddressManagementScene() {
       Alert.alert(error.message);
     },
     onCompleted: () => {
-      refetchGetCustomer();
+      refetchAddress();
     },
   });
 
-  //TODO: Typing error bug from react navigation
-  let focusEffect = useCallback(() => {
-    getCustomer({
-      variables: { accessToken: customerAccessToken },
-    });
+  useFocusEffect(
+    useCallback(() => {
+      refetchAddress();
 
-    return undefined;
-  }, [getCustomer, customerAccessToken]);
-
-  useFocusEffect(focusEffect);
+      return undefined;
+    }, []), // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   let toggleDeleteModal = () => {
     setIsDeleteModalVisible(!isDeleteModalVisible);
