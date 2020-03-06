@@ -39,8 +39,10 @@ export default function AddressManagementScene() {
   let first = screenSize === ScreenSize.Medium ? 10 : 5;
 
   let {
-    data: customerAddressData,
-    loading: getCustomerLoading,
+    addresses,
+    loading: loadingAddresses,
+    hasMore,
+    isFetchingMore,
     refetch: refetchAddress,
   } = useGetCustomerAddresses(first, customerAccessToken);
 
@@ -52,7 +54,7 @@ export default function AddressManagementScene() {
       Alert.alert(error.message);
     },
     onCompleted: () => {
-      refetchAddress();
+      refetchAddress('update', { first, customerAccessToken });
     },
   });
 
@@ -64,13 +66,14 @@ export default function AddressManagementScene() {
       Alert.alert(error.message);
     },
     onCompleted: () => {
-      refetchAddress();
+      refetchAddress('update', { first, customerAccessToken });
     },
   });
 
   useFocusEffect(
     useCallback(() => {
-      refetchAddress();
+      !loadingAddresses &&
+        refetchAddress('update', { first, customerAccessToken });
 
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps
@@ -108,7 +111,19 @@ export default function AddressManagementScene() {
     });
   };
 
-  if (getCustomerLoading || loadingDeleteAddress || loadingSetDefaultAddress) {
+  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
+    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+      refetchAddress('scroll', {
+        first,
+        customerAccessToken,
+        after: addresses[addresses.length - 1].cursor || null,
+      });
+    }
+  };
+
+  let loading =
+    loadingAddresses || loadingDeleteAddress || loadingSetDefaultAddress;
+  if (loading && !isFetchingMore) {
     return <ActivityIndicator size="large" style={styles.centered} />;
   }
 
@@ -120,9 +135,9 @@ export default function AddressManagementScene() {
         onPressCancel={onPressCancel}
         onPressDelete={() => onPressDelete(addressId)}
       />
-      {customerAddressData.length > 0 ? (
+      {addresses.length > 0 ? (
         <FlatList
-          data={customerAddressData}
+          data={addresses}
           renderItem={({ item }) => (
             <ManageAddress
               data={item}
@@ -137,6 +152,11 @@ export default function AddressManagementScene() {
           )}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.contentContainer}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.25}
+          ListFooterComponent={() => {
+            return hasMore ? <ActivityIndicator /> : null;
+          }}
         />
       ) : (
         <View style={[styles.centered, styles.imageContainer]}>

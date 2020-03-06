@@ -51,13 +51,11 @@ export default function CheckoutScene() {
   let { subtotalPrice, totalPrice } = paymentInfo;
   let { authToken } = useAuth();
   let [address, setAddress] = useState<AddressItem>(emptyAddress); // can be used to do the update
-  let [addressAvailable, setAddressAvailable] = useState<Array<AddressItem>>(
-    [],
-  );
   let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
     addressItemData[0],
   );
   let { screenSize } = useDimensions();
+  const first = 5;
 
   let { resetShoppingCart } = useResetCart();
 
@@ -85,20 +83,14 @@ export default function CheckoutScene() {
 
   let { getCustomer, data: customerData } = useGetCustomerData();
 
-  let {
-    data: customerAddressData,
-    refetch: refetchAddress,
-  } = useGetCustomerAddresses(5, authToken, {
-    onCompleted: ({ customer }) => {
-      if (customer && customer.defaultAddress) {
-        setAddressAvailable(customerAddressData);
-      }
-    },
-  });
+  let { addresses, refetch: refetchAddress } = useGetCustomerAddresses(
+    first,
+    authToken,
+  );
 
   useFocusEffect(
     useCallback(() => {
-      refetchAddress();
+      refetchAddress('update', { first, customerAccessToken: authToken });
 
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps
@@ -106,8 +98,7 @@ export default function CheckoutScene() {
 
   useEffect(() => {
     let defaultAddress =
-      addressAvailable.find((item) => item.default === true) ||
-      addressItemData[0];
+      addresses.find((item) => item.default === true) || addressItemData[0];
     setSelectedAddress(defaultAddress);
 
     if (customerData && customerData.customer) {
@@ -116,7 +107,7 @@ export default function CheckoutScene() {
         navigate('Home'); // TODO: Navigate to Order Confirmation scene
       }
     }
-  }, [addressAvailable, customerData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [addresses, customerData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     let handleAppStateChange = (appState: AppStateStatus) => {
@@ -209,7 +200,7 @@ export default function CheckoutScene() {
           <Text style={styles.opacity}>{t('Shipping Address')}</Text>
           <RadioButton.Group value="Address List">
             <FlatList
-              data={addressAvailable}
+              data={addresses}
               renderItem={({ item }) => (
                 <CheckoutAddress
                   data={item}

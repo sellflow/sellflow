@@ -67,11 +67,16 @@ export const GET_CUSTOMER_DATA = gql`
 `;
 
 export const GET_CUSTOMER_ADDRESSES = gql`
-  query GetCustomerAddresses($customerAccessToken: String!, $first: Int!) {
+  query GetCustomerAddresses(
+    $customerAccessToken: String!
+    $first: Int!
+    $after: String
+  ) {
     customer(customerAccessToken: $customerAccessToken) {
       id
-      addresses(first: $first) {
+      addresses(first: $first, after: $after) {
         edges {
+          cursor
           node {
             id
             name

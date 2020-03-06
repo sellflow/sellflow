@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import {
   useMutation,
   MutationHookOptions,
@@ -54,6 +55,7 @@ function getCustomerAddresses(
         let { firstName, lastName } = address;
         return {
           id: address.id,
+          cursor: item.cursor,
           name: address.name ?? '',
           firstName: firstName ?? '',
           lastName: lastName ?? '',
@@ -112,7 +114,12 @@ function useGetCustomerAddresses(
     GetCustomerAddressesVariables
   >,
 ) {
-  let { data, loading, refetch } = useQuery<
+  let [isInitFetching, setInitFetching] = useState<boolean>(true);
+  let [addresses, setAddresses] = useState<Array<AddressItem>>([]);
+  let isFetchingMore = useRef(false);
+  let hasMore = useRef(true);
+
+  let { data, loading, refetch: refetchQuery } = useQuery<
     GetCustomerAddresses,
     GetCustomerAddressesVariables
   >(GET_CUSTOMER_ADDRESSES, {
@@ -125,11 +132,46 @@ function useGetCustomerAddresses(
     ...options,
   });
 
-  let customerAddressData: Array<AddressItem> = getCustomerAddresses(data);
+  let refetch = async (
+    type: 'update' | 'scroll',
+    variables: GetCustomerAddressesVariables | undefined,
+  ) => {
+    isFetchingMore.current = type === 'scroll';
+    let { data } = await refetchQuery(variables);
+    let moreAddress = getCustomerAddresses(data);
+
+    if (type === 'update') {
+      setAddresses(moreAddress);
+    } else {
+      if (moreAddress.length <= 0) {
+        hasMore.current = false;
+      } else {
+        hasMore.current = true;
+      }
+      setAddresses([...addresses, ...moreAddress]);
+    }
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      isFetchingMore.current = false;
+    }
+    if (isInitFetching && !!data) {
+      let newAddresses = getCustomerAddresses(data);
+      if (newAddresses.length < first) {
+        hasMore.current = false;
+      }
+
+      setAddresses(newAddresses);
+      setInitFetching(false);
+    }
+  }, [loading, isInitFetching]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
-    data: customerAddressData,
+    addresses,
     loading,
+    hasMore: hasMore.current,
+    isFetchingMore: isFetchingMore.current,
     refetch,
   };
 }

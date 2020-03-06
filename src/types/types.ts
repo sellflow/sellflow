@@ -41,6 +41,7 @@ export type OrderRecord = {
 
 export type AddressItem = {
   id: string;
+  cursor?: string;
   name: string;
   firstName: string;
   lastName: string;
