@@ -117,25 +117,6 @@ export type Payment = {
   name: string;
 };
 
-export type ProductDetailsProps = {
-  onSelectionOptionChange: (key: string, value: string) => void;
-  selectedOptions: OptionsData;
-  quantity: number;
-  onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
-  product: Product;
-  productImages: Array<string>;
-
-  productDiscount: number;
-  productOriginalPrice: number;
-  isToastVisible: boolean;
-  options?: Options;
-  infoTabs?: Tabs;
-  isLoading: boolean;
-  isWishlistActive: boolean;
-  onAddToCartPress: () => void;
-  onWishlistPress: (value: boolean) => void;
-};
-
 export type Options = Array<{ name: string; values: Array<string> }>;
 
 export type Tabs = Array<{ title: string; content: string }>;

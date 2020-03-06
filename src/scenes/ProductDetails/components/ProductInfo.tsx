@@ -16,6 +16,17 @@ import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
 import { COLORS } from '../../../constants/colors';
 import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
 
+type Props = {
+  onSelectionOptionChange: (key: string, value: string) => void;
+  selectedOptions: OptionsData;
+  productOriginalPrice: number;
+  quantity: number;
+  onChangeQuantity: (qunatity: number) => void;
+  product: Product;
+  options: Options;
+  infoTabs: Tabs;
+};
+
 function infoTabRoutes(infoTabs: Tabs): Array<TabRoute> {
   return infoTabs.map(({ title, content }, i) => ({
     key: i.toString(),
@@ -32,16 +43,7 @@ function TabPane(props: { content: string }) {
   );
 }
 
-export default function ProductInfo(props: {
-  onSelectionOptionChange: (key: string, value: string) => void;
-  selectedOptions: OptionsData;
-  productOriginalPrice: number;
-  quantity: number;
-  onChangeQuantity: React.Dispatch<React.SetStateAction<number>>;
-  product: Product;
-  options: Options;
-  infoTabs: Tabs;
-}) {
+export default function ProductInfo(props: Props) {
   let {
     product,
     productOriginalPrice,
@@ -68,6 +70,7 @@ export default function ProductInfo(props: {
       />
     );
   });
+
   return (
     <>
       <View style={styles.padding}>
@@ -87,7 +90,6 @@ export default function ProductInfo(props: {
           </Text>
         )}
       </View>
-
       {radioGroupRenderView}
       <View style={styles.paddingHorizontal}>
         <Text style={styles.quantityText}>Quantity</Text>

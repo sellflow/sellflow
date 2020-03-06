@@ -5,12 +5,11 @@ import { useRoute, useFocusEffect } from '@react-navigation/native';
 
 import {
   VariantQueryData,
-  Tabs,
   Options,
   OptionsData,
+  Tabs,
 } from '../../types/types';
 import { useGetWishlistData } from '../../hooks/api/useWishlist';
-import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { StackRouteProp } from '../../types/Navigation';
 import {
   useAddToCart,
@@ -20,8 +19,6 @@ import {
   useGetProductVariant,
   useGetProductByHandle,
 } from '../../hooks/api/useProduct';
-import ProductLandscape from './components/ProductLandscape';
-import ProductPortrait from './components/ProductPortrait';
 import { useGetCustomerData } from '../../hooks/api/useCustomer';
 import { useAuth } from '../../helpers/useAuth';
 import {
@@ -29,9 +26,10 @@ import {
   useCheckoutCustomerAssociate,
   useCheckoutReplaceItem,
 } from '../../hooks/api/useShopifyCart';
+import { ProductDetailsView } from './components';
+import { Toast } from '../../core-ui';
 
 export default function ProductDetailsScene() {
-  let dimensions = useDimensions();
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
   let { product } = route.params;
 
@@ -227,46 +225,34 @@ export default function ProductDetailsScene() {
     <View style={styles.centered}>
       <ActivityIndicator size="large" />
     </View>
-  ) : dimensions.screenSize === ScreenSize.Large ? (
-    <ProductLandscape
-      isToastVisible={isToastVisible}
-      selectedOptions={selectedOptions}
-      onSelectionOptionChange={changeSelectedOptions}
-      quantity={quantity}
-      onChangeQuantity={setQuantity}
-      onAddToCartPress={onAddToCart}
-      product={product}
-      productImages={productImages}
-      productDiscount={productDiscount}
-      productOriginalPrice={productOriginalPrice}
-      options={options}
-      isLoading={isLoading}
-      infoTabs={infoTabs}
-      isWishlistActive={isWishlistActive}
-      onWishlistPress={(isActive) => {
-        setWishlistActive(isActive);
-      }}
-    />
   ) : (
-    <ProductPortrait
-      isToastVisible={isToastVisible}
-      selectedOptions={selectedOptions}
-      onSelectionOptionChange={changeSelectedOptions}
-      quantity={quantity}
-      onChangeQuantity={setQuantity}
-      onAddToCartPress={onAddToCart}
-      product={product}
-      productImages={productImages}
-      productDiscount={productDiscount}
-      productOriginalPrice={productOriginalPrice}
-      options={options}
-      isLoading={isLoading}
-      infoTabs={infoTabs}
-      isWishlistActive={isWishlistActive}
-      onWishlistPress={(isActive) => {
-        setWishlistActive(isActive);
-      }}
-    />
+    <>
+      <ProductDetailsView
+        selectedOptions={selectedOptions}
+        onSelectionOptionChange={changeSelectedOptions}
+        quantity={quantity}
+        onChangeQuantity={setQuantity}
+        onAddToCartPress={onAddToCart}
+        product={product}
+        productImages={productImages}
+        productDiscount={productDiscount}
+        productOriginalPrice={productOriginalPrice}
+        options={options}
+        isLoading={isLoading}
+        infoTabs={infoTabs}
+        isWishlistActive={isWishlistActive}
+        onWishlistPress={(isActive) => {
+          setWishlistActive(isActive);
+        }}
+      />
+      <Toast
+        data={{
+          message: t('Item Successfully Added'),
+          isVisible: isToastVisible,
+          mode: 'success',
+        }}
+      />
+    </>
   );
 }
 

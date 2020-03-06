@@ -8,9 +8,17 @@ import {
 } from '../../../hooks/api/useWishlist';
 import { COLORS } from '../../../constants/colors';
 import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
-import { ProductDetailsProps } from '../../../types/types';
+import { Product } from '../../../types/types';
 
-export default function BottomActionBar(props: ProductDetailsProps) {
+type Props = {
+  product: Product;
+  isLoading: boolean;
+  isWishlistActive: boolean;
+  onAddToCartPress: () => void;
+  onWishlistPress: (value: boolean) => void;
+};
+
+export default function BottomActionBar(props: Props) {
   let { addToWishlist } = useAddItemToWishlist();
   let { removeFromWishlist } = useRemoveItemFromWishlist();
   let {
