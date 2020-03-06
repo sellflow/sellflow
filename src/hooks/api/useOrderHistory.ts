@@ -9,6 +9,7 @@ import { OrderRecord, AddressItem } from '../../types/types';
 import { emptyAddress } from '../../constants/defaultValues';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
 import { useEffect, useState, useRef } from 'react';
+import useDefaultCurrency from './useDefaultCurrency';
 
 function getOrders(
   customerData: GetOrderHistory | undefined,
@@ -84,6 +85,7 @@ function useOrderHistory(
   let [orderHistory, setOrderHistory] = useState<Array<OrderRecord>>([]);
   let isFetchingMore = useRef(false);
   let hasMore = useRef(true);
+  let { data: currencyCode } = useDefaultCurrency();
 
   let { data, loading, refetch: refetchQuery } = useQuery<
     GetOrderHistory,
@@ -92,6 +94,7 @@ function useOrderHistory(
     variables: {
       customerAccessToken,
       first,
+      currencyCode: [currencyCode],
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',

@@ -1,7 +1,10 @@
 import gql from 'graphql-tag';
 
 export const SHOPPING_CART_CREATE = gql`
-  mutation ShoppingCartCreate($checkoutCreateInput: CheckoutCreateInput!) {
+  mutation ShoppingCartCreate(
+    $checkoutCreateInput: CheckoutCreateInput!
+    $currencyCode: [CurrencyCode!]
+  ) {
     checkoutCreate(input: $checkoutCreateInput) {
       checkoutUserErrors {
         message
@@ -11,6 +14,7 @@ export const SHOPPING_CART_CREATE = gql`
           amount
         }
         id
+        currencyCode
         subtotalPriceV2 {
           amount
           currencyCode
@@ -31,6 +35,23 @@ export const SHOPPING_CART_CREATE = gql`
               quantity
               variant {
                 id
+                presentmentPrices(
+                  first: 1
+                  presentmentCurrencies: $currencyCode
+                ) {
+                  edges {
+                    node {
+                      compareAtPrice {
+                        amount
+                        currencyCode
+                      }
+                      price {
+                        amount
+                        currencyCode
+                      }
+                    }
+                  }
+                }
                 selectedOptions {
                   name
                   value
@@ -38,12 +59,6 @@ export const SHOPPING_CART_CREATE = gql`
                 image {
                   originalSrc
                   transformedSrc
-                }
-                compareAtPriceV2 {
-                  amount
-                }
-                priceV2 {
-                  amount
                 }
               }
             }
@@ -58,6 +73,7 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
   mutation ShoppingCartReplaceItem(
     $lineItems: [CheckoutLineItemInput!]!
     $checkoutID: ID!
+    $currencyCode: [CurrencyCode!]
   ) {
     checkoutLineItemsReplace(lineItems: $lineItems, checkoutId: $checkoutID) {
       checkout {
@@ -65,6 +81,7 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
           amount
         }
         id
+        currencyCode
         subtotalPriceV2 {
           amount
           currencyCode
@@ -75,6 +92,7 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
         lineItems(first: 20) {
           edges {
             node {
+              id
               discountAllocations {
                 allocatedAmount {
                   amount
@@ -84,6 +102,23 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
               quantity
               variant {
                 id
+                presentmentPrices(
+                  first: 1
+                  presentmentCurrencies: $currencyCode
+                ) {
+                  edges {
+                    node {
+                      compareAtPrice {
+                        amount
+                        currencyCode
+                      }
+                      price {
+                        amount
+                        currencyCode
+                      }
+                    }
+                  }
+                }
                 selectedOptions {
                   name
                   value
@@ -91,12 +126,6 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
                 image {
                   originalSrc
                   transformedSrc
-                }
-                compareAtPriceV2 {
-                  amount
-                }
-                priceV2 {
-                  amount
                 }
               }
             }
@@ -152,36 +181,6 @@ export const SHOPPING_CART_UPDATE_ADDRESS = gql`
           }
         }
         taxesIncluded
-        lineItems(first: 20) {
-          edges {
-            node {
-              discountAllocations {
-                allocatedAmount {
-                  amount
-                }
-              }
-              title
-              quantity
-              variant {
-                id
-                selectedOptions {
-                  name
-                  value
-                }
-                image {
-                  originalSrc
-                  transformedSrc
-                }
-                compareAtPriceV2 {
-                  amount
-                }
-                priceV2 {
-                  amount
-                }
-              }
-            }
-          }
-        }
       }
     }
   }
@@ -223,6 +222,7 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
   mutation ShoppingCartDiscountCodeApply(
     $checkoutId: ID!
     $discountCode: String!
+    $currencyCode: [CurrencyCode!]
   ) {
     checkoutDiscountCodeApplyV2(
       checkoutId: $checkoutId
@@ -244,26 +244,11 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
         totalPriceV2 {
           amount
         }
-        shippingLine {
-          priceV2 {
-            amount
-          }
-        }
-        requiresShipping
-        availableShippingRates {
-          ready
-          shippingRates {
-            handle
-            priceV2 {
-              amount
-            }
-            title
-          }
-        }
         taxesIncluded
         lineItems(first: 20) {
           edges {
             node {
+              id
               discountAllocations {
                 allocatedAmount {
                   amount
@@ -273,6 +258,23 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
               quantity
               variant {
                 id
+                presentmentPrices(
+                  first: 1
+                  presentmentCurrencies: $currencyCode
+                ) {
+                  edges {
+                    node {
+                      compareAtPrice {
+                        amount
+                        currencyCode
+                      }
+                      price {
+                        amount
+                        currencyCode
+                      }
+                    }
+                  }
+                }
                 selectedOptions {
                   name
                   value
@@ -280,12 +282,6 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
                 image {
                   originalSrc
                   transformedSrc
-                }
-                compareAtPriceV2 {
-                  amount
-                }
-                priceV2 {
-                  amount
                 }
               }
             }

@@ -5,6 +5,7 @@ export const GET_ORDER_HISTORY = gql`
     $customerAccessToken: String!
     $first: Int!
     $after: String
+    $currencyCode: [CurrencyCode!]
   ) {
     customer(customerAccessToken: $customerAccessToken) {
       id
@@ -48,6 +49,23 @@ export const GET_ORDER_HISTORY = gql`
                   quantity
                   variant {
                     id
+                    presentmentPrices(
+                      first: 1
+                      presentmentCurrencies: $currencyCode
+                    ) {
+                      edges {
+                        node {
+                          compareAtPrice {
+                            amount
+                            currencyCode
+                          }
+                          price {
+                            amount
+                            currencyCode
+                          }
+                        }
+                      }
+                    }
                     selectedOptions {
                       name
                       value
@@ -55,12 +73,6 @@ export const GET_ORDER_HISTORY = gql`
                     image {
                       originalSrc
                       transformedSrc
-                    }
-                    compareAtPriceV2 {
-                      amount
-                    }
-                    priceV2 {
-                      amount
                     }
                   }
                 }

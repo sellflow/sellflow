@@ -23,6 +23,7 @@ import {
 } from '../../hooks/api/useShopifyCart';
 import { ProductDetailsView } from './components';
 import { Toast } from '../../core-ui';
+import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 
 export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
@@ -44,35 +45,44 @@ export default function ProductDetailsScene() {
     shoppingCartCustomerAssociate,
     loading: associateLoading,
   } = useCheckoutCustomerAssociate();
+  let { data } = useDefaultCurrency();
   let { createCheckout, loading: checkoutCreateLoading } = useCheckoutCreate({
-    fetchPolicy: 'network-only',
     onCompleted: async ({ checkoutCreate }) => {
       if (checkoutCreate && checkoutCreate.checkout) {
         await setShoppingCartID({
           variables: { id: checkoutCreate.checkout.id },
         });
-        await shoppingCartCustomerAssociate({
-          variables: {
-            checkoutId: checkoutCreate.checkout.id,
-            customerAccessToken: authToken,
-          },
-        });
+        if (authToken) {
+          await shoppingCartCustomerAssociate({
+            variables: {
+              checkoutId: checkoutCreate.checkout.id,
+              customerAccessToken: authToken,
+            },
+          });
+        }
       }
     },
   });
   let { getCustomer } = useGetCustomerData({
     onCompleted: async ({ customer }) => {
-      if (customer && customer.lastIncompleteCheckout) {
-        if (customer.lastIncompleteCheckout.id == null) {
-          await createCheckout();
-        }
+      if (customer && customer.lastIncompleteCheckout == null) {
+        await createCheckout({
+          variables: {
+            checkoutCreateInput: {
+              lineItems: [],
+              presentmentCurrencyCode: data,
+            },
+          },
+        });
       }
     },
   });
 
   useFocusEffect(
     useCallback(() => {
-      getCustomer({ variables: { accessToken: authToken } });
+      if (authToken) {
+        getCustomer({ variables: { accessToken: authToken } });
+      }
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps
   );
@@ -141,7 +151,6 @@ export default function ProductDetailsScene() {
           setProductDiscount(discount);
           setProductOriginalPrice(Math.round(originalPrice));
         }
-
         setVariantID(id);
       }
     },

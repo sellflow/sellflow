@@ -51,7 +51,7 @@ function useCheckoutCreate(
   let [createCheckout, { loading }] = useMutation<
     ShoppingCartCreate,
     ShoppingCartCreateVariables
-  >(SHOPPING_CART_CREATE, { ...options });
+  >(SHOPPING_CART_CREATE, { fetchPolicy: 'no-cache', ...options });
   return { createCheckout, loading };
 }
 

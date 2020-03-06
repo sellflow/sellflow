@@ -6,6 +6,7 @@ import { ActivityIndicator, Text } from 'exoflex';
 import { OrderHistoryItem } from '../components';
 import { StackNavProp, StackRouteProp } from '../types/Navigation';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
+import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 
 export default function OrderHistoryScene() {
   let { navigate } = useNavigation<StackNavProp<'OrderHistory'>>();
@@ -21,6 +22,7 @@ export default function OrderHistoryScene() {
     hasMore,
   } = useOrderHistory(first, customerAccessToken);
 
+  let { data } = useDefaultCurrency();
   if (loading && !isFetchingMore) {
     return <ActivityIndicator style={styles.center} />;
   }
@@ -31,6 +33,7 @@ export default function OrderHistoryScene() {
         customerAccessToken,
         first,
         after: orderHistory[orderHistory.length - 1].cursor || null,
+        currencyCode: [data],
       });
     }
   };

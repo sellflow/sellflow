@@ -38,6 +38,7 @@ import { cartPlaceholder } from '../../assets/images';
 import { mapToLineItems } from '../helpers/mapToLineItems';
 import Toast from '../core-ui/Toast';
 import { useAuth } from '../helpers/useAuth';
+import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 
 function extractDataCheckout(
   checkout: CheckoutCreate | CheckoutReplace | CheckoutDiscountApply,
@@ -103,6 +104,7 @@ export default function ShoppingCartScene() {
   let [firstLoading, setFirstLoading] = useState<boolean>(true);
   let [voucherCode, setVoucherCode] = useState<string>('');
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
+  let { data } = useDefaultCurrency();
 
   let setVoucherCodeValue = (value: string) => {
     setVoucherCode(value);
@@ -123,7 +125,11 @@ export default function ShoppingCartScene() {
 
   let onAddVoucherCode = () => {
     shoppingCartDiscountApply({
-      variables: { checkoutId: cartID, discountCode: voucherCode },
+      variables: {
+        checkoutId: cartID,
+        discountCode: voucherCode,
+        currencyCode: [data],
+      },
     });
   };
 
@@ -157,6 +163,7 @@ export default function ShoppingCartScene() {
       variables: {
         lineItems: shoppingCartItems,
         checkoutID: cartID,
+        currencyCode: [data],
       },
     });
   };
@@ -205,9 +212,9 @@ export default function ShoppingCartScene() {
           variables: {
             checkoutID: shoppingCart.id,
             lineItems: shoppingCartItems,
+            currencyCode: [data],
           },
         });
-        setFirstLoading(false);
       }
     },
   });
@@ -216,9 +223,34 @@ export default function ShoppingCartScene() {
   let { setShoppingCartID } = useSetShoppingCartID();
 
   let { shoppingCartReplaceItems } = useCheckoutReplaceItem({
-    onCompleted: ({ checkoutLineItemsReplace }) => {
+    fetchPolicy: 'no-cache',
+    onCompleted: async ({ checkoutLineItemsReplace }) => {
       if (checkoutLineItemsReplace && checkoutLineItemsReplace.checkout) {
+        let shoppingCartItems = checkoutLineItemsReplace.checkout.lineItems.edges.map(
+          ({ node }): { variantId: string; quantity: number } => {
+            let { variant, quantity } = node;
+            let variantId = variant ? variant.id : '';
+            return {
+              quantity,
+              variantId,
+            };
+          },
+        );
+
+        if (checkoutLineItemsReplace.checkout.currencyCode !== data) {
+          await createCheckout({
+            variables: {
+              checkoutCreateInput: {
+                presentmentCurrencyCode: data,
+                lineItems: shoppingCartItems,
+              },
+              currencyCode: [data],
+            },
+          });
+          return;
+        }
         setCartData(extractDataCheckout(checkoutLineItemsReplace.checkout));
+        setFirstLoading(false);
       }
     },
   });
