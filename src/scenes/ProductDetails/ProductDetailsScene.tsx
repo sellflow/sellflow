@@ -3,12 +3,7 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { ActivityIndicator } from 'exoflex';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 
-import {
-  VariantQueryData,
-  Options,
-  OptionsData,
-  Tabs,
-} from '../../types/types';
+import { VariantQueryData, Options, OptionsData } from '../../types/types';
 import { useGetWishlistData } from '../../hooks/api/useWishlist';
 import { StackRouteProp } from '../../types/Navigation';
 import {
@@ -38,9 +33,6 @@ export default function ProductDetailsScene() {
   let [options, setOptions] = useState<Options>([]);
   let [quantity, setQuantity] = useState<number>(1);
   let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
-  let [infoTabs, setInfoTabs] = useState<Tabs>([
-    { title: t('Description'), content: '' },
-  ]);
   let [productImages, setProductImages] = useState<Array<string>>([]);
   let [productDiscount, setProductDiscount] = useState<number>(0);
   let [productOriginalPrice, setProductOriginalPrice] = useState<number>(0);
@@ -184,19 +176,8 @@ export default function ProductDetailsScene() {
     fetchPolicy: 'network-only',
     onCompleted({ productByHandle }) {
       if (productByHandle) {
-        let newOptions = [...options, ...productByHandle.options];
+        let newOptions = [...productByHandle.options];
         setOptions(newOptions);
-        setInfoTabs([
-          ...[
-            {
-              title: t('Description'),
-              content:
-                productByHandle.description !== ''
-                  ? productByHandle.description
-                  : t('No Description Yet'),
-            },
-          ],
-        ]);
         setProductImages(
           productByHandle.images.edges.map((item) => item.node.originalSrc),
         );
@@ -212,7 +193,6 @@ export default function ProductDetailsScene() {
       Alert.alert(newError[1]);
     },
   });
-
   let isFirstLoading =
     getProductByHandleLoading ||
     !productData ||
@@ -239,7 +219,6 @@ export default function ProductDetailsScene() {
         productOriginalPrice={productOriginalPrice}
         options={options}
         isLoading={isLoading}
-        infoTabs={infoTabs}
         isWishlistActive={isWishlistActive}
         onWishlistPress={(isActive) => {
           setWishlistActive(isActive);

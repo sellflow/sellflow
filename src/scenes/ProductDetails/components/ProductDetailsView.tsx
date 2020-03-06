@@ -17,7 +17,7 @@ import { DiscountBadge } from '../../../core-ui';
 import { FONT_SIZE } from '../../../constants/fonts';
 import ProductInfo from './ProductInfo';
 import BottomActionBar from './BottomActionBar';
-import { OptionsData, Product, Options, Tabs } from '../../../types/types';
+import { OptionsData, Product, Options } from '../../../types/types';
 
 type Props = {
   onSelectionOptionChange: (key: string, value: string) => void;
@@ -30,7 +30,6 @@ type Props = {
   productOriginalPrice: number;
   options?: Options;
   isLoading: boolean;
-  infoTabs?: Tabs;
   isWishlistActive: boolean;
   onAddToCartPress: () => void;
   onWishlistPress: (value: boolean) => void;
@@ -47,7 +46,6 @@ export default function ProductDetailsView(props: Props) {
     onChangeQuantity,
     onSelectionOptionChange,
     selectedOptions,
-    infoTabs,
   } = props;
   let { screenSize, width } = useDimensions();
 
@@ -132,7 +130,6 @@ export default function ProductDetailsView(props: Props) {
             quantity={quantity}
             onChangeQuantity={onChangeQuantity}
             product={product}
-            infoTabs={infoTabs ? infoTabs : []}
             productOriginalPrice={productOriginalPrice}
             options={options ? options : []}
           />
@@ -164,7 +161,6 @@ export default function ProductDetailsView(props: Props) {
             product={product}
             productOriginalPrice={productOriginalPrice}
             options={options ? options : []}
-            infoTabs={infoTabs ? infoTabs : []}
           />
         </View>
       </ScrollView>

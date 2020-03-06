@@ -38,24 +38,20 @@ export default function OrderDetailsScene() {
       >
         <View style={styles.orderInfoSection}>
           <Surface containerStyle={styles.surfaceOrderContainer}>
-            <Text weight="500" style={styles.mediumText}>
+            <Text weight="medium" style={styles.mediumText}>
               {t('Order No.')}
             </Text>
-            <Text style={[styles.greyText, styles.smallText]}>
-              {orderNumber}
-            </Text>
+            <Text style={styles.mediumText}>{orderNumber}</Text>
           </Surface>
           <Surface containerStyle={styles.surfaceOrderContainer}>
-            <Text weight="500" style={styles.mediumText}>
+            <Text weight="medium" style={styles.mediumText}>
               {t('Ordered')}
             </Text>
             <Text style={styles.mediumText}>{formatDateTime(orderTime)}</Text>
           </Surface>
         </View>
         <View style={styles.productDetailsContainer}>
-          <Text style={[styles.greyText, styles.smallText]}>
-            {t('Product Details')}
-          </Text>
+          <Text style={styles.greyText}>{t('Product Details')}</Text>
           <View style={styles.orderItemContainer}>
             {lineItems.map((item) => (
               <OrderItem
@@ -68,66 +64,43 @@ export default function OrderDetailsScene() {
           </View>
         </View>
         <View style={styles.shippingAddressContainer}>
-          <Text style={[styles.greyText, styles.smallText]}>
-            {t('Shipping Address')}
-          </Text>
+          <Text style={styles.greyText}>{t('Shipping Address')}</Text>
           <Surface containerStyle={styles.surfaceShippingContainer}>
-            <Text weight="400" style={[styles.mediumText, { marginBottom: 6 }]}>
-              {name}
-            </Text>
-            <Text style={[styles.greyText, styles.smallText]}>{address1}</Text>
-            <Text style={[styles.greyText, styles.smallText]}>
-              {`${city}, ${province} ${zip}`}
-            </Text>
-            <Text style={[styles.greyText, styles.smallText]}>{country}</Text>
-            <Text style={[styles.greyText, styles.smallText]}>
-              {t('Phone : ')}
+            <Text style={[styles.mediumText, styles.marginBottom]}>{name}</Text>
+            <Text style={styles.greyText}>{address1}</Text>
+            <Text style={styles.greyText}>{`${city}, ${province} ${zip}`}</Text>
+            <Text style={styles.greyText}>{country}</Text>
+            <Text style={styles.greyText}>
+              {t('Phone: ')}
               {phone}
             </Text>
           </Surface>
         </View>
-        <View style={styles.paymentDetailsContainer}>
-          <Text style={[styles.greyText, styles.smallText]}>
-            {t('Payment Details')}
-          </Text>
-          <Surface containerStyle={styles.surfacePaymentDetails}>
-            <View style={styles.innerPaymentDetailsContainer}>
-              <Text
-                weight="400"
-                style={[styles.mediumText, { marginBottom: 6 }]}
-              >
-                {t('Subtotal')}
-              </Text>
-              <Text style={styles.mediumText}>
-                {formatCurrency(subtotalPayment)}
-              </Text>
-            </View>
-            <View style={styles.innerPaymentDetailsContainer}>
-              <Text
-                weight="400"
-                style={[styles.mediumText, { marginBottom: 6 }]}
-              >
-                {t('Shipping')}
-              </Text>
-              <Text style={[styles.mediumText, { textTransform: 'uppercase' }]}>
-                {shippingPrice === 0
-                  ? t('Free')
-                  : formatCurrency(shippingPrice)}
-              </Text>
-            </View>
-            <View style={[styles.innerPaymentDetailsContainer, styles.border]}>
-              <Text
-                weight="400"
-                style={[styles.mediumText, { marginBottom: 6 }]}
-              >
-                {t('Total')}
-              </Text>
-              <Text weight="bold" style={styles.mediumText}>
-                {formatCurrency(totalPayment)}
-              </Text>
-            </View>
-          </Surface>
-        </View>
+        <Text style={styles.greyText}>{t('Payment Details')}</Text>
+        <Surface containerStyle={styles.surfacePaymentDetails}>
+          <View style={styles.innerPaymentDetailsContainer}>
+            <Text style={[styles.mediumText, styles.marginBottom]}>
+              {t('Subtotal')}
+            </Text>
+            <Text style={styles.mediumText}>
+              {formatCurrency(subtotalPayment)}
+            </Text>
+          </View>
+          <View style={styles.innerPaymentDetailsContainer}>
+            <Text style={[styles.mediumText, styles.marginBottom]}>
+              {t('Shipping')}
+            </Text>
+            <Text style={[styles.mediumText, { textTransform: 'uppercase' }]}>
+              {shippingPrice === 0 ? t('Free') : formatCurrency(shippingPrice)}
+            </Text>
+          </View>
+          <View style={[styles.innerPaymentDetailsContainer, styles.border]}>
+            <Text style={styles.mediumText}>{t('Total')}</Text>
+            <Text weight="medium" style={styles.mediumText}>
+              {formatCurrency(totalPayment)}
+            </Text>
+          </View>
+        </Surface>
       </ScrollView>
       <Button
         onPress={() => {}}
@@ -159,9 +132,6 @@ const styles = StyleSheet.create({
   orderItemContainer: {
     marginTop: 11,
   },
-  paymentDetailsContainer: {
-    marginBottom: 23,
-  },
   innerPaymentDetailsContainer: {
     paddingVertical: 14,
     flexDirection: 'row',
@@ -171,6 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 12,
+    paddingVertical: 14,
   },
   surfaceShippingContainer: {
     marginTop: 12,
@@ -185,10 +156,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   greyText: {
-    color: COLORS.grey,
-  },
-  smallText: {
-    fontSize: FONT_SIZE.small,
+    opacity: 0.6,
   },
   mediumText: {
     fontSize: FONT_SIZE.medium,
@@ -199,7 +167,10 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     marginHorizontal: 24,
-    marginTop: 20,
+    marginTop: 24,
     marginBottom: 10,
+  },
+  marginBottom: {
+    marginBottom: 6,
   },
 });

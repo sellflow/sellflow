@@ -4,14 +4,8 @@ import { Text, TextInput } from 'exoflex';
 
 import { FONT_SIZE } from '../../../constants/fonts';
 import formatCurrency from '../../../helpers/formatCurrency';
-import { TabView, RichRadioGroup } from '../../../core-ui';
-import {
-  Product,
-  Tabs,
-  OptionsData,
-  Options,
-  TabRoute,
-} from '../../../types/types';
+import { RichRadioGroup } from '../../../core-ui';
+import { Product, OptionsData, Options } from '../../../types/types';
 import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
 import { COLORS } from '../../../constants/colors';
 import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
@@ -24,31 +18,13 @@ type Props = {
   onChangeQuantity: (qunatity: number) => void;
   product: Product;
   options: Options;
-  infoTabs: Tabs;
 };
-
-function infoTabRoutes(infoTabs: Tabs): Array<TabRoute> {
-  return infoTabs.map(({ title, content }, i) => ({
-    key: i.toString(),
-    title,
-    scene: () => <TabPane content={content} />,
-  }));
-}
-
-function TabPane(props: { content: string }) {
-  return (
-    <View style={[styles.padding, styles.flex]}>
-      <Text>{props.content}</Text>
-    </View>
-  );
-}
 
 export default function ProductInfo(props: Props) {
   let {
     product,
     productOriginalPrice,
     options,
-    infoTabs,
     quantity,
     selectedOptions,
     onChangeQuantity,
@@ -106,15 +82,15 @@ export default function ProductInfo(props: Props) {
           }
         />
       </View>
-      <TabView isScrollEnabled={true} routes={infoTabRoutes(infoTabs)} />
+      <View style={[styles.paddingHorizontal, styles.description]}>
+        <Text style={styles.labelStyle}>{t('Description')}</Text>
+        <Text>{t('Add Description Here')}</Text>
+      </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
   padding: {
     padding: 24,
   },
@@ -145,5 +121,13 @@ const styles = StyleSheet.create({
     color: COLORS.priceGrey,
     fontSize: FONT_SIZE.large,
     textDecorationLine: 'line-through',
+  },
+  labelStyle: {
+    opacity: 0.6,
+    marginBottom: 12,
+  },
+  description: {
+    marginTop: 16,
+    marginBottom: 24,
   },
 });
