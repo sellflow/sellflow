@@ -9,7 +9,7 @@ import formatAddress from '../../helpers/formatAddress';
 import { OrderData2 } from '../../fixtures/OrderItemData';
 import { addressItemData } from '../../fixtures/AddressItemData';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
-import formatCurrency from '../../helpers/formatCurrency';
+import useCurrencyFormatter from '../../hooks/api/useCurrencyFormatter';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { PaymentRadioGroup } from './components';
 import { Payment } from '../../types/types';
@@ -29,6 +29,7 @@ type CreditCardInfo = {
 
 export default function PaymentScene() {
   let { screenSize, isLandscape } = useDimensions();
+  let formatCurrency = useCurrencyFormatter();
   let [selectedPaymentType, setSelectedPaymentType] = useState<string>(
     'CREDIT_CARD',
   );

@@ -12,7 +12,7 @@ import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { OrderRecord } from '../types/types';
 import formatDateTime from '../helpers/formatDateTime';
-import formatCurrency from '../helpers/formatCurrency';
+import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 
 type Props = {
   order: OrderRecord;
@@ -22,6 +22,7 @@ type Props = {
 
 export default function OrderHistoryItem(props: Props) {
   let { order, containerStyle, onPress } = props;
+  let formatCurrency = useCurrencyFormatter();
   return (
     <TouchableOpacity
       style={[styles.container, containerStyle]}

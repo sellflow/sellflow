@@ -14,7 +14,7 @@ import { DiscountBadge } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { priceAfterDiscount } from '../helpers/priceAfterDiscount';
-import formatCurrency from '../helpers/formatCurrency';
+import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import { Product } from '../types/types';
 
 type Props = {
@@ -28,6 +28,7 @@ export default function ProductItem(props: Props) {
   let { product, onPress, containerStyle, imageStyle } = props;
   let { title, image, price, discount } = product;
   let afterDiscount = priceAfterDiscount(price, discount || 0);
+  let formatCurrency = useCurrencyFormatter();
 
   return (
     <TouchableOpacity

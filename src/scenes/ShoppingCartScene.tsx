@@ -15,13 +15,13 @@ import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import formatCurrency from '../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../generated/server/ShoppingCartCreate';
 import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../generated/server/ShoppingCartReplaceItem';
 import { ShoppingCartDiscountCodeApply_checkoutDiscountCodeApplyV2_checkout as CheckoutDiscountApply } from '../generated/server/ShoppingCartDiscountCodeApply';
 import { Cart, LineItem, OrderItem as OrderItemType } from '../types/types';
+import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import {
   useGetCart,
   useSetShoppingCartID,
@@ -413,6 +413,7 @@ function Payment(props: PaymentProps) {
     applyLoading,
   } = props;
   let { total, subtotal } = data;
+  let formatCurrency = useCurrencyFormatter();
 
   return (
     <>

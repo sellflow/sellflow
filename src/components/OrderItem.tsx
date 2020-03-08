@@ -12,7 +12,7 @@ import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
-import formatCurrency from '../helpers/formatCurrency';
+import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import { FONT_SIZE } from '../constants/fonts';
 import { OrderItem as OrderItemType } from '../types/types';
 
@@ -36,6 +36,7 @@ export default function OrderItem(props: Props) {
   let { containerStyle, cardType } = props;
   let [quantity, setQuantity] = useState<number>(props.orderItem.quantity);
   let [itemPrice] = useState<number>(originalPrice);
+  let formatCurrency = useCurrencyFormatter();
 
   return (
     <View style={[styles.container, containerStyle]}>

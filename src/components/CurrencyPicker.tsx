@@ -26,7 +26,7 @@ export default function CurrencyPicker(props: Props) {
 
   let [visible, setVisible] = useState(false);
 
-  let { setDefaultCurrency, data: defaultCurrency } = useDefaultCurrency();
+  let { setDefaultCurrency, data: selectedCurrency } = useDefaultCurrency();
 
   let { data } = useQuery<GetShop>(GET_SHOP);
 
@@ -47,7 +47,7 @@ export default function CurrencyPicker(props: Props) {
         anchor={
           <TouchableWithoutFeedback onPress={() => setVisible(true)}>
             <View style={styles.titleContainer}>
-              <Text weight="medium">{defaultCurrency}</Text>
+              <Text weight="medium">{selectedCurrency}</Text>
               <Animated.View
                 style={{
                   transform: [

@@ -1,9 +1,10 @@
+import * as Localization from 'expo-localization';
+
 type ParamsObject = {
   [key: string]: unknown;
 };
 
-// TODO: In future get this from the device.
-export const LOCALE = 'en-US';
+export const LOCALE = Localization.locale;
 
 // This matches words inside curly braces.
 const PLACEHOLDER = /\{(\w+)\}/g;

@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'exoflex';
 
 import { FONT_SIZE } from '../../../constants/fonts';
-import formatCurrency from '../../../helpers/formatCurrency';
+import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
 import { RichRadioGroup } from '../../../core-ui';
 import { Product, OptionsData, Options } from '../../../types/types';
 import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
@@ -30,6 +30,8 @@ export default function ProductInfo(props: Props) {
     onChangeQuantity,
     onSelectionOptionChange,
   } = props;
+
+  let formatCurrency = useCurrencyFormatter();
 
   let afterDiscount = priceAfterDiscount(product.price, product.discount || 0);
 

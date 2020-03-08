@@ -1,0 +1,22 @@
+{
+  "USD": {
+    "code": "USD",
+    "symbol": "$",
+    "decimalDigits": 2
+  },
+  "CAD": {
+    "code": "CAD",
+    "symbol": "$",
+    "decimalDigits": 2
+  },
+  "EUR": {
+    "code": "EUR",
+    "symbol": "€",
+    "decimalDigits": 2
+  },
+  "IDR": {
+    "code": "IDR",
+    "symbol": "Rp ",
+    "decimalDigits": 0
+  }
+}

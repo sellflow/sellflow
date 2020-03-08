@@ -10,7 +10,7 @@ import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { StackRouteProp } from '../types/Navigation';
-import formatCurrency from '../helpers/formatCurrency';
+import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 
 export default function OrderDetailsScene() {
@@ -27,6 +27,7 @@ export default function OrderDetailsScene() {
     subtotalPayment,
   } = order;
   let { address1, city, country, name, phone, province, zip } = address;
+  let formatCurrency = useCurrencyFormatter();
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView

@@ -25,7 +25,6 @@ import { addressItemData } from '../../fixtures/AddressItemData';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { FONT_SIZE } from '../../constants/fonts';
 import { COLORS } from '../../constants/colors';
-import formatCurrency from '../../helpers/formatCurrency';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { useAuth } from '../../helpers/useAuth';
@@ -38,6 +37,7 @@ import {
 import { useCheckoutUpdateAddress } from '../../hooks/api/useShopifyCart';
 import { ShippingAddressForm } from './components';
 import { useResetCart } from '../../hooks/api/useShoppingCart';
+import useCurrencyFormatter from '../../hooks/api/useCurrencyFormatter';
 
 export default function CheckoutScene() {
   let { navigate } = useNavigation<StackNavProp<'Checkout'>>();
@@ -56,6 +56,7 @@ export default function CheckoutScene() {
   );
   let { screenSize } = useDimensions();
   const first = 5;
+  let formatCurrency = useCurrencyFormatter();
 
   let { resetShoppingCart } = useResetCart();
 
