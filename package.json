@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "format:generated": "prettier --write \"src/generated/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
-    "lint": "eslint --rulesdir eslint_rules --rule 'translate: 2' --max-warnings 0 \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint --max-warnings 0 \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit -p .",
     "jest": "jest --coverage --passWithNoTests",
     "test": "yarn lint && yarn typecheck && yarn format:check && yarn jest",
@@ -70,6 +70,7 @@
     "cross-var": "^1.1.0",
     "eslint": "^6.8.0",
     "eslint-config-kodefox": "^0.1.0",
+    "eslint-plugin-t": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^24.9.0",
     "jest-expo": "^36.0.1",
@@ -81,13 +82,17 @@
   },
   "eslintConfig": {
     "extends": "kodefox/react-native",
+    "plugins": [
+      "t"
+    ],
     "rules": {
       "@typescript-eslint/camelcase": [
         "error",
         {
           "properties": "never"
         }
-      ]
+      ],
+      "t/string-literal": 1
     }
   },
   "eslintIgnore": [
