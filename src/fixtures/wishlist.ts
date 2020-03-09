@@ -10,6 +10,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '2',
@@ -20,6 +21,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '3',
@@ -31,6 +33,7 @@ export const wishlist: Array<Product> = [
     handle: 'box-flannel-trucker',
     price: 1000,
     discount: 75,
+    url: '',
   },
   {
     id: '4',
@@ -41,6 +44,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '5',
@@ -52,6 +56,7 @@ export const wishlist: Array<Product> = [
     handle: 'box-flannel-trucker',
     price: 1000,
     discount: 25,
+    url: '',
   },
   {
     id: '6',
@@ -62,6 +67,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '7',
@@ -72,6 +78,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '8',
@@ -82,6 +89,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '9',
@@ -93,6 +101,7 @@ export const wishlist: Array<Product> = [
     handle: 'box-flannel-trucker',
     price: 1000,
     discount: 50,
+    url: '',
   },
   {
     id: '10',
@@ -103,6 +112,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '11',
@@ -113,6 +123,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '12',
@@ -123,6 +134,7 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
   {
     id: '13',
@@ -133,5 +145,6 @@ export const wishlist: Array<Product> = [
     title: 'Box Flannel Trucker',
     handle: 'box-flannel-trucker',
     price: 1000,
+    url: '',
   },
 ];

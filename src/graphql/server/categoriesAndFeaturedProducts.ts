@@ -53,6 +53,7 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
               }
             }
           }
+          onlineStoreUrl
         }
       }
     }

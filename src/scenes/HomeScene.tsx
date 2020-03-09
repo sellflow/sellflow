@@ -90,6 +90,7 @@ export default function HomeScene() {
       handle: item.node.handle,
       price: price,
       discount: discount,
+      url: item.node.onlineStoreUrl,
     };
   });
 
@@ -128,6 +129,7 @@ export default function HomeScene() {
           <SearchInput
             pointerEvents="none"
             placeholder={t('Search')}
+            editable={false}
             style={styles.searchInput}
           />
         </View>

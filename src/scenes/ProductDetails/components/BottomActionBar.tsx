@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Share } from 'react-native';
 import { Button, IconButton } from 'exoflex';
 
 import {
@@ -9,6 +9,9 @@ import {
 import { COLORS } from '../../../constants/colors';
 import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
 import { Product } from '../../../types/types';
+import { useQuery } from '@apollo/react-hooks';
+import { GetShop } from '../../../generated/server/GetShop';
+import { GET_SHOP } from '../../../graphql/server/shop';
 
 type Props = {
   product: Product;
@@ -29,6 +32,13 @@ export default function BottomActionBar(props: Props) {
     isLoading,
   } = props;
 
+  let { data: shopData } = useQuery<GetShop>(GET_SHOP);
+  let shareMessage = shopData
+    ? t('Check out this product from {shopName}', {
+        shopName: shopData.shop.name,
+      })
+    : t('Check out this product');
+
   let onPressWishlist = () => {
     onWishlistPress(!isWishlistActive);
 
@@ -39,12 +49,18 @@ export default function BottomActionBar(props: Props) {
     }
   };
 
+  let onShare = () => {
+    Share.share({
+      message: `${shareMessage}: ${product.title} ${product.url}`,
+    });
+  };
+
   return (
     <View style={styles.bottomIconContainer}>
       <IconButton
         icon="share-variant"
         color={COLORS.primaryColor}
-        onPress={() => {}}
+        onPress={onShare}
         style={styles.icon}
       />
       {isWishlistActive ? (

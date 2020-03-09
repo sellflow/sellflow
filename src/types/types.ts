@@ -64,6 +64,7 @@ export type Product = {
   productType?: string;
   price: number;
   discount?: number;
+  url: string;
 };
 
 // TODO: Rename Category to Collection

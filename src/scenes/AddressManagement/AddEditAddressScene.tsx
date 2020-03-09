@@ -250,6 +250,7 @@ export default function AddEditAddressScene() {
               label={t('Country')}
               value={addressData.country}
               pointerEvents="none"
+              editable={false}
               containerStyle={styles.textInput}
             />
           </TouchableOpacity>

@@ -35,6 +35,7 @@ type WishlistProduct {
   image: String!
   title: String!
   price: Int!
+  url: String!
 }
 
 input WishlistProductInput {

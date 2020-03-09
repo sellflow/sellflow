@@ -9,6 +9,7 @@ export const ProductItemData: Array<Product> = [
     handle: 'box-flannel-trucker',
     productType: 'shirt',
     price: 1000,
+    url: '',
   },
   {
     id: '2',
@@ -18,6 +19,7 @@ export const ProductItemData: Array<Product> = [
     handle: 'box-flannel-trucker',
     productType: 'shirt',
     price: 1000,
+    url: '',
   },
   {
     id: '3',
@@ -28,6 +30,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 75,
+    url: '',
   },
   {
     id: '4',
@@ -38,6 +41,7 @@ export const ProductItemData: Array<Product> = [
     handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
+    url: '',
   },
   {
     id: '5',
@@ -48,6 +52,7 @@ export const ProductItemData: Array<Product> = [
     handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
+    url: '',
   },
   {
     id: '6',
@@ -58,6 +63,7 @@ export const ProductItemData: Array<Product> = [
     handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
+    url: '',
   },
   {
     id: '7',
@@ -68,6 +74,7 @@ export const ProductItemData: Array<Product> = [
     handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
+    url: '',
   },
   {
     id: '8',
@@ -78,5 +85,6 @@ export const ProductItemData: Array<Product> = [
     handle: 'sweater-champion',
     productType: 'shirt',
     price: 1000,
+    url: '',
   },
 ];

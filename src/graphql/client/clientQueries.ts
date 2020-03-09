@@ -48,6 +48,7 @@ export const REMOVE_FROM_WISHLIST = gql`
       image
       title
       price
+      url
     }
   }
 `;
@@ -60,6 +61,7 @@ export const ADD_TO_WISHLIST = gql`
       image
       title
       price
+      url
     }
   }
 `;
@@ -72,6 +74,7 @@ export const GET_WISHLIST = gql`
       image
       title
       price
+      url
     }
   }
 `;

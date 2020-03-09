@@ -51,6 +51,7 @@ function getProducts(
           productType: product.productType,
           price: price,
           discount: discount,
+          url: product.onlineStoreUrl,
         });
       }
     });

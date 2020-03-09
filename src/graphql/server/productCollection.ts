@@ -78,6 +78,7 @@ export const GET_COLLECTION = gql`
                 }
               }
             }
+            onlineStoreUrl
           }
         }
       }

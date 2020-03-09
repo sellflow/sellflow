@@ -20,6 +20,7 @@ export const GET_PRODUCT_BY_HANDLE = gql`
           }
         }
       }
+      onlineStoreUrl
     }
   }
 `;

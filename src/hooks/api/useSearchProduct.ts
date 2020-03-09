@@ -42,6 +42,7 @@ export default function getProducts(
         price: price,
         discount: discount,
         handle: product.handle,
+        url: product.onlineStoreUrl,
       };
     });
   }
