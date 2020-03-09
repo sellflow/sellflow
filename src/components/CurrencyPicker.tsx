@@ -28,7 +28,11 @@ export default function CurrencyPicker(props: Props) {
 
   let { setDefaultCurrency, data: selectedCurrency } = useDefaultCurrency();
 
-  let { data } = useQuery<GetShop>(GET_SHOP);
+  let { data: shopData } = useQuery<GetShop>(GET_SHOP);
+
+  let isMultiCurrency =
+    shopData &&
+    shopData.shop.paymentSettings.enabledPresentmentCurrencies.length > 1;
 
   let animatedValue = new Animated.Value(0);
 
@@ -39,62 +43,69 @@ export default function CurrencyPicker(props: Props) {
 
   return (
     <View style={styles.container}>
-      <Menu
-        visible={visible}
-        onDismiss={() => {
-          setVisible(false);
-        }}
-        anchor={
-          <TouchableWithoutFeedback onPress={() => setVisible(true)}>
-            <View style={styles.titleContainer}>
-              <Text weight="medium">{selectedCurrency}</Text>
-              <Animated.View
-                style={{
-                  transform: [
-                    {
-                      rotate: animatedValue.interpolate({
-                        inputRange: [-0.5, 0.5],
-                        outputRange: ['180deg', '0deg'],
-                      }),
-                    },
-                  ],
-                }}
-              >
-                <IconButton
-                  icon="menu-down"
-                  size={18}
-                  color={COLORS.primaryColor}
-                  style={styles.smallTriangle}
-                />
-              </Animated.View>
-            </View>
-          </TouchableWithoutFeedback>
-        }
-        contentStyle={[
-          Platform.OS === 'ios' && styles.topMargin,
-          styles.zeroPadding,
-        ]}
-      >
-        <View style={styles.menuItemContainer}>
-          <FlatList
-            style={styles.menuListContainer}
-            data={data?.shop.paymentSettings.enabledPresentmentCurrencies || []}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => {
-                  onPressCurrency(item);
-                  setDefaultCurrency({ variables: { currency: item } });
-                  setVisible(false);
-                }}
-              >
-                <Text weight="medium">{item}</Text>
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item) => item}
-          />
-        </View>
-      </Menu>
+      {isMultiCurrency ? (
+        <Menu
+          visible={visible}
+          onDismiss={() => {
+            setVisible(false);
+          }}
+          anchor={
+            <TouchableWithoutFeedback onPress={() => setVisible(true)}>
+              <View style={styles.titleContainer}>
+                <Text weight="medium">{selectedCurrency}</Text>
+                <Animated.View
+                  style={{
+                    transform: [
+                      {
+                        rotate: animatedValue.interpolate({
+                          inputRange: [-0.5, 0.5],
+                          outputRange: ['180deg', '0deg'],
+                        }),
+                      },
+                    ],
+                  }}
+                >
+                  <IconButton
+                    icon="menu-down"
+                    size={18}
+                    color={COLORS.primaryColor}
+                    style={styles.smallTriangle}
+                  />
+                </Animated.View>
+              </View>
+            </TouchableWithoutFeedback>
+          }
+          contentStyle={[
+            Platform.OS === 'ios' && styles.topMargin,
+            styles.zeroPadding,
+          ]}
+        >
+          <View style={styles.menuItemContainer}>
+            <FlatList
+              style={styles.menuListContainer}
+              data={
+                shopData?.shop.paymentSettings.enabledPresentmentCurrencies ||
+                []
+              }
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => {
+                    onPressCurrency(item);
+                    setDefaultCurrency({ variables: { currency: item } });
+                    setVisible(false);
+                  }}
+                >
+                  <Text weight="medium">{item}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item}
+            />
+          </View>
+        </Menu>
+      ) : (
+        <Text weight="medium">{selectedCurrency}</Text>
+      )}
     </View>
   );
 }

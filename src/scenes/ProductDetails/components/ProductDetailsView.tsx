@@ -66,6 +66,7 @@ export default function ProductDetailsView(props: Props) {
       color={COLORS.white}
       size={35}
       onPress={() => setIsImageModalVisible(false)}
+      style={styles.headerIcon}
     />
   );
 
@@ -199,6 +200,12 @@ const styles = StyleSheet.create({
   },
   flexColumn: {
     flexDirection: 'column',
+  },
+  headerIcon: {
+    position: 'absolute',
+    left: 0,
+    top: 17,
+    zIndex: 14,
   },
   bottomContainer: {
     flexDirection: 'row',
