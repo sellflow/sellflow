@@ -74,6 +74,8 @@ const styles = StyleSheet.create({
   message: {
     textAlign: 'center',
     marginVertical: 24,
+    marginHorizontal: 24,
+    lineHeight: 24,
   },
   modalOptionContainer: {
     flexDirection: 'row',

@@ -120,7 +120,12 @@ export default function CheckoutScene() {
   ) => {
     let { id, name, default: defaultStatus, cursor, ...usedAddress } = address;
     await updateCartAddress({
-      variables: { checkoutId: cartId, shippingAddress: { ...usedAddress } },
+      variables: {
+        checkoutId: cartId,
+        shippingAddress: {
+          ...usedAddress,
+        },
+      },
     });
     if (
       doWhenSuccess &&
@@ -173,7 +178,7 @@ export default function CheckoutScene() {
   };
 
   let isDisabled = authToken
-    ? false
+    ? selectedAddress === addressItemData[0] || false
     : !address.address1 ||
       !address.city ||
       !address.country ||
@@ -310,7 +315,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
     color: COLORS.primaryColor,
   },
-  opacity: { opacity: 0.6 },
+  opacity: { opacity: 0.6, marginTop: 16 },
   addressList: {
     marginTop: 12,
     marginBottom: 24,
