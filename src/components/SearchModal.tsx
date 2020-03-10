@@ -50,7 +50,11 @@ export default function SearchModal(props: Props) {
   }, [searchText]);
 
   useEffect(() => {
-    searchProducts({ variables: { searchText: debouncedSearchText } });
+    searchProducts({
+      variables: {
+        searchText: debouncedSearchText,
+      },
+    });
   }, [debouncedSearchText, searchProducts]);
 
   useEffect(() => {

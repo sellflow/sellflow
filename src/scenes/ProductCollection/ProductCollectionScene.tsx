@@ -13,10 +13,13 @@ import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { Product } from '../../types/types';
 import { useColumns } from '../../helpers/columns';
 import { ProductsView } from './components';
-
-const DEFAULT_MAX_PRICE = 1000;
+import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
+import { formatSliderValue } from '../../helpers/formatSliderValue';
 
 export default function ProductCollectionScene() {
+  let maxPrice = useGetHighestPrice();
+  let { maxPriceValue } = formatSliderValue(maxPrice);
+
   let { navigate, setOptions } = useNavigation<
     StackNavProp<'ProductCollection'>
   >();
@@ -25,7 +28,7 @@ export default function ProductCollectionScene() {
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
   let [priceRange, setPriceRange] = useState<[number, number]>([
     0,
-    DEFAULT_MAX_PRICE,
+    maxPriceValue,
   ]);
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   const collectionHandle = params.collection.handle;
@@ -40,8 +43,19 @@ export default function ProductCollectionScene() {
     isFetchingMore,
   } = useCollectionQuery(collectionHandle, first, priceRange);
 
-  let onClearFilter = () => setPriceRange([0, DEFAULT_MAX_PRICE]);
-  let onSetFilter = (values: [number, number]) => setPriceRange(values);
+  let onClearFilter = () => setPriceRange([0, maxPriceValue]);
+  let onSetFilter = (values: [number, number]) => {
+    setPriceRange(values);
+    refetch(
+      'sort',
+      {
+        collectionHandle,
+        first,
+        after: null,
+      },
+      values,
+    );
+  };
   let onPressRadioButton = (newValue: string) => {
     setRadioButtonValue(newValue);
     let { sortKey, reverse } = getSortKeys(newValue);

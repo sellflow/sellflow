@@ -28,8 +28,8 @@ function getProducts(
       let firstImage = product.images.edges[0];
       let priceRangeMin = product.presentmentPriceRanges.edges[0];
       if (
-        Number(priceRangeMin.node.minVariantPrice.amount) < maxPrice &&
-        Number(priceRangeMin.node.minVariantPrice.amount) > minPrice
+        Number(priceRangeMin.node.minVariantPrice.amount) <= maxPrice &&
+        Number(priceRangeMin.node.minVariantPrice.amount) >= minPrice
       ) {
         let originalProductPrice = ~~product.variants.edges[0].node
           .presentmentPrices.edges[0].node.compareAtPrice?.amount;
@@ -90,10 +90,11 @@ function useCollectionQuery(
   let refetch = async (
     type: 'sort' | 'scroll',
     variables: GetCollectionVariables | undefined,
+    values?: [number, number],
   ) => {
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
-    let moreCollection = getProducts(data, priceRange);
+    let moreCollection = getProducts(data, values || priceRange);
 
     if (type === 'sort') {
       setCollection(moreCollection);

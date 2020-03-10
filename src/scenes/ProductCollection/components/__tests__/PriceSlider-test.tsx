@@ -82,8 +82,8 @@ it('should not let minimum price be higher than maximum price', () => {
   expect(minPrice).toBeTruthy();
 });
 
-it('should not let maximum price be lower than minimum price', () => {
-  let { getByDisplayValue } = render(
+it('should not allow maximum price be lower than minimum price', () => {
+  let { getByDisplayValue, getByProps } = render(
     <PriceSlider
       minPrice={10}
       maxPrice={1000}
@@ -96,8 +96,8 @@ it('should not let maximum price be lower than minimum price', () => {
   expect(maxPrice).toBeTruthy();
 
   fireEvent.changeText(maxPrice, '9');
-  maxPrice = getByDisplayValue('11');
-  expect(maxPrice).toBeTruthy();
+  let submitButton = getByProps({ disabled: true });
+  expect(submitButton).toBeTruthy();
 });
 
 it('should let 0 for minimum and maximum price', () => {

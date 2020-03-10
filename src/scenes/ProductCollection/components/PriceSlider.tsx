@@ -32,6 +32,7 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
     onValuesChangeStart = () => {},
     onValuesChangeFinish = () => {},
   } = props;
+
   let [sliderLength, setSliderLength] = useState<number>(280); // default slider length
   let [priceRange, setPriceRange] = useState<[number, number]>(
     initialSliderValues,
@@ -51,6 +52,9 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
       return minPrice;
     }
     if (value >= priceRange[1]) {
+      if (priceRange[1] <= sliderStep) {
+        return 0;
+      }
       return priceRange[1] - sliderStep;
     }
     return value;
@@ -62,9 +66,6 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
     }
     if (value > maxPrice) {
       return maxPrice;
-    }
-    if (value <= priceRange[0]) {
-      return priceRange[0] + sliderStep;
     }
     return value;
   };
@@ -82,7 +83,10 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
     >
       <Slider
         sliderLength={sliderLength}
-        values={priceRange}
+        values={[
+          priceRange[0],
+          priceRange[1] < priceRange[0] ? priceRange[0] + 1 : priceRange[1],
+        ]}
         showLabel={false}
         min={minPrice}
         max={maxPrice}
@@ -114,12 +118,18 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
           onChangeText={(text: string) => {
             setPriceRange([priceRange[0], clampMaxValue(parseNumber(text))]);
           }}
+          onBlur={() => {
+            if (priceRange[1] === 0) {
+              setPriceRange([priceRange[0], maxPrice]);
+            }
+          }}
         />
       </View>
       <Button
         style={defaultButton}
         labelStyle={defaultButtonLabel}
         onPress={() => onSubmit(priceRange)}
+        disabled={!(priceRange[1] >= priceRange[0])}
       >
         {submitButtonText}
       </Button>

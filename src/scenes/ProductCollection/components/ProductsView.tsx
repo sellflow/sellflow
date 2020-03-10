@@ -12,6 +12,8 @@ import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
 import { useColumns } from '../../../helpers/columns';
 import { COLORS } from '../../../constants/colors';
 import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
+import { useGetHighestPrice } from '../../../hooks/api/useHighestPriceProduct';
+import { formatSliderValue } from '../../../helpers/formatSliderValue';
 
 type SortProps = {
   radioButtonValue: string;
@@ -35,9 +37,10 @@ type Props = {
   filterProps: FilterProps;
 };
 
-const DEFAULT_MAX_PRICE = 1000;
-
 export default function ProductsView(props: Props) {
+  let maxPrice = useGetHighestPrice();
+  let { sliderStep, maxPriceValue } = formatSliderValue(maxPrice);
+
   let {
     onItemPress,
     products,
@@ -91,7 +94,7 @@ export default function ProductsView(props: Props) {
           </View>
           <PriceSlider
             minPrice={0}
-            maxPrice={DEFAULT_MAX_PRICE}
+            maxPrice={maxPriceValue}
             initialSliderValues={priceRange}
             onSubmit={(values) => {
               onSetFilter(values);
@@ -100,6 +103,7 @@ export default function ProductsView(props: Props) {
             submitButtonText={t('Set Filter')}
             onValuesChangeStart={onValuesChangeStart}
             onValuesChangeFinish={onValuesChangeFinish}
+            sliderStep={sliderStep}
           />
         </View>
       </ScrollView>
@@ -168,7 +172,7 @@ export default function ProductsView(props: Props) {
           />
           <FilterModal
             minPrice={0}
-            maxPrice={DEFAULT_MAX_PRICE}
+            maxPrice={maxPriceValue}
             initialSliderValues={priceRange}
             isModalVisible={isFilterModalVisible}
             toggleModal={toggleFilterModal}
@@ -177,6 +181,7 @@ export default function ProductsView(props: Props) {
               toggleFilterModal();
             }}
             onClear={onClearFilter}
+            sliderStep={sliderStep}
           />
         </>
       )}

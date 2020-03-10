@@ -1,12 +1,23 @@
 import gql from 'graphql-tag';
 
-export const SEARCH_PRODUCT = gql`
-  query SearchProduct($keyword: String!) {
-    products(first: 10, query: $keyword) {
+export const GET_HIGHEST_PRICE = gql`
+  query GetHighestPrice($presentmentCurrencies: [CurrencyCode!]) {
+    products(first: 1, sortKey: PRICE, reverse: true) {
       edges {
         node {
-          title
-          description
+          presentmentPriceRanges(
+            first: 1
+            presentmentCurrencies: $presentmentCurrencies
+          ) {
+            edges {
+              node {
+                maxVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -15,10 +26,17 @@ export const SEARCH_PRODUCT = gql`
 
 export const SEARCH_RESULTS = gql`
   query SearchResults(
-    $searchText: String!
     $presentmentCurrencies: [CurrencyCode!]
+    $searchText: String!
+    $sortKey: ProductSortKeys
+    $reverse: Boolean
   ) {
-    products(first: 10, query: $searchText) {
+    products(
+      first: 10
+      query: $searchText
+      sortKey: $sortKey
+      reverse: $reverse
+    ) {
       edges {
         cursor
         node {
