@@ -72,8 +72,7 @@ export default function AddressManagementScene() {
 
   useFocusEffect(
     useCallback(() => {
-      !loadingAddresses &&
-        refetchAddresses('update', { first, customerAccessToken });
+      refetchAddresses('update', { first, customerAccessToken });
 
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps

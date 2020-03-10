@@ -22,7 +22,7 @@ import {
 } from '../../hooks/api/useCustomerAddress';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
-import { DeleteAddressModal, DropdownCountry } from './components';
+import { DeleteAddressModal, SelectCountryModal } from './components';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();
@@ -48,6 +48,18 @@ export default function AddEditAddressScene() {
     zip: '',
     phone: '',
   });
+
+  let isAddressDataEmpty =
+    addressData.address1 === '' ||
+    addressData.city === '' ||
+    addressData.country === '' ||
+    addressData.firstName === '' ||
+    addressData.lastName === '' ||
+    addressData.phone === '' ||
+    addressData.province === '' ||
+    addressData.zip === '';
+
+  let isIOS = Platform.OS === 'ios';
 
   let lastNameRef = useRef<TextInputType>(null);
   let address1Ref = useRef<TextInputType>(null);
@@ -123,16 +135,18 @@ export default function AddEditAddressScene() {
   let onPressCountry = (country: string) => {
     toggleCountryModal();
     setAddressData({ ...addressData, country });
+    provinceRef.current && provinceRef.current.focus();
   };
 
   let onPressSaveAddress = async () => {
-    if (address == null) {
+    if (address === undefined) {
       let result = await addNewAddress({
         variables: {
           customerAccessToken,
           address: addressData,
         },
       });
+
       let customerUserErrors =
         result?.data?.customerAddressCreate?.customerUserErrors;
 
@@ -183,9 +197,9 @@ export default function AddEditAddressScene() {
   return (
     <View style={styles.flex}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.flex}
-        keyboardVerticalOffset={Platform.select({ ios: 60, android: 0 })}
+        behavior={isIOS ? 'padding' : undefined}
+        keyboardVerticalOffset={isIOS ? 70 : 0}
       >
         <DeleteAddressModal
           deleteVisible={isDeleteModalVisible}
@@ -193,7 +207,7 @@ export default function AddEditAddressScene() {
           onPressCancel={onPressCancel}
           onPressDelete={onPressDelete}
         />
-        <DropdownCountry
+        <SelectCountryModal
           countryVisible={isCountryModalVisible}
           toggleModal={toggleCountryModal}
           onPressCountry={onPressCountry}
@@ -230,9 +244,7 @@ export default function AddEditAddressScene() {
             containerStyle={styles.textInput}
           />
           <TextInput
-            onSubmitEditing={() => {
-              provinceRef.current && provinceRef.current.focus();
-            }}
+            onSubmitEditing={toggleCountryModal}
             returnKeyType="next"
             ref={address1Ref}
             mode="flat"
@@ -267,6 +279,7 @@ export default function AddEditAddressScene() {
               setAddressData({ ...addressData, province })
             }
             containerStyle={styles.textInput}
+            autoCapitalize="words"
           />
           <TextInput
             onSubmitEditing={() => {
@@ -279,6 +292,7 @@ export default function AddEditAddressScene() {
             value={addressData.city}
             onChangeText={(city) => setAddressData({ ...addressData, city })}
             containerStyle={styles.textInput}
+            autoCapitalize="words"
           />
           <TextInput
             onSubmitEditing={() => {
@@ -309,7 +323,9 @@ export default function AddEditAddressScene() {
           labelStyle={defaultButtonLabel}
           onPress={onPressSaveAddress}
           loading={loadingAddNewAddress || loadingEditAddress}
-          disabled={loadingAddNewAddress || loadingEditAddress}
+          disabled={
+            loadingAddNewAddress || loadingEditAddress || isAddressDataEmpty
+          }
         >
           <Text weight="medium" style={styles.buttonText}>
             {t('Save Address')}

@@ -36,7 +36,7 @@ function EmptyCountryList(searchCountry: string) {
   );
 }
 
-export function DropdownCountry(props: Props) {
+export function SelectCountryModal(props: Props) {
   let { countryVisible, toggleModal, onPressCountry } = props;
 
   let { keyboardHeight } = useKeyboardListener();
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   emptyContainer: {
-    height: 361,
+    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.darkWhite,
   },
   countryList: {
-    height: 345,
+    height: 200,
     marginBottom: 16,
   },
   countryContainer: {

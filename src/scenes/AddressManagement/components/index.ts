@@ -1,4 +1,4 @@
 import { DeleteAddressModal } from './DeleteAddressModal';
-import { DropdownCountry } from './DropdownCountry';
+import { SelectCountryModal } from './SelectCountryModal';
 
-export { DeleteAddressModal, DropdownCountry };
+export { DeleteAddressModal, SelectCountryModal };
