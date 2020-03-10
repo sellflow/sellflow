@@ -1,189 +1,48 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { Button, Text } from 'exoflex';
+import React from 'react';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import { WebView } from 'react-native-webview';
 
-import { Surface } from '../../core-ui';
-import { OrderItem } from '../../components';
-import { FONT_SIZE } from '../../constants/fonts';
-import formatAddress from '../../helpers/formatAddress';
-import { OrderData2 } from '../../fixtures/OrderItemData';
-import { addressItemData } from '../../fixtures/AddressItemData';
-import { useDimensions, ScreenSize } from '../../helpers/dimensions';
-import useCurrencyFormatter from '../../hooks/api/useCurrencyFormatter';
-import { defaultButton, defaultButtonLabel } from '../../constants/theme';
-import { PaymentRadioGroup } from './components';
-import { Payment } from '../../types/types';
-
-type CreditCardInfo = {
-  cardNumber: {
-    number: string;
-    isValid: boolean;
-  };
-  name: string;
-  expirationDate: {
-    date: string;
-    isValid: boolean;
-  };
-  cvv: string;
-};
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { StackRouteProp, StackNavProp } from '../../types/Navigation';
+import { useResetCart } from '../../hooks/api/useShoppingCart';
+import { ActivityIndicator } from 'exoflex';
 
 export default function PaymentScene() {
-  let { screenSize, isLandscape } = useDimensions();
-  let formatCurrency = useCurrencyFormatter();
-  let [selectedPaymentType, setSelectedPaymentType] = useState<string>(
-    'CREDIT_CARD',
-  );
-  let [creditCardInfo, setCreditCardInfo] = useState<CreditCardInfo>({
-    cardNumber: {
-      number: '',
-      isValid: true,
-    },
-    name: '',
-    expirationDate: {
-      date: '',
-      isValid: true,
-    },
-    cvv: '',
-  });
+  let { params } = useRoute<StackRouteProp<'Payment'>>();
+  let { navigate } = useNavigation<StackNavProp<'Payment'>>();
+  let { resetShoppingCart } = useResetCart();
 
-  let subtotal = 77;
-  let shipping = 0;
-  let total = subtotal + shipping;
-  let address = addressItemData[0];
-  let acceptedPaymentTypes: Array<Payment> = [
-    { id: 'CREDIT_CARD', name: t('Credit Card') },
-    { id: 'PAYPAL', name: 'PayPal' },
-  ];
-
-  let orderSummary = (
-    <View style={styles.flex}>
-      <Text style={[styles.labelStyle, styles.opacity]}>
-        {t('Select Payment Method')}
-      </Text>
-      <PaymentRadioGroup
-        acceptedTypes={acceptedPaymentTypes}
-        selectedType={selectedPaymentType}
-        onSelect={setSelectedPaymentType}
-        creditCard={creditCardInfo}
-        onCardValueChange={setCreditCardInfo}
+  return (
+    <SafeAreaView style={styles.flex}>
+      <WebView
+        style={styles.margin}
+        source={{ uri: params.webUrl }}
+        originWhitelist={['*']}
+        onShouldStartLoadWithRequest={({ url }) => {
+          if (url.endsWith('thank_you')) {
+            resetShoppingCart();
+            navigate('Home');
+            return false;
+          }
+          return true;
+        }}
+        startInLoadingState={true}
+        renderLoading={() => <ActivityIndicator style={styles.center} />}
       />
-      <Text style={[styles.labelStyle, styles.opacity]}>
-        {t('Shipping Address')}
-      </Text>
-      <Surface containerStyle={styles.surfaceAddress}>
-        <Text style={styles.mediumText}>{address.name}</Text>
-        {formatAddress(address).map((item) =>
-          item ? (
-            <Text key={item} style={[styles.address, styles.opacity]}>
-              {item}
-            </Text>
-          ) : (
-            <Text>{t('No Addresses To Display')}</Text>
-          ),
-        )}
-        <Text style={[styles.address, styles.opacity]}>
-          {t('Phone: {phone}', { phone: address.phone })}
-        </Text>
-      </Surface>
-      <Text style={[styles.labelStyle, styles.opacity]}>
-        {t('Order Summary')}
-      </Text>
-      {OrderData2.map((item) => (
-        <OrderItem cardType="order" orderItem={item} key={item.variantID} />
-      ))}
-    </View>
-  );
-
-  let checkoutSummary = (
-    <View>
-      <View style={styles.surfacePrice}>
-        <Surface mode="row">
-          <Text style={styles.mediumText}>{t('Subtotal')}</Text>
-          <Text style={styles.mediumText}>{formatCurrency(subtotal)}</Text>
-        </Surface>
-        <Surface mode="row">
-          <Text style={styles.mediumText}>{t('Shipping')}</Text>
-          <Text style={styles.mediumText}>{formatCurrency(shipping)}</Text>
-        </Surface>
-        <Surface mode="row">
-          <Text style={styles.mediumText}>{t('Total')}</Text>
-          <Text style={styles.mediumText} weight="medium">
-            {formatCurrency(total)}
-          </Text>
-        </Surface>
-      </View>
-      <Button style={defaultButton} labelStyle={defaultButtonLabel}>
-        {t('Pay')}
-      </Button>
-    </View>
-  );
-
-  return isLandscape ? (
-    <View style={styles.horizontalLayout}>
-      <ScrollView style={styles.horizontalLayoutColumn}>
-        {orderSummary}
-      </ScrollView>
-      <View style={styles.horizontalLayoutColumn}>{checkoutSummary}</View>
-    </View>
-  ) : (
-    <ScrollView
-      style={
-        screenSize === ScreenSize.Small
-          ? styles.verticalNarrow
-          : styles.verticalWide
-      }
-      contentContainerStyle={styles.flexGrow}
-    >
-      {orderSummary}
-      {checkoutSummary}
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  mediumText: {
-    fontSize: FONT_SIZE.medium,
-  },
-  flexGrow: {
-    flexGrow: 1,
-  },
-  opacity: {
-    opacity: 0.6,
-  },
-  address: {
-    marginTop: 6,
-  },
-  labelStyle: {
-    marginTop: 16,
-    marginBottom: 6,
-  },
   flex: {
     flex: 1,
   },
-  verticalNarrow: {
-    paddingHorizontal: 24,
-    marginBottom: 24,
-  },
-  verticalWide: {
-    paddingHorizontal: 36,
-    paddingTop: 8,
-    marginBottom: 24,
-  },
-  horizontalLayout: {
+  center: {
     flex: 1,
-    paddingHorizontal: 18,
-    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
-  horizontalLayoutColumn: {
-    flex: 1,
-    marginHorizontal: 18,
+  margin: {
     marginBottom: 24,
-  },
-  surfacePrice: {
-    marginTop: 14,
-    marginBottom: 24,
-  },
-  surfaceAddress: {
-    marginTop: 6,
   },
 });

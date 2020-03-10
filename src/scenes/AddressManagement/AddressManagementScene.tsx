@@ -43,7 +43,7 @@ export default function AddressManagementScene() {
     loading: loadingAddresses,
     hasMore,
     isFetchingMore,
-    refetch: refetchAddress,
+    refetch: refetchAddresses,
   } = useGetCustomerAddresses(first, customerAccessToken);
 
   let {
@@ -54,7 +54,7 @@ export default function AddressManagementScene() {
       Alert.alert(error.message);
     },
     onCompleted: () => {
-      refetchAddress('update', { first, customerAccessToken });
+      refetchAddresses('update', { first, customerAccessToken });
     },
   });
 
@@ -66,14 +66,14 @@ export default function AddressManagementScene() {
       Alert.alert(error.message);
     },
     onCompleted: () => {
-      refetchAddress('update', { first, customerAccessToken });
+      refetchAddresses('update', { first, customerAccessToken });
     },
   });
 
   useFocusEffect(
     useCallback(() => {
       !loadingAddresses &&
-        refetchAddress('update', { first, customerAccessToken });
+        refetchAddresses('update', { first, customerAccessToken });
 
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps
@@ -113,7 +113,7 @@ export default function AddressManagementScene() {
 
   let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
     if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
-      refetchAddress('scroll', {
+      refetchAddresses('scroll', {
         first,
         customerAccessToken,
         after: addresses[addresses.length - 1].cursor || null,

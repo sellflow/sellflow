@@ -17,7 +17,6 @@ import {
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
-import { Linking } from 'expo';
 
 import { CheckoutAddress } from '../../components';
 import { Surface } from '../../core-ui';
@@ -36,7 +35,6 @@ import {
 } from '../../hooks/api/useCustomer';
 import { useCheckoutUpdateAddress } from '../../hooks/api/useShopifyCart';
 import { ShippingAddressForm } from './components';
-import { useResetCart } from '../../hooks/api/useShoppingCart';
 import useCurrencyFormatter from '../../hooks/api/useCurrencyFormatter';
 
 export default function CheckoutScene() {
@@ -57,8 +55,6 @@ export default function CheckoutScene() {
   let { screenSize } = useDimensions();
   const first = 5;
   let formatCurrency = useCurrencyFormatter();
-
-  let { resetShoppingCart } = useResetCart();
 
   let { updateCartAddress, data: updateAddressData } = useCheckoutUpdateAddress(
     {
@@ -101,14 +97,7 @@ export default function CheckoutScene() {
     let defaultAddress =
       addresses.find((item) => item.default === true) || addressItemData[0];
     setSelectedAddress(defaultAddress);
-
-    if (customerData && customerData.customer) {
-      if (!customerData.customer.lastIncompleteCheckout) {
-        resetShoppingCart();
-        navigate('Home'); // TODO: Navigate to Order Confirmation scene
-      }
-    }
-  }, [addresses, customerData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [addresses, customerData]);
 
   useEffect(() => {
     let handleAppStateChange = (appState: AppStateStatus) => {
@@ -129,7 +118,7 @@ export default function CheckoutScene() {
     address: AddressItem,
     doWhenSuccess?: (webUrl: string) => void,
   ) => {
-    let { id, name, default: defaultStatus, ...usedAddress } = address;
+    let { id, name, default: defaultStatus, cursor, ...usedAddress } = address;
     await updateCartAddress({
       variables: { checkoutId: cartId, shippingAddress: { ...usedAddress } },
     });
@@ -152,7 +141,7 @@ export default function CheckoutScene() {
   };
 
   let navigateToPayment = (webUrl: string) => {
-    Linking.openURL(webUrl);
+    navigate('Payment', { webUrl });
   };
 
   let containerStyle = () => {
