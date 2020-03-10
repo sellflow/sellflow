@@ -8,13 +8,13 @@ import {
 } from '../../../hooks/api/useWishlist';
 import { COLORS } from '../../../constants/colors';
 import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
-import { Product } from '../../../types/types';
 import { useQuery } from '@apollo/react-hooks';
 import { GetShop } from '../../../generated/server/GetShop';
 import { GET_SHOP } from '../../../graphql/server/shop';
+import { ProductDetails } from '../../../types/types';
 
 type Props = {
-  product: Product;
+  product: ProductDetails;
   isLoading: boolean;
   isWishlistActive: boolean;
   onAddToCartPress: () => void;

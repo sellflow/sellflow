@@ -82,7 +82,7 @@ export default function ProductCollectionScene() {
   };
 
   let onItemPress = (product: Product) => {
-    navigate('ProductDetails', { product });
+    navigate('ProductDetails', { productHandle: product.handle });
   };
   let onSubmit = (searchKeyword: string) =>
     navigate('SearchResults', {

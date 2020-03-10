@@ -5,7 +5,7 @@ import { Text, TextInput } from 'exoflex';
 import { FONT_SIZE } from '../../../constants/fonts';
 import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
 import { RichRadioGroup } from '../../../core-ui';
-import { Product, OptionsData, Options } from '../../../types/types';
+import { OptionsData, Options, ProductDetails } from '../../../types/types';
 import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
 import { COLORS } from '../../../constants/colors';
 import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
@@ -13,17 +13,15 @@ import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
 type Props = {
   onSelectionOptionChange: (key: string, value: string) => void;
   selectedOptions: OptionsData;
-  productOriginalPrice: number;
   quantity: number;
   onChangeQuantity: (qunatity: number) => void;
-  product: Product;
+  product: ProductDetails;
   options: Options;
 };
 
 export default function ProductInfo(props: Props) {
   let {
     product,
-    productOriginalPrice,
     options,
     quantity,
     selectedOptions,
@@ -53,7 +51,7 @@ export default function ProductInfo(props: Props) {
     <>
       <View style={styles.padding}>
         <Text style={styles.productInfoTitle}>{product.title}</Text>
-        {productOriginalPrice && productOriginalPrice > 0 ? (
+        {product.discount > 0 ? (
           <View style={styles.flexRow}>
             <Text weight="bold" style={styles.productInfoPrice}>
               {formatCurrency(afterDiscount)}
@@ -86,7 +84,7 @@ export default function ProductInfo(props: Props) {
       </View>
       <View style={[styles.paddingHorizontal, styles.description]}>
         <Text style={styles.labelStyle}>{t('Description')}</Text>
-        <Text>{t('Add Description Here')}</Text>
+        <Text>{product.description}</Text>
       </View>
     </>
   );

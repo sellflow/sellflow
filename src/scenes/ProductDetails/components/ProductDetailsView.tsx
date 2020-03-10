@@ -17,17 +17,14 @@ import { DiscountBadge } from '../../../core-ui';
 import { FONT_SIZE } from '../../../constants/fonts';
 import ProductInfo from './ProductInfo';
 import BottomActionBar from './BottomActionBar';
-import { OptionsData, Product, Options } from '../../../types/types';
+import { OptionsData, Options, ProductDetails } from '../../../types/types';
 
 type Props = {
   onSelectionOptionChange: (key: string, value: string) => void;
   selectedOptions: OptionsData;
   quantity: number;
   onChangeQuantity: (quantity: number) => void;
-  product: Product;
-  productImages: Array<string>;
-  productDiscount: number;
-  productOriginalPrice: number;
+  product: ProductDetails;
   options?: Options;
   isLoading: boolean;
   isWishlistActive: boolean;
@@ -38,9 +35,6 @@ type Props = {
 export default function ProductDetailsView(props: Props) {
   let {
     product,
-    productImages,
-    productDiscount,
-    productOriginalPrice,
     options,
     quantity,
     onChangeQuantity,
@@ -70,7 +64,7 @@ export default function ProductDetailsView(props: Props) {
     />
   );
 
-  let images = productImages.map((url) => ({ url }));
+  let images = product.images.map((url) => ({ url }));
   let imageSize = isLandscape
     ? {
         width: width / 2,
@@ -95,9 +89,9 @@ export default function ProductDetailsView(props: Props) {
           style={imageSize}
           resizeMode={isLandscape ? 'cover' : 'contain'}
         />
-        {productDiscount > 0 ? (
+        {product.discount > 0 ? (
           <DiscountBadge
-            value={productDiscount}
+            value={product.discount}
             containerStyle={
               isPhone
                 ? [styles.discountBox, styles.discountBoxTablet]
@@ -116,7 +110,7 @@ export default function ProductDetailsView(props: Props) {
         style={styles.flex}
         horizontal
         pagingEnabled
-        data={productImages}
+        data={product.images}
         renderItem={renderProductImage}
         keyExtractor={(item) => item}
       />
@@ -131,7 +125,6 @@ export default function ProductDetailsView(props: Props) {
             quantity={quantity}
             onChangeQuantity={onChangeQuantity}
             product={product}
-            productOriginalPrice={productOriginalPrice}
             options={options ? options : []}
           />
         </ScrollView>
@@ -149,7 +142,7 @@ export default function ProductDetailsView(props: Props) {
           style={styles.flex}
           horizontal
           pagingEnabled
-          data={productImages}
+          data={product.images}
           renderItem={renderProductImage}
           keyExtractor={(item) => item}
         />
@@ -160,7 +153,6 @@ export default function ProductDetailsView(props: Props) {
             quantity={quantity}
             onChangeQuantity={onChangeQuantity}
             product={product}
-            productOriginalPrice={productOriginalPrice}
             options={options ? options : []}
           />
         </View>

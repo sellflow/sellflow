@@ -50,7 +50,7 @@ export default function HomeScene() {
   });
 
   let onItemPress = (product: Product) => {
-    navigate('ProductDetails', { product });
+    navigate('ProductDetails', { productHandle: product.handle });
   };
   let onSubmit = (searchKeyword: string) =>
     navigate('SearchResults', {
@@ -85,7 +85,7 @@ export default function HomeScene() {
     return {
       id: item.node.id,
       cursor: item.cursor,
-      image: item.node.images.edges[0].node.originalSrc,
+      images: [item.node.images.edges[0].node.originalSrc],
       title: item.node.title,
       handle: item.node.handle,
       price: price,

@@ -36,7 +36,7 @@ export default function getProducts(
       return {
         id: product.id,
         cursor: item.cursor,
-        image: product.images.edges[0].node.transformedSrc.toString(),
+        images: [product.images.edges[0].node.transformedSrc],
         title: product.title,
         productType: product.productType,
         price: price,

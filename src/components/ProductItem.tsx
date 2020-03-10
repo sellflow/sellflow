@@ -26,7 +26,7 @@ type Props = {
 
 export default function ProductItem(props: Props) {
   let { product, onPress, containerStyle, imageStyle } = props;
-  let { title, image, price, discount } = product;
+  let { title, images, price, discount } = product;
   let afterDiscount = priceAfterDiscount(price, discount || 0);
   let formatCurrency = useCurrencyFormatter();
 
@@ -36,7 +36,7 @@ export default function ProductItem(props: Props) {
       onPress={onPress}
     >
       <View style={styles.imageContainer}>
-        <Image style={[styles.image, imageStyle]} source={{ uri: image }} />
+        <Image style={[styles.image, imageStyle]} source={{ uri: images[0] }} />
       </View>
       {discount && discount > 0 ? (
         <DiscountBadge value={discount} containerStyle={styles.discountBox} />

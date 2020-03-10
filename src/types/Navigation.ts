@@ -1,7 +1,7 @@
 import { RouteProp as RoutePropBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { CategoryItem, Product, OrderRecord, AddressItem, Cart } from './types';
+import { CategoryItem, OrderRecord, AddressItem, Cart } from './types';
 
 export type StackNavProp<T extends keyof StackParamList> = StackNavigationProp<
   StackParamList,
@@ -44,7 +44,7 @@ export type StackParamList = {
   Login: undefined;
   ForgotPassword: undefined;
   Checkout: { cartData: Cart };
-  ProductDetails: { product: Product };
+  ProductDetails: { productHandle: string };
   ShoppingCart: undefined;
   EditProfile: { customerAccessToken: string };
   Payment: { webUrl: string };

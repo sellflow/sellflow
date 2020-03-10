@@ -45,13 +45,12 @@ function getProducts(
         filteredData.push({
           id: product.id,
           cursor: item.cursor,
-          image: firstImage ? firstImage.node.transformedSrc.toString() : '',
+          images: [firstImage ? firstImage.node.transformedSrc : ''],
           title: product.title,
           handle: product.handle,
           productType: product.productType,
           price: price,
           discount: discount,
-          url: product.onlineStoreUrl,
         });
       }
     });

@@ -1,4 +1,4 @@
-import { AddressItem } from '../types/types';
+import { AddressItem, ProductDetails } from '../types/types';
 
 export const emptyAddress: AddressItem = {
   address1: '',
@@ -12,4 +12,15 @@ export const emptyAddress: AddressItem = {
   phone: '',
   province: '',
   zip: '',
+};
+
+export const emptyProduct: ProductDetails = {
+  id: '',
+  images: [],
+  title: '',
+  description: '',
+  handle: '',
+  price: 0,
+  discount: 0,
+  url: '',
 };

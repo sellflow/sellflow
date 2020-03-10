@@ -69,7 +69,7 @@ export default function SearchResultsScene() {
     setSortVariables(getSortKeys(newValue));
   };
   let onItemPress = (product: Product) => {
-    navigate('ProductDetails', { product });
+    navigate('ProductDetails', { productHandle: product.handle });
   };
   let onValuesChangeStart = () => {
     setOptions({

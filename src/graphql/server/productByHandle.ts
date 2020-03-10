@@ -1,11 +1,16 @@
 import gql from 'graphql-tag';
 
 export const GET_PRODUCT_BY_HANDLE = gql`
-  query GetProductByHandle($productHandle: String!) {
+  query GetProductByHandle(
+    $productHandle: String!
+    $presentmentCurrencies: [CurrencyCode!]
+  ) {
     productByHandle(handle: $productHandle) {
       id
       title
+      handle
       description
+      onlineStoreUrl
       options(first: 5) {
         name
         values
@@ -20,7 +25,29 @@ export const GET_PRODUCT_BY_HANDLE = gql`
           }
         }
       }
-      onlineStoreUrl
+      variants(first: 1) {
+        edges {
+          node {
+            presentmentPrices(
+              first: 1
+              presentmentCurrencies: $presentmentCurrencies
+            ) {
+              edges {
+                node {
+                  compareAtPrice {
+                    amount
+                    currencyCode
+                  }
+                  price {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -29,18 +56,28 @@ export const GET_PRODUCT_VARIANT = gql`
   query GetProductVariant(
     $selectedOptions: [SelectedOptionInput!]!
     $handle: String!
+    $presentmentCurrencies: [CurrencyCode!]
   ) {
     productByHandle(handle: $handle) {
       id
       variantBySelectedOptions(selectedOptions: $selectedOptions) {
         id
-        compareAtPriceV2 {
-          amount
-          currencyCode
-        }
-        priceV2 {
-          amount
-          currencyCode
+        presentmentPrices(
+          first: 1
+          presentmentCurrencies: $presentmentCurrencies
+        ) {
+          edges {
+            node {
+              compareAtPrice {
+                amount
+                currencyCode
+              }
+              price {
+                amount
+                currencyCode
+              }
+            }
+          }
         }
       }
     }

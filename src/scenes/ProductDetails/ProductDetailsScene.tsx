@@ -3,7 +3,12 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { ActivityIndicator } from 'exoflex';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 
-import { VariantQueryData, Options, OptionsData } from '../../types/types';
+import {
+  VariantQueryData,
+  Options,
+  OptionsData,
+  ProductDetails,
+} from '../../types/types';
 import { useGetWishlistData } from '../../hooks/api/useWishlist';
 import { StackRouteProp } from '../../types/Navigation';
 import {
@@ -24,20 +29,22 @@ import {
 import { ProductDetailsView } from './components';
 import { Toast } from '../../core-ui';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
+import { emptyProduct } from '../../constants/defaultValues';
+import { getDiscount } from '../../helpers/getDiscount';
 
 export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
-  let { product } = route.params;
+  let { productHandle } = route.params;
 
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
   let [isWishlistActive, setWishlistActive] = useState<boolean>(false);
   let [options, setOptions] = useState<Options>([]);
   let [quantity, setQuantity] = useState<number>(1);
   let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
-  let [productImages, setProductImages] = useState<Array<string>>([]);
-  let [productDiscount, setProductDiscount] = useState<number>(0);
-  let [productOriginalPrice, setProductOriginalPrice] = useState<number>(0);
   let [variantID, setVariantID] = useState<string>('');
+  let [productDetails, setProductDetails] = useState<ProductDetails>(
+    emptyProduct,
+  );
 
   let { authToken } = useAuth();
   let { setShoppingCartID } = useSetShoppingCartID();
@@ -45,7 +52,7 @@ export default function ProductDetailsScene() {
     shoppingCartCustomerAssociate,
     loading: associateLoading,
   } = useCheckoutCustomerAssociate();
-  let { data } = useDefaultCurrency();
+  let { data: currencyCode } = useDefaultCurrency();
   let { createCheckout, loading: checkoutCreateLoading } = useCheckoutCreate({
     onCompleted: async ({ checkoutCreate }) => {
       if (checkoutCreate && checkoutCreate.checkout) {
@@ -70,7 +77,7 @@ export default function ProductDetailsScene() {
           variables: {
             checkoutCreateInput: {
               lineItems: [],
-              presentmentCurrencyCode: data,
+              presentmentCurrencyCode: currencyCode,
             },
           },
         });
@@ -139,17 +146,28 @@ export default function ProductDetailsScene() {
       if (productByHandle && productByHandle.variantBySelectedOptions) {
         let {
           id,
-          compareAtPriceV2,
-          priceV2,
+          presentmentPrices,
         } = productByHandle.variantBySelectedOptions;
-        if (compareAtPriceV2) {
-          let originalPrice = compareAtPriceV2.amount;
-          let discount =
-            ((compareAtPriceV2.amount - priceV2.amount) /
-              compareAtPriceV2.amount) *
-            100;
-          setProductDiscount(discount);
-          setProductOriginalPrice(Math.round(originalPrice));
+        let { compareAtPrice, price } = presentmentPrices.edges[0].node;
+
+        if (compareAtPrice) {
+          let originalPrice = compareAtPrice.amount;
+          if (originalPrice > price.amount) {
+            let discount =
+              ((compareAtPrice.amount - price.amount) / compareAtPrice.amount) *
+              100;
+            setProductDetails({
+              ...productDetails,
+              price: Number(originalPrice),
+              discount,
+            });
+          }
+        } else {
+          setProductDetails({
+            ...productDetails,
+            price: Number(price.amount),
+            discount: 0,
+          });
         }
         setVariantID(id);
       }
@@ -159,15 +177,19 @@ export default function ProductDetailsScene() {
   useEffect(() => {
     let queryVariantID = extractOptionsData(selectedOptions);
     getVariant({
-      variables: { selectedOptions: queryVariantID, handle: product.handle },
+      variables: {
+        selectedOptions: queryVariantID,
+        handle: productHandle,
+        presentmentCurrencies: [currencyCode],
+      },
     });
-  }, [selectedOptions, getVariant, product.handle]);
+  }, [selectedOptions, getVariant]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let isLoading = getVariantIDLoading || addToCartLoading;
 
   let { data: wishlistData } = useGetWishlistData({
     onCompleted: ({ wishlist }) => {
-      if (wishlist.find((item) => item.handle === product.handle)) {
+      if (wishlist.find((item) => item.handle === productHandle)) {
         setWishlistActive(true);
       }
     },
@@ -181,15 +203,36 @@ export default function ProductDetailsScene() {
     data: productData,
     loading: getProductByHandleLoading,
   } = useGetProductByHandle({
-    variables: { productHandle: product.handle },
+    variables: { productHandle, presentmentCurrencies: [currencyCode] },
     fetchPolicy: 'network-only',
     onCompleted({ productByHandle }) {
       if (productByHandle) {
+        let images = productByHandle.images.edges.map(
+          (item) => item.node.originalSrc,
+        );
+        let originalProductPrice = ~~productByHandle.variants.edges[0].node
+          .presentmentPrices.edges[0].node.compareAtPrice?.amount;
+
+        let productPrice = ~~productByHandle.variants.edges[0].node
+          .presentmentPrices.edges[0].node.price.amount;
+
+        let { price, discount } = getDiscount(
+          originalProductPrice,
+          productPrice,
+        );
+
+        setProductDetails({
+          id: productByHandle.id,
+          title: productByHandle.title,
+          handle: productByHandle.handle,
+          description: productByHandle.description,
+          images,
+          price,
+          discount,
+          url: productByHandle.onlineStoreUrl,
+        });
         let newOptions = [...productByHandle.options];
         setOptions(newOptions);
-        setProductImages(
-          productByHandle.images.edges.map((item) => item.node.originalSrc),
-        );
         let defaultOptions: OptionsData = {};
         for (let { name, values } of newOptions) {
           defaultOptions[name] = values[0];
@@ -222,10 +265,7 @@ export default function ProductDetailsScene() {
         quantity={quantity}
         onChangeQuantity={setQuantity}
         onAddToCartPress={onAddToCart}
-        product={product}
-        productImages={productImages}
-        productDiscount={productDiscount}
-        productOriginalPrice={productOriginalPrice}
+        product={productDetails}
         options={options}
         isLoading={isLoading}
         isWishlistActive={isWishlistActive}

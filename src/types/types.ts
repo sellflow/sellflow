@@ -58,14 +58,18 @@ export type AddressItem = {
 export type Product = {
   id: string;
   cursor?: string;
-  image: string;
+  images: Array<string>;
   title: string;
   handle: string;
   productType?: string;
   price: number;
-  discount?: number;
-  url: string;
+  discount: number;
 };
+
+export type ProductDetails = {
+  description: string;
+  url: string;
+} & Product;
 
 // TODO: Rename Category to Collection
 export type CategoryItem = {

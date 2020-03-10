@@ -32,16 +32,16 @@ input LineItemInput {
 type WishlistProduct {
   id: String!
   handle: String!
-  image: String!
+  images: [String!]!
   title: String!
   price: Int!
-  url: String!
+  discount: Int!
 }
 
 input WishlistProductInput {
   id: String!
   handle: String!
-  image: String!
+  images: [String!]!
   title: String!
   price: Int!
 }

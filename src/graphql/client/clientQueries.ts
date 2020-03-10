@@ -45,10 +45,10 @@ export const REMOVE_FROM_WISHLIST = gql`
     removeFromWishlist(productHandle: $productHandle) @client {
       id
       handle
-      image
+      images
       title
       price
-      url
+      discount
     }
   }
 `;
@@ -58,10 +58,10 @@ export const ADD_TO_WISHLIST = gql`
     addToWishlist(product: $product) @client {
       id
       handle
-      image
+      images
       title
       price
-      url
+      discount
     }
   }
 `;
@@ -71,10 +71,10 @@ export const GET_WISHLIST = gql`
     wishlist @client {
       id
       handle
-      image
+      images
       title
       price
-      url
+      discount
     }
   }
 `;
