@@ -36,6 +36,7 @@ type WishlistProduct {
   title: String!
   price: Int!
   discount: Int!
+  availableForSale: Boolean!
 }
 
 input WishlistProductInput {

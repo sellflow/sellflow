@@ -19,6 +19,7 @@ type Props = {
   isWishlistActive: boolean;
   onAddToCartPress: () => void;
   onWishlistPress: (value: boolean) => void;
+  isButtonDisabled: boolean;
 };
 
 export default function BottomActionBar(props: Props) {
@@ -30,6 +31,7 @@ export default function BottomActionBar(props: Props) {
     onAddToCartPress,
     product,
     isLoading,
+    isButtonDisabled,
   } = props;
 
   let { data: shopData } = useQuery<GetShop>(GET_SHOP);
@@ -78,15 +80,26 @@ export default function BottomActionBar(props: Props) {
         />
       )}
       <Button
-        style={[defaultButton, styles.flex]}
-        labelStyle={defaultButtonLabel}
-        disabled={isLoading}
+        style={[
+          defaultButton,
+          styles.flex,
+          isButtonDisabled && styles.disabledButton,
+        ]}
+        labelStyle={[
+          defaultButtonLabel,
+          isButtonDisabled && styles.disabledLabel,
+        ]}
+        disabled={isLoading || isButtonDisabled}
         loading={isLoading}
         onPress={() => {
           onAddToCartPress();
         }}
       >
-        {t('Add to Cart')}
+        {!product.id
+          ? t('Unavailable')
+          : product.availableForSale
+          ? t('Add to Cart')
+          : t('Out of Stock')}
       </Button>
     </View>
   );
@@ -103,5 +116,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 14,
+  },
+  disabledButton: {
+    backgroundColor: COLORS.black,
+    opacity: 0.2,
+  },
+  disabledLabel: {
+    color: COLORS.white,
   },
 });

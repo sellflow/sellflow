@@ -12,6 +12,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
+    availableForSale: true,
   },
   {
     id: '2',
@@ -24,6 +25,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
+    availableForSale: true,
   },
   {
     id: '3',
@@ -36,6 +38,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 75,
+    availableForSale: true,
   },
   {
     id: '4',
@@ -48,6 +51,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
+    availableForSale: true,
   },
   {
     id: '5',
@@ -60,6 +64,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
+    availableForSale: true,
   },
   {
     id: '6',
@@ -72,6 +77,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
+    availableForSale: true,
   },
   {
     id: '7',
@@ -84,6 +90,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
+    availableForSale: true,
   },
   {
     id: '8',
@@ -96,5 +103,6 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
+    availableForSale: true,
   },
 ];

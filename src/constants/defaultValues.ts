@@ -23,4 +23,5 @@ export const emptyProduct: ProductDetails = {
   price: 0,
   discount: 0,
   url: '',
+  availableForSale: false,
 };

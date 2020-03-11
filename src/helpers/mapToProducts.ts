@@ -37,6 +37,7 @@ export default function mapToProducts(
       price: price,
       discount: discount,
       handle: product.handle,
+      availableForSale: product.availableForSale,
     };
   });
 }

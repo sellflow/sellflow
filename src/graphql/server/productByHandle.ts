@@ -9,6 +9,7 @@ export const GET_PRODUCT_BY_HANDLE = gql`
       id
       title
       handle
+      availableForSale
       description
       onlineStoreUrl
       options(first: 5) {
@@ -62,6 +63,7 @@ export const GET_PRODUCT_VARIANT = gql`
       id
       variantBySelectedOptions(selectedOptions: $selectedOptions) {
         id
+        availableForSale
         presentmentPrices(
           first: 1
           presentmentCurrencies: $presentmentCurrencies

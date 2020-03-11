@@ -49,6 +49,7 @@ export const REMOVE_FROM_WISHLIST = gql`
       title
       price
       discount
+      availableForSale
     }
   }
 `;
@@ -62,6 +63,7 @@ export const ADD_TO_WISHLIST = gql`
       title
       price
       discount
+      availableForSale
     }
   }
 `;
@@ -75,6 +77,7 @@ export const GET_WISHLIST = gql`
       title
       price
       discount
+      availableForSale
     }
   }
 `;

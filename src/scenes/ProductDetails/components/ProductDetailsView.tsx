@@ -129,7 +129,10 @@ export default function ProductDetailsView(props: Props) {
           />
         </ScrollView>
         <View style={[styles.bottomContainer, styles.bottomLandscapeContainer]}>
-          <BottomActionBar {...props} />
+          <BottomActionBar
+            isButtonDisabled={!product.availableForSale}
+            {...props}
+          />
         </View>
       </View>
     </View>
@@ -158,7 +161,10 @@ export default function ProductDetailsView(props: Props) {
         </View>
       </ScrollView>
       <View style={styles.bottomContainer}>
-        <BottomActionBar {...props} />
+        <BottomActionBar
+          isButtonDisabled={!product.availableForSale}
+          {...props}
+        />
       </View>
     </>
   );

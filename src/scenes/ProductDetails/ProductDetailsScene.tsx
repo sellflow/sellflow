@@ -143,10 +143,19 @@ export default function ProductDetailsScene() {
 
   let { getVariant, loading: getVariantIDLoading } = useGetProductVariant({
     onCompleted: ({ productByHandle }) => {
+      if (productByHandle?.variantBySelectedOptions == null) {
+        setProductDetails({
+          ...productDetails,
+          availableForSale: false,
+          id: '',
+        });
+        return;
+      }
       if (productByHandle && productByHandle.variantBySelectedOptions) {
         let {
           id,
           presentmentPrices,
+          availableForSale,
         } = productByHandle.variantBySelectedOptions;
         let { compareAtPrice, price } = presentmentPrices.edges[0].node;
 
@@ -160,6 +169,8 @@ export default function ProductDetailsScene() {
               ...productDetails,
               price: Number(originalPrice),
               discount,
+              availableForSale,
+              id,
             });
           }
         } else {
@@ -167,6 +178,8 @@ export default function ProductDetailsScene() {
             ...productDetails,
             price: Number(price.amount),
             discount: 0,
+            availableForSale,
+            id,
           });
         }
         setVariantID(id);
@@ -230,6 +243,7 @@ export default function ProductDetailsScene() {
           price,
           discount,
           url: productByHandle.onlineStoreUrl,
+          availableForSale: productByHandle.availableForSale,
         });
         let newOptions = [...productByHandle.options];
         setOptions(newOptions);

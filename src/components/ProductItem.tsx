@@ -7,6 +7,7 @@ import {
   StyleProp,
   ViewStyle,
   ImageStyle,
+  ImageBackground,
 } from 'react-native';
 import { Text } from 'exoflex';
 
@@ -26,18 +27,37 @@ type Props = {
 
 export default function ProductItem(props: Props) {
   let { product, onPress, containerStyle, imageStyle } = props;
-  let { title, images, price, discount } = product;
+  let { title, images, price, discount, availableForSale } = product;
   let afterDiscount = priceAfterDiscount(price, discount || 0);
   let formatCurrency = useCurrencyFormatter();
+
+  let renderImage = () => {
+    return availableForSale ? (
+      <View style={styles.imageContainer}>
+        <Image style={[styles.image, imageStyle]} source={{ uri: images[0] }} />
+      </View>
+    ) : (
+      <View style={styles.imageContainer}>
+        <ImageBackground
+          style={[styles.image, imageStyle]}
+          source={{ uri: images[0] }}
+        >
+          <View style={styles.oosBackground}>
+            <Text style={styles.oosText} weight="medium">
+              {t('Out of Stock')}
+            </Text>
+          </View>
+        </ImageBackground>
+      </View>
+    );
+  };
 
   return (
     <TouchableOpacity
       style={[styles.container, containerStyle]}
       onPress={onPress}
     >
-      <View style={styles.imageContainer}>
-        <Image style={[styles.image, imageStyle]} source={{ uri: images[0] }} />
-      </View>
+      {renderImage()}
       {discount && discount > 0 ? (
         <DiscountBadge value={discount} containerStyle={styles.discountBox} />
       ) : null}
@@ -93,5 +113,15 @@ const styles = StyleSheet.create({
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  oosText: {
+    color: COLORS.white,
+  },
+  oosBackground: {
+    backgroundColor: COLORS.black,
+    opacity: 0.6,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
