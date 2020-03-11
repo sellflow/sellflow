@@ -32,20 +32,28 @@ export default function ProductInfo(props: Props) {
   let formatCurrency = useCurrencyFormatter();
 
   let afterDiscount = priceAfterDiscount(product.price, product.discount || 0);
-
-  let radioGroupRenderView = options.map(({ name, values }) => {
-    return (
-      <RichRadioGroup
-        key={name}
-        name={name}
-        values={values}
-        selectedValue={selectedOptions[name]}
-        onSelect={(value) => {
-          onSelectionOptionChange(name, value);
-        }}
-      />
-    );
-  });
+  let radioGroupRenderView = null;
+  if (
+    !(
+      options.length === 1 &&
+      options[0].name === 'Title' &&
+      options[0].values[0] === 'Default Title'
+    )
+  ) {
+    radioGroupRenderView = options.map(({ name, values }) => {
+      return (
+        <RichRadioGroup
+          key={name}
+          name={name}
+          values={values}
+          selectedValue={selectedOptions[name]}
+          onSelect={(value) => {
+            onSelectionOptionChange(name, value);
+          }}
+        />
+      );
+    });
+  }
 
   return (
     <>

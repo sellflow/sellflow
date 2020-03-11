@@ -208,7 +208,7 @@ export default function ProductDetailsScene() {
     },
   });
 
-  let onAddToCart = () => {
+  let onAddToCart = async () => {
     addToCart({ variables: { variantId: variantID, quantity } });
   };
 

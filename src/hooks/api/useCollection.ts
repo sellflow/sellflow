@@ -84,7 +84,6 @@ function useCollectionQuery(
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
     let moreCollection = getProducts(data, values || priceRange);
-
     if (type === 'sort') {
       setCollection(moreCollection);
     } else {
