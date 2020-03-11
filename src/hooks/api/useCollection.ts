@@ -6,6 +6,7 @@ import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import {
   GetCollection,
   GetCollectionVariables,
+  GetCollection_collectionByHandle_products_edges as CollectionProducts,
 } from '../../generated/server/GetCollection';
 import {
   ProductCollectionSortKeys,
@@ -14,47 +15,36 @@ import {
 import { GetCategoriesAndFeaturedProducts } from '../../generated/server/GetCategoriesAndFeaturedProducts';
 import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../../graphql/server/categoriesAndFeaturedProducts';
 import useDefaultCurrency from './useDefaultCurrency';
-import { getDiscount } from '../../helpers/getDiscount';
+import mapToProducts from '../../helpers/mapToProducts';
+
+function filterProducts(
+  collectionProducts: CollectionProducts,
+  priceRange: [number, number],
+) {
+  let [minPrice, maxPrice] = priceRange;
+  let productPriceRange =
+    collectionProducts.node.presentmentPriceRanges.edges[0];
+
+  if (
+    Number(productPriceRange.node.minVariantPrice.amount) <= maxPrice &&
+    Number(productPriceRange.node.minVariantPrice.amount) >= minPrice
+  ) {
+    return collectionProducts.node;
+  }
+}
 
 function getProducts(
   collectionData: GetCollection | undefined,
   priceRange: [number, number],
 ): Array<Product> {
-  let [minPrice, maxPrice] = priceRange;
   if (collectionData && collectionData.collectionByHandle) {
-    let filteredData: Array<Product> = [];
-    collectionData.collectionByHandle.products.edges.forEach((item) => {
-      let product = item.node;
-      let firstImage = product.images.edges[0];
-      let priceRangeMin = product.presentmentPriceRanges.edges[0];
-      if (
-        Number(priceRangeMin.node.minVariantPrice.amount) <= maxPrice &&
-        Number(priceRangeMin.node.minVariantPrice.amount) >= minPrice
-      ) {
-        let originalProductPrice = ~~product.variants.edges[0].node
-          .presentmentPrices.edges[0].node.compareAtPrice?.amount;
+    let filtered = {
+      edges: collectionData.collectionByHandle.products.edges.filter(
+        (product) => filterProducts(product, priceRange),
+      ),
+    };
 
-        let productPrice = ~~product.variants.edges[0].node.presentmentPrices
-          .edges[0].node.price.amount;
-
-        let { price, discount } = getDiscount(
-          originalProductPrice,
-          productPrice,
-        );
-
-        filteredData.push({
-          id: product.id,
-          cursor: item.cursor,
-          images: [firstImage ? firstImage.node.transformedSrc : ''],
-          title: product.title,
-          handle: product.handle,
-          productType: product.productType,
-          price: price,
-          discount: discount,
-        });
-      }
-    });
-    return filteredData;
+    return mapToProducts(filtered);
   }
   return [];
 }

@@ -16,35 +16,13 @@ import {
 } from '../../generated/server/SearchResults';
 import useDefaultCurrency from './useDefaultCurrency';
 import { CurrencyCode } from '../../generated/server/globalTypes';
-import { getDiscount } from '../../helpers/getDiscount';
+import mapToProducts from '../../helpers/mapToProducts';
 
 export default function getProducts(
   searchData: SearchResults | undefined,
 ): Array<Product> {
   if (searchData) {
-    return searchData.products.edges.map((item) => {
-      let product = item.node;
-
-      let originalProductPrice = ~~product.variants.edges[0].node
-        .presentmentPrices.edges[0].node.compareAtPrice?.amount;
-
-      let productPrice = ~~product.variants.edges[0].node.presentmentPrices
-        .edges[0].node.price.amount;
-
-      let { price, discount } = getDiscount(originalProductPrice, productPrice);
-
-      return {
-        id: product.id,
-        cursor: item.cursor,
-        images: [product.images.edges[0].node.transformedSrc],
-        title: product.title,
-        productType: product.productType,
-        price: price,
-        discount: discount,
-        handle: product.handle,
-        url: product.onlineStoreUrl,
-      };
-    });
+    return mapToProducts(searchData.products);
   }
   return [];
 }

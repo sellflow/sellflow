@@ -13,7 +13,7 @@ import { useColumns } from '../helpers/columns';
 import { useCollectionAndProductQuery } from '../hooks/api/useCollection';
 import { COLORS } from '../constants/colors';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
-import { getDiscount } from '../helpers/getDiscount';
+import mapToProducts from '../helpers/mapToProducts';
 
 export default function HomeScene() {
   let { navigate, setOptions } = useNavigation<StackNavProp<'Home'>>();
@@ -73,26 +73,7 @@ export default function HomeScene() {
     }),
   );
 
-  let productData: Array<Product> = homeData.products.edges.map((item) => {
-    let originalProductPrice = ~~item.node.variants.edges[0].node
-      .presentmentPrices.edges[0].node.compareAtPrice?.amount;
-
-    let productPrice = ~~item.node.variants.edges[0].node.presentmentPrices
-      .edges[0].node.price.amount;
-
-    let { price, discount } = getDiscount(originalProductPrice, productPrice);
-
-    return {
-      id: item.node.id,
-      cursor: item.cursor,
-      images: [item.node.images.edges[0].node.originalSrc],
-      title: item.node.title,
-      handle: item.node.handle,
-      price: price,
-      discount: discount,
-      url: item.node.onlineStoreUrl,
-    };
-  });
+  let productData: Array<Product> = mapToProducts(homeData.products);
 
   let renderHeader = () => (
     <>

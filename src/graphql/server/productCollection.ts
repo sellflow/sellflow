@@ -27,7 +27,6 @@ export const GET_COLLECTION = gql`
             handle
             availableForSale
             productType
-            handle
             presentmentPriceRanges(
               first: 1
               presentmentCurrencies: $presentmentCurrencies
@@ -78,7 +77,6 @@ export const GET_COLLECTION = gql`
                 }
               }
             }
-            onlineStoreUrl
           }
         }
       }

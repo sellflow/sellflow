@@ -20,6 +20,25 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
           id
           title
           handle
+          availableForSale
+          productType
+          presentmentPriceRanges(
+            first: 1
+            presentmentCurrencies: $presentmentCurrencies
+          ) {
+            edges {
+              node {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+                maxVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
           images(first: 1) {
             edges {
               node {
@@ -53,7 +72,6 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
               }
             }
           }
-          onlineStoreUrl
         }
       }
     }

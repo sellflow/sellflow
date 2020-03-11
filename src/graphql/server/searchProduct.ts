@@ -95,7 +95,6 @@ export const SEARCH_RESULTS = gql`
               }
             }
           }
-          onlineStoreUrl
         }
       }
     }
