@@ -13,9 +13,9 @@ import ForgotPasswordScene from './ForgotPasswordScene';
 import ShoppingCartScene from './ShoppingCartScene';
 import CheckoutScene from './Checkout/CheckoutScene';
 import EditProfileScene from './EditProfileScene';
-import PaymentScene from './Payment/PaymentScene';
 import AuthScene from './AuthScene';
 import SearchResultsScene from './ProductCollection/SearchResultsScene';
+import WebViewScene from './WebViewScene';
 
 export {
   HomeScene,
@@ -33,7 +33,7 @@ export {
   AddressManagementScene,
   AddEditAddressScene,
   EditProfileScene,
-  PaymentScene,
   AuthScene,
   SearchResultsScene,
+  WebViewScene,
 };

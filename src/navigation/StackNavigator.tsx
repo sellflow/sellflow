@@ -18,9 +18,9 @@ import {
   AddressManagementScene,
   AddEditAddressScene,
   EditProfileScene,
-  PaymentScene,
   AuthScene,
   SearchResultsScene,
+  WebViewScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
@@ -201,13 +201,7 @@ export default function StackNavigator({
           title: t('Checkout'),
         })}
       />
-      <Stack.Screen
-        name="Payment"
-        component={PaymentScene}
-        options={() => ({
-          title: t('Payment'),
-        })}
-      />
+      <Stack.Screen name="WebView" component={WebViewScene} />
     </Stack.Navigator>
   );
 }

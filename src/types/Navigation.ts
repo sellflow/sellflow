@@ -47,8 +47,8 @@ export type StackParamList = {
   ProductDetails: { productHandle: string };
   ShoppingCart: undefined;
   EditProfile: { customerAccessToken: string };
-  Payment: { webUrl: string };
   Auth: { initialRouteKey: string };
+  WebView: { webUrl: string; type: 'terms' | 'policy' | 'payment' };
 };
 
 export type TabParamList = {

@@ -11,10 +11,12 @@ import { useAuth } from '../helpers/useAuth';
 import { Avatar } from '../core-ui';
 import { useDeactivateCustomerToken } from '../hooks/api/useCustomer';
 import { useResetCart } from '../hooks/api/useShoppingCart';
+import { useGetShop } from '../hooks/api/useCustomerAddress';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<StackNavProp<'Profile'>>();
   let { authToken, setAuthToken } = useAuth();
+  let { data } = useGetShop();
 
   let { resetShoppingCart } = useResetCart();
 
@@ -105,10 +107,26 @@ export default function ProfileScene() {
         <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
           <Text style={styles.buttonLabelStyle}>{t('About Us')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => {
+            navigate('WebView', {
+              webUrl: data?.shop.termsOfService?.url,
+              type: 'terms',
+            });
+          }}
+        >
           <Text style={styles.buttonLabelStyle}>{t('Terms & Conditions')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => {
+            navigate('WebView', {
+              webUrl: data?.shop.privacyPolicy?.url,
+              type: 'policy',
+            });
+          }}
+        >
           <Text style={styles.buttonLabelStyle}>{t('Privacy & Policy')}</Text>
         </TouchableOpacity>
       </View>

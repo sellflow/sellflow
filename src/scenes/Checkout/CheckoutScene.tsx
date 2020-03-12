@@ -114,11 +114,24 @@ export default function CheckoutScene() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let updateAddress = async (
-    address: AddressItem,
-    doWhenSuccess?: (webUrl: string) => void,
-  ) => {
+  useEffect(() => {
+    if (updateAddressData?.checkoutShippingAddressUpdateV2) {
+      let {
+        checkoutUserErrors,
+      } = updateAddressData.checkoutShippingAddressUpdateV2;
+      if (checkoutUserErrors.length === 0) {
+        navigateToPayment(
+          updateAddressData.checkoutShippingAddressUpdateV2.checkout?.webUrl,
+        );
+      } else {
+        Alert.alert(t('Please insert a valid address'));
+      }
+    }
+  }, [updateAddressData]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  let updateAddress = async (address: AddressItem) => {
     let { id, name, default: defaultStatus, cursor, ...usedAddress } = address;
+
     await updateCartAddress({
       variables: {
         checkoutId: cartId,
@@ -127,26 +140,10 @@ export default function CheckoutScene() {
         },
       },
     });
-    if (
-      doWhenSuccess &&
-      updateAddressData &&
-      updateAddressData.checkoutShippingAddressUpdateV2
-    ) {
-      let {
-        checkoutUserErrors,
-      } = updateAddressData.checkoutShippingAddressUpdateV2;
-      if (checkoutUserErrors.length === 0) {
-        doWhenSuccess(
-          updateAddressData.checkoutShippingAddressUpdateV2.checkout?.webUrl,
-        );
-      } else {
-        Alert.alert(t('Please insert a valid address'));
-      }
-    }
   };
 
   let navigateToPayment = (webUrl: string) => {
-    navigate('Payment', { webUrl });
+    navigate('WebView', { webUrl, type: 'payment' });
   };
 
   let containerStyle = () => {
@@ -171,9 +168,9 @@ export default function CheckoutScene() {
 
   let onProceedPressed = async () => {
     if (authToken) {
-      await updateAddress(selectedAddress, navigateToPayment);
+      await updateAddress(selectedAddress);
     } else {
-      await updateAddress(address, navigateToPayment);
+      await updateAddress(address);
     }
   };
 

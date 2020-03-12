@@ -22,7 +22,8 @@ import {
 } from '../../hooks/api/useCustomerAddress';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
-import { DeleteAddressModal, SelectCountryModal } from './components';
+import { DeleteAddressModal } from './components';
+import { CountryModal } from '../../components';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();
@@ -207,7 +208,7 @@ export default function AddEditAddressScene() {
           onPressCancel={onPressCancel}
           onPressDelete={onPressDelete}
         />
-        <SelectCountryModal
+        <CountryModal
           countryVisible={isCountryModalVisible}
           toggleModal={toggleCountryModal}
           onPressCountry={onPressCountry}

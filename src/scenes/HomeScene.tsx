@@ -82,7 +82,7 @@ export default function HomeScene() {
         height={screenSize === ScreenSize.Small ? 180 : 384}
       />
 
-      <View style={styles.subTitleContainer}>
+      <View>
         <Text style={styles.subTitle}>{t('Browse By Category')}</Text>
         <CategoryList
           categories={categoryData}
@@ -94,7 +94,7 @@ export default function HomeScene() {
         />
       </View>
 
-      <View style={styles.subTitleContainer}>
+      <View>
         <Text style={styles.subTitle}>{t('Featured Products')}</Text>
       </View>
     </>
@@ -144,12 +144,10 @@ const styles = StyleSheet.create({
   subTitle: {
     marginTop: 16,
     marginBottom: 12,
-  },
-  subTitleContainer: {
     marginLeft: 24,
   },
   itemWrapperStyle: {
-    marginHorizontal: 24,
+    marginHorizontal: 12,
   },
   searchInputContainer: {
     borderBottomWidth: 1,

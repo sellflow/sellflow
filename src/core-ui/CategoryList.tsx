@@ -45,6 +45,7 @@ export default function CategoryList(props: Props) {
       )}
       ItemSeparatorComponent={Separator}
       keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.flatlistContainer}
     />
   );
 }
@@ -64,5 +65,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     marginHorizontal: 6,
+  },
+  flatlistContainer: {
+    paddingStart: 24,
+    paddingEnd: 24,
   },
 });

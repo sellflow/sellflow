@@ -88,9 +88,10 @@ function useCustomerSetDefaultAddress(
   return { setDefaultAddress, loading };
 }
 
-function useGetCountryCode(options?: QueryHookOptions<GetShop>) {
+function useGetShop(options?: QueryHookOptions<GetShop>) {
   let { data, loading } = useQuery<GetShop>(GET_SHOP, {
     ...options,
+    fetchPolicy: 'no-cache',
   });
 
   return { data, loading };
@@ -101,5 +102,5 @@ export {
   useCustomerEditAddress,
   useCustomerAddressDelete,
   useCustomerSetDefaultAddress,
-  useGetCountryCode,
+  useGetShop,
 };

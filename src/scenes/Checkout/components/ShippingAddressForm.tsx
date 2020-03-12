@@ -1,9 +1,10 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, TextInput as TextInputType } from 'react-native';
 import { Text, TextInput } from 'exoflex';
 
 import { FONT_SIZE } from '../../../constants/fonts';
 import { AddressItem } from '../../../types/types';
+import { CountryModal } from '../../../components';
 
 type Props = {
   address: AddressItem;
@@ -12,6 +13,25 @@ type Props = {
 
 export default function ShippingAddressForm(props: Props) {
   let { address, onChangeAddress } = props;
+  let [isCountryModalVisible, setCountryModalVisible] = useState(false);
+
+  let toggleCountryModal = () => {
+    setCountryModalVisible(!isCountryModalVisible);
+  };
+
+  let onPressCountry = (country: string) => {
+    onChangeAddress({ ...address, country });
+    toggleCountryModal();
+    zipRef.current?.focus();
+  };
+
+  let lastNameRef = useRef<TextInputType>(null);
+  let address1Ref = useRef<TextInputType>(null);
+  let address2Ref = useRef<TextInputType>(null);
+  let provinceRef = useRef<TextInputType>(null);
+  let cityRef = useRef<TextInputType>(null);
+  let zipRef = useRef<TextInputType>(null);
+  let phoneRef = useRef<TextInputType>(null);
 
   return (
     <View style={styles.flex}>
@@ -30,9 +50,11 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+        onSubmitEditing={() => lastNameRef.current?.focus()}
       />
       <TextInput
         label={t('Last Name')}
+        ref={lastNameRef}
         clearTextOnFocus={false}
         autoCapitalize="words"
         textContentType="name"
@@ -42,9 +64,11 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+        onSubmitEditing={() => address1Ref.current?.focus()}
       />
       <TextInput
         label={t('Address 1')}
+        ref={address1Ref}
         clearTextOnFocus={false}
         autoCapitalize="none"
         textContentType="streetAddressLine1"
@@ -54,9 +78,11 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+        onSubmitEditing={() => address2Ref.current?.focus()}
       />
       <TextInput
         label={t('Address 2 (optional)')}
+        ref={address2Ref}
         clearTextOnFocus={false}
         autoCapitalize="none"
         textContentType="streetAddressLine2"
@@ -66,9 +92,11 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+        onSubmitEditing={() => cityRef.current?.focus()}
       />
       <TextInput
         label={t('City')}
+        ref={cityRef}
         clearTextOnFocus={false}
         autoCapitalize="words"
         textContentType="addressCity"
@@ -78,9 +106,11 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+        onSubmitEditing={() => provinceRef.current?.focus()}
       />
       <TextInput
         label={t('Province')}
+        ref={provinceRef}
         clearTextOnFocus={false}
         autoCapitalize="words"
         textContentType="addressState"
@@ -90,6 +120,7 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+        onSubmitEditing={toggleCountryModal}
       />
       <TextInput
         label={t('Country')}
@@ -98,13 +129,13 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="countryName"
         mode="flat"
         value={address.country}
-        onChangeText={(country) => onChangeAddress({ ...address, country })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
       />
       <TextInput
         label={t('Postal Code')}
+        ref={zipRef}
         clearTextOnFocus={false}
         textContentType="postalCode"
         keyboardType="number-pad"
@@ -114,9 +145,11 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+        onSubmitEditing={() => phoneRef.current?.focus()}
       />
       <TextInput
         label={t('Phone Number')}
+        ref={phoneRef}
         clearTextOnFocus={false}
         textContentType="telephoneNumber"
         mode="flat"
@@ -125,6 +158,11 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="done"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
+      />
+      <CountryModal
+        countryVisible={isCountryModalVisible}
+        toggleModal={toggleCountryModal}
+        onPressCountry={onPressCountry}
       />
     </View>
   );

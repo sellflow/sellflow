@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import { Text, Portal, Modal, TextInput } from 'exoflex';
 
-import { COLORS } from '../../../constants/colors';
-import { FONT_SIZE } from '../../../constants/fonts';
-import { COUNTRY_CODE } from '../../../constants/countryCode';
-import { useGetCountryCode } from '../../../hooks/api/useCustomerAddress';
-import { CountryCode } from '../../../generated/server/globalTypes';
-import { checkAddressImage, searchImage } from '../../../../assets/images';
-import { useKeyboardListener } from '../../../helpers/keyboardListener';
+import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
+import { COUNTRY_CODE } from '../constants/countryCode';
+import { useGetShop } from '../hooks/api/useCustomerAddress';
+import { CountryCode } from '../generated/server/globalTypes';
+import { checkAddressImage, searchImage } from '../../assets/images';
+import { useKeyboardListener } from '../helpers/keyboardListener';
 
 type Props = {
   countryVisible: boolean;
@@ -36,7 +36,7 @@ function EmptyCountryList(searchCountry: string) {
   );
 }
 
-export function SelectCountryModal(props: Props) {
+export default function CountryModal(props: Props) {
   let { countryVisible, toggleModal, onPressCountry } = props;
 
   let { keyboardHeight } = useKeyboardListener();
@@ -45,7 +45,7 @@ export function SelectCountryModal(props: Props) {
   let [selectedCountry, setSelectedCountry] = useState<string>('');
   let [countryList, setCountryList] = useState<Array<CountryCode>>([]);
 
-  let { data } = useGetCountryCode();
+  let { data } = useGetShop();
 
   useEffect(() => {
     if (data) {
