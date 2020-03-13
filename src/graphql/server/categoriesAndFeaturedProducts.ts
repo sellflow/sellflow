@@ -3,6 +3,8 @@ import gql from 'graphql-tag';
 export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
   query GetCategoriesAndFeaturedProducts(
     $presentmentCurrencies: [CurrencyCode!]
+    $first: Int!
+    $after: String
   ) {
     collections(first: 10) {
       edges {
@@ -13,7 +15,10 @@ export const GET_CATEGORIES_AND_FEATURED_PRODUCTS = gql`
         }
       }
     }
-    products(first: 10) {
+    products(first: $first, after: $after) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         cursor
         node {

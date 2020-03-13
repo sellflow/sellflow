@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
-import { Product } from '../../types/types';
+import { Product, CategoryItem } from '../../types/types';
 import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import {
   GetCollection,
@@ -12,7 +12,10 @@ import {
   ProductCollectionSortKeys,
   CurrencyCode,
 } from '../../generated/server/globalTypes';
-import { GetCategoriesAndFeaturedProducts } from '../../generated/server/GetCategoriesAndFeaturedProducts';
+import {
+  GetCategoriesAndFeaturedProducts,
+  GetCategoriesAndFeaturedProductsVariables,
+} from '../../generated/server/GetCategoriesAndFeaturedProducts';
 import { GET_CATEGORIES_AND_FEATURED_PRODUCTS } from '../../graphql/server/categoriesAndFeaturedProducts';
 import useDefaultCurrency from './useDefaultCurrency';
 import mapToProducts from '../../helpers/mapToProducts';
@@ -58,7 +61,6 @@ function useCollectionQuery(
   let hasMore = useRef(true);
 
   let defaultCurrency = useDefaultCurrency().data;
-  let currency: keyof typeof CurrencyCode = defaultCurrency;
 
   let { data, loading, refetch: refetchQuery } = useQuery<
     GetCollection,
@@ -68,7 +70,7 @@ function useCollectionQuery(
       collectionHandle,
       first,
       sortKey: ProductCollectionSortKeys.BEST_SELLING,
-      presentmentCurrencies: [CurrencyCode[currency]],
+      presentmentCurrencies: [defaultCurrency],
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
@@ -130,11 +132,6 @@ function useCollectionQuery(
       }
       setCollection(moreCollection);
     } else {
-      if (moreCollection.length <= 0) {
-        hasMore.current = false;
-      } else {
-        hasMore.current = true;
-      }
       if (moreCollection.length < first && hasMore.current) {
         let newCollection = await getMoreUntilTarget(
           first - moreCollection.length,
@@ -144,6 +141,8 @@ function useCollectionQuery(
         );
         moreCollection.push(...newCollection);
       }
+      hasMore.current = !!data.collectionByHandle?.products.pageInfo
+        .hasNextPage;
       setCollection([...collection, ...moreCollection]);
     }
   };
@@ -152,11 +151,10 @@ function useCollectionQuery(
     if (!loading) {
       isFetchingMore.current = false;
     }
-    if (isInitFetching && !!data) {
-      let newCollection = getProducts(data, priceRange);
-      if (newCollection.length < first) {
-        hasMore.current = false;
-      }
+    if (isInitFetching && !!data && !!data.collectionByHandle) {
+      let newCollection = mapToProducts(data.collectionByHandle.products);
+      hasMore.current = !!data.collectionByHandle?.products.pageInfo
+        .hasNextPage;
       setCollection(newCollection);
       setInitFetching(false);
     }
@@ -171,15 +169,66 @@ function useCollectionQuery(
   };
 }
 
-function useCollectionAndProductQuery(
-  options?: QueryHookOptions<GetCategoriesAndFeaturedProducts>,
-) {
-  let { loading, data } = useQuery<GetCategoriesAndFeaturedProducts>(
-    GET_CATEGORIES_AND_FEATURED_PRODUCTS,
-    { fetchPolicy: 'cache-and-network', ...options },
-  );
+function useCollectionAndProductQuery(currency: CurrencyCode, first: number) {
+  let [products, setProducts] = useState<Array<Product>>([]);
+  let [categories, setCategories] = useState<Array<CategoryItem>>([]);
+  let [isInitFetching, setInitFetching] = useState<boolean>(true);
+  let isFetchingMore = useRef(false);
+  let hasMore = useRef(true);
 
-  return { data, loading };
+  let { loading, data, refetch: refetchQuery } = useQuery<
+    GetCategoriesAndFeaturedProducts,
+    GetCategoriesAndFeaturedProductsVariables
+  >(GET_CATEGORIES_AND_FEATURED_PRODUCTS, {
+    variables: { presentmentCurrencies: [currency], first },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
+  });
+
+  let refetch = async (
+    type: 'update' | 'scroll',
+    variables?: GetCategoriesAndFeaturedProductsVariables,
+  ) => {
+    isFetchingMore.current = type === 'scroll';
+    let { data } = await refetchQuery(variables);
+    let moreProducts = mapToProducts(data.products);
+
+    if (type === 'update') {
+      setProducts(moreProducts);
+    } else {
+      hasMore.current = !!data.products.pageInfo.hasNextPage;
+      setProducts([...products, ...moreProducts]);
+    }
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      isFetchingMore.current = false;
+    }
+    if (isInitFetching && !!data) {
+      let products = mapToProducts(data.products);
+      hasMore.current = !!data.products.pageInfo.hasNextPage;
+      let categories: Array<CategoryItem> = data.collections.edges.map(
+        (item) => ({
+          id: item.node.id,
+          title: item.node.title,
+          handle: item.node.handle,
+        }),
+      );
+      setProducts(products);
+      setCategories(categories);
+      setInitFetching(false);
+    }
+  }, [loading, isInitFetching]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return {
+    products,
+    categories,
+    loading,
+    refetch,
+    hasMore: hasMore.current,
+    isFetchingMore: isFetchingMore.current,
+  };
 }
 
 export { useCollectionQuery, useCollectionAndProductQuery };

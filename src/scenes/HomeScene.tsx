@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
@@ -8,47 +8,43 @@ import { Carousel, CategoryList, SearchInput } from '../core-ui';
 import { ProductList, SearchModal, CurrencyPicker } from '../components';
 import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
-import { CategoryItem, Product } from '../types/types';
+import { Product } from '../types/types';
 import { useColumns } from '../helpers/columns';
 import { useCollectionAndProductQuery } from '../hooks/api/useCollection';
 import { COLORS } from '../constants/colors';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
-import mapToProducts from '../helpers/mapToProducts';
+import { CurrencyCode } from '../generated/server/globalTypes';
 
 export default function HomeScene() {
   let { navigate, setOptions } = useNavigation<StackNavProp<'Home'>>();
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
-
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
-  let [currencyCode, setCurrencyCode] = useState<string>('');
-
-  let {
-    loading: loadingHomeData,
-    data: homeData,
-  } = useCollectionAndProductQuery({
-    variables: { presentmentCurrencies: [currencyCode] },
-  });
+  let first = numColumns * 5;
 
   let {
     loading: loadingCurrency,
-    data: defaultCurrency,
+    data: selectedCurrency,
   } = useDefaultCurrency();
-
-  useEffect(() => {
-    if (defaultCurrency) {
-      setCurrencyCode(defaultCurrency);
-    }
-  }, [defaultCurrency]);
-
-  let onPressCurrency = (currency: string) => {
-    setCurrencyCode(currency);
-  };
+  let {
+    loading: loadingHomeData,
+    products,
+    categories,
+    refetch,
+    hasMore,
+    isFetchingMore,
+  } = useCollectionAndProductQuery(selectedCurrency, first);
 
   setOptions({
     headerLeft: () => <CurrencyPicker onPressCurrency={onPressCurrency} />,
   });
-
+  let onPressCurrency = (currency: CurrencyCode) => {
+    refetch('update', {
+      presentmentCurrencies: [currency],
+      first,
+      after: null,
+    });
+  };
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { productHandle: product.handle });
   };
@@ -57,23 +53,23 @@ export default function HomeScene() {
       searchKeyword,
     });
 
-  if (loadingHomeData || loadingCurrency || !homeData) {
+  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
+    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+      refetch('scroll', {
+        presentmentCurrencies: [selectedCurrency],
+        first,
+        after: products[products.length - 1].cursor || null,
+      });
+    }
+  };
+
+  if ((loadingHomeData || loadingCurrency || !products) && !isFetchingMore) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator />
       </View>
     );
   }
-
-  let categoryData: Array<CategoryItem> = homeData.collections.edges.map(
-    (item) => ({
-      id: item.node.id,
-      title: item.node.title,
-      handle: item.node.handle,
-    }),
-  );
-
-  let productData: Array<Product> = mapToProducts(homeData.products);
 
   let renderHeader = () => (
     <>
@@ -85,7 +81,7 @@ export default function HomeScene() {
       <View>
         <Text style={styles.subTitle}>{t('Browse By Category')}</Text>
         <CategoryList
-          categories={categoryData}
+          categories={categories}
           onSelect={(collection) => {
             navigate('ProductCollection', {
               collection,
@@ -123,10 +119,15 @@ export default function HomeScene() {
       />
       <ProductList
         ListHeaderComponent={renderHeader}
-        data={productData}
+        data={products}
         numColumns={numColumns}
         onItemPress={onItemPress}
         columnWrapperStyle={styles.itemWrapperStyle}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.25}
+        ListFooterComponent={() => {
+          return hasMore ? <ActivityIndicator /> : null;
+        }}
       />
     </View>
   );

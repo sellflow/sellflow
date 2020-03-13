@@ -16,9 +16,10 @@ import { COLORS } from '../constants/colors';
 import { GET_SHOP } from '../graphql/server/shop';
 import { GetShop } from '../generated/server/GetShop';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
+import { CurrencyCode } from '../generated/server/globalTypes';
 
 type Props = {
-  onPressCurrency: (currencyCode: string) => void;
+  onPressCurrency: (currencyCode: CurrencyCode) => void;
 };
 
 export default function CurrencyPicker(props: Props) {

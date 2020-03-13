@@ -75,6 +75,9 @@ export const GET_CUSTOMER_ADDRESSES = gql`
     customer(customerAccessToken: $customerAccessToken) {
       id
       addresses(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+        }
         edges {
           cursor
           node {

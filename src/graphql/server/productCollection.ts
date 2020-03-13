@@ -19,6 +19,9 @@ export const GET_COLLECTION = gql`
         sortKey: $sortKey
         reverse: $reverse
       ) {
+        pageInfo {
+          hasNextPage
+        }
         edges {
           cursor
           node {

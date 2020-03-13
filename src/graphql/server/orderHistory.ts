@@ -10,6 +10,9 @@ export const GET_ORDER_HISTORY = gql`
     customer(customerAccessToken: $customerAccessToken) {
       id
       orders(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+        }
         edges {
           cursor
           node {
