@@ -20,11 +20,15 @@ export default function mapToProducts(
     let product = item.node;
     let firstImage = product.images.edges[0];
 
-    let originalProductPrice = ~~product.variants.edges[0].node
-      .presentmentPrices.edges[0].node.compareAtPrice?.amount;
+    let originalProductPrice = Number(
+      product.variants.edges[0].node.presentmentPrices.edges[0].node
+        .compareAtPrice?.amount,
+    );
 
-    let productPrice = ~~product.variants.edges[0].node.presentmentPrices
-      .edges[0].node.price.amount;
+    let productPrice = Number(
+      product.variants.edges[0].node.presentmentPrices.edges[0].node.price
+        .amount,
+    );
 
     let { price, discount } = getDiscount(originalProductPrice, productPrice);
 

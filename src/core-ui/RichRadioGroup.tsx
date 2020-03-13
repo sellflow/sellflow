@@ -19,8 +19,7 @@ type Props<T> = {
   buttonTextStyle?: StyleProp<TextStyle>;
   name: string;
   values: Array<T>;
-  selectedValue?: T;
-  isSelected?: (item: T) => boolean;
+  selectedValue: T;
   onSelect: (item: T) => void;
   nameExtractor?: (item: T) => string;
 };
@@ -36,7 +35,6 @@ export default function RichRadioGroup(props: Props<string>) {
     values,
     onSelect,
     selectedValue,
-    isSelected,
     nameExtractor = defaultNameExtractor,
   } = props;
 
@@ -55,10 +53,7 @@ export default function RichRadioGroup(props: Props<string>) {
         contentContainerStyle={styles.categoryContainer}
       >
         {values.map((item, index) => {
-          let isItemSelected =
-            typeof isSelected === 'function'
-              ? isSelected(item)
-              : item === selectedValue;
+          let isItemSelected = item === selectedValue;
           let marginLeft = index === 0 ? 0 : 16;
           return (
             <TouchableOpacity

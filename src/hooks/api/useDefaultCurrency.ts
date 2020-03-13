@@ -37,7 +37,7 @@ export default function useDefaultCurrency() {
         },
       });
     }
-  });
+  }, [selectedCurrency, defaultCurrency]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     setDefaultCurrency,

@@ -1,14 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { ActivityIndicator } from 'exoflex';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 
-import {
-  VariantQueryData,
-  Options,
-  OptionsData,
-  ProductDetails,
-} from '../../types/types';
+import { VariantQueryData, OptionsData } from '../../types/types';
 import { useGetWishlistData } from '../../hooks/api/useWishlist';
 import { StackRouteProp } from '../../types/Navigation';
 import {
@@ -16,10 +11,7 @@ import {
   useSetShoppingCartID,
   useGetCart,
 } from '../../hooks/api/useShoppingCart';
-import {
-  useGetProductVariant,
-  useGetProductByHandle,
-} from '../../hooks/api/useProduct';
+import { useGetProductDetails } from '../../hooks/api/useProduct';
 import { useGetCustomerData } from '../../hooks/api/useCustomer';
 import { useAuth } from '../../helpers/useAuth';
 import {
@@ -27,11 +19,12 @@ import {
   useCheckoutCustomerAssociate,
   useCheckoutReplaceItem,
 } from '../../hooks/api/useShopifyCart';
-import { ProductDetailsView } from './components';
-import { Toast } from '../../core-ui';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
-import { emptyProduct } from '../../constants/defaultValues';
-import { getDiscount } from '../../helpers/getDiscount';
+import { Toast } from '../../core-ui';
+import { ProductInfo, ImageModal, ImageList } from './components';
+import BottomActionBar from './components/BottomActionBar';
+import { COLORS } from '../../constants/colors';
+import { ScreenSize, useDimensions } from '../../helpers/dimensions';
 
 export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
@@ -39,22 +32,22 @@ export default function ProductDetailsScene() {
 
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
   let [isWishlistActive, setWishlistActive] = useState<boolean>(false);
-  let [options, setOptions] = useState<Options>([]);
   let [quantity, setQuantity] = useState<number>(1);
   let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
-  let [variantID, setVariantID] = useState<string>('');
-  let [productDetails, setProductDetails] = useState<ProductDetails>(
-    emptyProduct,
-  );
+  let [isImageModalVisible, setIsImageModalVisible] = useState<boolean>(false);
+  let [activeIndex, setActiveIndex] = useState<number>(0);
 
   let { authToken } = useAuth();
   let { setShoppingCartID } = useSetShoppingCartID();
-  let {
-    shoppingCartCustomerAssociate,
-    loading: associateLoading,
-  } = useCheckoutCustomerAssociate();
+  let { shoppingCartCustomerAssociate } = useCheckoutCustomerAssociate();
   let { data: currencyCode } = useDefaultCurrency();
-  let { createCheckout, loading: checkoutCreateLoading } = useCheckoutCreate({
+
+  let onPressImage = (index: number) => {
+    setIsImageModalVisible(!isImageModalVisible);
+    setActiveIndex(index);
+  };
+
+  let { createCheckout } = useCheckoutCreate({
     onCompleted: async ({ checkoutCreate }) => {
       if (checkoutCreate && checkoutCreate.checkout) {
         await setShoppingCartID({
@@ -71,6 +64,7 @@ export default function ProductDetailsScene() {
       }
     },
   });
+
   let { getCustomer } = useGetCustomerData({
     onCompleted: async ({ customer }) => {
       if (customer && customer.lastIncompleteCheckout == null) {
@@ -157,49 +151,23 @@ export default function ProductDetailsScene() {
     },
   });
 
-  let { getVariant, loading: getVariantIDLoading } = useGetProductVariant({
-    onCompleted: ({ productByHandle }) => {
-      if (productByHandle?.variantBySelectedOptions == null) {
-        setProductDetails({
-          ...productDetails,
-          availableForSale: false,
-          id: '',
-        });
-        return;
-      }
-      if (productByHandle && productByHandle.variantBySelectedOptions) {
-        let {
-          id,
-          presentmentPrices,
-          availableForSale,
-        } = productByHandle.variantBySelectedOptions;
-        let { compareAtPrice, price } = presentmentPrices.edges[0].node;
-
-        if (compareAtPrice) {
-          let originalPrice = compareAtPrice.amount;
-          if (originalPrice > price.amount) {
-            let discount =
-              ((compareAtPrice.amount - price.amount) / compareAtPrice.amount) *
-              100;
-            setProductDetails({
-              ...productDetails,
-              price: Number(originalPrice),
-              discount,
-              availableForSale,
-              id,
-            });
-          }
-        } else {
-          setProductDetails({
-            ...productDetails,
-            price: Number(price.amount),
-            discount: 0,
-            availableForSale,
-            id,
-          });
-        }
-        setVariantID(id);
-      }
+  let {
+    getVariant,
+    data: productDetails,
+    loading: getProductDetailsLoading,
+  } = useGetProductDetails({
+    variables: { productHandle, presentmentCurrencies: [currencyCode] },
+    fetchPolicy: 'network-only',
+    onError(error) {
+      let newError = error.message.split(':');
+      Alert.alert(newError[1]);
+    },
+    onCompleted(value) {
+      let defaultOptions: OptionsData = {};
+      value.productByHandle?.options.map(({ name, values }) => {
+        return (defaultOptions[name] = values[0]);
+      });
+      setSelectedOptions(defaultOptions);
     },
   });
 
@@ -214,7 +182,7 @@ export default function ProductDetailsScene() {
     });
   }, [selectedOptions, getVariant]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let isLoading = getVariantIDLoading || addToCartLoading;
+  let isLoading = getProductDetailsLoading || addToCartLoading;
 
   let { data: wishlistData } = useGetWishlistData({
     onCompleted: ({ wishlist }) => {
@@ -225,84 +193,57 @@ export default function ProductDetailsScene() {
   });
 
   let onAddToCart = async () => {
-    addToCart({ variables: { variantId: variantID, quantity } });
+    addToCart({ variables: { variantId: productDetails.id, quantity } });
   };
 
-  let {
-    data: productData,
-    loading: getProductByHandleLoading,
-  } = useGetProductByHandle({
-    variables: { productHandle, presentmentCurrencies: [currencyCode] },
-    fetchPolicy: 'network-only',
-    onCompleted({ productByHandle }) {
-      if (productByHandle) {
-        let images = productByHandle.images.edges.map(
-          (item) => item.node.originalSrc,
-        );
-        let originalProductPrice = ~~productByHandle.variants.edges[0].node
-          .presentmentPrices.edges[0].node.compareAtPrice?.amount;
+  let isFirstLoading = !wishlistData || !productDetails;
 
-        let productPrice = ~~productByHandle.variants.edges[0].node
-          .presentmentPrices.edges[0].node.price.amount;
-
-        let { price, discount } = getDiscount(
-          originalProductPrice,
-          productPrice,
-        );
-
-        setProductDetails({
-          id: productByHandle.id,
-          title: productByHandle.title,
-          handle: productByHandle.handle,
-          description: productByHandle.description,
-          images,
-          price,
-          discount,
-          url: productByHandle.onlineStoreUrl,
-          availableForSale: productByHandle.availableForSale,
-        });
-        let newOptions = [...productByHandle.options];
-        setOptions(newOptions);
-        let defaultOptions: OptionsData = {};
-        for (let { name, values } of newOptions) {
-          defaultOptions[name] = values[0];
-        }
-        setSelectedOptions(defaultOptions);
-      }
-    },
-    onError(error) {
-      let newError = error.message.split(':');
-      Alert.alert(newError[1]);
-    },
-  });
-  let isFirstLoading =
-    getProductByHandleLoading ||
-    !productData ||
-    !wishlistData ||
-    addToCartLoading ||
-    associateLoading ||
-    checkoutCreateLoading;
+  let { screenSize } = useDimensions();
+  let isLandscape = screenSize === ScreenSize.Large;
 
   return isFirstLoading ? (
     <View style={styles.centered}>
       <ActivityIndicator size="large" />
     </View>
   ) : (
-    <>
-      <ProductDetailsView
-        selectedOptions={selectedOptions}
-        onSelectionOptionChange={changeSelectedOptions}
-        quantity={quantity}
-        onChangeQuantity={setQuantity}
-        onAddToCartPress={onAddToCart}
-        product={productDetails}
-        options={options}
-        isLoading={isLoading}
-        isWishlistActive={isWishlistActive}
-        onWishlistPress={(isActive) => {
-          setWishlistActive(isActive);
-        }}
-      />
+    <View style={styles.flex}>
+      <View style={[styles.flex, isLandscape && styles.flexRow]}>
+        {isLandscape && (
+          <ImageList product={productDetails} onImagePress={onPressImage} />
+        )}
+        <View style={styles.flex}>
+          <ScrollView style={styles.flex}>
+            {!isLandscape && (
+              <ImageList product={productDetails} onImagePress={onPressImage} />
+            )}
+            <ProductInfo
+              selectedOptions={selectedOptions}
+              onSelectionOptionChange={changeSelectedOptions}
+              quantity={quantity}
+              onChangeQuantity={setQuantity}
+              product={productDetails}
+              options={productDetails.options ? productDetails.options : []}
+            />
+          </ScrollView>
+          <View
+            style={[
+              styles.bottomContainer,
+              isLandscape && styles.bottomLandscapeContainer,
+            ]}
+          >
+            <BottomActionBar
+              isButtonDisabled={!productDetails.availableForSale}
+              onAddToCartPress={onAddToCart}
+              product={productDetails}
+              isLoading={isLoading}
+              isWishlistActive={isWishlistActive}
+              onWishlistPress={(isActive) => {
+                setWishlistActive(isActive);
+              }}
+            />
+          </View>
+        </View>
+      </View>
       <Toast
         data={{
           message: t('Item Successfully Added'),
@@ -310,7 +251,13 @@ export default function ProductDetailsScene() {
           mode: 'success',
         }}
       />
-    </>
+      <ImageModal
+        activeIndex={activeIndex}
+        images={productDetails.images}
+        isVisible={isImageModalVisible}
+        setVisible={setIsImageModalVisible}
+      />
+    </View>
   );
 }
 
@@ -318,9 +265,31 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
+  flexRow: {
+    flexDirection: 'row',
+  },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerIcon: {
+    position: 'absolute',
+    left: 0,
+    top: 17,
+    zIndex: 14,
+  },
+  bottomContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.lightGrey,
+    marginBottom: 12,
+  },
+  bottomLandscapeContainer: {
+    marginHorizontal: 36,
+    marginBottom: 24,
   },
 });

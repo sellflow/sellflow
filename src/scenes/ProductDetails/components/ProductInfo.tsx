@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { Text, TextInput } from 'exoflex';
 
 import { FONT_SIZE } from '../../../constants/fonts';
@@ -57,43 +57,46 @@ export default function ProductInfo(props: Props) {
 
   return (
     <>
-      <View style={styles.padding}>
-        <Text style={styles.productInfoTitle}>{product.title}</Text>
-        {product.discount > 0 ? (
-          <View style={styles.flexRow}>
+      <KeyboardAvoidingView>
+        <View style={styles.padding}>
+          <Text style={styles.productInfoTitle}>{product.title}</Text>
+          {product.discount > 0 ? (
+            <View style={styles.flexRow}>
+              <Text weight="bold" style={styles.productInfoPrice}>
+                {formatCurrency(afterDiscount)}
+              </Text>
+              <Text weight="bold" style={styles.productInfoOriginalPrice}>
+                {formatCurrency(product.price)}
+              </Text>
+            </View>
+          ) : (
             <Text weight="bold" style={styles.productInfoPrice}>
-              {formatCurrency(afterDiscount)}
-            </Text>
-            <Text weight="bold" style={styles.productInfoOriginalPrice}>
               {formatCurrency(product.price)}
             </Text>
-          </View>
-        ) : (
-          <Text weight="bold" style={styles.productInfoPrice}>
-            {formatCurrency(product.price)}
-          </Text>
-        )}
-      </View>
-      {radioGroupRenderView}
-      <View style={styles.paddingHorizontal}>
-        <Text style={styles.quantityText}>Quantity</Text>
-        <TextInput
-          containerStyle={styles.textInputStyle}
-          value={quantity.toString()}
-          onBlur={() => {
-            if (quantity === 0) {
-              onChangeQuantity(1);
+          )}
+        </View>
+        {radioGroupRenderView}
+        <View style={styles.paddingHorizontal}>
+          <Text style={styles.quantityText}>Quantity</Text>
+          <TextInput
+            containerStyle={styles.textInputStyle}
+            value={quantity.toString()}
+            onBlur={() => {
+              if (quantity === 0) {
+                onChangeQuantity(1);
+              }
+            }}
+            onChangeText={(value) =>
+              onChangeQuantity(valueBetweenZeroToMax(parseInt(value, 10), 100))
             }
-          }}
-          onChangeText={(value) =>
-            onChangeQuantity(valueBetweenZeroToMax(parseInt(value, 10), 100))
-          }
-        />
-      </View>
-      <View style={[styles.paddingHorizontal, styles.description]}>
-        <Text style={styles.labelStyle}>{t('Description')}</Text>
-        <Text>{product.description}</Text>
-      </View>
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={[styles.paddingHorizontal, styles.description]}>
+          <Text style={styles.labelStyle}>{t('Description')}</Text>
+          <Text>{product.description}</Text>
+        </View>
+      </KeyboardAvoidingView>
     </>
   );
 }
