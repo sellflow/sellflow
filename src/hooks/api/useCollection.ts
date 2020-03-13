@@ -24,7 +24,6 @@ function filterProducts(
   let [minPrice, maxPrice] = priceRange;
   let productPriceRange =
     collectionProducts.node.presentmentPriceRanges.edges[0];
-
   if (
     Number(productPriceRange.node.minVariantPrice.amount) <= maxPrice &&
     Number(productPriceRange.node.minVariantPrice.amount) >= minPrice
@@ -43,7 +42,6 @@ function getProducts(
         (product) => filterProducts(product, priceRange),
       ),
     };
-
     return mapToProducts(filtered);
   }
   return [];
@@ -76,6 +74,41 @@ function useCollectionQuery(
     fetchPolicy: 'no-cache',
   });
 
+  let getMoreUntilTarget = async (
+    targetAmount: number,
+    cursor: string,
+    handle: string,
+    filter: [number, number],
+  ) => {
+    let result: Array<Product> = [];
+    let moreData: Array<Product> = [];
+
+    let { data } = await refetchQuery({
+      first,
+      collectionHandle: handle,
+      after: cursor,
+    });
+
+    let productsData = getProducts(data, filter);
+    hasMore.current = productsData.length > 0;
+    if (hasMore.current === false) {
+      return result;
+    }
+    if (productsData.length < targetAmount) {
+      moreData = await getMoreUntilTarget(
+        targetAmount - productsData.length,
+        cursor,
+        handle,
+        filter,
+      );
+      productsData.push(...moreData);
+      result = productsData;
+    } else {
+      result = productsData.slice(0, targetAmount);
+    }
+    return result;
+  };
+
   let refetch = async (
     type: 'sort' | 'scroll',
     variables: GetCollectionVariables | undefined,
@@ -84,13 +117,32 @@ function useCollectionQuery(
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
     let moreCollection = getProducts(data, values || priceRange);
+
     if (type === 'sort') {
+      if (moreCollection.length < first) {
+        let newCollection = await getMoreUntilTarget(
+          first - moreCollection.length,
+          moreCollection[moreCollection.length - 1].cursor ?? '',
+          data.collectionByHandle ? data.collectionByHandle.handle : '',
+          values || priceRange,
+        );
+        moreCollection.push(...newCollection);
+      }
       setCollection(moreCollection);
     } else {
       if (moreCollection.length <= 0) {
         hasMore.current = false;
       } else {
         hasMore.current = true;
+      }
+      if (moreCollection.length < first && hasMore.current) {
+        let newCollection = await getMoreUntilTarget(
+          first - moreCollection.length,
+          moreCollection[moreCollection.length - 1].cursor ?? '',
+          data.collectionByHandle ? data.collectionByHandle.handle : '',
+          values || priceRange,
+        );
+        moreCollection.push(...newCollection);
       }
       setCollection([...collection, ...moreCollection]);
     }
@@ -112,7 +164,7 @@ function useCollectionQuery(
 
   return {
     collection,
-    loading,
+    loading: isInitFetching,
     hasMore: hasMore.current,
     isFetchingMore: isFetchingMore.current,
     refetch,
