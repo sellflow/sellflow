@@ -14,6 +14,7 @@ import { StackRouteProp } from '../../types/Navigation';
 import {
   useAddToCart,
   useSetShoppingCartID,
+  useGetCart,
 } from '../../hooks/api/useShoppingCart';
 import {
   useGetProductVariant,
@@ -93,7 +94,22 @@ export default function ProductDetailsScene() {
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps
   );
-
+  useGetCart({
+    fetchPolicy: 'cache-only',
+    notifyOnNetworkStatusChange: true,
+    onCompleted: async ({ shoppingCart }) => {
+      if (shoppingCart.id === '') {
+        createCheckout({
+          variables: {
+            checkoutCreateInput: {
+              lineItems: [],
+              presentmentCurrencyCode: currencyCode,
+            },
+          },
+        });
+      }
+    },
+  });
   let showToast = (duration: number) => {
     setIsToastVisible(true);
     setTimeout(() => {

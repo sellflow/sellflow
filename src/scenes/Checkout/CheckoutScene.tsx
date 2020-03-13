@@ -46,7 +46,7 @@ export default function CheckoutScene() {
     subtotalPrice: params.cartData.subtotalPrice,
     totalPrice: params.cartData.totalPrice,
   });
-  let { subtotalPrice, totalPrice } = paymentInfo;
+  let { subtotalPrice } = paymentInfo;
   let { authToken } = useAuth();
   let [address, setAddress] = useState<AddressItem>(emptyAddress); // can be used to do the update
   let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
@@ -63,15 +63,11 @@ export default function CheckoutScene() {
           checkoutShippingAddressUpdateV2 &&
           checkoutShippingAddressUpdateV2.checkout
         ) {
-          let {
-            totalPriceV2,
-            subtotalPriceV2,
-          } = checkoutShippingAddressUpdateV2.checkout;
+          let { subtotalPriceV2 } = checkoutShippingAddressUpdateV2.checkout;
 
           setPaymentInfo({
             ...paymentInfo,
             subtotalPrice: Number(subtotalPriceV2.amount),
-            totalPrice: Number(totalPriceV2.amount),
           });
         }
       },
@@ -241,7 +237,7 @@ export default function CheckoutScene() {
         <View style={[styles.paymentDetailsContainer, styles.totalBorder]}>
           <Text style={styles.paymentDetailLabel}>{t('Total')}</Text>
           <Text weight="bold" style={styles.mediumText}>
-            {formatCurrency(totalPrice)}
+            {formatCurrency(subtotalPrice)}
           </Text>
         </View>
       </Surface>
