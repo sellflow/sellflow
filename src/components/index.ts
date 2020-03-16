@@ -7,6 +7,7 @@ import ProductList from './ProductList';
 import SearchModal from './SearchModal';
 import CurrencyPicker from './CurrencyPicker';
 import CountryModal from './CountryModal';
+import ModalBottomSheetMessage from './ModalBottomSheetMessage';
 
 export {
   OrderItem,
@@ -18,4 +19,5 @@ export {
   SearchModal,
   CurrencyPicker,
   CountryModal,
+  ModalBottomSheetMessage,
 };

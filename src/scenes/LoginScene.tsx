@@ -4,9 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput as TextInputType,
-  Alert,
 } from 'react-native';
-import { Text, TextInput, Button } from 'exoflex';
+import { Text, TextInput, Button, Portal } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
@@ -21,18 +20,22 @@ import {
 } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
 import { useSetShoppingCart } from '../hooks/api/useShoppingCart';
+import { ModalBottomSheet } from '../core-ui';
+import { ModalBottomSheetMessage } from '../components';
 
 export default function LoginScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Login'>>();
   let { setAuthToken } = useAuth();
   let [email, setEmail] = useState<string>('');
   let [password, setPassword] = useState<string>('');
+  let [expiresDate, setExpiresDate] = useState<string>('');
+  let [errorMessage, setErrorMessage] = useState<string>('');
+  let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
 
   let dimensions = useDimensions();
-  let [expiresDate, setExpiresDate] = useState<string>('');
 
   let containerStyle = () => {
     let styleApplied;
@@ -86,10 +89,8 @@ export default function LoginScene() {
         setAuthToken(accessToken);
         login({ variables: { accessToken } });
       } else {
-        Alert.alert(
-          'Something went wrong!',
-          'Your email or password might be wrong!',
-        );
+        setErrorMessage(t('Your email or password might be wrong!'));
+        toggleModalVisible();
       }
     },
   });
@@ -147,8 +148,23 @@ export default function LoginScene() {
     setAuthenticatedUserLoading ||
     setShoppingCartLoading;
 
+  let toggleModalVisible = () => setIsModalVisible(!isModalVisible);
+
   return (
     <View style={[containerStyle(), styles.container]}>
+      <Portal>
+        <ModalBottomSheet
+          title={t('Something went wrong!')}
+          isModalVisible={isModalVisible}
+          toggleModal={toggleModalVisible}
+        >
+          <ModalBottomSheetMessage
+            isError={true}
+            message={errorMessage}
+            onPressModalButton={toggleModalVisible}
+          />
+        </ModalBottomSheet>
+      </Portal>
       <View>
         <TextInput
           label={t('Email Address')}

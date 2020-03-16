@@ -6,20 +6,19 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Alert,
   KeyboardAvoidingView,
   AppState,
   AppStateStatus,
 } from 'react-native';
-import { Text, RadioButton, IconButton, Button } from 'exoflex';
+import { Text, RadioButton, IconButton, Button, Portal } from 'exoflex';
 import {
   useNavigation,
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
 
-import { CheckoutAddress } from '../../components';
-import { Surface } from '../../core-ui';
+import { CheckoutAddress, ModalBottomSheetMessage } from '../../components';
+import { Surface, ModalBottomSheet } from '../../core-ui';
 import { addressItemData } from '../../fixtures/AddressItemData';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { FONT_SIZE } from '../../constants/fonts';
@@ -52,9 +51,12 @@ export default function CheckoutScene() {
   let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
     addressItemData[0],
   );
+  let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   let { screenSize } = useDimensions();
   const first = 5;
   let formatCurrency = useCurrencyFormatter();
+
+  let toggleModalVisible = () => setIsModalVisible(!isModalVisible);
 
   let { updateCartAddress, data: updateAddressData } = useCheckoutUpdateAddress(
     {
@@ -120,7 +122,7 @@ export default function CheckoutScene() {
           updateAddressData.checkoutShippingAddressUpdateV2.checkout?.webUrl,
         );
       } else {
-        Alert.alert(t('Please insert a valid address'));
+        toggleModalVisible();
       }
     }
   }, [updateAddressData]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -251,6 +253,22 @@ export default function CheckoutScene() {
       </Button>
     </View>
   );
+  let renderBottomModal = () => (
+    <Portal>
+      <ModalBottomSheet
+        title={t('An Error Occured!')}
+        isModalVisible={isModalVisible}
+        toggleModal={toggleModalVisible}
+      >
+        <ModalBottomSheetMessage
+          isError={true}
+          message={t('Please insert a valid address')}
+          onPressModalButton={toggleModalVisible}
+          buttonText={t('Close')}
+        />
+      </ModalBottomSheet>
+    </Portal>
+  );
 
   if (authToken) {
     return (
@@ -262,6 +280,7 @@ export default function CheckoutScene() {
   } else if (screenSize === ScreenSize.Large) {
     return (
       <SafeAreaView style={[styles.flex, styles.landscape, containerStyle()]}>
+        {renderBottomModal()}
         <KeyboardAvoidingView
           behavior="padding"
           style={styles.flex}
@@ -275,6 +294,7 @@ export default function CheckoutScene() {
   } else {
     return (
       <View style={styles.flex}>
+        {renderBottomModal()}
         <KeyboardAvoidingView
           behavior="padding"
           style={styles.flex}

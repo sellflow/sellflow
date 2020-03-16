@@ -3,13 +3,12 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Alert,
   KeyboardAvoidingView,
   TextInput as TextInputType,
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import { Text, TextInput, Button, ActivityIndicator } from 'exoflex';
+import { Text, TextInput, Button, ActivityIndicator, Portal } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../../constants/fonts';
@@ -23,7 +22,8 @@ import {
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
 import { DeleteAddressModal } from './components';
-import { CountryModal } from '../../components';
+import { CountryModal, ModalBottomSheetMessage } from '../../components';
+import { ModalBottomSheet } from '../../core-ui';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();
@@ -49,6 +49,8 @@ export default function AddEditAddressScene() {
     zip: '',
     phone: '',
   });
+  let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  let [errorMessage, setErrorMessage] = useState<string>('');
 
   let isAddressDataEmpty =
     addressData.address1 === '' ||
@@ -72,28 +74,20 @@ export default function AddEditAddressScene() {
   let {
     addNewAddress,
     loading: loadingAddNewAddress,
-  } = useCustomerAddNewAddress({
-    onError: (error) => {
-      Alert.alert(error.message);
-    },
-  });
+  } = useCustomerAddNewAddress();
 
   let { editAddress, loading: loadingEditAddress } = useCustomerEditAddress({
     onCompleted: () => {
       navigate(rootScene);
     },
-    onError: (error) => {
-      Alert.alert(error.message);
-    },
   });
+
+  let toggleModalVisible = () => setIsModalVisible(!isModalVisible);
 
   let {
     customerAddressDelete,
     loading: loadingDeleteAddress,
   } = useCustomerAddressDelete({
-    onError: (error) => {
-      Alert.alert(error.message);
-    },
     onCompleted: () => {
       navigate(rootScene);
     },
@@ -152,7 +146,8 @@ export default function AddEditAddressScene() {
         result?.data?.customerAddressCreate?.customerUserErrors;
 
       if (customerUserErrors && customerUserErrors.length > 0) {
-        Alert.alert(customerUserErrors[0].message);
+        setErrorMessage(customerUserErrors[0].message);
+        toggleModalVisible();
       } else {
         navigate(rootScene);
       }
@@ -169,7 +164,8 @@ export default function AddEditAddressScene() {
         result?.data?.customerAddressUpdate?.customerUserErrors;
 
       if (customerUserErrors && customerUserErrors.length > 0) {
-        Alert.alert(customerUserErrors[0].message);
+        setErrorMessage(customerUserErrors[0].message);
+        toggleModalVisible();
       } else {
         navigate(rootScene);
       }
@@ -197,6 +193,20 @@ export default function AddEditAddressScene() {
 
   return (
     <View style={styles.flex}>
+      <Portal>
+        <ModalBottomSheet
+          title={t('An Error Occured!')}
+          isModalVisible={isModalVisible}
+          toggleModal={toggleModalVisible}
+        >
+          <ModalBottomSheetMessage
+            isError={true}
+            message={errorMessage}
+            onPressModalButton={toggleModalVisible}
+            buttonText={t('Close')}
+          />
+        </ModalBottomSheet>
+      </Portal>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={isIOS ? 'padding' : undefined}

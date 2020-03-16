@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { ActivityIndicator } from 'exoflex';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 
@@ -158,10 +158,7 @@ export default function ProductDetailsScene() {
   } = useGetProductDetails({
     variables: { productHandle, presentmentCurrencies: [currencyCode] },
     fetchPolicy: 'network-only',
-    onError(error) {
-      let newError = error.message.split(':');
-      Alert.alert(newError[1]);
-    },
+
     onCompleted(value) {
       let defaultOptions: OptionsData = {};
       value.productByHandle?.options.map(({ name, values }) => {
@@ -191,7 +188,6 @@ export default function ProductDetailsScene() {
       }
     },
   });
-
   let onAddToCart = async () => {
     addToCart({ variables: { variantId: productDetails.id, quantity } });
   };

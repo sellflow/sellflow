@@ -21,6 +21,9 @@ export const CUSTOMER_REGISTER = gql`
         lastName
         email
       }
+      customerUserErrors {
+        message
+      }
     }
     customerAccessTokenCreate(input: { email: $email, password: $password }) {
       customerAccessToken {

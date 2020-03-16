@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert, Image } from 'react-native';
-import {
-  TextInput,
-  Button,
-  ActivityIndicator,
-  Portal,
-  Modal,
-  Text,
-} from 'exoflex';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button, ActivityIndicator, Portal } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
-import { COLORS } from '../constants/colors';
-import { FONT_SIZE } from '../constants/fonts';
 import { StackNavProp } from '../types/Navigation';
 import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
+import { ModalBottomSheet } from '../core-ui';
+import { ModalBottomSheetMessage } from '../components';
 
 export default function ForgotPasswordScene() {
   let { navigate } = useNavigation<StackNavProp<'ForgotPassword'>>();
@@ -25,21 +18,26 @@ export default function ForgotPasswordScene() {
 
   const isError = error !== '';
 
+  let toggleModalVisible = () => setVisible(!isVisible);
+
   let { resetPassword, loading } = useForgotPasswordMutation({
     onCompleted({ customerRecover }) {
       if (emailValue === '') {
-        Alert.alert(t('Please Enter Your Email'));
+        setError(errorMessage);
+        toggleModalVisible();
       } else {
         if (customerRecover && customerRecover.customerUserErrors.length > 0) {
           setError(customerRecover.customerUserErrors[0].message);
-          setVisible(!isVisible);
+          toggleModalVisible();
         }
-        setVisible(!isVisible);
+        toggleModalVisible();
       }
     },
     onError(error) {
-      setError(error.message);
-      setVisible(!isVisible);
+      let { message } = error;
+      let errorMessage = message.split('GraphQL error: ')[1];
+      setError(errorMessage);
+      toggleModalVisible();
     },
   });
 
@@ -54,7 +52,7 @@ export default function ForgotPasswordScene() {
   let onPressModalButton = () => {
     setVisible(!isVisible);
     setEmailValue('');
-    navigate('Login');
+    navigate('Auth', { initialRouteKey: 'Login' });
   };
 
   if (loading) {
@@ -63,47 +61,27 @@ export default function ForgotPasswordScene() {
     </View>;
   }
 
+  let errorMessage = isError
+    ? t(' {error}', { error })
+    : t(
+        'Please check your email, An email has been sent to reset your password.',
+      );
+
   return (
     <View style={styles.flex}>
       <Portal>
-        <Modal
-          contentContainerStyle={styles.modal}
-          visible={isVisible}
-          onDismiss={() => setVisible(!isVisible)}
+        <ModalBottomSheet
+          title={isError ? t('An Error Occured!') : t('Email Has Been Sent!')}
+          isModalVisible={isVisible}
+          toggleModal={toggleModalVisible}
         >
-          <View style={styles.modalTitleContainer}>
-            <Text weight="medium" style={styles.modalTitle}>
-              {isError ? t('An Error Occurred') : t('Email Has Been Sent!')}
-            </Text>
-          </View>
-          <View style={styles.iconContainer}>
-            {isError ? (
-              <Image
-                source={require('../../assets/images/errorImage.png')}
-                style={styles.image}
-              />
-            ) : (
-              <Image
-                source={require('../../assets/images/successImage.png')}
-                style={styles.image}
-              />
-            )}
-          </View>
-          <Text style={styles.message}>
-            {isError
-              ? t(
-                  'Sorry, an error occurred on this process. Please try again later.',
-                )
-              : t(
-                  'Please check your email, An email has been sent to reset your password.',
-                )}
-          </Text>
-          <Button style={styles.buttonStyle} onPress={onPressModalButton}>
-            <Text weight="medium" style={styles.buttonText}>
-              {isError ? t('Try Again') : t('Back To Login')}
-            </Text>
-          </Button>
-        </Modal>
+          <ModalBottomSheetMessage
+            isError={isError}
+            message={errorMessage}
+            onPressModalButton={onPressModalButton}
+            buttonText={isError ? t('Try Again') : t('Back To Login')}
+          />
+        </ModalBottomSheet>
       </Portal>
       <View style={styles.textInputContainer}>
         <TextInput
@@ -137,32 +115,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: 84,
-    height: 84,
-  },
-  modal: {
-    backgroundColor: COLORS.white,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  modalTitleContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightGrey,
-  },
-  modalTitle: {
-    paddingVertical: 16,
-    fontSize: FONT_SIZE.large,
-    textAlign: 'center',
-  },
-  iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 24,
-    marginBottom: 16,
-  },
   textInputContainer: {
     flex: 1,
     marginHorizontal: 24,
@@ -170,16 +122,8 @@ const styles = StyleSheet.create({
   textInput: {
     marginTop: 8,
   },
-  message: {
-    textAlign: 'center',
-  },
   buttonStyle: {
     marginVertical: 24,
     marginHorizontal: 24,
-  },
-  buttonText: {
-    color: COLORS.white,
-    fontSize: FONT_SIZE.medium,
-    textTransform: 'uppercase',
   },
 });

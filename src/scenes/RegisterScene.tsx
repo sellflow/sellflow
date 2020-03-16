@@ -5,7 +5,7 @@ import {
   Alert,
   TextInput as TextInputType,
 } from 'react-native';
-import { Text, TextInput, Button } from 'exoflex';
+import { Text, TextInput, Button, Portal } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
@@ -21,6 +21,8 @@ import { StackNavProp } from '../types/Navigation';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useCustomerRegister } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
+import { ModalBottomSheet } from '../core-ui';
+import { ModalBottomSheetMessage } from '../components';
 
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
@@ -30,6 +32,10 @@ export default function RegisterScene() {
   let [email, setEmail] = useState<string>('');
   let [password, setPassword] = useState<string>('');
   let [confirmPassword, setConfirmPassword] = useState<string>('');
+  let [isVisible, setIsVisible] = useState<boolean>(false);
+  let [errorMessage, setErrorMessage] = useState<string>('');
+  let toggleModalVisible = () => setIsVisible(!isVisible);
+
   let dimensions = useDimensions();
   let onSubmit = () => {
     register({
@@ -80,9 +86,17 @@ export default function RegisterScene() {
 
   let { register, loading: registerLoading } = useCustomerRegister({
     onError: (error) => {
-      Alert.alert('Error ocurred!', error.message);
+      let { message } = error;
+      let errorMessage = message.split('GraphQL error: ')[1];
+      setErrorMessage(errorMessage);
+      toggleModalVisible();
     },
     onCompleted: ({ customerCreate, customerAccessTokenCreate }) => {
+      if (customerCreate && customerCreate.customerUserErrors.length > 0) {
+        setErrorMessage(customerCreate.customerUserErrors[0].message);
+        toggleModalVisible();
+        return;
+      }
       if (
         customerCreate &&
         customerCreate.customer &&
@@ -127,6 +141,20 @@ export default function RegisterScene() {
   let isLoading = setAuthenticatedUserLoading || registerLoading;
   return (
     <View style={containerStyle()}>
+      <Portal>
+        <ModalBottomSheet
+          title={t('Something went wrong!')}
+          isModalVisible={isVisible}
+          toggleModal={toggleModalVisible}
+        >
+          <ModalBottomSheetMessage
+            isError={true}
+            message={errorMessage}
+            onPressModalButton={toggleModalVisible}
+            buttonText={t('Close')}
+          />
+        </ModalBottomSheet>
+      </Portal>
       <View>
         <View style={styles.textInputContainer}>
           <Text style={styles.greyText}>{t('First Name')}</Text>

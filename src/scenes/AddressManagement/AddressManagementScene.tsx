@@ -1,12 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  Alert,
-  Image,
-} from 'react-native';
+import { View, SafeAreaView, FlatList, StyleSheet, Image } from 'react-native';
 import { Text, Button, ActivityIndicator } from 'exoflex';
 import {
   useNavigation,
@@ -50,9 +43,6 @@ export default function AddressManagementScene() {
     customerAddressDelete,
     loading: loadingDeleteAddress,
   } = useCustomerAddressDelete({
-    onError: (error) => {
-      Alert.alert(error.message);
-    },
     onCompleted: () => {
       refetchAddresses('update', { first, customerAccessToken });
     },
@@ -62,9 +52,6 @@ export default function AddressManagementScene() {
     setDefaultAddress,
     loading: loadingSetDefaultAddress,
   } = useCustomerSetDefaultAddress({
-    onError: (error) => {
-      Alert.alert(error.message);
-    },
     onCompleted: () => {
       refetchAddresses('update', { first, customerAccessToken });
     },
