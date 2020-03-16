@@ -26,6 +26,7 @@ export default function OrderDetailsScene() {
     shippingPrice,
     subtotalPayment,
   } = order;
+
   let { address1, city, country, name, phone, province, zip } = address;
   let formatCurrency = useCurrencyFormatter();
   return (

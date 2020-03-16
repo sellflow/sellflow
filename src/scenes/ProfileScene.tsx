@@ -102,8 +102,6 @@ export default function ProfileScene() {
         >
           <Text style={styles.buttonLabelStyle}>{t('Order History')}</Text>
         </TouchableOpacity>
-      </View>
-      <View style={[styles.menuContainer, styles.divider]}>
         <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
           <Text style={styles.buttonLabelStyle}>{t('About Us')}</Text>
         </TouchableOpacity>

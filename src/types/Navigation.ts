@@ -48,6 +48,8 @@ export type StackParamList = {
   ShoppingCart: undefined;
   EditProfile: { customerAccessToken: string };
   Auth: { initialRouteKey: string };
+  LockScene: undefined;
+  OrderPlacedConfirmation: { orderNumber: string };
   WebView: { webUrl: string; type: 'terms' | 'policy' | 'payment' };
 };
 

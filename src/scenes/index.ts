@@ -15,6 +15,8 @@ import CheckoutScene from './Checkout/CheckoutScene';
 import EditProfileScene from './EditProfileScene';
 import AuthScene from './AuthScene';
 import SearchResultsScene from './ProductCollection/SearchResultsScene';
+import LockScene from './LockScene';
+import OrderPlacedConfirmationScene from './OrderPlacedConfirmationScene';
 import WebViewScene from './WebViewScene';
 
 export {
@@ -35,5 +37,7 @@ export {
   EditProfileScene,
   AuthScene,
   SearchResultsScene,
+  LockScene,
+  OrderPlacedConfirmationScene,
   WebViewScene,
 };

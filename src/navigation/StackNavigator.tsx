@@ -20,6 +20,8 @@ import {
   EditProfileScene,
   AuthScene,
   SearchResultsScene,
+  LockScene,
+  OrderPlacedConfirmationScene,
   WebViewScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
@@ -124,7 +126,6 @@ export default function StackNavigator({
           },
         })}
       />
-
       <Stack.Screen
         name="AddressManagement"
         component={AddressManagementScene}
@@ -202,6 +203,20 @@ export default function StackNavigator({
         })}
       />
       <Stack.Screen name="WebView" component={WebViewScene} />
+      <Stack.Screen
+        name="LockScene"
+        component={LockScene}
+        options={() => ({
+          title: t('LockScene'),
+        })}
+      />
+      <Stack.Screen
+        name="OrderPlacedConfirmation"
+        component={OrderPlacedConfirmationScene}
+        options={() => ({
+          title: t('OrderPlacedConfirmation'),
+        })}
+      />
     </Stack.Navigator>
   );
 }
