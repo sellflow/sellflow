@@ -42,6 +42,7 @@ export default function CheckoutAddress({
         style,
       ]}
       onPress={onSelect}
+      testID={`checkoutAddress-${id}`}
     >
       <RadioButton
         value={id}

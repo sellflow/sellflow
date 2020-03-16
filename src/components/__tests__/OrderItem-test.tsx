@@ -1,60 +1,12 @@
 import React from 'react';
-import { render, fireEvent, act } from 'react-native-testing-library';
+import { render, fireEvent } from 'react-native-testing-library';
 import { MockedProvider } from '@apollo/react-testing';
 
 import { OrderItem } from '..';
 import { OrderItem as OrderItemType } from '../../types/types';
-import { GET_SHOP } from '../../graphql/server/shop';
-import { GET_DEFAULT_CURRENCY } from '../../graphql/client/clientQueries';
 import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
-
-const mocks = [
-  {
-    request: {
-      query: GET_SHOP,
-    },
-    result: {
-      data: {
-        shop: {
-          name: 'Ivory Outfitters',
-          privacyPolicy: null,
-          termsOfService: null,
-          paymentSettings: {
-            acceptedCardBrands: [
-              'VISA',
-              'MASTERCARD',
-              'AMERICAN_EXPRESS',
-              'DISCOVER',
-              'JCB',
-              'DINERS_CLUB',
-            ],
-            cardVaultUrl: 'https://elb.deposit.shopifycs.com/sessions',
-            countryCode: 'US',
-            currencyCode: 'USD',
-            enabledPresentmentCurrencies: ['CAD', 'USD', 'EUR', 'IDR'],
-            supportedDigitalWallets: ['SHOPIFY_PAY', 'GOOGLE_PAY'],
-            shopifyPaymentsAccountId: null,
-          },
-          shipsToCountries: ['US'],
-          moneyFormat: '${{amount}}',
-          description: '',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_DEFAULT_CURRENCY,
-    },
-    result: {
-      data: {
-        defaultCurrency: {
-          currency: 'USD',
-        },
-      },
-    },
-  },
-];
+import { MOCKED_SHOP } from '../../__mocks__/mockedData';
+import wait from '../../__mocks__/wait';
 
 let initialData: OrderItemType = {
   variantID: '1162321131111',
@@ -67,18 +19,10 @@ let initialData: OrderItemType = {
   variant: 'Size M Grey',
 };
 
-async function wait(ms = 0) {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 async function renderComponent() {
   let { getByText, getByDisplayValue, getAllByText } = render(
     <MockedProvider
-      mocks={mocks}
+      mocks={MOCKED_SHOP}
       addTypename={false}
       resolvers={{
         Mutation: {

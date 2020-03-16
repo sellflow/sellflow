@@ -12,7 +12,7 @@ export const ProductItemData: Array<Product> = [
     productType: 'shirt',
     price: 1000,
     discount: 0,
-    availableForSale: true,
+    availableForSale: false,
   },
   {
     id: '2',

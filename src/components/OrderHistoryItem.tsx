@@ -17,7 +17,7 @@ import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 type Props = {
   order: OrderRecord;
   containerStyle?: StyleProp<ViewStyle>;
-  onPress: (order: OrderRecord) => void;
+  onPress: () => void;
 };
 
 export default function OrderHistoryItem(props: Props) {
@@ -26,7 +26,7 @@ export default function OrderHistoryItem(props: Props) {
   return (
     <TouchableOpacity
       style={[styles.container, containerStyle]}
-      onPress={() => onPress(order)}
+      onPress={onPress}
     >
       <Text weight="medium" style={styles.orderNumber}>
         {t('Order {orderID}', { orderID: order.orderNumber })}
