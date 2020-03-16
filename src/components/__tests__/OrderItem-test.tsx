@@ -1,11 +1,12 @@
 import React from 'react';
-import { render, fireEvent } from 'react-native-testing-library';
+import { render, fireEvent, act } from 'react-native-testing-library';
 import { MockedProvider } from '@apollo/react-testing';
 
 import { OrderItem } from '..';
 import { OrderItem as OrderItemType } from '../../types/types';
 import { GET_SHOP } from '../../graphql/server/shop';
 import { GET_DEFAULT_CURRENCY } from '../../graphql/client/clientQueries';
+import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
 
 const mocks = [
   {
@@ -16,11 +17,27 @@ const mocks = [
       data: {
         shop: {
           name: 'Ivory Outfitters',
+          privacyPolicy: null,
+          termsOfService: null,
           paymentSettings: {
+            acceptedCardBrands: [
+              'VISA',
+              'MASTERCARD',
+              'AMERICAN_EXPRESS',
+              'DISCOVER',
+              'JCB',
+              'DINERS_CLUB',
+            ],
+            cardVaultUrl: 'https://elb.deposit.shopifycs.com/sessions',
             countryCode: 'US',
             currencyCode: 'USD',
             enabledPresentmentCurrencies: ['CAD', 'USD', 'EUR', 'IDR'],
+            supportedDigitalWallets: ['SHOPIFY_PAY', 'GOOGLE_PAY'],
+            shopifyPaymentsAccountId: null,
           },
+          shipsToCountries: ['US'],
+          moneyFormat: '${{amount}}',
+          description: '',
         },
       },
     },
@@ -50,16 +67,39 @@ let initialData: OrderItemType = {
   variant: 'Size M Grey',
 };
 
-test('should render normally', () => {
-  let { getByText, getByDisplayValue } = render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+async function wait(ms = 0) {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
+async function renderComponent() {
+  let { getByText, getByDisplayValue, getAllByText } = render(
+    <MockedProvider
+      mocks={mocks}
+      addTypename={false}
+      resolvers={{
+        Mutation: {
+          setDefaultCurrency: setDefaultCurrencyResolver,
+        },
+      }}
+    >
       <OrderItem cardType="checkout" orderItem={initialData} />
     </MockedProvider>,
   );
+  await wait();
+  return { getByText, getByDisplayValue, getAllByText };
+}
+
+test('should render normally', async () => {
+  let { getByText, getByDisplayValue } = await renderComponent();
   let textInput = getByDisplayValue('2');
   let discount = getByText('$24.26');
   let price = getByText('$158.00');
   expect(textInput).toBeTruthy();
+
   fireEvent.changeText(textInput, 3);
   let label = getByText('$36.39');
   expect(label).toBeTruthy();
@@ -67,14 +107,11 @@ test('should render normally', () => {
   expect(discount).toBeTruthy();
 });
 
-test('should multiply the value correctly', () => {
-  let { getByText, getByDisplayValue, getAllByText } = render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <OrderItem cardType="checkout" orderItem={initialData} />
-    </MockedProvider>,
-  );
-
+test('should multiply the value correctly', async () => {
+  let { getByText, getAllByText, getByDisplayValue } = await renderComponent();
   let textInput = getByDisplayValue('2');
+  expect(textInput).toBeTruthy();
+
   fireEvent.changeText(textInput, 3);
   let discount = getByText('$36.39');
   let price = getByText('$237.00');
@@ -84,7 +121,6 @@ test('should multiply the value correctly', () => {
   fireEvent.changeText(textInput, 4);
   discount = getByText('$48.52');
   price = getByText('$316.00');
-
   expect(discount).toBeTruthy();
   expect(price).toBeTruthy();
 
@@ -96,16 +132,15 @@ test('should multiply the value correctly', () => {
   expect(price).toBeTruthy();
 });
 
-test('should never go above 999 the value and below zero', () => {
-  let { getByDisplayValue } = render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <OrderItem cardType="checkout" orderItem={initialData} />
-    </MockedProvider>,
-  );
+test('should never go above 999 the value and below zero', async () => {
+  let { getByDisplayValue } = await renderComponent();
   let textInput = getByDisplayValue('2');
+  expect(textInput).toBeTruthy();
+
   fireEvent.changeText(textInput, 1111);
   textInput = getByDisplayValue('999');
   expect(textInput).toBeTruthy();
+
   fireEvent.changeText(textInput, -100);
   textInput = getByDisplayValue('0');
   expect(textInput).toBeTruthy();
