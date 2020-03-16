@@ -78,7 +78,7 @@ function useCollectionQuery(
 
   let getMoreUntilTarget = async (
     targetAmount: number,
-    cursor: string,
+    cursor: string | null,
     handle: string,
     filter: [number, number],
   ) => {
@@ -92,7 +92,8 @@ function useCollectionQuery(
     });
 
     let productsData = getProducts(data, filter);
-    hasMore.current = productsData.length > 0;
+    hasMore.current = !!data.collectionByHandle?.products.pageInfo.hasNextPage;
+
     if (hasMore.current === false) {
       return result;
     }
@@ -120,29 +121,21 @@ function useCollectionQuery(
     let { data } = await refetchQuery(variables);
     let moreCollection = getProducts(data, values || priceRange);
 
+    hasMore.current = !!data.collectionByHandle?.products.pageInfo.hasNextPage;
+
+    if (moreCollection.length < first && hasMore.current) {
+      let newCollection = await getMoreUntilTarget(
+        first - moreCollection.length,
+        moreCollection[moreCollection.length - 1].cursor || null,
+        data.collectionByHandle ? data.collectionByHandle.handle : '',
+        values || priceRange,
+      );
+      moreCollection.push(...newCollection);
+    }
+
     if (type === 'sort') {
-      if (moreCollection.length < first) {
-        let newCollection = await getMoreUntilTarget(
-          first - moreCollection.length,
-          moreCollection[moreCollection.length - 1].cursor ?? '',
-          data.collectionByHandle ? data.collectionByHandle.handle : '',
-          values || priceRange,
-        );
-        moreCollection.push(...newCollection);
-      }
       setCollection(moreCollection);
     } else {
-      if (moreCollection.length < first && hasMore.current) {
-        let newCollection = await getMoreUntilTarget(
-          first - moreCollection.length,
-          moreCollection[moreCollection.length - 1].cursor ?? '',
-          data.collectionByHandle ? data.collectionByHandle.handle : '',
-          values || priceRange,
-        );
-        moreCollection.push(...newCollection);
-      }
-      hasMore.current = !!data.collectionByHandle?.products.pageInfo
-        .hasNextPage;
       setCollection([...collection, ...moreCollection]);
     }
   };
