@@ -1,5 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { View, StyleSheet, TextInput as TextInputType } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TextInput as TextInputType,
+  TouchableOpacity,
+} from 'react-native';
 import { Text, TextInput } from 'exoflex';
 
 import { FONT_SIZE } from '../../../constants/fonts';
@@ -122,17 +127,21 @@ export default function ShippingAddressForm(props: Props) {
         containerStyle={styles.textInput}
         onSubmitEditing={toggleCountryModal}
       />
-      <TextInput
-        label={t('Country')}
-        clearTextOnFocus={false}
-        autoCapitalize="words"
-        textContentType="countryName"
-        mode="flat"
-        value={address.country}
-        returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
-      />
+      <TouchableOpacity onPress={toggleCountryModal}>
+        <TextInput
+          label={t('Country')}
+          clearTextOnFocus={false}
+          autoCapitalize="words"
+          textContentType="countryName"
+          mode="flat"
+          value={address.country}
+          returnKeyType="next"
+          labelStyle={styles.textInputLabel}
+          containerStyle={styles.textInput}
+          pointerEvents="none"
+          editable={false}
+        />
+      </TouchableOpacity>
       <TextInput
         label={t('Postal Code')}
         ref={zipRef}
@@ -156,6 +165,7 @@ export default function ShippingAddressForm(props: Props) {
         value={address.phone}
         onChangeText={(phone) => onChangeAddress({ ...address, phone })}
         returnKeyType="done"
+        keyboardType="number-pad"
         labelStyle={styles.textInputLabel}
         containerStyle={styles.textInput}
       />
