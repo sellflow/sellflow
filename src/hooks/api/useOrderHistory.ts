@@ -106,11 +106,7 @@ function useOrderHistory(
     let { data } = await refetchQuery(variables);
     let moreOrderHistory = getOrders(data);
 
-    if (moreOrderHistory.length <= 0) {
-      hasMore.current = false;
-    } else {
-      hasMore.current = true;
-    }
+    hasMore.current = !!data.customer?.orders.pageInfo.hasNextPage;
     setOrderHistory([...orderHistory, ...moreOrderHistory]);
   };
 
@@ -120,9 +116,7 @@ function useOrderHistory(
     }
     if (isInitFetching && !!data) {
       let newOrderHistory = getOrders(data);
-      if (newOrderHistory.length < first) {
-        hasMore.current = false;
-      }
+      hasMore.current = !!data.customer?.orders.pageInfo.hasNextPage;
       setOrderHistory(newOrderHistory);
       setInitFetching(false);
     }

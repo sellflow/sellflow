@@ -5,7 +5,7 @@ import { GetShoppingCart_shoppingCart as ShoppingCart } from '../generated/clien
 import { GetRecentSearch_recentSearch as RecentSearch } from '../generated/client/GetRecentSearch';
 
 export type CarouselItem = {
-  render: () => ReactNode;
+  render?: () => ReactNode;
   image: string;
   onItemPress?: () => void;
 };
@@ -72,12 +72,12 @@ export type ProductDetails = {
   url: string;
 } & Product;
 
-// TODO: Rename Category to Collection
 export type CategoryItem = {
   id: string;
   title: string;
   handle: string;
   cursor: string;
+  image?: string;
 };
 
 export type LocalData = {

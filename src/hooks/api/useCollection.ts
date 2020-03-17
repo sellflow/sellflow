@@ -271,6 +271,7 @@ function useCategoryQuery(first: number) {
           title: item.node.title,
           handle: item.node.handle,
           cursor: item.cursor,
+          image: item.node.image?.transformedSrc || undefined,
         }),
       );
       setCategories(categories);

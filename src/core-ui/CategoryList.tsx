@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   FlatListProps,
+  ImageBackground,
 } from 'react-native';
 import { Text } from 'exoflex';
 
@@ -44,12 +45,31 @@ export default function CategoryList(props: Props) {
       data={categories}
       renderItem={({ item }) => (
         <TouchableOpacity
-          style={[styles.categoryItemContainer, containerStyle]}
+          style={[
+            styles.categoryItemContainer,
+            item.image ? styles.color : null,
+            containerStyle,
+          ]}
           onPress={() => onSelect(item)}
         >
-          <Text weight="medium" style={[styles.categoryItemText, textStyle]}>
-            {item.title}
-          </Text>
+          {item.image ? (
+            <ImageBackground
+              source={{ uri: item.image }}
+              imageStyle={styles.borderRadius}
+              style={styles.center}
+            >
+              <Text
+                weight="medium"
+                style={[styles.categoryItemText, textStyle]}
+              >
+                {item.title}
+              </Text>
+            </ImageBackground>
+          ) : (
+            <Text weight="medium" style={[styles.categoryItemText, textStyle]}>
+              {item.title}
+            </Text>
+          )}
         </TouchableOpacity>
       )}
       ItemSeparatorComponent={Separator}
@@ -64,9 +84,19 @@ const styles = StyleSheet.create({
   categoryItemContainer: {
     height: 48,
     borderRadius: 2,
-    backgroundColor: COLORS.primaryColor,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  borderRadius: {
+    borderRadius: 2,
+  },
+  color: {
+    backgroundColor: COLORS.primaryColor,
   },
   categoryItemText: {
     marginHorizontal: 12,

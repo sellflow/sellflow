@@ -35,7 +35,7 @@ export default function Carousel(props: Props) {
               source={{ uri: item.image }}
               style={[styles.itemContainer, { height }]}
             >
-              {item.render()}
+              {item.render && item.render()}
             </ImageBackground>
           </TouchableWithoutFeedback>
         )}
