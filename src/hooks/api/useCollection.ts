@@ -56,6 +56,7 @@ function useCollectionQuery(
   priceRange: [number, number],
 ) {
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
+  let [isReloading, setIsReloading] = useState<boolean>(true);
   let [collection, setCollection] = useState<Array<Product>>([]);
   let isFetchingMore = useRef(false);
   let hasMore = useRef(true);
@@ -93,14 +94,14 @@ function useCollectionQuery(
 
     let productsData = getProducts(data, filter);
     hasMore.current = !!data.collectionByHandle?.products.pageInfo.hasNextPage;
-
-    if (hasMore.current === false) {
+    let nextCursor = productsData[productsData.length - 1].cursor || cursor;
+    if (hasMore.current === false && productsData.length <= 0) {
       return result;
     }
     if (productsData.length < targetAmount) {
       moreData = await getMoreUntilTarget(
         targetAmount - productsData.length,
-        cursor,
+        nextCursor,
         handle,
         filter,
       );
@@ -118,6 +119,9 @@ function useCollectionQuery(
     values?: [number, number],
   ) => {
     isFetchingMore.current = type === 'scroll';
+    if (!isFetchingMore.current) {
+      setIsReloading(true);
+    }
     let { data } = await refetchQuery(variables);
     let moreCollection = getProducts(data, values || priceRange);
 
@@ -135,6 +139,7 @@ function useCollectionQuery(
 
     if (type === 'sort') {
       setCollection(moreCollection);
+      setIsReloading(false);
     } else {
       setCollection([...collection, ...moreCollection]);
     }
@@ -149,13 +154,14 @@ function useCollectionQuery(
       hasMore.current = !!data.collectionByHandle?.products.pageInfo
         .hasNextPage;
       setCollection(newCollection);
+      setIsReloading(false);
       setInitFetching(false);
     }
   }, [loading, isInitFetching]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     collection,
-    loading: isInitFetching,
+    loading: isReloading,
     hasMore: hasMore.current,
     isFetchingMore: isFetchingMore.current,
     refetch,
