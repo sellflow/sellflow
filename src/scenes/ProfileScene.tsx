@@ -31,11 +31,7 @@ export default function ProfileScene() {
   });
 
   if (getAuthenticatedUserLoading || !authenticatedUser) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <ActivityIndicator style={styles.centered} />;
   }
 
   let onLogout = () => {

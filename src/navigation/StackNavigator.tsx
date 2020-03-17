@@ -113,7 +113,10 @@ export default function StackNavigator({
         component={AuthScene}
         options={() => ({
           title: t('Welcome'),
-          headerLeft: undefined,
+          headerStyle: {
+            shadowColor: COLORS.transparent,
+            elevation: 0,
+          },
         })}
       />
       <Stack.Screen

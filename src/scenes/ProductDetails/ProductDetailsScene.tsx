@@ -132,7 +132,10 @@ export default function ProductDetailsScene() {
     setSelectedOptions({ ...selectedOptions, [key]: value });
   };
 
-  let { shoppingCartReplaceItems } = useCheckoutReplaceItem();
+  let {
+    shoppingCartReplaceItems,
+    loading: shoppingCartLoading,
+  } = useCheckoutReplaceItem();
 
   let { addToCart, loading: addToCartLoading } = useAddToCart({
     onCompleted: async ({ addToShoppingCart }) => {
@@ -179,7 +182,8 @@ export default function ProductDetailsScene() {
     });
   }, [selectedOptions, getVariant]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let isLoading = getProductDetailsLoading || addToCartLoading;
+  let isLoading =
+    getProductDetailsLoading || addToCartLoading || shoppingCartLoading;
 
   let { data: wishlistData } = useGetWishlistData({
     onCompleted: ({ wishlist }) => {
@@ -198,9 +202,7 @@ export default function ProductDetailsScene() {
   let isLandscape = screenSize === ScreenSize.Large;
 
   return isFirstLoading ? (
-    <View style={styles.centered}>
-      <ActivityIndicator size="large" />
-    </View>
+    <ActivityIndicator style={styles.centered} />
   ) : (
     <View style={styles.flex}>
       <View style={[styles.flex, isLandscape && styles.flexRow]}>

@@ -1,6 +1,7 @@
+import React from 'react';
 import { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { BottomTabBarOptions } from '@react-navigation/bottom-tabs';
-import { DefaultTheme, Theme } from 'exoflex';
+import { DefaultTheme, Theme, IconButton } from 'exoflex';
 import { StackNavigationOptions } from '@react-navigation/stack';
 
 import { COLORS } from './colors';
@@ -46,6 +47,7 @@ export const CustomTheme: Theme = {
   colors: ColorTheme,
   roundness: 2,
 };
+
 export const headerOptions: StackNavigationOptions = {
   cardStyle: {
     backgroundColor: COLORS.white,
@@ -58,11 +60,18 @@ export const headerOptions: StackNavigationOptions = {
   headerLeftContainerStyle: {
     marginLeft: 8,
   },
-  headerTintColor: COLORS.primaryColor,
   headerStyle: {
     elevation: 1,
   },
   headerTitleAlign: 'center',
+  headerLeft: ({ onPress }) => (
+    <IconButton
+      icon="chevron-left"
+      color={COLORS.primaryColor}
+      size={24}
+      onPress={onPress}
+    />
+  ),
 };
 
 export const tabBarOptions: BottomTabBarOptions = {

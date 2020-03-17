@@ -57,6 +57,19 @@ export default function BottomActionBar(props: Props) {
     });
   };
 
+  let buttonLabel = () => {
+    if (isLoading) {
+      return null;
+    }
+    if (!product.id) {
+      return t('Unavailable');
+    }
+    if (product.availableForSale) {
+      return t('Add to Cart');
+    }
+    return t('Out of Stock');
+  };
+
   return (
     <View style={styles.bottomIconContainer}>
       <IconButton
@@ -89,17 +102,13 @@ export default function BottomActionBar(props: Props) {
           defaultButtonLabel,
           isButtonDisabled && styles.disabledLabel,
         ]}
-        disabled={isLoading || isButtonDisabled}
+        disabled={isButtonDisabled}
         loading={isLoading}
         onPress={() => {
           onAddToCartPress();
         }}
       >
-        {!product.id
-          ? t('Unavailable')
-          : product.availableForSale
-          ? t('Add to Cart')
-          : t('Out of Stock')}
+        {buttonLabel()}
       </Button>
     </View>
   );

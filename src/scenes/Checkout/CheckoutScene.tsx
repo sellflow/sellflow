@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     marginHorizontal: 36,
-    paddingTop: 24,
+    marginTop: 24,
   },
   landscape: { flexDirection: 'row' },
   priceViewLandscape: {

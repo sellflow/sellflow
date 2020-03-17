@@ -152,7 +152,9 @@ export default function HomeScene() {
         onEndReached={onProductsEndReached}
         onEndReachedThreshold={0.25}
         ListFooterComponent={() => {
-          return hasMore ? <ActivityIndicator /> : null;
+          return hasMore ? (
+            <ActivityIndicator style={styles.activityIndicator} />
+          ) : null;
         }}
       />
     </View>
@@ -187,5 +189,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     marginTop: 8,
     marginBottom: 16,
+  },
+  activityIndicator: {
+    marginVertical: 24,
   },
 });

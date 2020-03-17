@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, ActivityIndicator, Portal } from 'exoflex';
+import { TextInput, Button, Portal } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
@@ -55,16 +55,10 @@ export default function ForgotPasswordScene() {
     navigate('Auth', { initialRouteKey: 'Login' });
   };
 
-  if (loading) {
-    <View style={styles.center}>
-      <ActivityIndicator size="large" />
-    </View>;
-  }
-
   let errorMessage = isError
-    ? t(' {error}', { error })
+    ? t('{error}', { error })
     : t(
-        'Please check your email, An email has been sent to reset your password.',
+        'An email has been sent to reset your password. Please check your email.',
       );
 
   return (
@@ -99,8 +93,9 @@ export default function ForgotPasswordScene() {
         style={[defaultButton, styles.buttonStyle]}
         labelStyle={defaultButtonLabel}
         onPress={onPressButton}
+        loading={loading}
       >
-        {t('Reset Password')}
+        {!loading && t('Reset Password')}
       </Button>
     </View>
   );
@@ -109,11 +104,6 @@ export default function ForgotPasswordScene() {
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   textInputContainer: {
     flex: 1,

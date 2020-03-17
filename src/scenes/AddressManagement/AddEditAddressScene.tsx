@@ -188,7 +188,7 @@ export default function AddEditAddressScene() {
   });
 
   if (loadingDeleteAddress) {
-    return <ActivityIndicator size="large" style={styles.centered} />;
+    return <ActivityIndicator style={styles.centered} />;
   }
 
   return (
@@ -333,13 +333,11 @@ export default function AddEditAddressScene() {
           style={[defaultButton, styles.buttonStyle]}
           labelStyle={defaultButtonLabel}
           onPress={onPressSaveAddress}
+          disabled={isAddressDataEmpty}
           loading={loadingAddNewAddress || loadingEditAddress}
-          disabled={
-            loadingAddNewAddress || loadingEditAddress || isAddressDataEmpty
-          }
         >
           <Text weight="medium" style={styles.buttonText}>
-            {t('Save Address')}
+            {!loadingAddNewAddress && !loadingEditAddress && t('Save Address')}
           </Text>
         </Button>
       </KeyboardAvoidingView>

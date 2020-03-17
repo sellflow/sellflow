@@ -94,7 +94,7 @@ export default function ProductInfo(props: Props) {
         </View>
         <View style={[styles.paddingHorizontal, styles.description]}>
           <Text style={styles.labelStyle}>{t('Description')}</Text>
-          <Text>{product.description}</Text>
+          <Text>{product.description || t('No description')}</Text>
         </View>
       </KeyboardAvoidingView>
     </>

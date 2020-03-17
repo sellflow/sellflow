@@ -155,7 +155,9 @@ export default function ProductsView(props: Props) {
           onEndReached={onEndReached}
           onEndReachedThreshold={0.25}
           ListFooterComponent={() => {
-            return hasMore ? <ActivityIndicator /> : null;
+            return hasMore ? (
+              <ActivityIndicator style={styles.activityIndicator} />
+            ) : null;
           }}
         />
       </View>
@@ -253,5 +255,8 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.MEDIUM,
     color: COLORS.primaryColor,
     fontSize: FONT_SIZE.medium,
+  },
+  activityIndicator: {
+    marginVertical: 24,
   },
 });

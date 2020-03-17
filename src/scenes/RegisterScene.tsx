@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
-  Alert,
   TextInput as TextInputType,
+  TouchableOpacity,
 } from 'react-native';
 import { Text, TextInput, Button, Portal } from 'exoflex';
 
@@ -23,6 +23,7 @@ import { useCustomerRegister } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
 import { ModalBottomSheet } from '../core-ui';
 import { ModalBottomSheetMessage } from '../components';
+import { useGetShop } from '../hooks/api/useCustomerAddress';
 
 export default function RegisterScene() {
   let navigation = useNavigation<StackNavProp<'Register'>>();
@@ -35,6 +36,7 @@ export default function RegisterScene() {
   let [isVisible, setIsVisible] = useState<boolean>(false);
   let [errorMessage, setErrorMessage] = useState<string>('');
   let toggleModalVisible = () => setIsVisible(!isVisible);
+  let { data } = useGetShop();
 
   let dimensions = useDimensions();
   let onSubmit = () => {
@@ -48,8 +50,10 @@ export default function RegisterScene() {
     });
   };
   let onTermsPressed = () => {
-    Alert.alert('Terms & Condition');
-    // TODO: Show terms and condition here
+    navigation.navigate('WebView', {
+      webUrl: data?.shop.termsOfService?.url,
+      type: 'terms',
+    });
   };
 
   let firstNameRef = useRef<TextInputType>(null);
@@ -221,7 +225,6 @@ export default function RegisterScene() {
         <View style={styles.textInputContainer}>
           <Text style={styles.greyText}>{t('Password')}</Text>
           <TextInput
-            textContentType="password"
             autoCapitalize="none"
             onFocus={() => {
               setIsPasswordValid(true);
@@ -272,11 +275,11 @@ export default function RegisterScene() {
       </View>
       <View>
         <Text style={styles.termsAndConditionText}>
-          {t('By clicking Register, you agree with our ')}
-          <Text style={styles.primaryColorText} onPress={onTermsPressed}>
-            {t('Terms & Conditions')}
-          </Text>
+          {t('By clicking Register, you agree with our')}
         </Text>
+        <TouchableOpacity onPress={onTermsPressed} activeOpacity={1}>
+          <Text style={styles.primaryColorText}>{t('Terms & Conditions')}</Text>
+        </TouchableOpacity>
         <Button
           loading={isLoading}
           onPress={onSubmit}
@@ -284,7 +287,7 @@ export default function RegisterScene() {
           disabled={isDisabled}
           labelStyle={defaultButtonLabel}
         >
-          {t('Register')}
+          {!isLoading && t('Register')}
         </Button>
       </View>
     </View>
@@ -315,6 +318,9 @@ const styles = StyleSheet.create({
   },
   primaryColorText: {
     color: COLORS.primaryColor,
+    marginTop: 4,
+    alignSelf: 'center',
+    textAlign: 'center',
   },
   insideTextInputContainer: {
     margin: 0,

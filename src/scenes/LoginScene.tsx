@@ -207,7 +207,7 @@ export default function LoginScene() {
         labelStyle={defaultButtonLabel}
         onPress={onSubmit}
       >
-        {t('Log in')}
+        {!isLoading && t('Log in')}
       </Button>
     </View>
   );

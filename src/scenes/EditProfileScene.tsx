@@ -100,11 +100,7 @@ export default function EditProfileScene() {
   });
 
   if (getAuthenticatedUserLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <ActivityIndicator style={styles.centered} />;
   }
 
   let isDisabled =
@@ -228,7 +224,7 @@ export default function EditProfileScene() {
           style={[defaultButton, styles.buttonSaveContainer]}
           labelStyle={defaultButtonLabel}
         >
-          {t('Save Changes')}
+          {!saving && t('Save Changes')}
         </Button>
       </View>
     </ScrollView>

@@ -110,7 +110,7 @@ export default function AddressManagementScene() {
   let loading =
     loadingAddresses || loadingDeleteAddress || loadingSetDefaultAddress;
   if (loading && !isFetchingMore) {
-    return <ActivityIndicator size="large" style={styles.centered} />;
+    return <ActivityIndicator style={styles.centered} />;
   }
 
   return (

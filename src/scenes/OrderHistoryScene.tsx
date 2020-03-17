@@ -49,15 +49,19 @@ export default function OrderHistoryScene() {
       )}
       keyExtractor={(item) => item.orderID}
       contentContainerStyle={styles.contentContainer}
-      ListEmptyComponent={() => (
-        <View style={styles.center}>
-          <Text>{t('No orders yet')}</Text>
-        </View>
-      )}
+      ListEmptyComponent={() => {
+        return hasMore ? null : (
+          <View style={styles.center}>
+            <Text>{t('No orders yet')}</Text>
+          </View>
+        );
+      }}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.25}
       ListFooterComponent={() => {
-        return hasMore ? <ActivityIndicator /> : null;
+        return hasMore ? (
+          <ActivityIndicator style={styles.activityIndicator} />
+        ) : null;
       }}
     />
   );
@@ -70,7 +74,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
+    flexGrow: 1,
     paddingVertical: 16,
     paddingHorizontal: 24,
+  },
+  activityIndicator: {
+    marginVertical: 24,
   },
 });
