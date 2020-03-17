@@ -7,6 +7,7 @@ import {
   TextStyle,
   FlatList,
   TouchableOpacity,
+  FlatListProps,
 } from 'react-native';
 import { Text } from 'exoflex';
 
@@ -14,7 +15,9 @@ import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { CategoryItem } from '../types/types';
 
-type Props = {
+type BaseProps = FlatListProps<CategoryItem>;
+
+type Props = Omit<BaseProps, 'data' | 'renderItem' | 'numColumns'> & {
   containerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   categories: Array<CategoryItem>;
@@ -26,7 +29,13 @@ function Separator() {
 }
 
 export default function CategoryList(props: Props) {
-  let { containerStyle, textStyle, categories, onSelect } = props;
+  let {
+    containerStyle,
+    textStyle,
+    categories,
+    onSelect,
+    ...otherprops
+  } = props;
 
   return (
     <FlatList
@@ -46,6 +55,7 @@ export default function CategoryList(props: Props) {
       ItemSeparatorComponent={Separator}
       keyExtractor={(item) => item.id}
       contentContainerStyle={styles.flatlistContainer}
+      {...otherprops}
     />
   );
 }

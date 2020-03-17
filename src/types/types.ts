@@ -77,6 +77,7 @@ export type CategoryItem = {
   id: string;
   title: string;
   handle: string;
+  cursor: string;
 };
 
 export type LocalData = {

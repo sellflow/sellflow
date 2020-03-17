@@ -2,7 +2,7 @@ import {
   GetCollection_collectionByHandle_products as CollectionProducts,
   GetCollection_collectionByHandle_products_edges as FilteredProducts,
 } from '../generated/server/GetCollection';
-import { GetCategoriesAndFeaturedProducts_products as FeaturedProducts } from '../generated/server/GetCategoriesAndFeaturedProducts';
+import { GetFeaturedProducts_products as FeaturedProducts } from '../generated/server/GetFeaturedProducts';
 import { SearchResults_products as SearchResultProducts } from '../generated/server/SearchResults';
 import { Product } from '../types/types';
 import { getDiscount } from './getDiscount';
