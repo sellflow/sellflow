@@ -30,13 +30,19 @@ export const SEARCH_RESULTS = gql`
     $searchText: String!
     $sortKey: ProductSortKeys
     $reverse: Boolean
+    $first: Int!
+    $after: String
   ) {
     products(
-      first: 10
+      first: $first
       query: $searchText
       sortKey: $sortKey
       reverse: $reverse
+      after: $after
     ) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         cursor
         node {

@@ -20,7 +20,7 @@ export default function HomeScene() {
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
-  let first = numColumns * 5;
+  let first = numColumns * 6;
 
   let {
     loading: loadingCurrency,

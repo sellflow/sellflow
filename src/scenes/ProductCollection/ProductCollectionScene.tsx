@@ -33,7 +33,7 @@ export default function ProductCollectionScene() {
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   const collectionHandle = params.collection.handle;
   let numColumns = useColumns();
-  let first = numColumns * 5;
+  let first = numColumns * 6;
 
   let {
     collection,
@@ -99,7 +99,7 @@ export default function ProductCollectionScene() {
     });
   };
   let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
-    if (distanceFromEnd > 0 && !isFetchingMore) {
+    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
       refetch('scroll', {
         collectionHandle,
         first,

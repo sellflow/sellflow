@@ -9,26 +9,33 @@ import { ProductSortKeys } from '../../generated/server/globalTypes';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
 import { formatSliderValue } from '../../helpers/formatSliderValue';
+import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
+import { SearchModal } from '../../components';
+import { useColumns } from '../../helpers/columns';
 
 export default function SearchResultsScene() {
   let maxPrice = useGetHighestPrice();
   let { maxPriceValue } = formatSliderValue(maxPrice);
-
+  let defaultCurrency = useDefaultCurrency().data;
   let { navigate, setOptions } = useNavigation<StackNavProp<'SearchResults'>>();
-
+  let numColumns = useColumns();
+  let first = numColumns * 6;
+  let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
   let [priceRange, setPriceRange] = useState<[number, number]>([
     0,
     maxPriceValue,
   ]);
-  let [sortVariables, setSortVariables] = useState({
-    sortKey: ProductSortKeys.ID,
-    reverse: false,
-  });
   let { params } = useRoute<StackRouteProp<'SearchResults'>>();
 
   let searchKeyword = params.searchKeyword;
-  let { searchProducts, data: results } = useSearchProductsQuery();
+  let {
+    searchProducts,
+    results,
+    refetch,
+    isFetchingMore,
+    hasMore,
+  } = useSearchProductsQuery();
 
   let getSortKeys = (value: string) => {
     let sortKey = ProductSortKeys.BEST_SELLING;
@@ -47,27 +54,36 @@ export default function SearchResultsScene() {
   useEffect(() => {
     searchProducts({
       variables: {
+        first,
+        presentmentCurrencies: [defaultCurrency],
         searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
-        sortKey: sortVariables.sortKey,
-        reverse: sortVariables.reverse,
+        sortKey: ProductSortKeys.BEST_SELLING,
       },
     });
-  }, [
-    priceRange,
-    searchKeyword,
-    searchProducts,
-    sortVariables.reverse,
-    sortVariables.sortKey,
-  ]);
+  }, [searchKeyword]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
   let onSetFilter = (values: [number, number]) => {
     setPriceRange(values);
+    refetch('update', {
+      first,
+      searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
+    });
   };
   let onPressRadioButton = (newValue: string) => {
     setRadioButtonValue(newValue);
-    setSortVariables(getSortKeys(newValue));
+    let { sortKey, reverse } = getSortKeys(newValue);
+    refetch('update', {
+      first,
+      searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
+      sortKey,
+      reverse,
+    });
   };
+  let onSubmit = (searchKeyword: string) =>
+    navigate('SearchResults', {
+      searchKeyword,
+    });
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { productHandle: product.handle });
   };
@@ -81,21 +97,38 @@ export default function SearchResultsScene() {
       gestureEnabled: true,
     });
   };
+  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
+    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+      refetch('scroll', {
+        searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
+        first,
+        after: results[results.length - 1].cursor || null,
+      });
+    }
+  };
 
   return (
-    <ProductsView
-      products={results}
-      onItemPress={onItemPress}
-      hasMore={false}
-      onEndReached={() => {}}
-      sortProps={{ radioButtonValue, onPressRadioButton }}
-      filterProps={{
-        priceRange,
-        onClearFilter,
-        onSetFilter,
-        onValuesChangeStart,
-        onValuesChangeFinish,
-      }}
-    />
+    <>
+      <ProductsView
+        products={results}
+        onItemPress={onItemPress}
+        hasMore={false}
+        onEndReached={onEndReached}
+        sortProps={{ radioButtonValue, onPressRadioButton }}
+        filterProps={{
+          priceRange,
+          onClearFilter,
+          onSetFilter,
+          onValuesChangeStart,
+          onValuesChangeFinish,
+        }}
+      />
+      <SearchModal
+        onItemPress={onItemPress}
+        onSubmit={onSubmit}
+        isVisible={isSearchModalVisible}
+        setVisible={setSearchModalVisible}
+      />
+    </>
   );
 }

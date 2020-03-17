@@ -34,7 +34,7 @@ export default function SearchModal(props: Props) {
 
   let {
     searchProducts,
-    data: searchResults,
+    results,
     loading: searchLoading,
   } = useSearchProductsQuery();
   let { data: recentSearch } = useGetRecentSearch();
@@ -52,6 +52,7 @@ export default function SearchModal(props: Props) {
   useEffect(() => {
     searchProducts({
       variables: {
+        first: 10,
         searchText: debouncedSearchText,
       },
     });
@@ -143,7 +144,7 @@ export default function SearchModal(props: Props) {
             {searchLoading ? (
               <ActivityIndicator />
             ) : searchText !== '' ? (
-              renderList({ results: searchResults })
+              renderList({ results })
             ) : (
               renderList({ recent: recentSearch.recentSearch })
             )}
@@ -171,8 +172,6 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   closeIcon: {
-    // The default marginTop is 8, but the icon appears a little off-center
-    // vertically, so we're bumping it by two points.
     marginTop: 10,
     marginLeft: 16,
   },
