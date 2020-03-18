@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Text, ActivityIndicator, Button } from 'exoflex';
+import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
@@ -36,25 +36,13 @@ export default function ProfileScene() {
 
   let onLogout = () => {
     setAuthToken('');
-    navigate('Profile');
+    navigate('Home');
   };
 
   let { email, firstName, lastName } = authenticatedUser.authenticatedUser;
 
   if (!authToken) {
-    // TODO: Render LockedFeature Scene
-    return (
-      <View>
-        <Button onPress={() => navigate('Auth', { initialRouteKey: 'Login' })}>
-          Go to Login
-        </Button>
-        <Button
-          onPress={() => navigate('Auth', { initialRouteKey: 'Register' })}
-        >
-          Go to Register
-        </Button>
-      </View>
-    );
+    navigate('LockScene');
   }
 
   return (

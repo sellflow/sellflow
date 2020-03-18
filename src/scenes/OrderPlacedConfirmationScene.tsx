@@ -4,83 +4,105 @@ import {
   SafeAreaView,
   Image,
   Text,
-  TouchableOpacity,
+  View,
+  ActivityIndicator,
 } from 'react-native';
-import image from '../.././assets/images/checkMark.png';
+import { useNavigation } from '@react-navigation/native';
 import { Button } from 'exoflex';
-import { defaultButton } from '../constants/theme';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { StackNavProp, StackRouteProp } from '../types/Navigation';
+
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { useAuth } from '../helpers/useAuth';
+import { useOrderHistory } from '../hooks/api/useOrderHistory';
+import { successImage } from '../.././assets/images';
+
 export default function OrderPlacedConfirmation() {
-  let { navigate } = useNavigation<StackNavProp<'OrderPlacedConfirmation'>>();
-  let route = useRoute<StackRouteProp<'OrderPlacedConfirmation'>>();
-  const navigation = useNavigation();
-  let { orderNumber } = route.params;
+  let { reset, navigate } = useNavigation();
   let { authToken } = useAuth();
 
-  return (
-    <SafeAreaView style={styles.scene}>
-      <Image source={image} width={590} height={590} style={styles.image} />
+  let { orderHistory, loading } = useOrderHistory(1, authToken);
+  let orderNumber = orderHistory.length > 0 ? orderHistory[0].orderNumber : '';
 
-      <Text style={styles.purchase}>
-        {t(
-          `Thank you for your purchase! Your order {orderNumber} has been received and will be process.`,
-          { orderNumber },
-        )}
-      </Text>
+  return loading ? (
+    <ActivityIndicator style={styles.centered} />
+  ) : (
+    <SafeAreaView style={styles.scene}>
+      <View style={styles.textView}>
+        <Image source={successImage} style={styles.image} />
+        <Text style={styles.purchase}>
+          {t(
+            `Thank you for your purchase! Your order {orderNumber} has been received and will be processed shortly.`,
+            { orderNumber },
+          )}
+        </Text>
+      </View>
 
       <Button
         style={defaultButton}
+        labelStyle={defaultButtonLabel}
         onPress={() => {
-          // Put Order History Scene Here
-          navigate('OrderHistory', { customerAccessToken: authToken });
-        }}
-      >
-        {t('VIEW ORDER HISTORY')}
-      </Button>
-
-      <TouchableOpacity
-        style={styles.buttonToHome}
-        onPress={() =>
-          navigation.reset({
+          reset({
             index: 0,
             routes: [
-              { name: 'Home' },
-              { name: 'Wishlist' },
-              { name: 'Profile' },
+              {
+                name: 'Home',
+              },
             ],
+          });
+          navigate('OrderHistory', {
+            customerAccessToken: authToken,
+          });
+        }}
+      >
+        {t('View Order History')}
+      </Button>
+
+      <Button
+        preset="invisible"
+        style={styles.backButton}
+        labelStyle={defaultButtonLabel}
+        onPress={() =>
+          reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
           })
         }
       >
-        <Text style={styles.backToHomeText}>{t('Back To Home')}</Text>
-      </TouchableOpacity>
+        {t('Back To Home')}
+      </Button>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   scene: {
-    justifyContent: 'center',
     flex: 1,
+    justifyContent: 'space-between',
+    marginHorizontal: 24,
+  },
+  textView: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 60,
   },
   image: {
-    resizeMode: 'contain',
-    maxWidth: 280,
-    maxHeight: 280,
-    borderRadius: 200 / 2,
-  },
-  buttonToHome: {
-    top: 100,
-  },
-  backToHomeText: {
-    color: '#004fb4',
-    textTransform: 'uppercase',
+    maxWidth: 84,
+    maxHeight: 84,
   },
   purchase: {
-    fontSize: 14,
     textAlign: 'center',
-    paddingBottom: 100,
+    marginTop: 24,
+    marginBottom: 100,
+    marginHorizontal: 12,
+    lineHeight: 24,
+  },
+  backButton: {
+    marginTop: 16,
+    marginBottom: 24,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

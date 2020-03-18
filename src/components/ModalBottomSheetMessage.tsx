@@ -3,6 +3,7 @@ import { View, Image, StyleSheet } from 'react-native';
 import { Text, Button } from 'exoflex';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
+import { successImage, errorImage } from '../../assets/images';
 
 type Props = {
   isError: boolean;
@@ -17,15 +18,9 @@ export default function ModalBottomSheetMessage(props: Props) {
     <>
       <View style={styles.iconContainer}>
         {isError ? (
-          <Image
-            source={require('../../assets/images/errorImage.png')}
-            style={styles.image}
-          />
+          <Image source={errorImage} style={styles.image} />
         ) : (
-          <Image
-            source={require('../../assets/images/successImage.png')}
-            style={styles.image}
-          />
+          <Image source={successImage} style={styles.image} />
         )}
       </View>
       <Text style={styles.message}>{t(' {message}', { message })}</Text>

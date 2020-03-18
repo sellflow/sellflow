@@ -39,7 +39,7 @@ export default function WebScene() {
         onShouldStartLoadWithRequest={({ url }) => {
           if (url.endsWith('thank_you')) {
             resetShoppingCart();
-            navigate('Home');
+            navigate('OrderPlacedConfirmation');
             return false;
           }
           return true;

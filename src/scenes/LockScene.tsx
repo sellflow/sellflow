@@ -4,40 +4,55 @@ import {
   View,
   SafeAreaView,
   Image,
-  Text,
   TouchableOpacity,
 } from 'react-native';
-import image from '../.././assets/images/lock.png';
-import { Button } from 'exoflex';
-import { defaultButton } from '../constants/theme';
+import { Text, Button, IconButton } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
+
+import { lock } from '../.././assets/images';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
+import { COLORS } from '../constants/colors';
 
 export default function LockScene() {
-  let { navigate } = useNavigation<StackNavProp<'LockScene'>>();
+  let { navigate, setOptions } = useNavigation<StackNavProp<'LockScene'>>();
+
+  setOptions({
+    headerLeft: () => (
+      <IconButton
+        icon="chevron-left"
+        color={COLORS.primaryColor}
+        size={24}
+        onPress={() => navigate('Home')}
+      />
+    ),
+  });
 
   return (
     <SafeAreaView style={styles.scene}>
-      <Image source={image} width={100} height={100} style={styles.image} />
-
-      <Text style={styles.loginNotification}>
-        {t('Hey there! To continue please log in or create an account.')}
-      </Text>
-
+      <View style={styles.imageContainer}>
+        <Image source={lock} style={styles.image} />
+        <Text style={styles.descriptionText}>
+          {t('Hey there! To continue please log in or create an account.')}
+        </Text>
+      </View>
       <Button
         style={defaultButton}
+        labelStyle={defaultButtonLabel}
         onPress={() => {
-          navigate('Register');
+          navigate('Auth', { initialRouteKey: 'Register' });
         }}
       >
-        {t('REGISTER')}
+        {t('Register')}
       </Button>
       <View style={styles.flexRow}>
-        <Text style={styles.accountAlreadyText}>
-          {t('Already have an account?')}
-        </Text>
-        <TouchableOpacity style={styles.top} onPress={() => navigate('Login')}>
-          <Text style={styles.loginColor}>{t('Log In')}</Text>
+        <Text>{t('Already have an account? ')}</Text>
+        <TouchableOpacity
+          onPress={() => navigate('Auth', { initialRouteKey: 'Login' })}
+        >
+          <Text style={styles.loginText} weight="medium">
+            {t('Log In')}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -46,31 +61,34 @@ export default function LockScene() {
 
 const styles = StyleSheet.create({
   scene: {
-    justifyContent: 'center',
+    flex: 1,
+    justifyContent: 'space-between',
+    marginHorizontal: 24,
+  },
+  imageContainer: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
+    flex: 1,
     resizeMode: 'contain',
-    maxWidth: 280,
-    maxHeight: 280,
+    maxWidth: 240,
+    maxHeight: 180,
   },
-  loginNotification: {
-    fontSize: 18,
+  descriptionText: {
     textAlign: 'center',
-    paddingBottom: 100,
+    marginTop: 24,
+    lineHeight: 24,
+    opacity: 0.6,
   },
   flexRow: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 12,
+    marginBottom: 24,
   },
-  accountAlreadyText: {
-    top: 100,
-    paddingRight: 10,
-  },
-  top: {
-    top: 100,
-  },
-  loginColor: {
-    color: '#004fb4',
+  loginText: {
+    color: COLORS.primaryColor,
   },
 });

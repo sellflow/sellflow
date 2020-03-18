@@ -71,6 +71,7 @@ export default function LoginScene() {
         index: 0,
         routes: [{ name: 'Profile' }],
       });
+      navigate('Home');
     },
   });
 
