@@ -41,10 +41,6 @@ export default function ProfileScene() {
 
   let { email, firstName, lastName } = authenticatedUser.authenticatedUser;
 
-  if (!authToken) {
-    navigate('LockScene');
-  }
-
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity

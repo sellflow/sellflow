@@ -78,19 +78,21 @@ export default function StackNavigator({
   route: Route<TabRouteName>;
   navigation: NavigationProp<TabParamList>;
 }) {
+  let { authToken } = useAuth();
   let initialRouteName: StackRouteName;
   if (route.name === 'HomeTab') {
     initialRouteName = 'Home';
   } else if (route.name === 'WishlistTab') {
     initialRouteName = 'Wishlist';
-  } else {
+  } else if (authToken) {
     initialRouteName = 'Profile';
+  } else {
+    initialRouteName = 'LockScene';
   }
-  let { authToken } = useAuth();
 
-  if (initialRouteName === 'Profile') {
+  if (initialRouteName === 'LockScene') {
     navigation.setOptions({
-      tabBarVisible: !!authToken,
+      tabBarVisible: false,
     });
   }
 
