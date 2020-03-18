@@ -33,9 +33,14 @@ function TabStory() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <TabView
         isScrollEnabled={true}
+        routes={routes}
+        containerStyle={styles.tabContainerStyle}
+      />
+      <TabView
+        isScrollEnabled={false}
         routes={routes}
         containerStyle={styles.tabContainerStyle}
       />
@@ -44,6 +49,10 @@ function TabStory() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-around',
+  },
   tabBoxContainer: {
     height: 100,
   },
