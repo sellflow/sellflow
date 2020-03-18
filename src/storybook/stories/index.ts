@@ -1,10 +1,8 @@
 import carouselStory from './core-ui/carouselStory';
 import discountBadgeStory from './core-ui/discountBadgeStory';
-import datePickerStory from './core-ui/datePickerStory';
 import categoryListStory from './core-ui/categoryListStory';
 import richRadioGroupStory from './core-ui/richRadioGroupStory';
 import searchInputStory from './core-ui/searchInputStory';
-import stepIndicatorStory from './core-ui/stepIndicatorStory';
 import surfaceStory from './core-ui/surfaceStory';
 import tabStory from './core-ui/tabStory';
 import modalBottomSheetStory from './core-ui/modalBottomSheetStory';
@@ -25,7 +23,6 @@ discountBadgeStory();
 productItemStory();
 richRadioGroupStory();
 searchInputStory();
-stepIndicatorStory();
 surfaceStory();
 tabStory();
 modalBottomSheetStory();
