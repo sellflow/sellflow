@@ -32,4 +32,3 @@ manageAddressStory();
 checkoutAddressStory();
 orderHistoryItemStory();
 orderItemStory();
-datePickerStory();
