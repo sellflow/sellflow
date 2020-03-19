@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import { SearchInput } from '../../../core-ui';
 
 export default function searchInputStory() {
-  return storiesOf('Search Input', module).add('Default', () => (
+  return storiesOf('Search Input', module).add('Search Input', () => (
     <View style={style.container}>
       <SearchInput
         style={style.searchInput}

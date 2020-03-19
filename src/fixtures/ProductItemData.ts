@@ -5,7 +5,7 @@ export const ProductItemData: Array<Product> = [
     id: '1',
     cursor: '',
     images: [
-      'https://s7d5.scene7.com/is/images/UrbanOutfitters/51302875_016_b',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Box Flannel Truc[ker',
     handle: 'box-flannel-trucker',
@@ -18,7 +18,7 @@ export const ProductItemData: Array<Product> = [
     id: '2',
     cursor: '',
     images: [
-      'https://s7d5.scene7.com/is/images/UrbanOutfitters/51302875_016_b',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Box Flannel Truc[ker',
     handle: 'box-flannel-trucker',
@@ -31,7 +31,7 @@ export const ProductItemData: Array<Product> = [
     id: '3',
     cursor: '',
     images: [
-      'https://s7d5.scene7.com/is/images/UrbanOutfitters/51302875_016_b',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Box Flannel Truc[ker',
     handle: 'box-flannel-trucker',
@@ -44,7 +44,7 @@ export const ProductItemData: Array<Product> = [
     id: '4',
     cursor: '',
     images: [
-      'https://www.static-src.com/wcsstore/Indraprastha/imagess/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Sweater Champ[ion',
     handle: 'sweater-champion',
@@ -57,7 +57,7 @@ export const ProductItemData: Array<Product> = [
     id: '5',
     cursor: '',
     images: [
-      'https://www.static-src.com/wcsstore/Indraprastha/imagess/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Sweater Champ[ion',
     handle: 'sweater-champion',
@@ -70,7 +70,7 @@ export const ProductItemData: Array<Product> = [
     id: '6',
     cursor: '',
     images: [
-      'https://www.static-src.com/wcsstore/Indraprastha/imagess/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Sweater Champ[ion',
     handle: 'sweater-champion',
@@ -83,7 +83,7 @@ export const ProductItemData: Array<Product> = [
     id: '7',
     cursor: '',
     images: [
-      'https://www.static-src.com/wcsstore/Indraprastha/imagess/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Sweater Champ[ion',
     handle: 'sweater-champion',
@@ -96,7 +96,7 @@ export const ProductItemData: Array<Product> = [
     id: '8',
     cursor: '',
     images: [
-      'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-2792088/champion_champion-crewneck-sweater-pria---grey_full06.jpg',
+      'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
     ],
     title: 'Sweater Champion',
     handle: 'sweater-champion',

@@ -1,4 +1,5 @@
 import '../polyfills';
+import '../filterWarnings';
 import React from 'react';
 import { registerRootComponent } from 'expo';
 import { getStorybookUI, configure } from '@storybook/react-native';
@@ -13,6 +14,7 @@ configure(() => {
 const StorybookUIRoot = getStorybookUI({
   onDeviceUI: true,
   disableWebsockets: true,
+  asyncStorage: require('react-native').AsyncStorage || null,
 });
 
 function App() {

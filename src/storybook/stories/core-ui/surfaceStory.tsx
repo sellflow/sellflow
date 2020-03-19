@@ -5,20 +5,17 @@ import { storiesOf } from '@storybook/react-native';
 import { Surface } from '../../../core-ui';
 import { COLORS } from '../../../constants/colors';
 import { FONT_SIZE, FONT_FAMILY } from '../../../constants/fonts';
+import { addressItemData } from '../../../fixtures/AddressItemData';
 
 export default function SurfaceStory() {
   return storiesOf('Surface', module).add('Surface', () => (
     <View style={styles.container}>
-      <Surface>
-        <Text style={styles.title}>{'Anna Belle'}</Text>
-        <Text>
-          {
-            'Jl. Scientia Boulevard, Curug Sangereng, Kec. Klp. Dua, Tangerang, Banten 15810'
-          }
-        </Text>
-        <Text>{'0876123987'}</Text>
+      <Surface containerStyle={styles.padding}>
+        <Text style={styles.title}>{addressItemData[0].name}</Text>
+        <Text>{addressItemData[0].address1}</Text>
+        <Text>{addressItemData[0].phone}</Text>
       </Surface>
-      <Surface mode="row">
+      <Surface mode="row" containerStyle={styles.padding}>
         <Text>{'Delivered'}</Text>
         <View
           style={[
@@ -27,7 +24,7 @@ export default function SurfaceStory() {
           ]}
         />
       </Surface>
-      <Surface mode="row">
+      <Surface mode="row" containerStyle={styles.padding}>
         <Text>{'On Courier'}</Text>
         <View
           style={[
@@ -59,5 +56,8 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: FONT_FAMILY.BOLD,
     fontSize: FONT_SIZE.large,
+  },
+  padding: {
+    padding: 12,
   },
 });

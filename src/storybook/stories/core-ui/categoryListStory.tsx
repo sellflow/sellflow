@@ -8,10 +8,7 @@ import { CategoryListData } from '../../../fixtures/CategoryListData';
 export default function categoryListStory() {
   return storiesOf('Category List', module).add('Category List', () => (
     <View style={style.container}>
-      <CategoryList
-        categories={CategoryListData}
-        onSelect={(category) => category}
-      />
+      <CategoryList categories={CategoryListData} onSelect={() => {}} />
     </View>
   ));
 }
@@ -19,7 +16,7 @@ export default function categoryListStory() {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 24,
+    marginTop: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },

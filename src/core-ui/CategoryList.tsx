@@ -47,7 +47,8 @@ export default function CategoryList(props: Props) {
         <TouchableOpacity
           style={[
             styles.categoryItemContainer,
-            item.image ? styles.color : null,
+            styles.borderRadius,
+            !item.image && styles.color,
             containerStyle,
           ]}
           onPress={() => onSelect(item)}
@@ -56,7 +57,7 @@ export default function CategoryList(props: Props) {
             <ImageBackground
               source={{ uri: item.image }}
               imageStyle={styles.borderRadius}
-              style={styles.center}
+              style={styles.categoryItemContainer}
             >
               <Text
                 weight="medium"
@@ -82,13 +83,9 @@ export default function CategoryList(props: Props) {
 
 const styles = StyleSheet.create({
   categoryItemContainer: {
-    height: 48,
-    borderRadius: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  center: {
     flex: 1,
+    height: 48,
+    minWidth: 80,
     justifyContent: 'center',
     alignItems: 'center',
   },
