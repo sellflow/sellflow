@@ -45,7 +45,7 @@ export const GET_ORDER_HISTORY = gql`
               zip
               country
             }
-            lineItems(first: 20) {
+            lineItems(first: 250) {
               edges {
                 node {
                   discountAllocations {

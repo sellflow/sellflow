@@ -54,7 +54,7 @@ export const GET_CUSTOMER_DATA = gql`
       email
       lastIncompleteCheckout {
         id
-        lineItems(first: 100) {
+        lineItems(first: 250) {
           edges {
             node {
               variant {

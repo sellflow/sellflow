@@ -1,11 +1,27 @@
 import gql from 'graphql-tag';
 
-export const GET_FEATURED_PRODUCTS = gql`
-  query GetFeaturedProducts(
+export const GET_FEATURED_PRODUCTS_AND_CATEGORIES = gql`
+  query GetFeaturedProductsAndCategories(
     $presentmentCurrencies: [CurrencyCode!]
     $first: Int!
     $after: String
   ) {
+    collections(first: 250) {
+      edges {
+        cursor
+        node {
+          image {
+            transformedSrc
+          }
+          handle
+          id
+          title
+        }
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
     products(first: $first, after: $after) {
       pageInfo {
         hasNextPage
@@ -69,27 +85,6 @@ export const GET_FEATURED_PRODUCTS = gql`
             }
           }
         }
-      }
-    }
-  }
-`;
-
-export const GET_CATEGORIES = gql`
-  query GetCategories($first: Int!, $after: String) {
-    collections(first: $first, after: $after) {
-      edges {
-        cursor
-        node {
-          image {
-            transformedSrc
-          }
-          handle
-          id
-          title
-        }
-      }
-      pageInfo {
-        hasNextPage
       }
     }
   }

@@ -10,7 +10,7 @@ import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { Product } from '../types/types';
 import { useColumns } from '../helpers/columns';
-import { useProductQuery, useCategoryQuery } from '../hooks/api/useCollection';
+import { useProductsAndCategoriesQuery } from '../hooks/api/useCollection';
 import { COLORS } from '../constants/colors';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { CurrencyCode } from '../generated/server/globalTypes';
@@ -29,17 +29,11 @@ export default function HomeScene() {
   let {
     loading: loadingHomeData,
     products,
+    categories,
     refetch,
     hasMore,
     isFetchingMore,
-  } = useProductQuery(selectedCurrency, first);
-
-  let {
-    categories,
-    refetch: categoriesRefetch,
-    hasMore: categoriesHasMore,
-    isFetchingMore: categoriesIsFetchingMore,
-  } = useCategoryQuery(first);
+  } = useProductsAndCategoriesQuery(selectedCurrency, first);
 
   setOptions({
     headerLeft: () => <CurrencyPicker onPressCurrency={onPressCurrency} />,
@@ -72,18 +66,6 @@ export default function HomeScene() {
       });
     }
   };
-  let onCategoriesEndReached = ({
-    distanceFromEnd,
-  }: {
-    distanceFromEnd: number;
-  }) => {
-    if (distanceFromEnd > 0 && !categoriesIsFetchingMore && categoriesHasMore) {
-      categoriesRefetch({
-        first,
-        after: categories[categories.length - 1].cursor || null,
-      });
-    }
-  };
 
   if ((loadingHomeData || loadingCurrency || !products) && !isFetchingMore) {
     return (
@@ -92,6 +74,28 @@ export default function HomeScene() {
       </View>
     );
   }
+
+  let renderHeaderComponent = () => (
+    <View>
+      <Carousel
+        data={carouselData}
+        height={screenSize === ScreenSize.Small ? 180 : 384}
+      />
+
+      <View>
+        <Text style={styles.subTitle}>{t('Browse By Category')}</Text>
+        <CategoryList
+          categories={categories}
+          onSelect={(collection) => {
+            navigate('ProductCollection', {
+              collection,
+            });
+          }}
+        />
+      </View>
+      <Text style={styles.subTitle}>{t('Featured Products')}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.flex}>
@@ -114,37 +118,9 @@ export default function HomeScene() {
         isVisible={isSearchModalVisible}
         setVisible={setSearchModalVisible}
       />
-      <Carousel
-        data={carouselData}
-        height={screenSize === ScreenSize.Small ? 180 : 384}
-      />
 
-      <View>
-        <Text style={styles.subTitle}>{t('Browse By Category')}</Text>
-        <CategoryList
-          categories={categories}
-          onSelect={(collection) => {
-            navigate('ProductCollection', {
-              collection,
-            });
-          }}
-          onEndReached={onCategoriesEndReached}
-          onEndReachedThreshold={0.25}
-          ListFooterComponentStyle={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          ListFooterComponent={() => {
-            return categoriesHasMore ? <ActivityIndicator /> : null;
-          }}
-        />
-      </View>
       <ProductList
-        ListHeaderComponent={() => (
-          <View>
-            <Text style={styles.subTitle}>{t('Featured Products')}</Text>
-          </View>
-        )}
+        ListHeaderComponent={renderHeaderComponent}
         data={products}
         numColumns={numColumns}
         onItemPress={onItemPress}

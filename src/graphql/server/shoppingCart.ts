@@ -22,7 +22,7 @@ export const SHOPPING_CART_CREATE = gql`
         paymentDueV2 {
           amount
         }
-        lineItems(first: 20) {
+        lineItems(first: 250) {
           edges {
             node {
               id
@@ -89,7 +89,7 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
         paymentDueV2 {
           amount
         }
-        lineItems(first: 20) {
+        lineItems(first: 250) {
           edges {
             node {
               id
@@ -197,7 +197,7 @@ export const SHOPPING_CART_CUSTOMER_ASSOCIATE = gql`
     ) {
       checkout {
         id
-        lineItems(first: 19) {
+        lineItems(first: 250) {
           edges {
             node {
               title
@@ -245,7 +245,7 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
           amount
         }
         taxesIncluded
-        lineItems(first: 20) {
+        lineItems(first: 250) {
           edges {
             node {
               id

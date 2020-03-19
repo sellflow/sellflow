@@ -12,21 +12,13 @@ import {
   ProductCollectionSortKeys,
   CurrencyCode,
 } from '../../generated/server/globalTypes';
-import {
-  GET_FEATURED_PRODUCTS,
-  GET_CATEGORIES,
-} from '../../graphql/server/categoriesAndFeaturedProducts';
+import { GET_FEATURED_PRODUCTS_AND_CATEGORIES } from '../../graphql/server/categoriesAndFeaturedProducts';
 import useDefaultCurrency from './useDefaultCurrency';
 import mapToProducts from '../../helpers/mapToProducts';
 import {
-  GetFeaturedProducts,
-  GetFeaturedProductsVariables,
-} from '../../generated/server/GetFeaturedProducts';
-import {
-  GetCategories,
-  GetCategoriesVariables,
-} from '../../generated/server/GetCategories';
-
+  GetFeaturedProductsAndCategories,
+  GetFeaturedProductsAndCategoriesVariables,
+} from '../../generated/server/GetFeaturedProductsAndCategories';
 function filterProducts(
   collectionProducts: CollectionProducts,
   priceRange: [number, number],
@@ -175,16 +167,17 @@ function useCollectionQuery(
   };
 }
 
-function useProductQuery(currency: CurrencyCode, first: number) {
+function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
+  let [categories, setCategories] = useState<Array<CategoryItem>>([]);
   let [products, setProducts] = useState<Array<Product>>([]);
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
   let isFetchingMore = useRef(false);
   let hasMore = useRef(true);
 
   let { loading, data, refetch: refetchQuery } = useQuery<
-    GetFeaturedProducts,
-    GetFeaturedProductsVariables
-  >(GET_FEATURED_PRODUCTS, {
+    GetFeaturedProductsAndCategories,
+    GetFeaturedProductsAndCategoriesVariables
+  >(GET_FEATURED_PRODUCTS_AND_CATEGORIES, {
     variables: { first },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
@@ -192,7 +185,7 @@ function useProductQuery(currency: CurrencyCode, first: number) {
 
   let refetch = async (
     type: 'update' | 'scroll',
-    variables?: GetFeaturedProductsVariables,
+    variables?: GetFeaturedProductsAndCategoriesVariables,
   ) => {
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
@@ -214,57 +207,6 @@ function useProductQuery(currency: CurrencyCode, first: number) {
       let products = mapToProducts(data.products);
       hasMore.current = !!data.products.pageInfo.hasNextPage;
 
-      setProducts(products);
-      setInitFetching(false);
-    }
-  }, [loading, isInitFetching]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return {
-    products,
-    loading,
-    refetch,
-    hasMore: hasMore.current,
-    isFetchingMore: isFetchingMore.current,
-  };
-}
-
-function useCategoryQuery(first: number) {
-  let [categories, setCategories] = useState<Array<CategoryItem>>([]);
-  let [isInitFetching, setInitFetching] = useState<boolean>(true);
-  let isFetchingMore = useRef(false);
-  let hasMore = useRef(true);
-
-  let { loading, data, refetch: refetchQuery } = useQuery<
-    GetCategories,
-    GetCategoriesVariables
-  >(GET_CATEGORIES, {
-    variables: { first },
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
-  });
-
-  let refetch = async (variables?: GetCategoriesVariables) => {
-    isFetchingMore.current = true;
-    let { data } = await refetchQuery(variables);
-    let moreCategories: Array<CategoryItem> = data.collections.edges.map(
-      (item) => ({
-        id: item.node.id,
-        title: item.node.title,
-        handle: item.node.handle,
-        cursor: item.cursor,
-      }),
-    );
-
-    hasMore.current = !!data.collections.pageInfo.hasNextPage;
-    setCategories([...categories, ...moreCategories]);
-  };
-
-  useEffect(() => {
-    if (!loading) {
-      isFetchingMore.current = false;
-    }
-    if (isInitFetching && !!data) {
-      hasMore.current = !!data.collections.pageInfo.hasNextPage;
       let categories: Array<CategoryItem> = data.collections.edges.map(
         (item) => ({
           id: item.node.id,
@@ -275,17 +217,20 @@ function useCategoryQuery(first: number) {
         }),
       );
       setCategories(categories);
+
+      setProducts(products);
       setInitFetching(false);
     }
   }, [loading, isInitFetching]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
+    products,
+    loading,
     categories,
-    loading: isInitFetching,
     refetch,
     hasMore: hasMore.current,
     isFetchingMore: isFetchingMore.current,
   };
 }
 
-export { useCollectionQuery, useProductQuery, useCategoryQuery };
+export { useCollectionQuery, useProductsAndCategoriesQuery };
