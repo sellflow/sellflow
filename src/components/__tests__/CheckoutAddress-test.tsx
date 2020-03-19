@@ -19,7 +19,7 @@ test('should render normally', () => {
 
 test('should checked the address', () => {
   const App = () => {
-    let [isSelected, setSelected] = useState(false);
+    let [isSelected, setSelected] = useState<boolean>(false);
     return (
       <CheckoutAddress
         onEditPressed={() => {}}

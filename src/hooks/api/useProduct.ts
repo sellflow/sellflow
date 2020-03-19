@@ -14,11 +14,15 @@ import {
   GetProductByHandleVariables,
 } from '../../generated/server/GetProductByHandle';
 import { getDiscount } from '../../helpers/getDiscount';
+import { ProductDetails } from '../../types/types';
+import { emptyProduct } from '../../constants/defaultValues';
 
 function useGetProductDetails(
   options?: QueryHookOptions<GetProductByHandle, GetProductByHandleVariables>,
 ) {
-  let [productDetails, setProductDetails] = useState();
+  let [productDetails, setProductDetails] = useState<ProductDetails>(
+    emptyProduct,
+  );
 
   let { loading, data } = useQuery<
     GetProductByHandle,
@@ -51,8 +55,7 @@ function useGetProductDetails(
       );
 
       let { price, discount } = getDiscount(originalProductPrice, productPrice);
-
-      let newOptions = [...productByHandle.options];
+      let newOptions = productByHandle.options;
 
       if (
         variantProductByHandle &&

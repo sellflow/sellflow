@@ -83,8 +83,8 @@ function useOrderHistory(
 ) {
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
   let [orderHistory, setOrderHistory] = useState<Array<OrderRecord>>([]);
-  let isFetchingMore = useRef(false);
-  let hasMore = useRef(true);
+  let isFetchingMore = useRef<boolean>(false);
+  let hasMore = useRef<boolean>(true);
   let { data: currencyCode } = useDefaultCurrency();
 
   let { data, loading, refetch: refetchQuery } = useQuery<

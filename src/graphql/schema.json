@@ -12918,8 +12918,8 @@
               "name": "CheckoutCompleteWithTokenizedPaymentV2Payload",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use `checkoutCompleteWithTokenizedPaymentV3` instead"
           },
           {
             "name": "checkoutCreate",

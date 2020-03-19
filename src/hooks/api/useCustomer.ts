@@ -116,8 +116,8 @@ function useGetCustomerAddresses(
 ) {
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
   let [addresses, setAddresses] = useState<Array<AddressItem>>([]);
-  let isFetchingMore = useRef(false);
-  let hasMore = useRef(true);
+  let isFetchingMore = useRef<boolean>(false);
+  let hasMore = useRef<boolean>(true);
 
   let { data, loading, refetch: refetchQuery } = useQuery<
     GetCustomerAddresses,

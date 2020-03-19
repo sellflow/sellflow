@@ -22,7 +22,7 @@ let AuthContext = createContext<Context>({
 });
 
 export function Provider(props: Props) {
-  let [token, setToken] = useState('');
+  let [token, setToken] = useState<string>('');
 
   useEffect(() => {
     getToken().then((token) => {

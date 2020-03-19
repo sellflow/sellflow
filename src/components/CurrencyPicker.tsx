@@ -24,11 +24,8 @@ type Props = {
 
 export default function CurrencyPicker(props: Props) {
   let { onPressCurrency } = props;
-
-  let [visible, setVisible] = useState(false);
-
+  let [visible, setVisible] = useState<boolean>(false);
   let { setDefaultCurrency, data: selectedCurrency } = useDefaultCurrency();
-
   let { data: shopData } = useQuery<GetShop>(GET_SHOP);
 
   let isMultiCurrency =

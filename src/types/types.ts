@@ -42,7 +42,7 @@ export type OrderRecord = {
 export type AddressItem = {
   id: string;
   cursor?: string;
-  name: string;
+  name?: string;
   firstName: string;
   lastName: string;
   address1: string;
@@ -70,6 +70,7 @@ export type Product = {
 export type ProductDetails = {
   description: string;
   url: string;
+  options?: Options;
 } & Product;
 
 export type CategoryItem = {

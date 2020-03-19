@@ -29,8 +29,8 @@ export default function getProducts(
 function useSearchProductsQuery() {
   let [results, setResults] = useState<Array<Product>>([]);
   let [isSearching, setIsSearching] = useState<boolean>(true);
-  let isFetchingMore = useRef(false);
-  let hasMore = useRef(true);
+  let isFetchingMore = useRef<boolean>(false);
+  let hasMore = useRef<boolean>(true);
 
   let [searchProducts, { data, loading, refetch: refetchQuery }] = useLazyQuery<
     SearchResults,

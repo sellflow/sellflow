@@ -13,17 +13,15 @@ import { FONT_SIZE } from '../../../constants/fonts';
 import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
 import { Product } from '../../../types/types';
 
-export default function ImageList({
-  product,
-  onImagePress,
-  style,
-  contentContainerStyle,
-}: {
+type Props = {
   product: Product;
   onImagePress: (index: number) => void;
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
-}) {
+};
+
+export default function ImageList(props: Props) {
+  let { product, onImagePress, style, contentContainerStyle } = props;
   let { screenSize, width } = useDimensions();
 
   let isPhone = screenSize === ScreenSize.Small;

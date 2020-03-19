@@ -57,8 +57,8 @@ function useCollectionQuery(
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
   let [isReloading, setIsReloading] = useState<boolean>(true);
   let [collection, setCollection] = useState<Array<Product>>([]);
-  let isFetchingMore = useRef(false);
-  let hasMore = useRef(true);
+  let isFetchingMore = useRef<boolean>(false);
+  let hasMore = useRef<boolean>(true);
 
   let defaultCurrency = useDefaultCurrency().data;
 
@@ -171,8 +171,8 @@ function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
   let [categories, setCategories] = useState<Array<CategoryItem>>([]);
   let [products, setProducts] = useState<Array<Product>>([]);
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
-  let isFetchingMore = useRef(false);
-  let hasMore = useRef(true);
+  let isFetchingMore = useRef<boolean>(false);
+  let hasMore = useRef<boolean>(true);
 
   let { loading, data, refetch: refetchQuery } = useQuery<
     GetFeaturedProductsAndCategories,

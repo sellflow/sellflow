@@ -24,6 +24,8 @@ import { useAuth } from '../../helpers/useAuth';
 import { DeleteAddressModal } from './components';
 import { CountryModal, ModalBottomSheetMessage } from '../../components';
 import { ModalBottomSheet } from '../../core-ui';
+import { AddressItem } from '../../types/types';
+import { emptyAddress } from '../../constants/defaultValues';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();
@@ -39,16 +41,9 @@ export default function AddEditAddressScene() {
   let [isCountryModalVisible, setIsCountryModalVisible] = useState<boolean>(
     false,
   );
-  let [addressData, setAddressData] = useState({
-    firstName: '',
-    lastName: '',
-    address1: '',
-    country: '',
-    province: '',
-    city: '',
-    zip: '',
-    phone: '',
-  });
+  let [addressData, setAddressData] = useState<Omit<AddressItem, 'id'>>(
+    emptyAddress,
+  );
   let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   let [errorMessage, setErrorMessage] = useState<string>('');
 
