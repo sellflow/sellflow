@@ -70,6 +70,8 @@ export default function BottomActionBar(props: Props) {
     return t('Out of Stock');
   };
 
+  let addButtonAction = !isLoading ? onAddToCartPress : () => {};
+
   return (
     <View style={styles.bottomIconContainer}>
       <IconButton
@@ -104,9 +106,7 @@ export default function BottomActionBar(props: Props) {
         ]}
         disabled={isButtonDisabled}
         loading={isLoading}
-        onPress={() => {
-          onAddToCartPress();
-        }}
+        onPress={addButtonAction}
       >
         {buttonLabel()}
       </Button>
