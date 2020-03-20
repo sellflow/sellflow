@@ -1,12 +1,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationState } from '@react-navigation/native';
 import { IconButton, Text } from 'exoflex';
 
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';
-import StackNavigator from './StackNavigator';
-import { TabParamList, TabRouteProp } from '../types/Navigation';
+import { TabParamList } from '../types/Navigation';
+import { HomeScene, WishlistScene, ProfileScene, LockScene } from '../scenes';
+import { useAuth } from '../helpers/useAuth';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -15,14 +15,6 @@ type LabelProps = {
   color: string;
   label: string;
 };
-
-type State = {
-  state?: NavigationState;
-};
-
-type HomeRoute = TabRouteProp<'HomeTab'> & State;
-type WishlistRoute = TabRouteProp<'WishlistTab'> & State;
-type ProfileRoute = TabRouteProp<'ProfileTab'> & State;
 
 function TabLabel(props: LabelProps) {
   let { focused, color, label } = props;
@@ -37,41 +29,44 @@ function TabLabel(props: LabelProps) {
 }
 
 export default function TabNavigator() {
+  let { authToken } = useAuth();
   return (
     <Tab.Navigator initialRouteName="HomeTab" tabBarOptions={tabBarOptions}>
       <Tab.Screen
         name="HomeTab"
-        component={StackNavigator}
-        options={({ route }: { route: HomeRoute }) => {
+        component={HomeScene}
+        options={() => {
           return {
+            title: t('Home'),
             tabBarLabel: ({ focused, color }) => (
               <TabLabel focused={focused} color={color} label={t('Home')} />
             ),
             tabBarIcon: ({ color }) => <IconButton icon="home" color={color} />,
-            tabBarVisible: route.state && route.state.index <= 0,
           };
         }}
       />
       <Tab.Screen
         name="WishlistTab"
-        component={StackNavigator}
-        options={({ route }: { route: WishlistRoute }) => {
+        component={WishlistScene}
+        options={() => {
           return {
+            title: t('Wishlist'),
             tabBarLabel: ({ focused, color }) => (
               <TabLabel focused={focused} color={color} label={t('Wishlist')} />
             ),
             tabBarIcon: ({ color }) => (
               <IconButton icon="heart" color={color} />
             ),
-            tabBarVisible: route.state && route.state.index <= 0,
           };
         }}
       />
       <Tab.Screen
         name="ProfileTab"
-        component={StackNavigator}
-        options={({ route }: { route: ProfileRoute }) => {
+        component={authToken ? ProfileScene : LockScene}
+        options={() => {
           return {
+            title: t('Profile'),
+            tabBarVisible: !!authToken,
             tabBarLabel: ({ focused, color }) => (
               <TabLabel
                 focused={focused}
@@ -82,7 +77,6 @@ export default function TabNavigator() {
             tabBarIcon: ({ color }) => (
               <IconButton icon="account" color={color} />
             ),
-            tabBarVisible: route.state && route.state.index <= 0,
           };
         }}
       />

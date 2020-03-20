@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { Carousel, CategoryList, SearchInput } from '../core-ui';
-import { ProductList, SearchModal, CurrencyPicker } from '../components';
+import { ProductList, SearchModal } from '../components';
 import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
 import { Product } from '../types/types';
@@ -13,10 +13,9 @@ import { useColumns } from '../helpers/columns';
 import { useProductsAndCategoriesQuery } from '../hooks/api/useCollection';
 import { COLORS } from '../constants/colors';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
-import { CurrencyCode } from '../generated/server/globalTypes';
 
 export default function HomeScene() {
-  let { navigate, setOptions } = useNavigation<StackNavProp<'Home'>>();
+  let { navigate } = useNavigation<StackNavProp<'Home'>>();
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
@@ -26,6 +25,7 @@ export default function HomeScene() {
     loading: loadingCurrency,
     data: selectedCurrency,
   } = useDefaultCurrency();
+
   let {
     loading: loadingHomeData,
     products,
@@ -35,16 +35,14 @@ export default function HomeScene() {
     isFetchingMore,
   } = useProductsAndCategoriesQuery(selectedCurrency, first);
 
-  setOptions({
-    headerLeft: () => <CurrencyPicker onPressCurrency={onPressCurrency} />,
-  });
-  let onPressCurrency = (currency: CurrencyCode) => {
+  useEffect(() => {
     refetch('update', {
-      presentmentCurrencies: [currency],
+      presentmentCurrencies: [selectedCurrency],
       first,
       after: null,
     });
-  };
+  }, [selectedCurrency]); // eslint-disable-line react-hooks/exhaustive-deps
+
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { productHandle: product.handle });
   };
@@ -140,11 +138,13 @@ export default function HomeScene() {
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+    backgroundColor: COLORS.white,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.white,
   },
   subTitle: {
     marginTop: 16,

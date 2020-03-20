@@ -128,6 +128,7 @@ export default function ProfileScene() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.white,
   },
   profileContainer: {
     borderBottomWidth: 1,

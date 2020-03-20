@@ -8,6 +8,7 @@ import { FONT_SIZE } from '../constants/fonts';
 import { StackNavProp } from '../types/Navigation';
 import { useColumns } from '../helpers/columns';
 import { useGetWishlistData } from '../hooks/api/useWishlist';
+import { COLORS } from '../constants/colors';
 
 export default function WishlistScene() {
   let { navigate } = useNavigation<StackNavProp<'Wishlist'>>();
@@ -46,11 +47,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 12,
+    backgroundColor: COLORS.white,
   },
   emptyWishlist: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: COLORS.white,
   },
   emptyWishlistText: {
     fontSize: FONT_SIZE.medium,

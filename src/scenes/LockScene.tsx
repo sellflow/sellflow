@@ -37,7 +37,7 @@ export default function LockScene() {
         </Text>
       </View>
       <Button
-        style={defaultButton}
+        style={[defaultButton, styles.buttonMargin]}
         labelStyle={defaultButtonLabel}
         onPress={() => {
           navigate('Auth', { initialRouteKey: 'Register' });
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   scene: {
     flex: 1,
     justifyContent: 'space-between',
-    marginHorizontal: 24,
+    backgroundColor: COLORS.white,
   },
   imageContainer: {
     flex: 1,
@@ -90,5 +90,8 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: COLORS.primaryColor,
+  },
+  buttonMargin: {
+    marginHorizontal: 24,
   },
 });

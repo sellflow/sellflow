@@ -2,12 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'exoflex';
-import { Route, NavigationProp } from '@react-navigation/native';
 
 import {
-  HomeScene,
-  WishlistScene,
-  ProfileScene,
   OrderDetailsScene,
   OrderHistoryScene,
   ProductDetailsScene,
@@ -20,20 +16,17 @@ import {
   EditProfileScene,
   AuthScene,
   SearchResultsScene,
-  LockScene,
   OrderPlacedConfirmationScene,
   WebViewScene,
 } from '../scenes';
 import { headerOptions } from '../constants/theme';
 import { COLORS } from '../constants/colors';
-import {
-  StackParamList,
-  StackRouteName,
-  TabRouteName,
-  TabParamList,
-} from '../types/Navigation';
+import { StackParamList } from '../types/Navigation';
 import { useCartFilled } from '../helpers/cartFilled';
 import { useAuth } from '../helpers/useAuth';
+import TabNavigator from './TabNavigator';
+import { CurrencyPicker } from '../components';
+import { NavigationState, Route } from '@react-navigation/native';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -71,85 +64,72 @@ function HeaderIconButton(props: HeaderIconButtonProps) {
   );
 }
 
-export default function StackNavigator({
-  route,
-  navigation,
-}: {
-  route: Route<TabRouteName>;
-  navigation: NavigationProp<TabParamList>;
-}) {
+export default function StackNavigator() {
   let { authToken } = useAuth();
-  let initialRouteName: StackRouteName;
-  if (route.name === 'HomeTab') {
-    initialRouteName = 'Home';
-  } else if (route.name === 'WishlistTab') {
-    initialRouteName = 'Wishlist';
-  } else if (authToken) {
-    initialRouteName = 'Profile';
-  } else {
-    initialRouteName = 'LockScene';
-  }
 
-  if (initialRouteName === 'LockScene') {
-    navigation.setOptions({
-      tabBarVisible: false,
-    });
+  function getTabSceneName(
+    route: { state?: NavigationState } & Pick<Route<string>, 'key' | 'name'>,
+  ) {
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : 'HomeTab';
+    return routeName;
   }
 
   return (
     <Stack.Navigator
       screenOptions={headerOptions}
       headerMode="screen"
-      initialRouteName={initialRouteName}
+      initialRouteName={'Home'}
     >
-      {initialRouteName === 'Home' ? (
-        <Stack.Screen
-          name="Home"
-          component={HomeScene}
-          options={({ navigation }) => ({
-            title: t('Hello'),
-            headerRight: () => (
-              <HeaderIconButton
-                icon="cart"
-                onPress={() => navigation.navigate('ShoppingCart')}
-              />
-            ),
-            headerStyle: {
-              shadowColor: COLORS.transparent,
-              elevation: 0,
-            },
-          })}
-        />
-      ) : null}
       <Stack.Screen
-        name="Wishlist"
-        component={WishlistScene}
-        options={() => ({
-          headerLeft: () => null,
-        })}
+        name="Home"
+        component={TabNavigator}
+        options={({ navigation, route }) => {
+          let tabScene = getTabSceneName(route);
+          if (tabScene === 'HomeTab') {
+            return {
+              title: t('Hello'),
+              headerLeft: () => <CurrencyPicker />,
+              headerRight: () => (
+                <HeaderIconButton
+                  icon="cart"
+                  onPress={() => navigation.navigate('ShoppingCart')}
+                />
+              ),
+              headerStyle: {
+                shadowColor: COLORS.transparent,
+                elevation: 0,
+              },
+            };
+          } else if (tabScene === 'WishlistTab') {
+            return {
+              headerLeft: () => null,
+              title: t('Wishlist'),
+            };
+          } else {
+            return authToken
+              ? {
+                  headerLeft: () => null,
+                  title: t('My Profile'),
+                }
+              : {
+                  headerLeft: () =>
+                    !authToken && (
+                      <HeaderIconButton
+                        icon="chevron-left"
+                        onPress={() => navigation.navigate('HomeTab')}
+                      />
+                    ),
+                  title: '',
+                  headerStyle: {
+                    shadowColor: COLORS.transparent,
+                    elevation: 0,
+                  },
+                };
+          }
+        }}
       />
-      {authToken ? (
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScene}
-          options={() => ({
-            title: 'My Profile',
-            headerLeft: () => null,
-          })}
-        />
-      ) : (
-        <Stack.Screen
-          name="LockScene"
-          component={LockScene}
-          options={() => ({
-            title: '',
-            headerStyle: {
-              shadowColor: COLORS.transparent,
-              elevation: 0,
-            },
-          })}
-        />
-      )}
       <Stack.Screen
         name="Auth"
         component={AuthScene}
@@ -171,35 +151,31 @@ export default function StackNavigator({
           },
         })}
       />
-      {initialRouteName === 'Profile' ? (
-        <>
-          <Stack.Screen
-            name="AddressManagement"
-            component={AddressManagementScene}
-            options={() => ({
-              title: t('Manage Addresses'),
-            })}
-          />
-          <Stack.Screen name="AddEditAddress" component={AddEditAddressScene} />
-          <Stack.Screen
-            name="EditProfile"
-            component={EditProfileScene}
-            options={() => ({
-              title: t('Edit Profile'),
-            })}
-          />
-          <Stack.Screen
-            name="OrderHistory"
-            component={OrderHistoryScene}
-            options={() => ({
-              title: t('Order History'),
-              cardStyle: {
-                backgroundColor: COLORS.darkWhite,
-              },
-            })}
-          />
-        </>
-      ) : null}
+      <Stack.Screen
+        name="AddressManagement"
+        component={AddressManagementScene}
+        options={() => ({
+          title: t('Manage Addresses'),
+        })}
+      />
+      <Stack.Screen name="AddEditAddress" component={AddEditAddressScene} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScene}
+        options={() => ({
+          title: t('Edit Profile'),
+        })}
+      />
+      <Stack.Screen
+        name="OrderHistory"
+        component={OrderHistoryScene}
+        options={() => ({
+          title: t('Order History'),
+          cardStyle: {
+            backgroundColor: COLORS.darkWhite,
+          },
+        })}
+      />
       <Stack.Screen
         name="OrderDetails"
         component={OrderDetailsScene}
