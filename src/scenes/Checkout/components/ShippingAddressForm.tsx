@@ -56,7 +56,8 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(firstName) => onChangeAddress({ ...address, firstName })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
         onSubmitEditing={() => lastNameRef.current?.focus()}
       />
       <TextInput
@@ -70,7 +71,8 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(lastName) => onChangeAddress({ ...address, lastName })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
         onSubmitEditing={() => address1Ref.current?.focus()}
       />
       <TextInput
@@ -84,7 +86,8 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(address1) => onChangeAddress({ ...address, address1 })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
         onSubmitEditing={() => address2Ref.current?.focus()}
       />
       <TextInput
@@ -98,7 +101,8 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(address2) => onChangeAddress({ ...address, address2 })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
         onSubmitEditing={() => cityRef.current?.focus()}
       />
       <TextInput
@@ -112,7 +116,8 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(city) => onChangeAddress({ ...address, city })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
         onSubmitEditing={() => provinceRef.current?.focus()}
       />
       <TextInput
@@ -126,7 +131,8 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(province) => onChangeAddress({ ...address, province })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
         onSubmitEditing={toggleCountryModal}
       />
       <TouchableOpacity onPress={toggleCountryModal}>
@@ -139,7 +145,8 @@ export default function ShippingAddressForm(props: Props) {
           value={address.country}
           returnKeyType="next"
           labelStyle={styles.textInputLabel}
-          containerStyle={styles.textInput}
+          containerStyle={styles.textInputContainer}
+          style={styles.textInputStyle}
           pointerEvents="none"
           editable={false}
         />
@@ -155,7 +162,8 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(zip) => onChangeAddress({ ...address, zip })}
         returnKeyType="next"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
         onSubmitEditing={() => phoneRef.current?.focus()}
       />
       <TextInput
@@ -169,7 +177,8 @@ export default function ShippingAddressForm(props: Props) {
         returnKeyType="done"
         keyboardType="number-pad"
         labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInput}
+        containerStyle={styles.textInputContainer}
+        style={styles.textInputStyle}
       />
       <CountryModal
         countryVisible={isCountryModalVisible}
@@ -183,7 +192,8 @@ export default function ShippingAddressForm(props: Props) {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   opacity: { opacity: 0.6 },
-  textInput: { marginBottom: 24 },
+  textInputContainer: { marginBottom: 24 },
+  textInputStyle: { height: 36 },
   textInputLabel: { fontSize: FONT_SIZE.small },
   shippingInfo: { marginBottom: 16 },
 });

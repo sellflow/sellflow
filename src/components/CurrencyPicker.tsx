@@ -29,7 +29,7 @@ export default function CurrencyPicker() {
   let animatedValue = new Animated.Value(0);
 
   Animated.timing(animatedValue, {
-    toValue: visible ? -0.5 : 0.5,
+    toValue: visible ? -180 : 0,
     duration: 300,
   }).start();
 
@@ -50,7 +50,7 @@ export default function CurrencyPicker() {
                     transform: [
                       {
                         rotate: animatedValue.interpolate({
-                          inputRange: [-0.5, 0.5],
+                          inputRange: [-180, 0],
                           outputRange: ['180deg', '0deg'],
                         }),
                       },

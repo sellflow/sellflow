@@ -80,6 +80,7 @@ export default function ProductInfo(props: Props) {
           <Text style={styles.quantityText}>Quantity</Text>
           <TextInput
             containerStyle={styles.textInputStyle}
+            style={styles.textInputStyle}
             value={quantity.toString()}
             onBlur={() => {
               if (quantity === 0) {

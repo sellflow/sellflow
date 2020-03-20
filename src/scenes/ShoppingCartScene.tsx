@@ -5,12 +5,11 @@ import {
   ScrollView,
   SafeAreaView,
   Image,
-  KeyboardAvoidingView,
 } from 'react-native';
 import { Text, Button, TextInput, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
-import { Surface } from '../core-ui';
+import { Surface, KeyboardAvoidingView } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { OrderItem } from '../components';
@@ -341,25 +340,27 @@ export default function ShoppingCartScene() {
   return (
     <>
       {screenSize === ScreenSize.Large ? (
-        <SafeAreaView style={styles.horizontalLayout}>
-          <ScrollView
-            style={styles.flex}
-            contentContainerStyle={styles.horizontalCart}
-            contentInsetAdjustmentBehavior="automatic"
-          >
-            {renderCartView()}
-          </ScrollView>
-          <View style={styles.horizontalPaymentView}>
-            {renderPaymentView()}
-            <BottomButton
-              label={t('Checkout')}
-              onPressAction={() => navigate('Checkout', { cartData })}
-            />
-          </View>
-        </SafeAreaView>
+        <KeyboardAvoidingView>
+          <SafeAreaView style={styles.horizontalLayout}>
+            <ScrollView
+              style={styles.flex}
+              contentContainerStyle={styles.horizontalCart}
+              contentInsetAdjustmentBehavior="automatic"
+            >
+              {renderCartView()}
+            </ScrollView>
+            <View style={styles.horizontalPaymentView}>
+              {renderPaymentView()}
+              <BottomButton
+                label={t('Checkout')}
+                onPressAction={() => navigate('Checkout', { cartData })}
+              />
+            </View>
+          </SafeAreaView>
+        </KeyboardAvoidingView>
       ) : (
         <SafeAreaView style={styles.flex}>
-          <KeyboardAvoidingView behavior="padding" style={styles.flex}>
+          <KeyboardAvoidingView>
             <ScrollView
               style={styles.flex}
               contentContainerStyle={[
@@ -426,6 +427,7 @@ function Payment(props: PaymentProps) {
             returnKeyType="done"
             value={voucherCode}
             onChangeText={onVoucherCodeChange}
+            style={styles.voucherTextInputStyle}
           />
           <Button
             style={defaultButton}
@@ -497,6 +499,9 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1,
     borderColor: COLORS.lightGrey,
+  },
+  voucherTextInputStyle: {
+    height: 48,
   },
   voucherTextInputContainer: {
     flexGrow: 1,

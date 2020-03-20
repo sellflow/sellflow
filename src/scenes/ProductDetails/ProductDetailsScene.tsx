@@ -20,7 +20,7 @@ import {
   useCheckoutReplaceItem,
 } from '../../hooks/api/useShopifyCart';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
-import { Toast } from '../../core-ui';
+import { Toast, KeyboardAvoidingView } from '../../core-ui';
 import { ProductInfo, ImageModal, ImageList } from './components';
 import BottomActionBar from './components/BottomActionBar';
 import { COLORS } from '../../constants/colors';
@@ -36,6 +36,7 @@ export default function ProductDetailsScene() {
   let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
   let [isImageModalVisible, setIsImageModalVisible] = useState<boolean>(false);
   let [activeIndex, setActiveIndex] = useState<number>(0);
+  let [bottomButtonHeight, setBottomButtonHeight] = useState<number>(0);
 
   let { authToken } = useAuth();
   let { setShoppingCartID } = useSetShoppingCartID();
@@ -210,24 +211,32 @@ export default function ProductDetailsScene() {
           <ImageList product={productDetails} onImagePress={onPressImage} />
         )}
         <View style={styles.flex}>
-          <ScrollView style={styles.flex}>
-            {!isLandscape && (
-              <ImageList product={productDetails} onImagePress={onPressImage} />
-            )}
-            <ProductInfo
-              selectedOptions={selectedOptions}
-              onSelectionOptionChange={changeSelectedOptions}
-              quantity={quantity}
-              onChangeQuantity={setQuantity}
-              product={productDetails}
-              options={productDetails.options ? productDetails.options : []}
-            />
-          </ScrollView>
+          <KeyboardAvoidingView keyboardVerticalOffset={-bottomButtonHeight}>
+            <ScrollView style={styles.flex}>
+              {!isLandscape && (
+                <ImageList
+                  product={productDetails}
+                  onImagePress={onPressImage}
+                />
+              )}
+              <ProductInfo
+                selectedOptions={selectedOptions}
+                onSelectionOptionChange={changeSelectedOptions}
+                quantity={quantity}
+                onChangeQuantity={setQuantity}
+                product={productDetails}
+                options={productDetails.options ? productDetails.options : []}
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
           <View
             style={[
               styles.bottomContainer,
               isLandscape && styles.bottomLandscapeContainer,
             ]}
+            onLayout={({ nativeEvent }) =>
+              setBottomButtonHeight(nativeEvent.layout.height)
+            }
           >
             <BottomActionBar
               isButtonDisabled={!productDetails.availableForSale}

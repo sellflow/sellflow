@@ -8,6 +8,7 @@ import ModalBottomSheet from './ModalBottomSheet';
 import CategoryList from './CategoryList';
 import Avatar from './Avatar';
 import Toast from './Toast';
+import KeyboardAvoidingView from './KeyboardAvoidingView';
 
 export {
   Carousel,
@@ -20,4 +21,5 @@ export {
   CategoryList,
   Avatar,
   Toast,
+  KeyboardAvoidingView,
 };

@@ -3,9 +3,7 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  KeyboardAvoidingView,
   TextInput as TextInputType,
-  Platform,
   TouchableOpacity,
 } from 'react-native';
 import { Text, TextInput, Button, ActivityIndicator, Portal } from 'exoflex';
@@ -23,7 +21,7 @@ import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
 import { DeleteAddressModal } from './components';
 import { CountryModal, ModalBottomSheetMessage } from '../../components';
-import { ModalBottomSheet } from '../../core-ui';
+import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
 import { AddressItem } from '../../types/types';
 import { emptyAddress } from '../../constants/defaultValues';
 
@@ -46,6 +44,7 @@ export default function AddEditAddressScene() {
   );
   let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   let [errorMessage, setErrorMessage] = useState<string>('');
+  let [bottomButtonHeight, setBottomButtonHeight] = useState<number>(0);
 
   let isAddressDataEmpty =
     addressData.address1 === '' ||
@@ -56,8 +55,6 @@ export default function AddEditAddressScene() {
     addressData.phone === '' ||
     addressData.province === '' ||
     addressData.zip === '';
-
-  let isIOS = Platform.OS === 'ios';
 
   let lastNameRef = useRef<TextInputType>(null);
   let address1Ref = useRef<TextInputType>(null);
@@ -202,11 +199,7 @@ export default function AddEditAddressScene() {
           />
         </ModalBottomSheet>
       </Portal>
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={isIOS ? 'padding' : undefined}
-        keyboardVerticalOffset={isIOS ? 70 : 0}
-      >
+      <KeyboardAvoidingView keyboardVerticalOffset={-bottomButtonHeight}>
         <DeleteAddressModal
           deleteVisible={isDeleteModalVisible}
           toggleModal={toggleDeleteModal}
@@ -234,6 +227,7 @@ export default function AddEditAddressScene() {
               setAddressData({ ...addressData, firstName })
             }
             containerStyle={styles.textInput}
+            style={styles.textInputStyle}
           />
           <TextInput
             onSubmitEditing={() => {
@@ -248,6 +242,7 @@ export default function AddEditAddressScene() {
               setAddressData({ ...addressData, lastName })
             }
             containerStyle={styles.textInput}
+            style={styles.textInputStyle}
           />
           <TextInput
             onSubmitEditing={toggleCountryModal}
@@ -260,6 +255,7 @@ export default function AddEditAddressScene() {
               setAddressData({ ...addressData, address1 })
             }
             containerStyle={styles.textInput}
+            style={styles.textInputStyle}
             autoCapitalize="words"
           />
           <TouchableOpacity onPress={toggleCountryModal}>
@@ -270,6 +266,7 @@ export default function AddEditAddressScene() {
               pointerEvents="none"
               editable={false}
               containerStyle={styles.textInput}
+              style={styles.textInputStyle}
             />
           </TouchableOpacity>
           <TextInput
@@ -285,6 +282,7 @@ export default function AddEditAddressScene() {
               setAddressData({ ...addressData, province })
             }
             containerStyle={styles.textInput}
+            style={styles.textInputStyle}
             autoCapitalize="words"
           />
           <TextInput
@@ -298,6 +296,7 @@ export default function AddEditAddressScene() {
             value={addressData.city}
             onChangeText={(city) => setAddressData({ ...addressData, city })}
             containerStyle={styles.textInput}
+            style={styles.textInputStyle}
             autoCapitalize="words"
           />
           <TextInput
@@ -311,6 +310,7 @@ export default function AddEditAddressScene() {
             value={addressData.zip}
             onChangeText={(zip) => setAddressData({ ...addressData, zip })}
             containerStyle={styles.textInput}
+            style={styles.textInputStyle}
           />
           <TextInput
             returnKeyType="done"
@@ -322,8 +322,15 @@ export default function AddEditAddressScene() {
             keyboardType="number-pad"
             textContentType="telephoneNumber"
             containerStyle={styles.textInput}
+            style={styles.textInputStyle}
           />
         </ScrollView>
+      </KeyboardAvoidingView>
+      <View
+        onLayout={({ nativeEvent }) =>
+          setBottomButtonHeight(nativeEvent.layout.height)
+        }
+      >
         <Button
           style={[defaultButton, styles.buttonStyle]}
           labelStyle={defaultButtonLabel}
@@ -335,7 +342,7 @@ export default function AddEditAddressScene() {
             {!loadingAddNewAddress && !loadingEditAddress && t('Save Address')}
           </Text>
         </Button>
-      </KeyboardAvoidingView>
+      </View>
     </View>
   );
 }
@@ -360,6 +367,7 @@ const styles = StyleSheet.create({
   textInput: {
     marginTop: 16,
   },
+  textInputStyle: { height: 36 },
   buttonStyle: {
     margin: 24,
   },

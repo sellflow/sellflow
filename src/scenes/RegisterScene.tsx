@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TextInput as TextInputType,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { Text, TextInput, Button, Portal } from 'exoflex';
 
@@ -21,7 +22,7 @@ import { StackNavProp } from '../types/Navigation';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useCustomerRegister } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
-import { ModalBottomSheet } from '../core-ui';
+import { ModalBottomSheet, KeyboardAvoidingView } from '../core-ui';
 import { ModalBottomSheetMessage } from '../components';
 import { useGetShop } from '../hooks/api/useCustomerAddress';
 
@@ -76,6 +77,7 @@ export default function RegisterScene() {
   let [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState<boolean>(
     true,
   );
+  let [bottomButtonHeight, setBottomButtonHeight] = useState<number>(0);
 
   let isDisabled =
     !firstName ||
@@ -159,121 +161,135 @@ export default function RegisterScene() {
           />
         </ModalBottomSheet>
       </Portal>
-      <View>
-        <View style={styles.textInputContainer}>
-          <Text style={styles.greyText}>{t('First Name')}</Text>
-          <TextInput
-            autoFocus={false}
-            clearTextOnFocus={false}
-            autoCapitalize="none"
-            textContentType="name"
-            mode="flat"
-            value={firstName}
-            onChangeText={setFirstName}
-            containerStyle={styles.insideTextInputContainer}
-            returnKeyType="next"
-            ref={firstNameRef}
-            onSubmitEditing={() => {
-              lastNameRef.current && lastNameRef.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.textInputContainer}>
-          <Text style={styles.greyText}>{t('Last Name')}</Text>
-          <TextInput
-            autoFocus={false}
-            clearTextOnFocus={false}
-            autoCapitalize="none"
-            textContentType="name"
-            mode="flat"
-            value={lastName}
-            onChangeText={setLastName}
-            containerStyle={styles.insideTextInputContainer}
-            returnKeyType="next"
-            ref={lastNameRef}
-            onSubmitEditing={() => {
-              emailRef.current && emailRef.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.textInputContainer}>
-          <Text style={styles.greyText}>{t('Email Address')}</Text>
-          <TextInput
-            autoFocus={false}
-            clearTextOnFocus={false}
-            autoCapitalize="none"
-            onFocus={() => {
-              setIsEmailValid(true);
-            }}
-            onBlur={() => {
-              setIsEmailValid(validateEmail(email));
-            }}
-            errorMessage={!isEmailValid ? INVALID_EMAIL_MESSAGE : undefined}
-            textContentType="emailAddress"
-            mode="flat"
-            value={email}
-            errorMessageStyle={styles.errorMessage}
-            onChangeText={setEmail}
-            containerStyle={styles.insideTextInputContainer}
-            returnKeyType="next"
-            ref={emailRef}
-            onSubmitEditing={() => {
-              passwordRef.current && passwordRef.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.textInputContainer}>
-          <Text style={styles.greyText}>{t('Password')}</Text>
-          <TextInput
-            autoCapitalize="none"
-            onFocus={() => {
-              setIsPasswordValid(true);
-            }}
-            onBlur={() => {
-              setIsPasswordValid(validatePassword(password));
-            }}
-            errorMessage={
-              !isPasswordValid ? INVALID_PASSWORD_MESSAGE : undefined
-            }
-            returnKeyType="next"
-            containerStyle={styles.insideTextInputContainer}
-            secureTextEntry={true}
-            mode="flat"
-            value={password}
-            errorMessageStyle={styles.errorMessage}
-            onChangeText={setPassword}
-            ref={passwordRef}
-            onSubmitEditing={() => {
-              confirmPasswordRef.current && confirmPasswordRef.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.textInputContainer}>
-          <Text style={styles.greyText}>{t('Confirm Password')}</Text>
-          <TextInput
-            clearTextOnFocus={false}
-            autoCapitalize="none"
-            onFocus={() => {
-              setIsConfirmPasswordValid(true);
-            }}
-            onBlur={() => {
-              setIsConfirmPasswordValid(confirmPassword === password);
-            }}
-            errorMessage={
-              !isConfirmPasswordValid ? t('Password does not match') : undefined
-            }
-            containerStyle={styles.insideTextInputContainer}
-            secureTextEntry={true}
-            mode="flat"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            errorMessageStyle={styles.errorMessage}
-            ref={confirmPasswordRef}
-            returnKeyType="done"
-          />
-        </View>
-      </View>
-      <View>
+      <KeyboardAvoidingView keyboardVerticalOffset={-bottomButtonHeight}>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <View style={styles.textInputContainer}>
+            <Text style={styles.greyText}>{t('First Name')}</Text>
+            <TextInput
+              autoFocus={false}
+              clearTextOnFocus={false}
+              autoCapitalize="none"
+              textContentType="name"
+              mode="flat"
+              value={firstName}
+              onChangeText={setFirstName}
+              containerStyle={styles.insideTextInputContainer}
+              returnKeyType="next"
+              ref={firstNameRef}
+              onSubmitEditing={() => {
+                lastNameRef.current && lastNameRef.current.focus();
+              }}
+              style={styles.textInputStyle}
+            />
+          </View>
+          <View style={styles.textInputContainer}>
+            <Text style={styles.greyText}>{t('Last Name')}</Text>
+            <TextInput
+              autoFocus={false}
+              clearTextOnFocus={false}
+              autoCapitalize="none"
+              textContentType="name"
+              mode="flat"
+              value={lastName}
+              onChangeText={setLastName}
+              containerStyle={styles.insideTextInputContainer}
+              returnKeyType="next"
+              ref={lastNameRef}
+              onSubmitEditing={() => {
+                emailRef.current && emailRef.current.focus();
+              }}
+              style={styles.textInputStyle}
+            />
+          </View>
+          <View style={styles.textInputContainer}>
+            <Text style={styles.greyText}>{t('Email Address')}</Text>
+            <TextInput
+              autoFocus={false}
+              clearTextOnFocus={false}
+              autoCapitalize="none"
+              onFocus={() => {
+                setIsEmailValid(true);
+              }}
+              onBlur={() => {
+                setIsEmailValid(validateEmail(email));
+              }}
+              errorMessage={!isEmailValid ? INVALID_EMAIL_MESSAGE : undefined}
+              textContentType="emailAddress"
+              mode="flat"
+              value={email}
+              errorMessageStyle={styles.errorMessage}
+              onChangeText={setEmail}
+              containerStyle={styles.insideTextInputContainer}
+              returnKeyType="next"
+              ref={emailRef}
+              onSubmitEditing={() => {
+                passwordRef.current && passwordRef.current.focus();
+              }}
+              style={styles.textInputStyle}
+            />
+          </View>
+          <View style={styles.textInputContainer}>
+            <Text style={styles.greyText}>{t('Password')}</Text>
+            <TextInput
+              autoCapitalize="none"
+              onFocus={() => {
+                setIsPasswordValid(true);
+              }}
+              onBlur={() => {
+                setIsPasswordValid(validatePassword(password));
+              }}
+              errorMessage={
+                !isPasswordValid ? INVALID_PASSWORD_MESSAGE : undefined
+              }
+              returnKeyType="next"
+              containerStyle={styles.insideTextInputContainer}
+              secureTextEntry={true}
+              mode="flat"
+              value={password}
+              errorMessageStyle={styles.errorMessage}
+              onChangeText={setPassword}
+              ref={passwordRef}
+              onSubmitEditing={() => {
+                confirmPasswordRef.current &&
+                  confirmPasswordRef.current.focus();
+              }}
+              style={styles.textInputStyle}
+            />
+          </View>
+          <View style={styles.textInputContainer}>
+            <Text style={styles.greyText}>{t('Confirm Password')}</Text>
+            <TextInput
+              clearTextOnFocus={false}
+              autoCapitalize="none"
+              onFocus={() => {
+                setIsConfirmPasswordValid(true);
+              }}
+              onBlur={() => {
+                setIsConfirmPasswordValid(confirmPassword === password);
+              }}
+              errorMessage={
+                !isConfirmPasswordValid
+                  ? t('Password does not match')
+                  : undefined
+              }
+              containerStyle={styles.insideTextInputContainer}
+              secureTextEntry={true}
+              mode="flat"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              errorMessageStyle={styles.errorMessage}
+              ref={confirmPasswordRef}
+              returnKeyType="done"
+              style={styles.textInputStyle}
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <View
+        onLayout={({ nativeEvent }) => {
+          setBottomButtonHeight(nativeEvent.layout.height);
+        }}
+      >
         <Text style={styles.termsAndConditionText}>
           {t('By clicking Register, you agree with our')}
         </Text>
@@ -297,7 +313,6 @@ export default function RegisterScene() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 24,
     marginHorizontal: 24,
     marginTop: 7,
     justifyContent: 'space-between',
@@ -306,8 +321,12 @@ const styles = StyleSheet.create({
     marginVertical: 9,
     height: 60,
   },
+  textInputStyle: {
+    height: 24,
+  },
   button: {
     marginTop: 16,
+    marginBottom: 24,
   },
   termsAndConditionText: {
     alignSelf: 'center',
@@ -324,7 +343,7 @@ const styles = StyleSheet.create({
   },
   insideTextInputContainer: {
     margin: 0,
-    paddingVertical: 10,
+    paddingVertical: 6,
   },
   errorMessage: {
     padding: 0,

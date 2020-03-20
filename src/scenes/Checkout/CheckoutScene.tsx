@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  KeyboardAvoidingView,
   AppState,
   AppStateStatus,
 } from 'react-native';
@@ -18,7 +17,7 @@ import {
 } from '@react-navigation/native';
 
 import { CheckoutAddress, ModalBottomSheetMessage } from '../../components';
-import { Surface, ModalBottomSheet } from '../../core-ui';
+import { Surface, ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
 import { addressItemData } from '../../fixtures/AddressItemData';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { FONT_SIZE } from '../../constants/fonts';
@@ -226,7 +225,14 @@ export default function CheckoutScene() {
   };
 
   let renderPaymentView = () => (
-    <View style={screenSize === ScreenSize.Large && styles.priceViewLandscape}>
+    <View
+      style={
+        screenSize === ScreenSize.Large && [
+          styles.flex,
+          styles.priceViewLandscape,
+        ]
+      }
+    >
       <Surface containerStyle={styles.surfacePaymentDetails}>
         <View style={styles.paymentDetailsContainer}>
           <Text style={styles.paymentDetailLabel}>{t('Subtotal')}</Text>
@@ -272,34 +278,32 @@ export default function CheckoutScene() {
 
   if (authToken) {
     return (
-      <SafeAreaView style={[styles.container, containerStyle()]}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          containerStyle(),
+          screenSize === ScreenSize.Large && styles.landscape,
+        ]}
+      >
         {renderShippingAddress()}
         {renderPaymentView()}
       </SafeAreaView>
     );
   } else if (screenSize === ScreenSize.Large) {
     return (
-      <SafeAreaView style={[styles.flex, styles.landscape, containerStyle()]}>
-        {renderBottomModal()}
-        <KeyboardAvoidingView
-          behavior="padding"
-          style={styles.flex}
-          keyboardVerticalOffset={60}
-        >
+      <KeyboardAvoidingView>
+        <SafeAreaView style={[styles.flex, styles.landscape, containerStyle()]}>
+          {renderBottomModal()}
           <ScrollView style={styles.flex}>{renderShippingAddress()}</ScrollView>
-        </KeyboardAvoidingView>
-        {renderPaymentView()}
-      </SafeAreaView>
+          {renderPaymentView()}
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   } else {
     return (
-      <View style={styles.flex}>
-        {renderBottomModal()}
-        <KeyboardAvoidingView
-          behavior="padding"
-          style={styles.flex}
-          keyboardVerticalOffset={60}
-        >
+      <KeyboardAvoidingView>
+        <View style={styles.flex}>
+          {renderBottomModal()}
           <ScrollView
             style={styles.flex}
             contentContainerStyle={containerStyle()}
@@ -307,8 +311,8 @@ export default function CheckoutScene() {
             {renderShippingAddress()}
             {renderPaymentView()}
           </ScrollView>
-        </KeyboardAvoidingView>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -348,10 +352,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   landscape: { flexDirection: 'row' },
-  priceViewLandscape: {
-    flex: 1,
-    marginLeft: 24,
-  },
+  priceViewLandscape: { marginLeft: 24 },
   surfacePaymentDetails: { paddingHorizontal: 15, marginBottom: 24 },
   paymentDetailsContainer: {
     paddingVertical: 14,

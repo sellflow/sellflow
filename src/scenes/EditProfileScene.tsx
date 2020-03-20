@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  KeyboardAvoidingView,
   TextInput as TextInputType,
   ActivityIndicator,
 } from 'react-native';
@@ -26,6 +25,7 @@ import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/api/useAuthenticatedUser';
+import { KeyboardAvoidingView } from '../core-ui';
 
 export default function EditProfileScene() {
   let [firstName, setFirstName] = useState<string>('');
@@ -108,126 +108,130 @@ export default function EditProfileScene() {
       ? !isPasswordValid
       : false || !isEmailValid;
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollContentContainer}
-    >
-      <View style={containerStyle()}>
-        <KeyboardAvoidingView behavior="position">
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.formsContainer}>
-              <TextInput
-                label={t('First Name')}
-                labelStyle={styles.textInputLabel}
-                autoFocus={true}
-                clearTextOnFocus={false}
-                autoCapitalize="none"
-                textContentType="name"
-                mode="flat"
-                value={firstName}
-                onChangeText={setFirstName}
-                containerStyle={styles.textInputContainer}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  lastNameRef.current && lastNameRef.current.focus();
-                }}
-              />
-              <TextInput
-                ref={lastNameRef}
-                label={t('Last Name')}
-                labelStyle={styles.textInputLabel}
-                autoFocus={true}
-                clearTextOnFocus={false}
-                autoCapitalize="none"
-                textContentType="name"
-                mode="flat"
-                value={lastName}
-                onChangeText={setLastName}
-                containerStyle={styles.textInputContainer}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  emailRef.current && emailRef.current.focus();
-                }}
-              />
-              <TextInput
-                onFocus={() => {
-                  setIsEmailValid(true);
-                }}
-                onBlur={() => {
-                  setIsEmailValid(validateEmail(email));
-                }}
-                clearTextOnFocus={false}
-                autoCapitalize="none"
-                errorMessage={!isEmailValid ? INVALID_EMAIL_MESSAGE : undefined}
-                ref={emailRef}
-                label={t('Email Address')}
-                labelStyle={styles.textInputLabel}
-                textContentType="emailAddress"
-                mode="flat"
-                value={email}
-                containerStyle={styles.textInputContainer}
-                onChangeText={setEmail}
-                errorMessageStyle={styles.errorMessage}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  phoneNumberRef.current && phoneNumberRef.current.focus();
-                }}
-              />
-              <TextInput
-                clearTextOnFocus={false}
-                ref={phoneNumberRef}
-                label={t('Phone Number')}
-                labelStyle={styles.textInputLabel}
-                textContentType="telephoneNumber"
-                keyboardType="number-pad"
-                mode="flat"
-                value={phoneNumber}
-                containerStyle={styles.textInputContainer}
-                onChangeText={setPhoneNumber}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  passwordRef.current && passwordRef.current.focus();
-                }}
-              />
-              <TextInput
-                onFocus={() => {
-                  setIsPasswordValid(true);
-                }}
-                onBlur={() => {
-                  if (password.length > 0) {
-                    setIsPasswordValid(validatePassword(password));
-                  }
-                }}
-                ref={passwordRef}
-                textContentType="password"
-                autoCapitalize="none"
-                errorMessage={
-                  !isPasswordValid ? INVALID_PASSWORD_MESSAGE : undefined
+    <KeyboardAvoidingView>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContentContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={containerStyle()}>
+          <View style={styles.formsContainer}>
+            <TextInput
+              label={t('First Name')}
+              labelStyle={styles.textInputLabel}
+              autoFocus={true}
+              clearTextOnFocus={false}
+              autoCapitalize="none"
+              textContentType="name"
+              mode="flat"
+              value={firstName}
+              onChangeText={setFirstName}
+              containerStyle={styles.textInputContainer}
+              style={styles.textInputStyle}
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                lastNameRef.current && lastNameRef.current.focus();
+              }}
+            />
+            <TextInput
+              ref={lastNameRef}
+              label={t('Last Name')}
+              labelStyle={styles.textInputLabel}
+              autoFocus={true}
+              clearTextOnFocus={false}
+              autoCapitalize="none"
+              textContentType="name"
+              mode="flat"
+              value={lastName}
+              onChangeText={setLastName}
+              containerStyle={styles.textInputContainer}
+              style={styles.textInputStyle}
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                emailRef.current && emailRef.current.focus();
+              }}
+            />
+            <TextInput
+              onFocus={() => {
+                setIsEmailValid(true);
+              }}
+              onBlur={() => {
+                setIsEmailValid(validateEmail(email));
+              }}
+              clearTextOnFocus={false}
+              autoCapitalize="none"
+              errorMessage={!isEmailValid ? INVALID_EMAIL_MESSAGE : undefined}
+              ref={emailRef}
+              label={t('Email Address')}
+              labelStyle={styles.textInputLabel}
+              textContentType="emailAddress"
+              mode="flat"
+              value={email}
+              containerStyle={styles.textInputContainer}
+              style={styles.textInputStyle}
+              onChangeText={setEmail}
+              errorMessageStyle={styles.errorMessage}
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                phoneNumberRef.current && phoneNumberRef.current.focus();
+              }}
+            />
+            <TextInput
+              clearTextOnFocus={false}
+              ref={phoneNumberRef}
+              label={t('Phone Number')}
+              labelStyle={styles.textInputLabel}
+              textContentType="telephoneNumber"
+              keyboardType="number-pad"
+              mode="flat"
+              value={phoneNumber}
+              containerStyle={styles.textInputContainer}
+              style={styles.textInputStyle}
+              onChangeText={setPhoneNumber}
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                passwordRef.current && passwordRef.current.focus();
+              }}
+            />
+            <TextInput
+              onFocus={() => {
+                setIsPasswordValid(true);
+              }}
+              onBlur={() => {
+                if (password.length > 0) {
+                  setIsPasswordValid(validatePassword(password));
                 }
-                label={t('Password')}
-                labelStyle={styles.textInputLabel}
-                secureTextEntry={true}
-                mode="flat"
-                value={password}
-                onChangeText={setPassword}
-                containerStyle={styles.textInputContainer}
-                errorMessageStyle={styles.errorMessage}
-                returnKeyType="done"
-              />
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-        <Button
-          disabled={isDisabled}
-          onPress={saveChanges}
-          loading={saving}
-          style={[defaultButton, styles.buttonSaveContainer]}
-          labelStyle={defaultButtonLabel}
-        >
-          {!saving && t('Save Changes')}
-        </Button>
-      </View>
-    </ScrollView>
+              }}
+              ref={passwordRef}
+              textContentType="password"
+              autoCapitalize="none"
+              errorMessage={
+                !isPasswordValid ? INVALID_PASSWORD_MESSAGE : undefined
+              }
+              label={t('Password')}
+              labelStyle={styles.textInputLabel}
+              secureTextEntry={true}
+              mode="flat"
+              value={password}
+              onChangeText={setPassword}
+              containerStyle={styles.textInputContainer}
+              style={styles.textInputStyle}
+              errorMessageStyle={styles.errorMessage}
+              returnKeyType="done"
+            />
+          </View>
+          <Button
+            disabled={isDisabled}
+            onPress={saveChanges}
+            loading={saving}
+            style={[defaultButton, styles.buttonSaveContainer]}
+            labelStyle={defaultButtonLabel}
+          >
+            {!saving && t('Save Changes')}
+          </Button>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -260,6 +264,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     paddingVertical: 8,
   },
+  textInputStyle: { flexGrow: 1 },
   errorMessage: {
     padding: 0,
     marginTop: 0,
