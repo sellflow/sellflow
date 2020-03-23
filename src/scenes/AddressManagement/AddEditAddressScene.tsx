@@ -29,7 +29,7 @@ import { DeleteAddressModal } from './components';
 import { CountryModal, ModalBottomSheetMessage } from '../../components';
 import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
 import { AddressItem } from '../../types/types';
-import { emptyAddress } from '../../constants/defaultValues';
+import { newAddress } from '../../constants/defaultValues';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();
@@ -45,9 +45,9 @@ export default function AddEditAddressScene() {
   let [isCountryModalVisible, setIsCountryModalVisible] = useState<boolean>(
     false,
   );
-  let [addressData, setAddressData] = useState<Omit<AddressItem, 'id'>>(
-    emptyAddress,
-  );
+  let [addressData, setAddressData] = useState<
+    Omit<AddressItem, 'id' | 'name'>
+  >(newAddress);
   let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   let [errorMessage, setErrorMessage] = useState<string>('');
   let [bottomButtonHeight, setBottomButtonHeight] = useState<number>(0);
@@ -369,6 +369,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   paddingHorizontal: {
+    marginTop: 14,
     paddingHorizontal: 24,
   },
   headerRightText: {

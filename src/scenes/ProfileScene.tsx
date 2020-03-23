@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
-import { StackNavProp } from '../types/Navigation';
+import { StackNavProp, TabNavProp } from '../types/Navigation';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useAuth } from '../helpers/useAuth';
 import { Avatar } from '../core-ui';
@@ -14,7 +14,9 @@ import { useResetCart } from '../hooks/api/useShoppingCart';
 import { useGetShop } from '../hooks/api/useCustomerAddress';
 
 export default function ProfileScene() {
-  let { navigate } = useNavigation<StackNavProp<'Profile'>>();
+  let { navigate } = useNavigation<
+    StackNavProp<'Profile'> & TabNavProp<'ProfileTab'>
+  >();
   let { authToken, setAuthToken } = useAuth();
   let { data } = useGetShop();
 
@@ -36,7 +38,7 @@ export default function ProfileScene() {
 
   let onLogout = () => {
     setAuthToken('');
-    navigate('Home');
+    navigate('HomeTab');
   };
 
   let { email, firstName, lastName } = authenticatedUser.authenticatedUser;

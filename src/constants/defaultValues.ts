@@ -14,6 +14,18 @@ export const emptyAddress: AddressItem = {
   zip: '',
 };
 
+export const newAddress: Omit<AddressItem, 'id' | 'name'> = {
+  address1: '',
+  address2: '',
+  city: '',
+  country: '',
+  firstName: '',
+  lastName: '',
+  phone: '',
+  province: '',
+  zip: '',
+};
+
 export const emptyProduct: ProductDetails = {
   id: '',
   images: [],
