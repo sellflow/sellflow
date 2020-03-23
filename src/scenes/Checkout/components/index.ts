@@ -1,3 +1,4 @@
 import ShippingAddressForm from './ShippingAddressForm';
+import AddressList from './AddressList';
 
-export { ShippingAddressForm };
+export { ShippingAddressForm, AddressList };

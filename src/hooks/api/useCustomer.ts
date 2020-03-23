@@ -143,11 +143,7 @@ function useGetCustomerAddresses(
     if (type === 'update') {
       setAddresses(moreAddress);
     } else {
-      if (moreAddress.length <= 0) {
-        hasMore.current = false;
-      } else {
-        hasMore.current = true;
-      }
+      hasMore.current = !!data.customer?.addresses.pageInfo.hasNextPage;
       setAddresses([...addresses, ...moreAddress]);
     }
   };
@@ -158,9 +154,7 @@ function useGetCustomerAddresses(
     }
     if (isInitFetching && !!data) {
       let newAddresses = getCustomerAddresses(data);
-      if (newAddresses.length < first) {
-        hasMore.current = false;
-      }
+      hasMore.current = !!data.customer?.addresses.pageInfo.hasNextPage;
 
       setAddresses(newAddresses);
       setInitFetching(false);
