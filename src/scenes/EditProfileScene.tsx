@@ -9,7 +9,6 @@ import {
 import { Button, TextInput } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import {
@@ -18,7 +17,13 @@ import {
   validateEmail,
   validatePassword,
 } from '../helpers/validation';
-import { defaultButtonLabel, defaultButton } from '../constants/theme';
+import {
+  defaultButtonLabel,
+  defaultButton,
+  flatTextInputContainerStyle,
+  flatTextInputStyle,
+  textInputLabel,
+} from '../constants/theme';
 import { StackNavProp, StackRouteProp } from '../types/Navigation';
 import { useUpdateCustomer } from '../hooks/api/useCustomer';
 import {
@@ -118,7 +123,7 @@ export default function EditProfileScene() {
           <View style={styles.formsContainer}>
             <TextInput
               label={t('First Name')}
-              labelStyle={styles.textInputLabel}
+              labelStyle={textInputLabel}
               autoFocus={true}
               clearTextOnFocus={false}
               autoCapitalize="none"
@@ -126,17 +131,17 @@ export default function EditProfileScene() {
               mode="flat"
               value={firstName}
               onChangeText={setFirstName}
-              containerStyle={styles.textInputContainer}
-              style={styles.textInputStyle}
               returnKeyType="next"
               onSubmitEditing={() => {
                 lastNameRef.current && lastNameRef.current.focus();
               }}
+              containerStyle={flatTextInputContainerStyle}
+              style={flatTextInputStyle}
             />
             <TextInput
               ref={lastNameRef}
               label={t('Last Name')}
-              labelStyle={styles.textInputLabel}
+              labelStyle={textInputLabel}
               autoFocus={true}
               clearTextOnFocus={false}
               autoCapitalize="none"
@@ -144,12 +149,12 @@ export default function EditProfileScene() {
               mode="flat"
               value={lastName}
               onChangeText={setLastName}
-              containerStyle={styles.textInputContainer}
-              style={styles.textInputStyle}
               returnKeyType="next"
               onSubmitEditing={() => {
                 emailRef.current && emailRef.current.focus();
               }}
+              containerStyle={flatTextInputContainerStyle}
+              style={flatTextInputStyle}
             />
             <TextInput
               onFocus={() => {
@@ -163,35 +168,35 @@ export default function EditProfileScene() {
               errorMessage={!isEmailValid ? INVALID_EMAIL_MESSAGE : undefined}
               ref={emailRef}
               label={t('Email Address')}
-              labelStyle={styles.textInputLabel}
+              labelStyle={textInputLabel}
               textContentType="emailAddress"
               mode="flat"
               value={email}
-              containerStyle={styles.textInputContainer}
-              style={styles.textInputStyle}
               onChangeText={setEmail}
               errorMessageStyle={styles.errorMessage}
               returnKeyType="next"
               onSubmitEditing={() => {
                 phoneNumberRef.current && phoneNumberRef.current.focus();
               }}
+              containerStyle={flatTextInputContainerStyle}
+              style={flatTextInputStyle}
             />
             <TextInput
               clearTextOnFocus={false}
               ref={phoneNumberRef}
               label={t('Phone Number')}
-              labelStyle={styles.textInputLabel}
+              labelStyle={textInputLabel}
               textContentType="telephoneNumber"
               keyboardType="number-pad"
               mode="flat"
               value={phoneNumber}
-              containerStyle={styles.textInputContainer}
-              style={styles.textInputStyle}
               onChangeText={setPhoneNumber}
               returnKeyType="next"
               onSubmitEditing={() => {
                 passwordRef.current && passwordRef.current.focus();
               }}
+              containerStyle={flatTextInputContainerStyle}
+              style={flatTextInputStyle}
             />
             <TextInput
               onFocus={() => {
@@ -209,15 +214,15 @@ export default function EditProfileScene() {
                 !isPasswordValid ? INVALID_PASSWORD_MESSAGE : undefined
               }
               label={t('Password')}
-              labelStyle={styles.textInputLabel}
+              labelStyle={textInputLabel}
               secureTextEntry={true}
               mode="flat"
               value={password}
               onChangeText={setPassword}
-              containerStyle={styles.textInputContainer}
-              style={styles.textInputStyle}
               errorMessageStyle={styles.errorMessage}
               returnKeyType="done"
+              containerStyle={flatTextInputContainerStyle}
+              style={flatTextInputStyle}
             />
           </View>
           <Button
@@ -247,9 +252,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexGrow: 2,
   },
-  textInputLabel: {
-    fontSize: FONT_SIZE.small,
-  },
   formsContainer: {
     marginVertical: 12,
     alignSelf: 'flex-start',
@@ -259,12 +261,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 24,
   },
-  textInputContainer: {
-    marginTop: 16,
-    marginBottom: 4,
-    paddingVertical: 8,
-  },
-  textInputStyle: { flexGrow: 1 },
   errorMessage: {
     padding: 0,
     marginTop: 0,

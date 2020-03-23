@@ -14,7 +14,11 @@ import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { OrderItem } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { defaultButton, defaultButtonLabel } from '../constants/theme';
+import {
+  defaultButton,
+  defaultButtonLabel,
+  outlinedTextInput,
+} from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../generated/server/ShoppingCartCreate';
 import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../generated/server/ShoppingCartReplaceItem';
@@ -422,12 +426,15 @@ function Payment(props: PaymentProps) {
         <Text style={styles.opacity}>{t('Voucher code or giftcard')}</Text>
         <View style={styles.voucherInputButtonContainer}>
           <TextInput
-            containerStyle={styles.voucherTextInputContainer}
             autoCapitalize="none"
             returnKeyType="done"
             value={voucherCode}
             onChangeText={onVoucherCodeChange}
-            style={styles.voucherTextInputStyle}
+            containerStyle={[
+              outlinedTextInput,
+              styles.voucherTextInputContainer,
+            ]}
+            style={outlinedTextInput}
           />
           <Button
             style={defaultButton}
@@ -500,14 +507,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.lightGrey,
   },
-  voucherTextInputStyle: {
-    height: 48,
-  },
   voucherTextInputContainer: {
     flexGrow: 1,
-    height: 48,
-    borderColor: COLORS.lightGrey,
-    borderWidth: 1,
     marginRight: 16,
   },
   voucherInputButtonContainer: {

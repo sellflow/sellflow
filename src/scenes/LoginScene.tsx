@@ -11,7 +11,13 @@ import { useNavigation } from '@react-navigation/native';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { defaultButtonLabel, defaultButton } from '../constants/theme';
+import {
+  defaultButtonLabel,
+  defaultButton,
+  flatTextInputContainerStyle,
+  flatTextInputStyle,
+  textInputLabel,
+} from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import {
@@ -168,18 +174,19 @@ export default function LoginScene() {
       </Portal>
       <View>
         <TextInput
-          label={t('Email Address')}
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          containerStyle={styles.textInputContainer}
-          labelStyle={styles.inputLabel}
-          style={styles.textSize}
-          returnKeyType="next"
-          ref={emailRef}
           onSubmitEditing={() => {
             passwordRef.current && passwordRef.current.focus();
           }}
+          returnKeyType="next"
+          ref={emailRef}
+          mode="flat"
+          label={t('Email Address')}
+          value={email}
+          onChangeText={setEmail}
+          labelStyle={textInputLabel}
+          autoCapitalize="none"
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
         />
         <TextInput
           returnKeyType="done"
@@ -189,9 +196,10 @@ export default function LoginScene() {
           onChangeText={setPassword}
           autoCapitalize="none"
           secureTextEntry={true}
-          containerStyle={styles.textInputContainer}
-          labelStyle={styles.inputLabel}
-          style={styles.textSize}
+          mode="flat"
+          labelStyle={textInputLabel}
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
         />
         <TouchableOpacity
           style={styles.forgetPassword}
@@ -221,14 +229,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     justifyContent: 'space-between',
   },
-  textInputContainer: {
-    borderWidth: 0,
-    borderBottomWidth: 1,
-    justifyContent: 'center',
-    marginTop: 16,
-  },
   forgetPassword: { alignSelf: 'flex-end', marginTop: 24 },
-  inputLabel: { fontSize: FONT_SIZE.small, marginBottom: 12 },
   textSize: { fontSize: FONT_SIZE.medium },
   colorPrimary: { color: COLORS.primaryColor },
   normal: {

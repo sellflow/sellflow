@@ -3,7 +3,12 @@ import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Portal } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
-import { defaultButton, defaultButtonLabel } from '../constants/theme';
+import {
+  defaultButton,
+  defaultButtonLabel,
+  flatTextInputContainerStyle,
+  flatTextInputStyle,
+} from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
 import { ModalBottomSheet } from '../core-ui';
@@ -80,13 +85,13 @@ export default function ForgotPasswordScene() {
       <View style={styles.textInputContainer}>
         <TextInput
           mode="flat"
-          style={styles.textInput}
-          containerStyle={styles.textInput}
           label={t('Email Address')}
           value={emailValue}
           onChangeText={setEmailValue}
           autoFocus={true}
           autoCapitalize="none"
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
         />
       </View>
       <Button
@@ -107,10 +112,8 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     flex: 1,
+    marginTop: 16,
     marginHorizontal: 24,
-  },
-  textInput: {
-    marginTop: 8,
   },
   buttonStyle: {
     marginVertical: 24,

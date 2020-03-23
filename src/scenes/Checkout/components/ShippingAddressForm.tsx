@@ -7,9 +7,13 @@ import {
 } from 'react-native';
 import { Text, TextInput } from 'exoflex';
 
-import { FONT_SIZE } from '../../../constants/fonts';
 import { AddressItem } from '../../../types/types';
 import { CountryModal } from '../../../components';
+import {
+  flatTextInputContainerStyle,
+  flatTextInputStyle,
+  textInputLabel,
+} from '../../../constants/theme';
 
 type Props = {
   address: AddressItem;
@@ -55,10 +59,10 @@ export default function ShippingAddressForm(props: Props) {
         value={address.firstName}
         onChangeText={(firstName) => onChangeAddress({ ...address, firstName })}
         returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
         onSubmitEditing={() => lastNameRef.current?.focus()}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <TextInput
         label={t('Last Name')}
@@ -70,10 +74,10 @@ export default function ShippingAddressForm(props: Props) {
         value={address.lastName}
         onChangeText={(lastName) => onChangeAddress({ ...address, lastName })}
         returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
         onSubmitEditing={() => address1Ref.current?.focus()}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <TextInput
         label={t('Address 1')}
@@ -85,10 +89,10 @@ export default function ShippingAddressForm(props: Props) {
         value={address.address1}
         onChangeText={(address1) => onChangeAddress({ ...address, address1 })}
         returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
         onSubmitEditing={() => address2Ref.current?.focus()}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <TextInput
         label={t('Address 2 (optional)')}
@@ -100,10 +104,10 @@ export default function ShippingAddressForm(props: Props) {
         value={address.address2}
         onChangeText={(address2) => onChangeAddress({ ...address, address2 })}
         returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
         onSubmitEditing={() => cityRef.current?.focus()}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <TextInput
         label={t('City')}
@@ -115,10 +119,10 @@ export default function ShippingAddressForm(props: Props) {
         value={address.city}
         onChangeText={(city) => onChangeAddress({ ...address, city })}
         returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
         onSubmitEditing={() => provinceRef.current?.focus()}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <TextInput
         label={t('Province')}
@@ -130,10 +134,10 @@ export default function ShippingAddressForm(props: Props) {
         value={address.province}
         onChangeText={(province) => onChangeAddress({ ...address, province })}
         returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
         onSubmitEditing={toggleCountryModal}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <TouchableOpacity onPress={toggleCountryModal}>
         <TextInput
@@ -144,11 +148,11 @@ export default function ShippingAddressForm(props: Props) {
           mode="flat"
           value={address.country}
           returnKeyType="next"
-          labelStyle={styles.textInputLabel}
-          containerStyle={styles.textInputContainer}
-          style={styles.textInputStyle}
+          labelStyle={textInputLabel}
           pointerEvents="none"
           editable={false}
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
         />
       </TouchableOpacity>
       <TextInput
@@ -161,10 +165,10 @@ export default function ShippingAddressForm(props: Props) {
         value={address.zip}
         onChangeText={(zip) => onChangeAddress({ ...address, zip })}
         returnKeyType="next"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
         onSubmitEditing={() => phoneRef.current?.focus()}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <TextInput
         label={t('Phone Number')}
@@ -176,9 +180,9 @@ export default function ShippingAddressForm(props: Props) {
         onChangeText={(phone) => onChangeAddress({ ...address, phone })}
         returnKeyType="done"
         keyboardType="number-pad"
-        labelStyle={styles.textInputLabel}
-        containerStyle={styles.textInputContainer}
-        style={styles.textInputStyle}
+        labelStyle={textInputLabel}
+        containerStyle={flatTextInputContainerStyle}
+        style={flatTextInputStyle}
       />
       <CountryModal
         countryVisible={isCountryModalVisible}
@@ -192,8 +196,5 @@ export default function ShippingAddressForm(props: Props) {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   opacity: { opacity: 0.6 },
-  textInputContainer: { marginBottom: 24 },
-  textInputStyle: { height: 36 },
-  textInputLabel: { fontSize: FONT_SIZE.small },
   shippingInfo: { marginBottom: 16 },
 });

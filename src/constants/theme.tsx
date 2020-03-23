@@ -93,3 +93,16 @@ export const defaultButtonLabel: StyleProp<TextStyle> = {
   fontSize: FONT_SIZE.medium,
   fontFamily: FONT_FAMILY.MEDIUM,
 };
+
+export const flatTextInputContainerStyle: StyleProp<ViewStyle> = {
+  height: 75,
+  marginBottom: 10,
+};
+
+export const flatTextInputStyle: StyleProp<ViewStyle> = { height: 50 };
+
+export const outlinedTextInput: StyleProp<ViewStyle> = { height: 48 };
+
+export const textInputLabel: StyleProp<TextStyle> = {
+  fontSize: FONT_SIZE.small,
+};

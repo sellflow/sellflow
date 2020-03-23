@@ -6,7 +6,7 @@ import {
   TextInput as TextInputType,
   TouchableOpacity,
 } from 'react-native';
-import { Text, TextInput, Button, ActivityIndicator, Portal } from 'exoflex';
+import { Text, TextInput, Button, ActivityIndicator } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../../constants/fonts';
@@ -17,7 +17,13 @@ import {
   useCustomerEditAddress,
   useCustomerAddressDelete,
 } from '../../hooks/api/useCustomerAddress';
-import { defaultButton, defaultButtonLabel } from '../../constants/theme';
+import {
+  defaultButton,
+  defaultButtonLabel,
+  flatTextInputContainerStyle,
+  flatTextInputStyle,
+  textInputLabel,
+} from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
 import { DeleteAddressModal } from './components';
 import { CountryModal, ModalBottomSheetMessage } from '../../components';
@@ -185,20 +191,18 @@ export default function AddEditAddressScene() {
 
   return (
     <View style={styles.flex}>
-      <Portal>
-        <ModalBottomSheet
-          title={t('An Error Occured!')}
-          isModalVisible={isModalVisible}
-          toggleModal={toggleModalVisible}
-        >
-          <ModalBottomSheetMessage
-            isError={true}
-            message={errorMessage}
-            onPressModalButton={toggleModalVisible}
-            buttonText={t('Close')}
-          />
-        </ModalBottomSheet>
-      </Portal>
+      <ModalBottomSheet
+        title={t('An Error Occured!')}
+        isModalVisible={isModalVisible}
+        toggleModal={toggleModalVisible}
+      >
+        <ModalBottomSheetMessage
+          isError={true}
+          message={errorMessage}
+          onPressModalButton={toggleModalVisible}
+          buttonText={t('Close')}
+        />
+      </ModalBottomSheet>
       <KeyboardAvoidingView keyboardVerticalOffset={-bottomButtonHeight}>
         <DeleteAddressModal
           deleteVisible={isDeleteModalVisible}
@@ -222,12 +226,13 @@ export default function AddEditAddressScene() {
             returnKeyType="next"
             mode="flat"
             label={t('First Name')}
+            labelStyle={textInputLabel}
             value={addressData.firstName}
             onChangeText={(firstName) =>
               setAddressData({ ...addressData, firstName })
             }
-            containerStyle={styles.textInput}
-            style={styles.textInputStyle}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
           />
           <TextInput
             onSubmitEditing={() => {
@@ -237,12 +242,13 @@ export default function AddEditAddressScene() {
             returnKeyType="next"
             mode="flat"
             label={t('Last Name')}
+            labelStyle={textInputLabel}
             value={addressData.lastName}
             onChangeText={(lastName) =>
               setAddressData({ ...addressData, lastName })
             }
-            containerStyle={styles.textInput}
-            style={styles.textInputStyle}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
           />
           <TextInput
             onSubmitEditing={toggleCountryModal}
@@ -250,23 +256,25 @@ export default function AddEditAddressScene() {
             ref={address1Ref}
             mode="flat"
             label={t('Address')}
+            labelStyle={textInputLabel}
             value={addressData.address1}
             onChangeText={(address1) =>
               setAddressData({ ...addressData, address1 })
             }
-            containerStyle={styles.textInput}
-            style={styles.textInputStyle}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
             autoCapitalize="words"
           />
           <TouchableOpacity onPress={toggleCountryModal}>
             <TextInput
               mode="flat"
               label={t('Country')}
+              labelStyle={textInputLabel}
               value={addressData.country}
               pointerEvents="none"
               editable={false}
-              containerStyle={styles.textInput}
-              style={styles.textInputStyle}
+              containerStyle={flatTextInputContainerStyle}
+              style={flatTextInputStyle}
             />
           </TouchableOpacity>
           <TextInput
@@ -277,12 +285,13 @@ export default function AddEditAddressScene() {
             ref={provinceRef}
             mode="flat"
             label={t('State / Province')}
+            labelStyle={textInputLabel}
             value={addressData.province}
             onChangeText={(province) =>
               setAddressData({ ...addressData, province })
             }
-            containerStyle={styles.textInput}
-            style={styles.textInputStyle}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
             autoCapitalize="words"
           />
           <TextInput
@@ -293,10 +302,11 @@ export default function AddEditAddressScene() {
             ref={cityRef}
             mode="flat"
             label={t('City')}
+            labelStyle={textInputLabel}
             value={addressData.city}
             onChangeText={(city) => setAddressData({ ...addressData, city })}
-            containerStyle={styles.textInput}
-            style={styles.textInputStyle}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
             autoCapitalize="words"
           />
           <TextInput
@@ -307,22 +317,24 @@ export default function AddEditAddressScene() {
             ref={zipRef}
             mode="flat"
             label={t('Postal / Zip Code')}
+            labelStyle={textInputLabel}
             value={addressData.zip}
             onChangeText={(zip) => setAddressData({ ...addressData, zip })}
-            containerStyle={styles.textInput}
-            style={styles.textInputStyle}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
           />
           <TextInput
             returnKeyType="done"
             ref={phoneRef}
             mode="flat"
             label={t('Phone Number')}
+            labelStyle={textInputLabel}
             value={addressData.phone}
             onChangeText={(phone) => setAddressData({ ...addressData, phone })}
             keyboardType="number-pad"
             textContentType="telephoneNumber"
-            containerStyle={styles.textInput}
-            style={styles.textInputStyle}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
           />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -364,10 +376,6 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
     color: COLORS.red,
   },
-  textInput: {
-    marginTop: 16,
-  },
-  textInputStyle: { height: 36 },
   buttonStyle: {
     margin: 24,
   },

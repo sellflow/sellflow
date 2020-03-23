@@ -3,18 +3,18 @@ import {
   View,
   StyleSheet,
   Image,
-  TextInput,
   TouchableOpacity,
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import { Text } from 'exoflex';
+import { Text, TextInput } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import { FONT_SIZE } from '../constants/fonts';
 import { OrderItem as OrderItemType } from '../types/types';
+import { outlinedTextInput } from '../constants/theme';
 
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;
@@ -78,7 +78,6 @@ export default function OrderItem(props: Props) {
       {cardType === 'checkout' ? (
         <View style={styles.amountContainer}>
           <TextInput
-            style={styles.amountInput}
             keyboardType="number-pad"
             returnKeyType="done"
             value={quantity.toString()}
@@ -93,6 +92,8 @@ export default function OrderItem(props: Props) {
             onChangeText={(value) => {
               setQuantity(valueBetweenZeroToMax(parseInt(value, 10), 999));
             }}
+            containerStyle={[outlinedTextInput, styles.amountInputWidth]}
+            style={[outlinedTextInput, styles.amount]}
           />
           <TouchableOpacity
             activeOpacity={0.5}
@@ -132,14 +133,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     maxWidth: 70,
   },
-  amountInput: {
-    width: 40,
-    height: 40,
-    borderWidth: 1,
-    borderColor: COLORS.lightGrey,
-    alignItems: 'center',
+  amountInputWidth: {
+    width: 50,
+  },
+  amount: {
     textAlign: 'center',
-    backgroundColor: COLORS.white,
   },
   price: {
     flexDirection: 'row',

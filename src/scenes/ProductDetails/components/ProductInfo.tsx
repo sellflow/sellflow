@@ -9,6 +9,7 @@ import { OptionsData, Options, ProductDetails } from '../../../types/types';
 import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
 import { COLORS } from '../../../constants/colors';
 import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
+import { outlinedTextInput } from '../../../constants/theme';
 
 type Props = {
   onSelectionOptionChange: (key: string, value: string) => void;
@@ -77,10 +78,10 @@ export default function ProductInfo(props: Props) {
         </View>
         {radioGroupRenderView}
         <View style={styles.paddingHorizontal}>
-          <Text style={styles.quantityText}>Quantity</Text>
+          <Text style={styles.quantityText}>{t('Quantity')}</Text>
           <TextInput
-            containerStyle={styles.textInputStyle}
-            style={styles.textInputStyle}
+            containerStyle={[outlinedTextInput, styles.textInputWidth]}
+            style={outlinedTextInput}
             value={quantity.toString()}
             onBlur={() => {
               if (quantity === 0) {
@@ -121,9 +122,8 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.small,
     marginBottom: 12,
   },
-  textInputStyle: {
-    width: 80,
-    height: 48,
+  textInputWidth: {
+    width: 60,
   },
   flexRow: {
     flexDirection: 'row',
