@@ -297,12 +297,9 @@ export default function CheckoutScene() {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   newAddressButton: {
-    flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderWidth: 1,
     borderColor: COLORS.lightGrey,
+    marginTop: 12,
   },
   opacity: { opacity: 0.6, marginTop: 16 },
   proceedButtonStyle: { marginBottom: 24 },

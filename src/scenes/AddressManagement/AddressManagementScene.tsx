@@ -44,7 +44,7 @@ export default function AddressManagementScene() {
     loading: loadingDeleteAddress,
   } = useCustomerAddressDelete({
     onCompleted: () => {
-      refetchAddresses('update', { first, customerAccessToken });
+      refetchAddresses('update', { first, customerAccessToken, after: null });
     },
   });
 
@@ -53,13 +53,13 @@ export default function AddressManagementScene() {
     loading: loadingSetDefaultAddress,
   } = useCustomerSetDefaultAddress({
     onCompleted: () => {
-      refetchAddresses('update', { first, customerAccessToken });
+      refetchAddresses('update', { first, customerAccessToken, after: null });
     },
   });
 
   useFocusEffect(
     useCallback(() => {
-      refetchAddresses('update', { first, customerAccessToken });
+      refetchAddresses('update', { first, customerAccessToken, after: null });
 
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps
