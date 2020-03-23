@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import { Text, Button } from 'exoflex';
+import { Text, Button, ActivityIndicator } from 'exoflex';
 import {
   useNavigation,
   useRoute,
@@ -48,35 +48,41 @@ export default function CheckoutScene() {
 
   let toggleModalVisible = () => setIsModalVisible(!isModalVisible);
 
-  let { updateCartAddress, data: updateAddressData } = useCheckoutUpdateAddress(
-    {
-      onCompleted: ({ checkoutShippingAddressUpdateV2 }) => {
-        if (
-          checkoutShippingAddressUpdateV2 &&
-          checkoutShippingAddressUpdateV2.checkout
-        ) {
-          let { subtotalPriceV2 } = checkoutShippingAddressUpdateV2.checkout;
+  let {
+    updateCartAddress,
+    data: updateAddressData,
+    loading: updateAddressLoading,
+  } = useCheckoutUpdateAddress({
+    onCompleted: ({ checkoutShippingAddressUpdateV2 }) => {
+      if (
+        checkoutShippingAddressUpdateV2 &&
+        checkoutShippingAddressUpdateV2.checkout
+      ) {
+        let { subtotalPriceV2 } = checkoutShippingAddressUpdateV2.checkout;
 
-          setPaymentInfo({
-            ...paymentInfo,
-            subtotalPrice: Number(subtotalPriceV2.amount),
-          });
-        }
-      },
+        setPaymentInfo({
+          ...paymentInfo,
+          subtotalPrice: Number(subtotalPriceV2.amount),
+        });
+      }
     },
-  );
+  });
 
   let {
     addresses,
     refetch: refetchAddresses,
     hasMore,
     isFetchingMore,
+    loading,
   } = useGetCustomerAddresses(first, authToken);
 
   useFocusEffect(
     useCallback(() => {
+      let firstIn = async () => {
+        await updateAddress(selectedAddress);
+      };
+      firstIn();
       refetchAddresses('update', { first, customerAccessToken: authToken });
-
       return undefined;
     }, []), // eslint-disable-line react-hooks/exhaustive-deps
   );
@@ -92,11 +98,7 @@ export default function CheckoutScene() {
       let {
         checkoutUserErrors,
       } = updateAddressData.checkoutShippingAddressUpdateV2;
-      if (checkoutUserErrors.length === 0) {
-        navigateToPayment(
-          updateAddressData.checkoutShippingAddressUpdateV2.checkout?.webUrl,
-        );
-      } else {
+      if (checkoutUserErrors.length !== 0) {
         toggleModalVisible();
       }
     }
@@ -140,10 +142,21 @@ export default function CheckoutScene() {
   };
 
   let onProceedPressed = async () => {
-    if (authToken) {
-      await updateAddress(selectedAddress);
-    } else {
-      await updateAddress(address);
+    if (!updateAddressLoading) {
+      if (
+        updateAddressData &&
+        updateAddressData.checkoutShippingAddressUpdateV2?.checkoutUserErrors
+          .length === 0
+      ) {
+        if (authToken) {
+          await updateAddress(selectedAddress);
+        } else {
+          await updateAddress(address);
+        }
+        navigateToPayment(
+          updateAddressData.checkoutShippingAddressUpdateV2.checkout?.webUrl,
+        );
+      }
     }
   };
 
@@ -173,14 +186,18 @@ export default function CheckoutScene() {
       return (
         <View style={styles.flex}>
           <Text style={styles.opacity}>{t('Shipping Address')}</Text>
-          <AddressList
-            addresses={addresses}
-            selectedAddress={selectedAddress}
-            onEditAddress={onPressEdit}
-            onSelectAddress={onSelect}
-            onEndReached={onEndReached}
-            hasMore={hasMore}
-          />
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <AddressList
+              addresses={addresses}
+              selectedAddress={selectedAddress}
+              onEditAddress={onPressEdit}
+              onSelectAddress={onSelect}
+              onEndReached={onEndReached}
+              hasMore={hasMore}
+            />
+          )}
           <Button
             preset="secondary"
             style={[defaultButton, styles.newAddressButton]}
@@ -232,7 +249,7 @@ export default function CheckoutScene() {
         style={[defaultButton, styles.proceedButtonStyle]}
         labelStyle={defaultButtonLabel}
         onPress={onProceedPressed}
-        disabled={isDisabled}
+        disabled={isDisabled || updateAddressLoading}
       >
         {t('Proceed to payment')}
       </Button>
