@@ -279,7 +279,7 @@ export default function CheckoutScene() {
   } else {
     return (
       <KeyboardAvoidingView>
-        <View style={styles.flex}>
+        <SafeAreaView style={styles.flex}>
           {renderBottomModal()}
           <ScrollView
             style={styles.flex}
@@ -288,7 +288,7 @@ export default function CheckoutScene() {
             {renderShippingAddress()}
             {renderPaymentView()}
           </ScrollView>
-        </View>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     );
   }

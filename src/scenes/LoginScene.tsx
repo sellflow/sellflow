@@ -4,8 +4,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput as TextInputType,
+  SafeAreaView,
 } from 'react-native';
-import { Text, TextInput, Button, Portal } from 'exoflex';
+import { Text, TextInput, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
@@ -158,71 +159,77 @@ export default function LoginScene() {
   let toggleModalVisible = () => setIsModalVisible(!isModalVisible);
 
   return (
-    <View style={[containerStyle(), styles.container]}>
-      <Portal>
-        <ModalBottomSheet
-          title={t('Something went wrong!')}
-          isModalVisible={isModalVisible}
-          toggleModal={toggleModalVisible}
-        >
-          <ModalBottomSheetMessage
-            isError={true}
-            message={errorMessage}
-            onPressModalButton={toggleModalVisible}
-          />
-        </ModalBottomSheet>
-      </Portal>
-      <View>
-        <TextInput
-          onSubmitEditing={() => {
-            passwordRef.current && passwordRef.current.focus();
-          }}
-          returnKeyType="next"
-          ref={emailRef}
-          mode="flat"
-          label={t('Email Address')}
-          value={email}
-          onChangeText={setEmail}
-          labelStyle={textInputLabel}
-          autoCapitalize="none"
-          containerStyle={flatTextInputContainerStyle}
-          style={flatTextInputStyle}
-        />
-        <TextInput
-          returnKeyType="done"
-          ref={passwordRef}
-          label={t('Password')}
-          value={password}
-          onChangeText={setPassword}
-          autoCapitalize="none"
-          secureTextEntry={true}
-          mode="flat"
-          labelStyle={textInputLabel}
-          containerStyle={flatTextInputContainerStyle}
-          style={flatTextInputStyle}
-        />
-        <TouchableOpacity
-          style={styles.forgetPassword}
-          onPress={() => navigate('ForgotPassword')}
-        >
-          <Text style={[styles.colorPrimary, styles.textSize]} weight="medium">
-            {t('Forgot Password?')}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Button
-        loading={isLoading}
-        style={defaultButton}
-        labelStyle={defaultButtonLabel}
-        onPress={onSubmit}
+    <SafeAreaView style={styles.flex}>
+      <ModalBottomSheet
+        title={t('Something went wrong!')}
+        isModalVisible={isModalVisible}
+        toggleModal={toggleModalVisible}
       >
-        {!isLoading && t('Log in')}
-      </Button>
-    </View>
+        <ModalBottomSheetMessage
+          isError={true}
+          message={errorMessage}
+          onPressModalButton={toggleModalVisible}
+        />
+      </ModalBottomSheet>
+      <View style={[containerStyle(), styles.container]}>
+        <View>
+          <TextInput
+            onSubmitEditing={() => {
+              passwordRef.current && passwordRef.current.focus();
+            }}
+            returnKeyType="next"
+            ref={emailRef}
+            mode="flat"
+            label={t('Email Address')}
+            value={email}
+            onChangeText={setEmail}
+            labelStyle={textInputLabel}
+            autoCapitalize="none"
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
+          />
+          <TextInput
+            returnKeyType="done"
+            ref={passwordRef}
+            label={t('Password')}
+            value={password}
+            onChangeText={setPassword}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            mode="flat"
+            labelStyle={textInputLabel}
+            containerStyle={flatTextInputContainerStyle}
+            style={flatTextInputStyle}
+          />
+          <TouchableOpacity
+            style={styles.forgetPassword}
+            onPress={() => navigate('ForgotPassword')}
+          >
+            <Text
+              style={[styles.colorPrimary, styles.textSize]}
+              weight="medium"
+            >
+              {t('Forgot Password?')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Button
+          loading={isLoading}
+          style={defaultButton}
+          labelStyle={defaultButtonLabel}
+          onPress={onSubmit}
+        >
+          {!isLoading && t('Log in')}
+        </Button>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     paddingTop: 16,

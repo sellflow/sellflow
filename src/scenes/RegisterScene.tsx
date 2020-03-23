@@ -5,6 +5,7 @@ import {
   TextInput as TextInputType,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import { Text, TextInput, Button, Portal } from 'exoflex';
 
@@ -152,7 +153,7 @@ export default function RegisterScene() {
 
   let isLoading = setAuthenticatedUserLoading || registerLoading;
   return (
-    <View style={containerStyle()}>
+    <SafeAreaView style={containerStyle()}>
       <Portal>
         <ModalBottomSheet
           title={t('Something went wrong!')}
@@ -304,7 +305,7 @@ export default function RegisterScene() {
           {!isLoading && t('Register')}
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Portal } from 'exoflex';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { TextInput, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -67,21 +67,19 @@ export default function ForgotPasswordScene() {
       );
 
   return (
-    <View style={styles.flex}>
-      <Portal>
-        <ModalBottomSheet
-          title={isError ? t('An Error Occured!') : t('Email Has Been Sent!')}
-          isModalVisible={isVisible}
-          toggleModal={toggleModalVisible}
-        >
-          <ModalBottomSheetMessage
-            isError={isError}
-            message={errorMessage}
-            onPressModalButton={onPressModalButton}
-            buttonText={isError ? t('Try Again') : t('Back To Login')}
-          />
-        </ModalBottomSheet>
-      </Portal>
+    <SafeAreaView style={styles.flex}>
+      <ModalBottomSheet
+        title={isError ? t('An Error Occured!') : t('Email Has Been Sent!')}
+        isModalVisible={isVisible}
+        toggleModal={toggleModalVisible}
+      >
+        <ModalBottomSheetMessage
+          isError={isError}
+          message={errorMessage}
+          onPressModalButton={onPressModalButton}
+          buttonText={isError ? t('Try Again') : t('Back To Login')}
+        />
+      </ModalBottomSheet>
       <View style={styles.textInputContainer}>
         <TextInput
           mode="flat"
@@ -102,7 +100,7 @@ export default function ForgotPasswordScene() {
       >
         {!loading && t('Reset Password')}
       </Button>
-    </View>
+    </SafeAreaView>
   );
 }
 

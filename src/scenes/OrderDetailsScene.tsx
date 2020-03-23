@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { Text, Button } from 'exoflex';
+import { Text } from 'exoflex';
 
 import { Surface } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
@@ -10,7 +10,6 @@ import { OrderItem, PaymentDetails } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { StackRouteProp } from '../types/Navigation';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
-import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { PaymentDetailsProps } from '../types/types';
 
 export default function OrderDetailsScene() {
@@ -100,13 +99,6 @@ export default function OrderDetailsScene() {
           containerStyle={styles.surfacePaymentDetails}
         />
       </ScrollView>
-      <Button
-        onPress={() => {}}
-        style={[defaultButton, styles.bottomButton]}
-        labelStyle={defaultButtonLabel}
-      >
-        {t('Track Order')}
-      </Button>
     </SafeAreaView>
   );
 }
@@ -114,9 +106,11 @@ export default function OrderDetailsScene() {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 24,
+    paddingBottom: 24,
   },
   containerWide: {
     marginHorizontal: 36,
+    paddingBottom: 24,
   },
   orderInfoSection: {
     marginVertical: 16,
@@ -153,11 +147,6 @@ const styles = StyleSheet.create({
   },
   mediumText: {
     fontSize: FONT_SIZE.medium,
-  },
-  bottomButton: {
-    marginHorizontal: 24,
-    marginTop: 24,
-    marginBottom: 10,
   },
   marginBottom: {
     marginBottom: 6,
