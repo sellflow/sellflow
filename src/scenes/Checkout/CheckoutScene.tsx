@@ -7,17 +7,20 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 
-import { ModalBottomSheetMessage } from '../../components';
-import { Surface, ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
+import { ModalBottomSheetMessage, PaymentDetails } from '../../components';
+import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
 import { addressItemData } from '../../fixtures/AddressItemData';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
-import { FONT_SIZE } from '../../constants/fonts';
 import { COLORS } from '../../constants/colors';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { useAuth } from '../../helpers/useAuth';
 import { emptyAddress } from '../../constants/defaultValues';
-import { AddressItem, PaymentInfo } from '../../types/types';
+import {
+  AddressItem,
+  PaymentInfo,
+  PaymentDetailsProps,
+} from '../../types/types';
 import { useGetCustomerAddresses } from '../../hooks/api/useCustomer';
 import { useCheckoutUpdateAddress } from '../../hooks/api/useShopifyCart';
 import { ShippingAddressForm, AddressList } from './components';
@@ -197,6 +200,21 @@ export default function CheckoutScene() {
     }
   };
 
+  let paymentData: Array<PaymentDetailsProps> = [
+    {
+      name: t('Subtotal'),
+      value: formatCurrency(subtotalPrice),
+    },
+    {
+      name: t('Shipping'),
+      value: t('Calculated at next step'),
+    },
+    {
+      name: t('Total'),
+      value: formatCurrency(subtotalPrice),
+    },
+  ];
+
   let renderPaymentView = () => (
     <View
       style={
@@ -206,22 +224,10 @@ export default function CheckoutScene() {
         ]
       }
     >
-      <Surface containerStyle={styles.surfacePaymentDetails}>
-        <View style={styles.paymentDetailsContainer}>
-          <Text style={styles.paymentDetailLabel}>{t('Subtotal')}</Text>
-          <Text style={styles.mediumText}>{formatCurrency(subtotalPrice)}</Text>
-        </View>
-        <View style={styles.paymentDetailsContainer}>
-          <Text style={styles.paymentDetailLabel}>{t('Shipping')}</Text>
-          <Text style={styles.mediumText}>{t('Calculated at next step')}</Text>
-        </View>
-        <View style={[styles.paymentDetailsContainer, styles.totalBorder]}>
-          <Text style={styles.paymentDetailLabel}>{t('Total')}</Text>
-          <Text weight="bold" style={styles.mediumText}>
-            {formatCurrency(subtotalPrice)}
-          </Text>
-        </View>
-      </Surface>
+      <PaymentDetails
+        data={paymentData}
+        containerStyle={styles.surfacePaymentDetails}
+      />
       <Button
         style={[defaultButton, styles.proceedButtonStyle]}
         labelStyle={defaultButtonLabel}
@@ -290,7 +296,14 @@ export default function CheckoutScene() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  mediumText: { fontSize: FONT_SIZE.medium },
+  newAddressButton: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.lightGrey,
+  },
   opacity: { opacity: 0.6, marginTop: 16 },
   proceedButtonStyle: { marginBottom: 24 },
   container: {
@@ -308,23 +321,4 @@ const styles = StyleSheet.create({
   landscape: { flexDirection: 'row' },
   priceViewLandscape: { marginLeft: 24 },
   surfacePaymentDetails: { paddingHorizontal: 15, marginBottom: 24 },
-  paymentDetailsContainer: {
-    paddingVertical: 14,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  paymentDetailLabel: {
-    fontSize: FONT_SIZE.medium,
-    marginBottom: 6,
-  },
-  totalBorder: {
-    borderTopWidth: 1,
-    borderColor: COLORS.lightGrey,
-  },
-  newAddressButton: {
-    borderWidth: 1,
-    borderColor: COLORS.lightGrey,
-    marginTop: 12,
-    marginBottom: 24,
-  },
 });

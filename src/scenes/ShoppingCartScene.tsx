@@ -9,10 +9,9 @@ import {
 import { Text, Button, TextInput, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
-import { Surface, KeyboardAvoidingView } from '../core-ui';
-import { FONT_SIZE } from '../constants/fonts';
+import { KeyboardAvoidingView } from '../core-ui';
 import { COLORS } from '../constants/colors';
-import { OrderItem } from '../components';
+import { OrderItem, PaymentDetails } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import {
   defaultButton,
@@ -23,7 +22,12 @@ import { StackNavProp } from '../types/Navigation';
 import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../generated/server/ShoppingCartCreate';
 import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../generated/server/ShoppingCartReplaceItem';
 import { ShoppingCartDiscountCodeApply_checkoutDiscountCodeApplyV2_checkout as CheckoutDiscountApply } from '../generated/server/ShoppingCartDiscountCodeApply';
-import { Cart, LineItem, OrderItem as OrderItemType } from '../types/types';
+import {
+  Cart,
+  LineItem,
+  OrderItem as OrderItemType,
+  PaymentDetailsProps,
+} from '../types/types';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import {
   useGetCart,
@@ -419,7 +423,20 @@ function Payment(props: PaymentProps) {
   } = props;
   let { total, subtotal } = data;
   let formatCurrency = useCurrencyFormatter();
-
+  let paymentData: Array<PaymentDetailsProps> = [
+    {
+      name: t('Subtotal'),
+      value: formatCurrency(subtotal),
+    },
+    {
+      name: t('Discount'),
+      value: formatCurrency(subtotal - total),
+    },
+    {
+      name: t('Total'),
+      value: formatCurrency(total),
+    },
+  ];
   return (
     <>
       <View style={styles.voucherCodeContainer}>
@@ -447,24 +464,10 @@ function Payment(props: PaymentProps) {
           </Button>
         </View>
       </View>
-      <Surface containerStyle={styles.surfacePaymentDetails}>
-        <View style={styles.paymentDetailsContainer}>
-          <Text style={styles.mediumText}>{t('Subtotal')}</Text>
-          <Text style={styles.mediumText}>{formatCurrency(subtotal)}</Text>
-        </View>
-        <View style={styles.paymentDetailsContainer}>
-          <Text style={styles.mediumText}>{t('Discount')}</Text>
-          <Text style={styles.mediumText}>
-            -{formatCurrency(subtotal - total)}
-          </Text>
-        </View>
-        <View style={[styles.paymentDetailsContainer, styles.border]}>
-          <Text style={styles.mediumText}>{t('Total')}</Text>
-          <Text weight="bold" style={styles.mediumText}>
-            {formatCurrency(total)}
-          </Text>
-        </View>
-      </Surface>
+      <PaymentDetails
+        data={paymentData}
+        containerStyle={styles.surfacePaymentDetails}
+      />
     </>
   );
 }
@@ -516,11 +519,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  paymentDetailsContainer: {
-    paddingVertical: 14,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   surfacePaymentDetails: {
     marginTop: 16,
     marginBottom: 24,
@@ -528,9 +526,6 @@ const styles = StyleSheet.create({
   },
   orderItem: {
     paddingVertical: 24,
-  },
-  mediumText: {
-    fontSize: FONT_SIZE.medium,
   },
   addButton: {
     maxWidth: 88,

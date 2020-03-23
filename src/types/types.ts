@@ -125,6 +125,8 @@ export type Payment = {
   name: string;
 };
 
+export type PaymentDetailsProps = { name: string; value: string };
+
 export type Options = Array<{ name: string; values: Array<string> }>;
 
 export type Tabs = Array<{ title: string; content: string }>;

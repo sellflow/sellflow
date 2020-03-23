@@ -5,13 +5,13 @@ import { Text, Button } from 'exoflex';
 
 import { Surface } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
-import { COLORS } from '../constants/colors';
 import formatDateTime from '../helpers/formatDateTime';
-import { OrderItem } from '../components';
+import { OrderItem, PaymentDetails } from '../components';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { StackRouteProp } from '../types/Navigation';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
+import { PaymentDetailsProps } from '../types/types';
 
 export default function OrderDetailsScene() {
   let route = useRoute<StackRouteProp<'OrderDetails'>>();
@@ -29,6 +29,22 @@ export default function OrderDetailsScene() {
 
   let { address1, city, country, name, phone, province, zip } = address;
   let formatCurrency = useCurrencyFormatter();
+
+  let paymentData: Array<PaymentDetailsProps> = [
+    {
+      name: t('Subtotal'),
+      value: formatCurrency(subtotalPayment),
+    },
+    {
+      name: t('Shipping'),
+      value: shippingPrice === 0 ? t('Free') : formatCurrency(shippingPrice),
+    },
+    {
+      name: t('Total'),
+      value: formatCurrency(totalPayment),
+    },
+  ];
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
@@ -79,30 +95,10 @@ export default function OrderDetailsScene() {
           </Surface>
         </View>
         <Text style={styles.greyText}>{t('Payment Details')}</Text>
-        <Surface containerStyle={styles.surfacePaymentDetails}>
-          <View style={styles.innerPaymentDetailsContainer}>
-            <Text style={[styles.mediumText, styles.marginBottom]}>
-              {t('Subtotal')}
-            </Text>
-            <Text style={styles.mediumText}>
-              {formatCurrency(subtotalPayment)}
-            </Text>
-          </View>
-          <View style={styles.innerPaymentDetailsContainer}>
-            <Text style={[styles.mediumText, styles.marginBottom]}>
-              {t('Shipping')}
-            </Text>
-            <Text style={[styles.mediumText, { textTransform: 'uppercase' }]}>
-              {shippingPrice === 0 ? t('Free') : formatCurrency(shippingPrice)}
-            </Text>
-          </View>
-          <View style={[styles.innerPaymentDetailsContainer, styles.border]}>
-            <Text style={styles.mediumText}>{t('Total')}</Text>
-            <Text weight="medium" style={styles.mediumText}>
-              {formatCurrency(totalPayment)}
-            </Text>
-          </View>
-        </Surface>
+        <PaymentDetails
+          data={paymentData}
+          containerStyle={styles.surfacePaymentDetails}
+        />
       </ScrollView>
       <Button
         onPress={() => {}}
@@ -134,11 +130,6 @@ const styles = StyleSheet.create({
   orderItemContainer: {
     marginTop: 11,
   },
-  innerPaymentDetailsContainer: {
-    paddingVertical: 14,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   surfaceOrderContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -162,10 +153,6 @@ const styles = StyleSheet.create({
   },
   mediumText: {
     fontSize: FONT_SIZE.medium,
-  },
-  border: {
-    borderTopWidth: 1,
-    borderTopColor: COLORS.lightGrey,
   },
   bottomButton: {
     marginHorizontal: 24,
