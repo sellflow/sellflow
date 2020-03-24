@@ -87,9 +87,11 @@ export default function CheckoutScene() {
   );
 
   useEffect(() => {
-    let defaultAddress =
-      addresses.find((item) => item.default === true) || emptyAddress;
-    setSelectedAddress(defaultAddress);
+    let defaultAddress = addresses.find((item) => item.default === true);
+
+    if (defaultAddress) {
+      setSelectedAddress(defaultAddress);
+    }
   }, [addresses]);
 
   useEffect(() => {

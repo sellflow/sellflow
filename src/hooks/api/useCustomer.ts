@@ -49,7 +49,7 @@ function getCustomerAddresses(
   let oldAddressData = customerAddressData?.customer?.addresses;
   let defaultAddress = customerAddressData?.customer?.defaultAddress;
   let newAddresses: Array<AddressItem> = [];
-  if (update) {
+  if (update && defaultAddress) {
     newAddresses.push({
       id: defaultAddress?.id ?? '',
       name: defaultAddress?.name ?? '',

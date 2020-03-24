@@ -1,6 +1,6 @@
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
-import { ActivityIndicator } from 'exoflex';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Text } from 'exoflex';
 
 import { CheckoutAddress } from '../../../components';
 import { AddressItem } from '../../../types/types';
@@ -46,6 +46,13 @@ export default function AdddressList(props: Props) {
           <ActivityIndicator style={styles.activityIndicator} />
         ) : null;
       }}
+      ListEmptyComponent={() => {
+        return hasMore ? null : (
+          <View style={styles.center}>
+            <Text>{t('No address yet')}</Text>
+          </View>
+        );
+      }}
     />
   );
 }
@@ -57,5 +64,10 @@ const styles = StyleSheet.create({
   checkoutAddress: { marginBottom: 12 },
   activityIndicator: {
     marginVertical: 24,
+  },
+  center: {
+    marginTop: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
