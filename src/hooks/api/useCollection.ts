@@ -93,7 +93,10 @@ function useCollectionQuery(
 
     let productsData = getProducts(data, filter);
     hasMore.current = !!data.collectionByHandle?.products.pageInfo.hasNextPage;
-    let nextCursor = productsData[productsData.length - 1].cursor || cursor;
+    let nextCursor = cursor;
+    if (productsData[productsData.length - 1]) {
+      nextCursor = productsData[productsData.length - 1].cursor || cursor;
+    }
     if (hasMore.current === false && productsData.length <= 0) {
       return result;
     }
@@ -125,11 +128,15 @@ function useCollectionQuery(
     let moreCollection = getProducts(data, values || priceRange);
 
     hasMore.current = !!data.collectionByHandle?.products.pageInfo.hasNextPage;
+    let cursor = null;
+    if (moreCollection[moreCollection.length - 1]) {
+      cursor = moreCollection[moreCollection.length - 1].cursor || null;
+    }
 
     if (moreCollection.length < first && hasMore.current) {
       let newCollection = await getMoreUntilTarget(
         first - moreCollection.length,
-        moreCollection[moreCollection.length - 1].cursor || null,
+        cursor,
         data.collectionByHandle ? data.collectionByHandle.handle : '',
         values || priceRange,
       );
