@@ -44,16 +44,32 @@ import {
 
 function getCustomerAddresses(
   customerAddressData: GetCustomerAddresses | undefined,
+  update: boolean,
 ): Array<AddressItem> {
   let oldAddressData = customerAddressData?.customer?.addresses;
   let defaultAddress = customerAddressData?.customer?.defaultAddress;
-
+  let newAddresses: Array<AddressItem> = [];
+  if (update) {
+    newAddresses.push({
+      id: defaultAddress?.id ?? '',
+      name: defaultAddress?.name ?? '',
+      firstName: defaultAddress?.firstName ?? '',
+      lastName: defaultAddress?.lastName ?? '',
+      address1: defaultAddress?.address1 ?? '',
+      country: defaultAddress?.country ?? '',
+      province: defaultAddress?.province ?? '',
+      city: defaultAddress?.city ?? '',
+      zip: defaultAddress?.zip ?? '',
+      phone: defaultAddress?.phone ?? '',
+      default: true,
+    });
+  }
   if (oldAddressData) {
-    return oldAddressData.edges.map(
-      (item): AddressItem => {
-        let address = item.node;
-        let { firstName, lastName } = address;
-        return {
+    oldAddressData.edges.forEach((item) => {
+      let address = item.node;
+      let { firstName, lastName } = address;
+      if (address.id !== defaultAddress?.id) {
+        newAddresses.push({
           id: address.id,
           cursor: item.cursor,
           name: address.name ?? '',
@@ -66,9 +82,10 @@ function getCustomerAddresses(
           zip: address.zip ?? '',
           phone: address.phone ?? '',
           default: address.id === defaultAddress?.id,
-        };
-      },
-    );
+        });
+      }
+    });
+    return newAddresses;
   } else {
     return [];
   }
@@ -138,7 +155,7 @@ function useGetCustomerAddresses(
   ) => {
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
-    let moreAddress = getCustomerAddresses(data);
+    let moreAddress = getCustomerAddresses(data, type === 'update');
     hasMore.current = !!data.customer?.addresses.pageInfo.hasNextPage;
 
     if (type === 'update') {
@@ -153,9 +170,8 @@ function useGetCustomerAddresses(
       isFetchingMore.current = false;
     }
     if (isInitFetching && !!data) {
-      let newAddresses = getCustomerAddresses(data);
+      let newAddresses = getCustomerAddresses(data, true);
       hasMore.current = !!data.customer?.addresses.pageInfo.hasNextPage;
-
       setAddresses(newAddresses);
       setInitFetching(false);
     }
