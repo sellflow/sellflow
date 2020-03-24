@@ -9,7 +9,6 @@ import {
 
 import { ModalBottomSheetMessage, PaymentDetails } from '../../components';
 import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
-import { addressItemData } from '../../fixtures/AddressItemData';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { COLORS } from '../../constants/colors';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
@@ -39,7 +38,7 @@ export default function CheckoutScene() {
   let { authToken } = useAuth();
   let [address, setAddress] = useState<AddressItem>(emptyAddress);
   let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
-    addressItemData[0],
+    emptyAddress,
   );
   let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   let { screenSize } = useDimensions();
@@ -89,7 +88,7 @@ export default function CheckoutScene() {
 
   useEffect(() => {
     let defaultAddress =
-      addresses.find((item) => item.default === true) || addressItemData[0];
+      addresses.find((item) => item.default === true) || emptyAddress;
     setSelectedAddress(defaultAddress);
   }, [addresses]);
 
@@ -171,7 +170,7 @@ export default function CheckoutScene() {
   };
 
   let isDisabled = authToken
-    ? selectedAddress === addressItemData[0] || false
+    ? selectedAddress === emptyAddress || false
     : !address.address1 ||
       !address.city ||
       !address.country ||

@@ -175,19 +175,22 @@ export default function ShoppingCartScene() {
     });
   };
 
-  let removeSelectedItem = (variantID: string) => {
+  let removeSelectedItem = async (variantID: string) => {
+    if (replaceLoading) {
+      return;
+    }
     shoppingCartItems = cartData.lineItems
       .filter((item) => item.variantID !== variantID)
       .map(({ variantID, quantity }) => {
         return { variantId: variantID, quantity };
       });
-    setShoppingCart({ variables: { items: shoppingCartItems, id: cartID } });
-    shoppingCartReplaceItems({
+    await shoppingCartReplaceItems({
       variables: {
         lineItems: shoppingCartItems,
         checkoutID: cartID,
       },
     });
+    setShoppingCart({ variables: { items: shoppingCartItems, id: cartID } });
     showToast(1100);
   };
 
@@ -229,7 +232,10 @@ export default function ShoppingCartScene() {
   let { setShoppingCart } = useSetShoppingCart();
   let { setShoppingCartID } = useSetShoppingCartID();
 
-  let { shoppingCartReplaceItems } = useCheckoutReplaceItem({
+  let {
+    shoppingCartReplaceItems,
+    loading: replaceLoading,
+  } = useCheckoutReplaceItem({
     fetchPolicy: 'no-cache',
     onCompleted: async ({ checkoutLineItemsReplace }) => {
       if (checkoutLineItemsReplace && checkoutLineItemsReplace.checkout) {
