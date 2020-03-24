@@ -48,11 +48,11 @@ function useSearchProductsQuery() {
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
     let moreResults = mapToProducts(data.products);
+    hasMore.current = !!data.products.pageInfo.hasNextPage;
 
     if (type === 'update') {
       setResults(moreResults);
     } else {
-      hasMore.current = !!data.products.pageInfo.hasNextPage;
       setResults([...results, ...moreResults]);
     }
   };

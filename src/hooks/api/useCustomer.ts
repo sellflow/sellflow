@@ -139,11 +139,11 @@ function useGetCustomerAddresses(
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
     let moreAddress = getCustomerAddresses(data);
+    hasMore.current = !!data.customer?.addresses.pageInfo.hasNextPage;
 
     if (type === 'update') {
       setAddresses(moreAddress);
     } else {
-      hasMore.current = !!data.customer?.addresses.pageInfo.hasNextPage;
       setAddresses([...addresses, ...moreAddress]);
     }
   };

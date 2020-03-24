@@ -190,11 +190,11 @@ function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
     isFetchingMore.current = type === 'scroll';
     let { data } = await refetchQuery(variables);
     let moreProducts = mapToProducts(data.products);
+    hasMore.current = !!data.products.pageInfo.hasNextPage;
 
     if (type === 'update') {
       setProducts(moreProducts);
     } else {
-      hasMore.current = !!data.products.pageInfo.hasNextPage;
       setProducts([...products, ...moreProducts]);
     }
   };
