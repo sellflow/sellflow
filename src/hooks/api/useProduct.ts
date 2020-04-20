@@ -80,7 +80,7 @@ function useGetProductDetails(
           url: productByHandle.onlineStoreUrl,
           options: newOptions,
           availableForSale: false,
-          quantityAvailable: quantityAvailable != null ? quantityAvailable : 0,
+          quantityAvailable,
         });
       } else if (
         variantProductByHandle &&
@@ -133,7 +133,7 @@ function useGetProductDetails(
           url: productByHandle.onlineStoreUrl,
           availableForSale: productByHandle.availableForSale,
           options: newOptions,
-          quantityAvailable: quantityAvailable != null ? quantityAvailable : 0,
+          quantityAvailable,
         });
       }
     }

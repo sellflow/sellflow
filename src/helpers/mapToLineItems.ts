@@ -33,9 +33,9 @@ export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
           id,
           selectedOptions,
           presentmentPrices,
-          quantityAvailable: quantityAv,
+          quantityAvailable: stockAvailable,
         } = variant;
-        quantityAvailable = quantityAv != null ? quantityAv : 0;
+        quantityAvailable = stockAvailable ?? 0;
         presentmentPrices.edges[0].node.price?.amount;
         let { compareAtPrice, price } = presentmentPrices.edges[0].node;
         let priceUsed = Number(price.amount);
