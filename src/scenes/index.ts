@@ -10,7 +10,7 @@ import ProductCollectionScene from './ProductCollection/ProductCollectionScene';
 import RegisterScene from './RegisterScene';
 import LoginScene from './LoginScene';
 import ForgotPasswordScene from './ForgotPasswordScene';
-import ShoppingCartScene from './ShoppingCartScene';
+import ShoppingCartScene from './ShoppingCart/ShoppingCartScene';
 import CheckoutScene from './Checkout/CheckoutScene';
 import EditProfileScene from './EditProfileScene';
 import AuthScene from './AuthScene';

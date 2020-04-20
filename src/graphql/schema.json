@@ -79,7 +79,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -193,7 +193,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -307,7 +307,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `collection_type`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `collection_type`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -518,7 +518,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -729,7 +729,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `available_for_sale`\n - `created_at`\n - `product_type`\n - `tag`\n - `title`\n - `updated_at`\n - `variants.price`\n - `vendor`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `available_for_sale`\n - `created_at`\n - `product_type`\n - `tag`\n - `title`\n - `updated_at`\n - `variants.price`\n - `vendor`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -1453,6 +1453,26 @@
             "kind": "OBJECT",
             "name": "Payment",
             "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ExternalVideo",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "MediaImage",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Model3d",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Video",
+            "ofType": null
           }
         ]
       },
@@ -1651,7 +1671,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -2938,6 +2958,22 @@
             "deprecationReason": null
           },
           {
+            "name": "compareAtPriceRange",
+            "description": "The compare at price of the product across all variants.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ProductPriceRange",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createdAt",
             "description": "The date and time when the product was created.",
             "args": [],
@@ -3139,6 +3175,73 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "ImageConnection",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "media",
+            "description": "The media associated with the product.",
+            "args": [
+              {
+                "name": "first",
+                "description": "Returns up to the first `n` elements from the list.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "after",
+                "description": "Returns the elements that come after the specified cursor.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "last",
+                "description": "Returns up to the last `n` elements from the list.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "before",
+                "description": "Returns the elements that come before the specified cursor.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "reverse",
+                "description": "Reverse the order of the underlying list.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MediaConnection",
                 "ofType": null
               }
             },
@@ -3484,6 +3587,18 @@
             "deprecationReason": null
           },
           {
+            "name": "totalInventory",
+            "description": "The total quantity of inventory in stock for this Product.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "updatedAt",
             "description": "The date and time when the product was last modified.",
             "args": [],
@@ -3790,6 +3905,22 @@
         "description": "Metafields represent custom metadata attached to a resource. Metafields can be sorted into namespaces and are\ncomprised of keys, values, and value types.\n",
         "fields": [
           {
+            "name": "createdAt",
+            "description": "The date and time when the storefront metafield was created.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "description",
             "description": "The description of a metafield.",
             "args": [],
@@ -3859,6 +3990,22 @@
               "ofType": {
                 "kind": "UNION",
                 "name": "MetafieldParentResource",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updatedAt",
+            "description": "The date and time when the storefront metafield was updated.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "DateTime",
                 "ofType": null
               }
             },
@@ -3983,6 +4130,22 @@
               "kind": "OBJECT",
               "name": "MoneyV2",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "currentlyNotInStock",
+            "description": "Whether the product variant is available for sale but currently out of stock.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4260,6 +4423,91 @@
             "deprecationReason": null
           },
           {
+            "name": "presentmentUnitPrices",
+            "description": "List of unit prices in the presentment currencies for this shop.",
+            "args": [
+              {
+                "name": "presentmentCurrencies",
+                "description": "Specify the currencies in which to return presentment unit prices.",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "CurrencyCode",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "first",
+                "description": "Returns up to the first `n` elements from the list.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "after",
+                "description": "Returns the elements that come after the specified cursor.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "last",
+                "description": "Returns up to the last `n` elements from the list.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "before",
+                "description": "Returns the elements that come before the specified cursor.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "reverse",
+                "description": "Reverse the order of the underlying list.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2Connection",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "price",
             "description": "The product variant’s price.",
             "args": [],
@@ -4303,6 +4551,18 @@
                 "name": "Product",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "quantityAvailable",
+            "description": "The total sellable quantity of the variant for online sales channels.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4371,6 +4631,30 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unitPrice",
+            "description": "The unit price value for the variant based on the variant's measurement.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "MoneyV2",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unitPriceMeasurement",
+            "description": "The unit price measurement for the variant.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UnitPriceMeasurement",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4744,6 +5028,12 @@
             "deprecationReason": null
           },
           {
+            "name": "DJF",
+            "description": "Djiboutian Franc (DJF).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "DOP",
             "description": "Dominican Peso (DOP).",
             "isDeprecated": false,
@@ -4768,6 +5058,12 @@
             "deprecationReason": null
           },
           {
+            "name": "FKP",
+            "description": "Falkland Islands Pounds (FKP).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "XPF",
             "description": "CFP Franc (XPF).",
             "isDeprecated": false,
@@ -4776,6 +5072,12 @@
           {
             "name": "FJD",
             "description": "Fijian Dollars (FJD).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GIP",
+            "description": "Gibraltar Pounds (GIP).",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -4806,6 +5108,12 @@
           {
             "name": "GEL",
             "description": "Georgian Lari (GEL).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GNF",
+            "description": "Guinean Franc (GNF).",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -4854,6 +5162,12 @@
           {
             "name": "ILS",
             "description": "Israeli New Shekel (NIS).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "IRR",
+            "description": "Iranian Rial (IRR).",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -4938,6 +5252,12 @@
           {
             "name": "LRD",
             "description": "Liberian Dollar (LRD).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LYD",
+            "description": "Libyan Dinar (LYD).",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5140,6 +5460,12 @@
             "deprecationReason": null
           },
           {
+            "name": "SHP",
+            "description": "Saint Helena Pounds (SHP).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SAR",
             "description": "Saudi Riyal (SAR).",
             "isDeprecated": false,
@@ -5160,6 +5486,12 @@
           {
             "name": "SCR",
             "description": "Seychellois Rupee (SCR).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SLL",
+            "description": "Sierra Leonean Leone (SLL).",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5248,8 +5580,20 @@
             "deprecationReason": null
           },
           {
+            "name": "TJS",
+            "description": "Tajikistani Somoni (TJS).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "TZS",
             "description": "Tanzanian Shilling (TZS).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TOP",
+            "description": "Tongan Pa'anga (TOP).",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5575,6 +5919,100 @@
       },
       {
         "kind": "OBJECT",
+        "name": "MoneyV2Connection",
+        "description": null,
+        "fields": [
+          {
+            "name": "edges",
+            "description": "A list of edges.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "MoneyV2Edge",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pageInfo",
+            "description": "Information to aid in pagination.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "MoneyV2Edge",
+        "description": null,
+        "fields": [
+          {
+            "name": "cursor",
+            "description": "A cursor for use in pagination.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "node",
+            "description": "The item at the end of MoneyV2Edge.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "SelectedOption",
         "description": "Custom properties that a shop owner can use to define product variants.\nMultiple options can exist. Options are represented as: option1, option2, option3, etc.\n",
         "fields": [
@@ -5614,6 +6052,197 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UnitPriceMeasurement",
+        "description": "The measurement used to calculate a unit price for a product variant (e.g. $9.99 / 100ml).\n",
+        "fields": [
+          {
+            "name": "measuredType",
+            "description": "The type of unit of measurement for the unit price measurement.",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "UnitPriceMeasurementMeasuredType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "quantityUnit",
+            "description": "The quantity unit for the unit price measurement.",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "UnitPriceMeasurementMeasuredUnit",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "quantityValue",
+            "description": "The quantity value for the unit price measurement.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referenceUnit",
+            "description": "The reference unit for the unit price measurement.",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "UnitPriceMeasurementMeasuredUnit",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referenceValue",
+            "description": "The reference value for the unit price measurement.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "UnitPriceMeasurementMeasuredType",
+        "description": "The accepted types of unit of measurement.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "VOLUME",
+            "description": "Unit of measurements representing volumes.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WEIGHT",
+            "description": "Unit of measurements representing weights.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LENGTH",
+            "description": "Unit of measurements representing lengths.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AREA",
+            "description": "Unit of measurements representing areas.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "UnitPriceMeasurementMeasuredUnit",
+        "description": "The valid units of measurement for a unit price measurement.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ML",
+            "description": "1000 milliliters equals 1 liter.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CL",
+            "description": "100 centiliters equals 1 liter.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "L",
+            "description": "Metric system unit of volume.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "M3",
+            "description": "1 cubic meter equals 1000 liters.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MG",
+            "description": "1000 milligrams equals 1 gram.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "G",
+            "description": "Metric system unit of weight.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "KG",
+            "description": "1 kilogram equals 1000 grams.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MM",
+            "description": "1000 millimeters equals 1 meter.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CM",
+            "description": "100 centimeters equals 1 meter.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "M",
+            "description": "Metric system unit of length.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "M2",
+            "description": "Metric system unit of area.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -5785,6 +6414,49 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "ProductPriceRange",
+        "description": "The price range of the product.",
+        "fields": [
+          {
+            "name": "maxVariantPrice",
+            "description": "The highest variant's price.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "minVariantPrice",
+            "description": "The lowest variant's price.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "ENUM",
         "name": "ProductImageSortKeys",
         "description": "The set of valid sort keys for the ProductImage query.",
@@ -5911,6 +6583,207 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "MediaConnection",
+        "description": null,
+        "fields": [
+          {
+            "name": "edges",
+            "description": "A list of edges.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "MediaEdge",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pageInfo",
+            "description": "Information to aid in pagination.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "MediaEdge",
+        "description": null,
+        "fields": [
+          {
+            "name": "cursor",
+            "description": "A cursor for use in pagination.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "node",
+            "description": "The item at the end of MediaEdge.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INTERFACE",
+                "name": "Media",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Media",
+        "description": "Represents a media interface.",
+        "fields": [
+          {
+            "name": "alt",
+            "description": "A word or phrase to share the nature or contents of a media.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mediaContentType",
+            "description": "The media content type.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "MediaContentType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "previewImage",
+            "description": "The preview image for the media.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Image",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "ExternalVideo",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "MediaImage",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Model3d",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Video",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "ENUM",
+        "name": "MediaContentType",
+        "description": "The possible content types for a media object.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "EXTERNAL_VIDEO",
+            "description": "An externally hosted video.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "IMAGE",
+            "description": "A Shopify hosted image.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MODEL_3D",
+            "description": "A 3d model.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VIDEO",
+            "description": "A Shopify hosted video.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -6068,49 +6941,6 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "ProductPriceRange",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "ProductPriceRange",
-        "description": "The price range of the product.",
-        "fields": [
-          {
-            "name": "maxVariantPrice",
-            "description": "The highest variant's price.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "MoneyV2",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "minVariantPrice",
-            "description": "The lowest variant's price.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "MoneyV2",
                 "ofType": null
               }
             },
@@ -6594,7 +7424,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `processed_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `processed_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -9936,6 +10766,18 @@
             "deprecationReason": null
           },
           {
+            "name": "unitPrice",
+            "description": "Unit price of the line item.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "MoneyV2",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "variant",
             "description": "Product variant of the line item.",
             "args": [],
@@ -10008,6 +10850,30 @@
         "description": "An order is a customer’s completed request to purchase one or more products from a shop. An order is created when a customer completes the checkout process, during which time they provides an email address, billing address and payment information.",
         "fields": [
           {
+            "name": "cancelReason",
+            "description": "Represents the reason for the order's cancellation. Returns null if the order wasn't canceled.",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "OrderCancelReason",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canceledAt",
+            "description": "The date and time when the order was canceled. Returns null if the order wasn't canceled.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "currencyCode",
             "description": "The code of the currency used for the payment.",
             "args": [],
@@ -10017,6 +10883,54 @@
               "ofType": {
                 "kind": "ENUM",
                 "name": "CurrencyCode",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "currentSubtotalPrice",
+            "description": "The subtotal of line items and their discounts, excluding line items that have been removed. Does not contain order-level discounts, shipping costs, or shipping discounts. Taxes are not included unless the order is a taxes-included order.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "currentTotalPrice",
+            "description": "The total amount of the order, including taxes and discounts, minus amounts for line items that have been removed.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "currentTotalTax",
+            "description": "The total of all taxes applied to the order, excluding taxes for returned line items.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
                 "ofType": null
               }
             },
@@ -10115,6 +11029,22 @@
             "deprecationReason": null
           },
           {
+            "name": "edited",
+            "description": "Whether the order has had any edits applied or not.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "email",
             "description": "The customer's email address.",
             "args": [],
@@ -10122,6 +11052,34 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "financialStatus",
+            "description": "The financial status of the order.",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "OrderFinancialStatus",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "fulfillmentStatus",
+            "description": "The fulfillment status for the order.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "OrderFulfillmentStatus",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -10235,6 +11193,22 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "originalTotalPrice",
+            "description": "The total price of the order before any applied edits.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
                 "ofType": null
               }
             },
@@ -10509,6 +11483,153 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "OrderCancelReason",
+        "description": "Represents the reason for the order's cancellation.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CUSTOMER",
+            "description": "The customer wanted to cancel the order.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FRAUD",
+            "description": "The order was fraudulent.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVENTORY",
+            "description": "There was insufficient inventory.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DECLINED",
+            "description": "Payment was declined.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER",
+            "description": "The order was canceled for an unlisted reason.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "OrderFinancialStatus",
+        "description": "Represents the order's current financial status.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "PENDING",
+            "description": "Displayed as **Pending**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AUTHORIZED",
+            "description": "Displayed as **Authorized**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PARTIALLY_PAID",
+            "description": "Displayed as **Partially paid**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PARTIALLY_REFUNDED",
+            "description": "Displayed as **Partially refunded**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VOIDED",
+            "description": "Displayed as **Voided**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PAID",
+            "description": "Displayed as **Paid**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFUNDED",
+            "description": "Displayed as **Refunded**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "OrderFulfillmentStatus",
+        "description": "Represents the order's current fulfillment status.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "UNFULFILLED",
+            "description": "Displayed as **Unfulfilled**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PARTIALLY_FULFILLED",
+            "description": "Displayed as **Partially fulfilled**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FULFILLED",
+            "description": "Displayed as **Fulfilled**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESTOCKED",
+            "description": "Displayed as **Restocked**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PENDING_FULFILLMENT",
+            "description": "Displayed as **Pending fulfillment**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OPEN",
+            "description": "Displayed as **Open**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "IN_PROGRESS",
+            "description": "Displayed as **In progress**.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "OrderLineItemConnection",
         "description": null,
@@ -10608,6 +11729,22 @@
         "description": "Represents a single line in an order. There is one line item for each distinct product variant.",
         "fields": [
           {
+            "name": "currentQuantity",
+            "description": "The number of entries associated to the line item minus the items that have been removed.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "customAttributes",
             "description": "List of custom attributes associated to the line item.",
             "args": [],
@@ -10650,6 +11787,38 @@
                     "ofType": null
                   }
                 }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "discountedTotalPrice",
+            "description": "The total price of the line item, including discounts, and displayed in the presentment currency.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "originalTotalPrice",
+            "description": "The total price of the line item, not including any discounts. The total price is calculated using the original unit price multiplied by the quantity, and it is displayed in the presentment currency.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "MoneyV2",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -11694,7 +12863,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -11781,7 +12950,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -11895,7 +13064,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `collection_type`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `collection_type`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -12175,7 +13344,7 @@
               },
               {
                 "name": "query",
-                "description": "Supported filter parameters:\n - `available_for_sale`\n - `created_at`\n - `product_type`\n - `tag`\n - `title`\n - `updated_at`\n - `variants.price`\n - `vendor`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax).\n",
+                "description": "Supported filter parameters:\n - `available_for_sale`\n - `created_at`\n - `product_type`\n - `tag`\n - `title`\n - `updated_at`\n - `variants.price`\n - `vendor`\n\nSee the detailed [search syntax](https://help.shopify.com/api/getting-started/search-syntax)\nfor more information about using filters.\n",
                 "type": {
                   "kind": "SCALAR",
                   "name": "String",
@@ -12920,6 +14089,47 @@
             },
             "isDeprecated": true,
             "deprecationReason": "Use `checkoutCompleteWithTokenizedPaymentV3` instead"
+          },
+          {
+            "name": "checkoutCompleteWithTokenizedPaymentV3",
+            "description": "Completes a checkout with a tokenized payment.",
+            "args": [
+              {
+                "name": "checkoutId",
+                "description": "The ID of the checkout.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "payment",
+                "description": "The info to apply as a tokenized payment.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "TokenizedPaymentInputV3",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CheckoutCompleteWithTokenizedPaymentV3Payload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "checkoutCreate",
@@ -13794,6 +15004,33 @@
             "deprecationReason": null
           },
           {
+            "name": "customerAccessTokenCreateWithMultipass",
+            "description": "Creates a customer access token using a multipass token instead of email and password.\nA customer record is created if customer does not exist. If a customer record already\nexists but the record is disabled, then it's enabled.\n",
+            "args": [
+              {
+                "name": "multipassToken",
+                "description": "A valid multipass token to be authenticated.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CustomerAccessTokenCreateWithMultipassPayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "customerAccessTokenDelete",
             "description": "Permanently destroys a customer access token.",
             "args": [
@@ -13883,6 +15120,47 @@
             "type": {
               "kind": "OBJECT",
               "name": "CustomerActivatePayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customerActivateByUrl",
+            "description": "Activates a customer with the activation url received from `customerCreate`.",
+            "args": [
+              {
+                "name": "activationUrl",
+                "description": "The customer activation URL.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "URL",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "password",
+                "description": "A new password set during activation.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CustomerActivateByUrlPayload",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14763,6 +16041,12 @@
             "description": "Line item was not found in checkout.",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "UNABLE_TO_APPLY",
+            "description": "Unable to apply discount.",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -15398,6 +16682,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nextActionUrl",
+            "description": "The URL where the customer needs to be redirected so they can complete the 3D Secure payment flow.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "URL",
               "ofType": null
             },
             "isDeprecated": false,
@@ -16237,6 +17533,225 @@
         "kind": "OBJECT",
         "name": "CheckoutCompleteWithTokenizedPaymentV2Payload",
         "description": "Return type for `checkoutCompleteWithTokenizedPaymentV2` mutation.",
+        "fields": [
+          {
+            "name": "checkout",
+            "description": "The checkout on which the payment was applied.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Checkout",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "checkoutUserErrors",
+            "description": "List of errors that occurred executing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CheckoutUserError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "payment",
+            "description": "A representation of the attempted payment.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Payment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "userErrors",
+            "description": "List of errors that occurred executing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "UserError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use `checkoutUserErrors` instead"
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "TokenizedPaymentInputV3",
+        "description": "Specifies the fields required to complete a checkout with\na tokenized payment.\n",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "paymentAmount",
+            "description": "The amount and currency of the payment.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "MoneyInput",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "idempotencyKey",
+            "description": "A unique client generated key used to avoid duplicate charges. When a duplicate payment is found, the original is returned instead of creating a new one.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "billingAddress",
+            "description": "The billing address for the payment.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "MailingAddressInput",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "paymentData",
+            "description": "A simple string or JSON containing the required payment data for the tokenized payment.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "test",
+            "description": "Whether to execute the payment in test mode, if possible. Test mode is not supported in production stores. Defaults to `false`.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": "false"
+          },
+          {
+            "name": "identifier",
+            "description": "Public Hash Key used for AndroidPay payments only.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "type",
+            "description": "The type of payment token.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "PaymentTokenType",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PaymentTokenType",
+        "description": "The valid values for the types of payment token.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "APPLE_PAY",
+            "description": "Apple Pay token type.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VAULT",
+            "description": "Vault payment token type.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SHOPIFY_PAY",
+            "description": "Shopify Pay token type.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GOOGLE_PAY",
+            "description": "Google Pay token type.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CheckoutCompleteWithTokenizedPaymentV3Payload",
+        "description": "Return type for `checkoutCompleteWithTokenizedPaymentV3` mutation.",
         "fields": [
           {
             "name": "checkout",
@@ -18327,8 +19842,67 @@
             "description": "Address does not exist.",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "BAD_DOMAIN",
+            "description": "Input email contains an invalid domain name.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID_MULTIPASS_REQUEST",
+            "description": "Multipass token is not valid.",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CustomerAccessTokenCreateWithMultipassPayload",
+        "description": "Return type for `customerAccessTokenCreateWithMultipass` mutation.",
+        "fields": [
+          {
+            "name": "customerAccessToken",
+            "description": "An access token object associated with the customer.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CustomerAccessToken",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customerUserErrors",
+            "description": "List of errors that occurred executing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomerUserError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -18552,6 +20126,65 @@
             },
             "isDeprecated": true,
             "deprecationReason": "Use `customerUserErrors` instead"
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CustomerActivateByUrlPayload",
+        "description": "Return type for `customerActivateByUrl` mutation.",
+        "fields": [
+          {
+            "name": "customer",
+            "description": "The customer that was activated.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Customer",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customerAccessToken",
+            "description": "A new customer access token for the customer.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CustomerAccessToken",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customerUserErrors",
+            "description": "List of errors that occurred executing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomerUserError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -20419,6 +22052,100 @@
       },
       {
         "kind": "OBJECT",
+        "name": "ExternalVideo",
+        "description": "Represents a video hosted outside of Shopify.",
+        "fields": [
+          {
+            "name": "alt",
+            "description": "A word or phrase to share the nature or contents of a media.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "embeddedUrl",
+            "description": "The URL.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "URL",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "Globally unique identifier.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mediaContentType",
+            "description": "The media content type.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "MediaContentType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "previewImage",
+            "description": "The preview image for the media.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Image",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "Media",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "ManualDiscountApplication",
         "description": "Manual discount applications capture the intentions of a discount that was manually created.\n",
         "fields": [
@@ -20523,6 +22250,273 @@
             "ofType": null
           }
         ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "MediaImage",
+        "description": "Represents a Shopify hosted image.",
+        "fields": [
+          {
+            "name": "alt",
+            "description": "A word or phrase to share the nature or contents of a media.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "Globally unique identifier.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "image",
+            "description": "The image for the media.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Image",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mediaContentType",
+            "description": "The media content type.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "MediaContentType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "previewImage",
+            "description": "The preview image for the media.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Image",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "Media",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Model3d",
+        "description": "Represents a Shopify hosted 3D model.",
+        "fields": [
+          {
+            "name": "alt",
+            "description": "A word or phrase to share the nature or contents of a media.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "Globally unique identifier.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mediaContentType",
+            "description": "The media content type.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "MediaContentType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "previewImage",
+            "description": "The preview image for the media.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Image",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "sources",
+            "description": "The sources for a 3d model.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Model3dSource",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "Media",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Model3dSource",
+        "description": "Represents a source for a Shopify hosted 3d model.",
+        "fields": [
+          {
+            "name": "filesize",
+            "description": "The filesize of the 3d model.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "format",
+            "description": "The format of the 3d model.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mimeType",
+            "description": "The MIME type of the 3d model.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "url",
+            "description": "The URL of the 3d model.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },
@@ -20636,6 +22630,199 @@
             "ofType": null
           }
         ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Video",
+        "description": "Represents a Shopify hosted video.",
+        "fields": [
+          {
+            "name": "alt",
+            "description": "A word or phrase to share the nature or contents of a media.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "Globally unique identifier.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mediaContentType",
+            "description": "The media content type.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "MediaContentType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "previewImage",
+            "description": "The preview image for the media.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Image",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "sources",
+            "description": "The sources for a video.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "VideoSource",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "Media",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "VideoSource",
+        "description": "Represents a source for a Shopify hosted video.",
+        "fields": [
+          {
+            "name": "format",
+            "description": "The format of the video source.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "height",
+            "description": "The height of the video.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mimeType",
+            "description": "The video MIME type.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "url",
+            "description": "The URL of the video.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "width",
+            "description": "The width of the video.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       }

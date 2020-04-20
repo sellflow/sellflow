@@ -6,46 +6,42 @@ import {
   SafeAreaView,
   Image,
 } from 'react-native';
-import { Text, Button, TextInput, ActivityIndicator } from 'exoflex';
+import { Text, ActivityIndicator } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
-import { KeyboardAvoidingView } from '../core-ui';
-import { COLORS } from '../constants/colors';
-import { OrderItem, PaymentDetails } from '../components';
-import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import {
-  defaultButton,
-  defaultButtonLabel,
-  outlinedTextInput,
-} from '../constants/theme';
-import { StackNavProp } from '../types/Navigation';
-import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../generated/server/ShoppingCartCreate';
-import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../generated/server/ShoppingCartReplaceItem';
-import { ShoppingCartDiscountCodeApply_checkoutDiscountCodeApplyV2_checkout as CheckoutDiscountApply } from '../generated/server/ShoppingCartDiscountCodeApply';
+import { KeyboardAvoidingView } from '../../core-ui';
+import { COLORS } from '../../constants/colors';
+import { OrderItem } from '../../components';
+import { useDimensions, ScreenSize } from '../../helpers/dimensions';
+import { StackNavProp } from '../../types/Navigation';
+import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../../generated/server/ShoppingCartCreate';
+import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../../generated/server/ShoppingCartReplaceItem';
+import { ShoppingCartDiscountCodeApply_checkoutDiscountCodeApplyV2_checkout as CheckoutDiscountApply } from '../../generated/server/ShoppingCartDiscountCodeApply';
 import {
   Cart,
   LineItem,
   OrderItem as OrderItemType,
-  PaymentDetailsProps,
-} from '../types/types';
-import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
+  PaymentData,
+} from '../../types/types';
 import {
   useGetCart,
   useSetShoppingCartID,
   useSetShoppingCart,
-} from '../hooks/api/useShoppingCart';
+} from '../../hooks/api/useShoppingCart';
 import {
   useCheckoutCreate,
   useCheckoutCustomerAssociate,
   useCheckoutDiscountApply,
   useCheckoutDiscountRemove,
   useCheckoutReplaceItem,
-} from '../hooks/api/useShopifyCart';
-import { cartPlaceholder } from '../../assets/images';
-import { mapToLineItems } from '../helpers/mapToLineItems';
-import Toast from '../core-ui/Toast';
-import { useAuth } from '../helpers/useAuth';
-import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
+} from '../../hooks/api/useShopifyCart';
+import { cartPlaceholder } from '../../../assets/images';
+import { mapToLineItems } from '../../helpers/mapToLineItems';
+import Toast from '../../core-ui/Toast';
+import { useAuth } from '../../helpers/useAuth';
+import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
+import { ShoppingCartPayment, BottomButton } from './components';
+import { CheckoutErrorCode } from '../../generated/server/globalTypes';
 
 function extractDataCheckout(
   checkout: CheckoutCreate | CheckoutReplace | CheckoutDiscountApply,
@@ -78,23 +74,6 @@ function mapLineItemsToOrder(
   return result;
 }
 
-type BottomButtonProps = {
-  label: string;
-  onPressAction: () => void;
-};
-function BottomButton(props: BottomButtonProps) {
-  let { label, onPressAction } = props;
-  return (
-    <Button
-      style={[defaultButton, styles.buttonStyle]}
-      labelStyle={defaultButtonLabel}
-      onPress={onPressAction}
-    >
-      {label}
-    </Button>
-  );
-}
-
 export default function ShoppingCartScene() {
   let { authToken } = useAuth();
   let { screenSize } = useDimensions();
@@ -111,6 +90,7 @@ export default function ShoppingCartScene() {
   let [firstLoading, setFirstLoading] = useState<boolean>(true);
   let [voucherCode, setVoucherCode] = useState<string>('');
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
+  let [isVoucherCodeValid, setIsVoucherCodeValid] = useState<boolean>(true);
   let { data } = useDefaultCurrency();
 
   let setVoucherCodeValue = (value: string) => {
@@ -130,14 +110,23 @@ export default function ShoppingCartScene() {
 
   let { shoppingCartDiscountRemove } = useCheckoutDiscountRemove();
 
-  let onAddVoucherCode = () => {
-    shoppingCartDiscountApply({
+  let onAddVoucherCode = async () => {
+    let result = await shoppingCartDiscountApply({
       variables: {
         checkoutId: cartID,
         discountCode: voucherCode,
         currencyCode: [data],
       },
     });
+
+    let checkoutUserErrors =
+      result.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors;
+
+    if (checkoutUserErrors && checkoutUserErrors.length > 0) {
+      if (checkoutUserErrors[0].code === CheckoutErrorCode.DISCOUNT_NOT_FOUND) {
+        setIsVoucherCodeValid(false);
+      }
+    }
   };
 
   let paymentData: PaymentData = {
@@ -306,12 +295,13 @@ export default function ShoppingCartScene() {
   };
 
   let renderPaymentView = () => (
-    <Payment
+    <ShoppingCartPayment
       data={paymentData}
       onVoucherCodeChange={setVoucherCodeValue}
       voucherCode={voucherCode}
       onAddCode={onAddVoucherCode}
       applyLoading={DiscountCodeApplyLoading}
+      isVoucherCodeValid={isVoucherCodeValid}
     />
   );
 
@@ -409,77 +399,6 @@ export default function ShoppingCartScene() {
   );
 }
 
-type PaymentProps = {
-  data: PaymentData;
-  voucherCode: string;
-  onVoucherCodeChange: (value: string) => void;
-  onAddCode: () => void;
-  applyLoading: boolean;
-};
-type PaymentData = {
-  total: number;
-  subtotal: number;
-};
-
-function Payment(props: PaymentProps) {
-  let {
-    data,
-    onVoucherCodeChange,
-    voucherCode,
-    onAddCode,
-    applyLoading,
-  } = props;
-  let { total, subtotal } = data;
-  let formatCurrency = useCurrencyFormatter();
-  let paymentData: Array<PaymentDetailsProps> = [
-    {
-      name: t('Subtotal'),
-      value: formatCurrency(subtotal),
-    },
-    {
-      name: t('Discount'),
-      value: formatCurrency(subtotal - total),
-    },
-    {
-      name: t('Total'),
-      value: formatCurrency(total),
-    },
-  ];
-  return (
-    <>
-      <View style={styles.voucherCodeContainer}>
-        <Text style={styles.opacity}>{t('Voucher code or giftcard')}</Text>
-        <View style={styles.voucherInputButtonContainer}>
-          <TextInput
-            autoCapitalize="none"
-            returnKeyType="done"
-            value={voucherCode}
-            onChangeText={onVoucherCodeChange}
-            containerStyle={[
-              outlinedTextInput,
-              styles.voucherTextInputContainer,
-            ]}
-            style={outlinedTextInput}
-          />
-          <Button
-            style={defaultButton}
-            disabled={applyLoading}
-            contentStyle={styles.addButton}
-            labelStyle={defaultButtonLabel}
-            onPress={onAddCode}
-          >
-            {t('Add')}
-          </Button>
-        </View>
-      </View>
-      <PaymentDetails
-        data={paymentData}
-        containerStyle={styles.surfacePaymentDetails}
-      />
-    </>
-  );
-}
-
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
@@ -513,32 +432,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 36,
     paddingBottom: 24,
   },
-  voucherCodeContainer: {
-    padding: 12,
-    borderWidth: 1,
-    borderColor: COLORS.lightGrey,
-  },
-  voucherTextInputContainer: {
-    flexGrow: 1,
-    marginRight: 16,
-  },
-  voucherInputButtonContainer: {
-    marginTop: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  surfacePaymentDetails: {
-    marginTop: 16,
-    marginBottom: 24,
-    paddingHorizontal: 15,
-  },
-  orderItem: {
-    paddingVertical: 24,
-  },
-  addButton: {
-    maxWidth: 88,
-    minWidth: 88,
-  },
   border: {
     borderTopWidth: 1,
     borderTopColor: COLORS.lightGrey,
@@ -557,7 +450,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonStyle: {
-    marginBottom: 24,
+  orderItem: {
+    paddingVertical: 24,
   },
 });

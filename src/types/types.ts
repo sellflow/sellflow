@@ -130,6 +130,11 @@ export type Payment = {
 
 export type PaymentDetailsProps = { name: string; value: string };
 
+export type PaymentData = {
+  total: number;
+  subtotal: number;
+};
+
 export type Options = Array<{ name: string; values: Array<string> }>;
 
 export type Tabs = Array<{ title: string; content: string }>;

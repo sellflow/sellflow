@@ -234,6 +234,9 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
       checkoutId: $checkoutId
       discountCode: $discountCode
     ) {
+      checkoutUserErrors {
+        code
+      }
       checkout {
         webUrl
         lineItemsSubtotalPrice {
