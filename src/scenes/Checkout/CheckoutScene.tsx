@@ -91,19 +91,12 @@ export default function CheckoutScene() {
 
     if (defaultAddress) {
       setSelectedAddress(defaultAddress);
+      updateAddress(defaultAddress);
     }
-  }, [addresses]);
-
-  useEffect(() => {
-    if (updateAddressData?.checkoutShippingAddressUpdateV2) {
-      let {
-        checkoutUserErrors,
-      } = updateAddressData.checkoutShippingAddressUpdateV2;
-      if (checkoutUserErrors.length !== 0) {
-        toggleModalVisible();
-      }
+    if (address !== emptyAddress) {
+      updateAddress(address);
     }
-  }, [updateAddressData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [addresses, address]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let updateAddress = async (address: AddressItem) => {
     let { id, name, default: defaultStatus, cursor, ...usedAddress } = address;
@@ -149,14 +142,11 @@ export default function CheckoutScene() {
         updateAddressData.checkoutShippingAddressUpdateV2?.checkoutUserErrors
           .length === 0
       ) {
-        if (authToken) {
-          await updateAddress(selectedAddress);
-        } else {
-          await updateAddress(address);
-        }
         navigateToPayment(
           updateAddressData.checkoutShippingAddressUpdateV2.checkout?.webUrl,
         );
+      } else {
+        toggleModalVisible();
       }
     }
   };
