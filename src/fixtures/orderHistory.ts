@@ -27,6 +27,7 @@ export const orders: Array<OrderRecord> = [
         image:
           'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
         originalPrice: 8,
+        quantityAvailable: 100,
         priceAfterDiscount: 6,
         quantity: 1,
         title: 'Earring',
@@ -63,6 +64,7 @@ export const orders: Array<OrderRecord> = [
         image:
           'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
         originalPrice: 8,
+        quantityAvailable: 100,
         priceAfterDiscount: 6,
         quantity: 1,
         title: 'Earring',
@@ -98,6 +100,7 @@ export const orders: Array<OrderRecord> = [
         image:
           'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
         originalPrice: 8,
+        quantityAvailable: 100,
         priceAfterDiscount: 6,
         quantity: 1,
         title: 'Earring',
@@ -133,6 +136,7 @@ export const orders: Array<OrderRecord> = [
         image:
           'https://cdn.shopify.com/s/files/1/0316/3675/0472/products/00000000_zi_0ec1dfc5-ed5f-40ea-a5fd-a3d7e9b40461.jpg?v=1580283553',
         originalPrice: 8,
+        quantityAvailable: 100,
         priceAfterDiscount: 6,
         quantity: 1,
         title: 'Earring',

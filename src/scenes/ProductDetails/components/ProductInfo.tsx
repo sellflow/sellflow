@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { Text, TextInput } from 'exoflex';
 
@@ -29,8 +29,9 @@ export default function ProductInfo(props: Props) {
     onChangeQuantity,
     onSelectionOptionChange,
   } = props;
-
   let formatCurrency = useCurrencyFormatter();
+  let quantityAvailable =
+    product.quantityAvailable != null ? product.quantityAvailable : 0;
 
   let afterDiscount = priceAfterDiscount(product.price, product.discount || 0);
   let radioGroupRenderView = null;
@@ -55,6 +56,14 @@ export default function ProductInfo(props: Props) {
       );
     });
   }
+
+  useEffect(() => {
+    if (quantity === 0) {
+      onChangeQuantity(1);
+    } else if (quantity > quantityAvailable) {
+      onChangeQuantity(quantityAvailable);
+    }
+  }, [quantityAvailable]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -83,13 +92,11 @@ export default function ProductInfo(props: Props) {
             containerStyle={[outlinedTextInput, styles.textInputWidth]}
             style={outlinedTextInput}
             value={quantity.toString()}
-            onBlur={() => {
-              if (quantity === 0) {
-                onChangeQuantity(1);
-              }
-            }}
+            onBlur={() => {}}
             onChangeText={(value) =>
-              onChangeQuantity(valueBetweenZeroToMax(parseInt(value, 10), 100))
+              onChangeQuantity(
+                valueBetweenZeroToMax(parseInt(value, 10), quantityAvailable),
+              )
             }
             keyboardType="numeric"
           />

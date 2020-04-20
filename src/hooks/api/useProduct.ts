@@ -34,13 +34,21 @@ function useGetProductDetails(
     { data: variantData, loading: variantLoading },
   ] = useLazyQuery<GetProductVariant, GetProductVariantVariables>(
     GET_PRODUCT_VARIANT,
+    {
+      fetchPolicy: 'network-only',
+    },
   );
-
   let productByHandle = data?.productByHandle;
   let variantProductByHandle = variantData?.productByHandle;
 
   useEffect(() => {
     if (productByHandle) {
+      let quantityAvailable = 0;
+      if (variantProductByHandle) {
+        let value =
+          variantProductByHandle.variantBySelectedOptions?.quantityAvailable;
+        quantityAvailable = value != null ? quantityAvailable : 0;
+      }
       let images = productByHandle.images.edges.map(
         (item) => item.node.originalSrc,
       );
@@ -72,6 +80,7 @@ function useGetProductDetails(
           url: productByHandle.onlineStoreUrl,
           options: newOptions,
           availableForSale: false,
+          quantityAvailable: quantityAvailable != null ? quantityAvailable : 0,
         });
       } else if (
         variantProductByHandle &&
@@ -81,6 +90,7 @@ function useGetProductDetails(
           id,
           presentmentPrices,
           availableForSale,
+          quantityAvailable,
         } = variantProductByHandle.variantBySelectedOptions;
         let { compareAtPrice, price } = presentmentPrices.edges[0].node;
 
@@ -96,6 +106,8 @@ function useGetProductDetails(
               discount,
               availableForSale,
               id,
+              quantityAvailable:
+                quantityAvailable != null ? quantityAvailable : 0,
             });
           }
         } else {
@@ -105,6 +117,8 @@ function useGetProductDetails(
             discount: 0,
             availableForSale,
             id,
+            quantityAvailable:
+              quantityAvailable != null ? quantityAvailable : 0,
           });
         }
       } else {
@@ -119,6 +133,7 @@ function useGetProductDetails(
           url: productByHandle.onlineStoreUrl,
           availableForSale: productByHandle.availableForSale,
           options: newOptions,
+          quantityAvailable: quantityAvailable != null ? quantityAvailable : 0,
         });
       }
     }

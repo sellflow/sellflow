@@ -31,13 +31,13 @@ export default function OrderItem(props: Props) {
     onRemovePress,
     variantID,
     originalPrice,
+    quantityAvailable,
     onChangeQuantity,
   } = props.orderItem;
   let { containerStyle, cardType } = props;
   let [quantity, setQuantity] = useState<number>(props.orderItem.quantity);
   let [itemPrice] = useState<number>(originalPrice);
   let formatCurrency = useCurrencyFormatter();
-
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.imageContainer}>
@@ -90,10 +90,12 @@ export default function OrderItem(props: Props) {
                 : null;
             }}
             onChangeText={(value) => {
-              setQuantity(valueBetweenZeroToMax(parseInt(value, 10), 999));
+              setQuantity(
+                valueBetweenZeroToMax(parseInt(value, 10), quantityAvailable),
+              );
             }}
             containerStyle={[outlinedTextInput, styles.amountInputWidth]}
-            style={[outlinedTextInput, styles.amount]}
+            style={[outlinedTextInput, quantity < 999 && styles.amount]}
           />
           <TouchableOpacity
             activeOpacity={0.5}
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
   },
   amountInputWidth: {
     width: 50,
+    paddingHorizontal: 5,
   },
   amount: {
     textAlign: 'center',

@@ -27,6 +27,7 @@ export const newAddress: Omit<AddressItem, 'id' | 'name'> = {
 };
 
 export const emptyProduct: ProductDetails = {
+  quantityAvailable: 0,
   id: '',
   images: [],
   title: '',

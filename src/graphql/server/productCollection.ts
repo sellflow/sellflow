@@ -60,6 +60,7 @@ export const GET_COLLECTION = gql`
             variants(first: 1) {
               edges {
                 node {
+                  quantityAvailable
                   presentmentPrices(
                     first: 1
                     presentmentCurrencies: $presentmentCurrencies

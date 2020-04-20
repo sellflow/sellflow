@@ -293,14 +293,16 @@ export default function ShoppingCartScene() {
       cartData.lineItems,
       changeItemQuantity,
       removeSelectedItem,
-    ).map((item, index) => (
-      <OrderItem
-        cardType="checkout"
-        orderItem={item}
-        containerStyle={[styles.orderItem, index > 0 && styles.border]}
-        key={item.variantID}
-      />
-    ));
+    ).map((item, index) => {
+      return (
+        <OrderItem
+          cardType="checkout"
+          orderItem={item}
+          containerStyle={[styles.orderItem, index > 0 && styles.border]}
+          key={item.variantID}
+        />
+      );
+    });
   };
 
   let renderPaymentView = () => (

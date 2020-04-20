@@ -35,6 +35,7 @@ export const SHOPPING_CART_CREATE = gql`
               quantity
               variant {
                 id
+                quantityAvailable
                 presentmentPrices(
                   first: 1
                   presentmentCurrencies: $currencyCode
@@ -102,6 +103,7 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
               quantity
               variant {
                 id
+                quantityAvailable
                 presentmentPrices(
                   first: 1
                   presentmentCurrencies: $currencyCode
@@ -202,6 +204,10 @@ export const SHOPPING_CART_CUSTOMER_ASSOCIATE = gql`
             node {
               title
               quantity
+              variant {
+                id
+                quantityAvailable
+              }
             }
           }
         }
@@ -257,6 +263,7 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
               title
               quantity
               variant {
+                quantityAvailable
                 id
                 presentmentPrices(
                   first: 1

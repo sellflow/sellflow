@@ -17,6 +17,7 @@ export type OrderItem = {
   variantID: string;
   quantity: number;
   priceAfterDiscount?: number;
+  quantityAvailable: number;
   variant: string;
   onRemovePress?: (variantID: string) => void;
   onChangeQuantity?: (variantIDSearched: string, amount: number) => void;
@@ -65,6 +66,7 @@ export type Product = {
   price: number;
   discount: number;
   availableForSale: boolean;
+  quantityAvailable?: number;
 };
 
 export type ProductDetails = {
@@ -113,6 +115,7 @@ export type LineItem = {
   originalPrice: number;
   image: string;
   quantity: number;
+  quantityAvailable: number;
 };
 
 export type PaymentInfo = {

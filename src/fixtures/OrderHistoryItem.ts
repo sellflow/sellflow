@@ -28,6 +28,7 @@ export let orderHistory: OrderRecord = {
       originalPrice: 8,
       priceAfterDiscount: 6,
       quantity: 1,
+      quantityAvailable: 100,
       title: 'Earring',
       variant: 'Title Default Title',
       variantID: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC8zMjAzNjA5NTU5MDUzNg==',

@@ -57,6 +57,7 @@ export const GET_ORDER_HISTORY = gql`
                   quantity
                   variant {
                     id
+                    quantityAvailable
                     presentmentPrices(
                       first: 1
                       presentmentCurrencies: $currencyCode

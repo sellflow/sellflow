@@ -64,6 +64,7 @@ export const GET_FEATURED_PRODUCTS_AND_CATEGORIES = gql`
           variants(first: 1) {
             edges {
               node {
+                quantityAvailable
                 presentmentPrices(
                   first: 1
                   presentmentCurrencies: $presentmentCurrencies

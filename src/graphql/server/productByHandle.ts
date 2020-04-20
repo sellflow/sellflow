@@ -29,6 +29,8 @@ export const GET_PRODUCT_BY_HANDLE = gql`
       variants(first: 1) {
         edges {
           node {
+            id
+            quantityAvailable
             presentmentPrices(
               first: 1
               presentmentCurrencies: $presentmentCurrencies
@@ -64,6 +66,7 @@ export const GET_PRODUCT_VARIANT = gql`
       variantBySelectedOptions(selectedOptions: $selectedOptions) {
         id
         availableForSale
+        quantityAvailable
         presentmentPrices(
           first: 1
           presentmentCurrencies: $presentmentCurrencies

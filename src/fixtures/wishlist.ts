@@ -12,6 +12,7 @@ export const wishlist: Array<Product> = [
     handle: 'box-flannel-trucker',
     price: 1000,
     discount: 0,
+    quantityAvailable: 100,
     availableForSale: true,
   },
   {
@@ -25,6 +26,7 @@ export const wishlist: Array<Product> = [
     handle: 'box-flannel-trucker',
     price: 1000,
     discount: 0,
+    quantityAvailable: 100,
     availableForSale: true,
   },
   {
@@ -38,6 +40,7 @@ export const wishlist: Array<Product> = [
     handle: 'box-flannel-trucker',
     price: 1000,
     discount: 75,
+    quantityAvailable: 100,
     availableForSale: true,
   },
   {
@@ -51,6 +54,7 @@ export const wishlist: Array<Product> = [
     handle: 'box-flannel-trucker',
     price: 1000,
     discount: 0,
+    quantityAvailable: 100,
     availableForSale: true,
   },
 ];

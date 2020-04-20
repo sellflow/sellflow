@@ -9,6 +9,7 @@ import { MOCKED_SHOP } from '../../__mocks__/mockedData';
 import wait from '../../__mocks__/wait';
 
 let initialData: OrderItemType = {
+  quantityAvailable: 1000,
   variantID: '1162321131111',
   title: 'Basic T Shirt',
   image:
@@ -76,13 +77,13 @@ test('should multiply the value correctly', async () => {
   expect(price).toBeTruthy();
 });
 
-test('should never go above 999 the value and below zero', async () => {
+test('should never go above maxQuantity value and below zero', async () => {
   let { getByDisplayValue } = await renderComponent();
   let textInput = getByDisplayValue('2');
   expect(textInput).toBeTruthy();
 
   fireEvent.changeText(textInput, 1111);
-  textInput = getByDisplayValue('999');
+  textInput = getByDisplayValue('1000');
   expect(textInput).toBeTruthy();
 
   fireEvent.changeText(textInput, -100);

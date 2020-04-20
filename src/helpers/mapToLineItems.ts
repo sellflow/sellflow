@@ -27,8 +27,15 @@ export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
       let originalPrice = 0;
       let variantID = '';
       let variants = '';
+      let quantityAvailable = 0;
       if (variant) {
-        let { id, selectedOptions, presentmentPrices } = variant;
+        let {
+          id,
+          selectedOptions,
+          presentmentPrices,
+          quantityAvailable: quantityAv,
+        } = variant;
+        quantityAvailable = quantityAv != null ? quantityAv : 0;
         presentmentPrices.edges[0].node.price?.amount;
         let { compareAtPrice, price } = presentmentPrices.edges[0].node;
         let priceUsed = Number(price.amount);
@@ -52,7 +59,6 @@ export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
           image = variant.image.transformedSrc;
         }
       }
-
       return {
         variant: variants,
         variantID,
@@ -61,6 +67,7 @@ export function mapToLineItems(lineItems: CompatibleType): Array<LineItem> {
         originalPrice,
         priceAfterDiscount,
         quantity,
+        quantityAvailable,
       };
     },
   );

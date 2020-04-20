@@ -18,8 +18,15 @@ export default function mapToProducts(
 ): Array<Product> {
   return products.edges.map((item) => {
     let product = item.node;
+    let {} = product;
     let firstImage = product.images.edges[0];
-
+    let quantityAvailable = 0;
+    let quantityAvailableValue =
+      product.variants.edges[0].node.quantityAvailable;
+    quantityAvailable =
+      quantityAvailableValue != null
+        ? quantityAvailableValue
+        : quantityAvailable;
     let originalProductPrice = Number(
       product.variants.edges[0].node.presentmentPrices.edges[0].node
         .compareAtPrice?.amount,
@@ -42,6 +49,7 @@ export default function mapToProducts(
       discount: discount,
       handle: product.handle,
       availableForSale: product.availableForSale,
+      quantityAvailable,
     };
   });
 }
