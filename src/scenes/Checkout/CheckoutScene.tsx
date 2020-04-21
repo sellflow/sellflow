@@ -270,6 +270,7 @@ export default function CheckoutScene() {
           screenSize === ScreenSize.Large && styles.landscape,
         ]}
       >
+        {renderBottomModal()}
         {renderShippingAddress()}
         {renderPaymentView()}
       </SafeAreaView>
