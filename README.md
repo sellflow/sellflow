@@ -77,10 +77,6 @@ Sellflow is a pre-built mobile app that you can customize to fit your brand and 
 
 Sellflow is just the “frontend” — the customer interface — it works with Shopify’s “headless mode”, technically the [Storefront API](https://help.shopify.com/en/api/storefront-api). You as the merchant still use Shopify’s admin interface as normal to manage your products, inventory and orders.
 
-## Project Status
-
-Pre-release. This will be ready soon for a select set of beta testers. If you have a Shopify store and you'd like to join our beta, please reach out to hello@sellflow.com.
-
 ## How to Contribute
 
 - Fork the repository.
