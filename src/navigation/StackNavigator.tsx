@@ -27,6 +27,7 @@ import { useAuth } from '../helpers/useAuth';
 import TabNavigator from './TabNavigator';
 import { CurrencyPicker } from '../components';
 import { NavigationState, Route } from '@react-navigation/native';
+import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -66,6 +67,7 @@ function HeaderIconButton(props: HeaderIconButtonProps) {
 
 export default function StackNavigator() {
   let { authToken } = useAuth();
+  let { data: userData } = useGetAuthenticatedUser();
 
   function getTabSceneName(
     route: { state?: NavigationState } & Pick<Route<string>, 'key' | 'name'>,
@@ -89,7 +91,10 @@ export default function StackNavigator() {
           let tabScene = getTabSceneName(route);
           if (tabScene === 'HomeTab') {
             return {
-              title: t('Hello'),
+              title:
+                authToken && userData?.authenticatedUser.firstName
+                  ? `${t('Hello')}, ${userData.authenticatedUser.firstName}`
+                  : t('Hello'),
               headerLeft: () => <CurrencyPicker />,
               headerRight: () => (
                 <HeaderIconButton
