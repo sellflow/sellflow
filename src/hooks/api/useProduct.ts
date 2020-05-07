@@ -43,12 +43,6 @@ function useGetProductDetails(
 
   useEffect(() => {
     if (productByHandle) {
-      let quantityAvailable = 0;
-      if (variantProductByHandle) {
-        let value =
-          variantProductByHandle.variantBySelectedOptions?.quantityAvailable;
-        quantityAvailable = value != null ? quantityAvailable : 0;
-      }
       let images = productByHandle.images.edges.map(
         (item) => item.node.originalSrc,
       );
@@ -65,61 +59,51 @@ function useGetProductDetails(
       let { price, discount } = getDiscount(originalProductPrice, productPrice);
       let newOptions = productByHandle.options;
 
-      if (
-        variantProductByHandle &&
-        variantProductByHandle.variantBySelectedOptions == null
-      ) {
-        setProductDetails({
-          id: '',
-          title: productByHandle.title,
-          handle: productByHandle.handle,
-          description: productByHandle.description,
-          images,
-          price,
-          discount,
-          url: productByHandle.onlineStoreUrl,
-          options: newOptions,
-          availableForSale: false,
-          quantityAvailable,
-        });
-      } else if (
-        variantProductByHandle &&
-        variantProductByHandle.variantBySelectedOptions
-      ) {
-        let {
-          id,
-          presentmentPrices,
-          availableForSale,
-          quantityAvailable,
-        } = variantProductByHandle.variantBySelectedOptions;
-        let { compareAtPrice, price } = presentmentPrices.edges[0].node;
-
-        if (compareAtPrice) {
-          let originalPrice = compareAtPrice.amount;
-          if (originalPrice > price.amount) {
+      if (variantProductByHandle) {
+        if (variantProductByHandle.variantBySelectedOptions == null) {
+          setProductDetails({
+            id: '',
+            title: productByHandle.title,
+            handle: productByHandle.handle,
+            description: productByHandle.description,
+            images,
+            price,
+            discount,
+            url: productByHandle.onlineStoreUrl,
+            options: newOptions,
+            availableForSale: false,
+            quantityAvailable: 0,
+          });
+        } else {
+          let {
+            id,
+            presentmentPrices,
+            availableForSale,
+            quantityAvailable,
+          } = variantProductByHandle.variantBySelectedOptions;
+          let { compareAtPrice, price } = presentmentPrices.edges[0].node;
+          if (compareAtPrice) {
+            let originalPrice = compareAtPrice.amount;
             let discount =
-              ((compareAtPrice.amount - price.amount) / compareAtPrice.amount) *
-              100;
+              (Math.abs(originalPrice - price.amount) / originalPrice) * 100;
             setProductDetails({
               ...productDetails,
               price: Number(originalPrice),
               discount,
               availableForSale,
               id,
-              quantityAvailable:
-                quantityAvailable != null ? quantityAvailable : 0,
+              quantityAvailable: quantityAvailable ?? 0,
+            });
+          } else {
+            setProductDetails({
+              ...productDetails,
+              price: Number(price.amount),
+              discount: 0,
+              availableForSale,
+              id,
+              quantityAvailable: quantityAvailable ?? 0,
             });
           }
-        } else {
-          setProductDetails({
-            ...productDetails,
-            price: Number(price.amount),
-            discount: 0,
-            availableForSale,
-            id,
-            quantityAvailable:
-              quantityAvailable != null ? quantityAvailable : 0,
-          });
         }
       } else {
         setProductDetails({
@@ -133,7 +117,7 @@ function useGetProductDetails(
           url: productByHandle.onlineStoreUrl,
           availableForSale: productByHandle.availableForSale,
           options: newOptions,
-          quantityAvailable,
+          quantityAvailable: 0,
         });
       }
     }
