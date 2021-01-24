@@ -5,7 +5,6 @@ import {
   FlatList,
   Modal,
   SafeAreaView,
-  BackHandler,
   TouchableOpacity,
 } from 'react-native';
 import { Text, IconButton, ActivityIndicator } from 'exoflex';
@@ -58,13 +57,6 @@ export default function SearchModal(props: Props) {
     });
   }, [debouncedSearchText, searchProducts]);
 
-  useEffect(() => {
-    let backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      setVisible(false);
-      return true;
-    });
-    return backHandler.remove();
-  });
 
   let renderList = (props: {
     recent?: Array<Product>;
@@ -104,7 +96,7 @@ export default function SearchModal(props: Props) {
 
   return (
     <>
-      <Modal visible={isVisible} animated={true} animationType="slide">
+      <Modal visible={isVisible} animated={true} animationType="slide" onRequestClose={() => setVisible(false)}>
         <SafeAreaView style={styles.flex}>
           <View style={styles.searchInputContainer}>
             <IconButton
