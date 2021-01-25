@@ -21,9 +21,9 @@ type SortProps = {
 };
 
 type FilterProps = {
-  priceRange: [number, number];
+  priceRange: Array<number>;
   onClearFilter: () => void;
-  onSetFilter: (values: [number, number]) => void;
+  onSetFilter: (values: Array<number>) => void;
   onValuesChangeStart: () => void;
   onValuesChangeFinish: () => void;
 };
@@ -32,7 +32,7 @@ type Props = {
   products: Array<Product>;
   hasMore: boolean;
   onItemPress: (product: Product) => void;
-  onEndReached: (info: { distanceFromEnd: number }) => void;
+  onEndReached: () => void;
   sortProps: SortProps;
   filterProps: FilterProps;
 };

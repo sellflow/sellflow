@@ -22,10 +22,7 @@ export default function SearchResultsScene() {
   let first = numColumns * 6;
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
-  let [priceRange, setPriceRange] = useState<[number, number]>([
-    0,
-    maxPriceValue,
-  ]);
+  let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let { params } = useRoute<StackRouteProp<'SearchResults'>>();
 
   let searchKeyword = params.searchKeyword;
@@ -63,7 +60,7 @@ export default function SearchResultsScene() {
   }, [searchKeyword]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
-  let onSetFilter = (values: [number, number]) => {
+  let onSetFilter = (values: Array<number>) => {
     setPriceRange(values);
     refetch('update', {
       first,
@@ -97,8 +94,8 @@ export default function SearchResultsScene() {
       gestureEnabled: true,
     });
   };
-  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
-    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+  let onEndReached = () => {
+    if (!isFetchingMore && hasMore) {
       refetch('scroll', {
         searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
         first,
