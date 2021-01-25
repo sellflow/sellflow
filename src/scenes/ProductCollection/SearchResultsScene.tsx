@@ -97,8 +97,8 @@ export default function SearchResultsScene() {
       gestureEnabled: true,
     });
   };
-  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
-    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+  let onEndReached = () => {
+    if (!isFetchingMore && hasMore) {
       refetch('scroll', {
         searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
         first,

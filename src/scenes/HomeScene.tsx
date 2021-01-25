@@ -51,12 +51,8 @@ export default function HomeScene() {
       searchKeyword,
     });
 
-  let onProductsEndReached = ({
-    distanceFromEnd,
-  }: {
-    distanceFromEnd: number;
-  }) => {
-    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+  let onProductsEndReached = () => {
+    if (!isFetchingMore && hasMore) {
       refetch('scroll', {
         presentmentCurrencies: [selectedCurrency],
         first,

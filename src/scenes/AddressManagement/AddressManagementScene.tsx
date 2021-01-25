@@ -97,8 +97,8 @@ export default function AddressManagementScene() {
     });
   };
 
-  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
-    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+  let onEndReached = () => {
+    if (!isFetchingMore && hasMore) {
       refetchAddresses('scroll', {
         first,
         customerAccessToken,
