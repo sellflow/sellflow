@@ -27,8 +27,8 @@ export default function OrderHistoryScene() {
     return <ActivityIndicator style={styles.center} />;
   }
 
-  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
-    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+  let onEndReached = () => {
+    if (!isFetchingMore && hasMore) {
       refetch({
         customerAccessToken,
         first,

@@ -98,8 +98,8 @@ export default function ProductCollectionScene() {
       gestureEnabled: true,
     });
   };
-  let onEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
-    if (distanceFromEnd > 0 && !isFetchingMore && hasMore) {
+  let onEndReached = () => {
+    if (!isFetchingMore && hasMore) {
       refetch('scroll', {
         collectionHandle,
         first,
