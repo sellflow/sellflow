@@ -57,7 +57,6 @@ export default function SearchModal(props: Props) {
     });
   }, [debouncedSearchText, searchProducts]);
 
-
   let renderList = (props: {
     recent?: Array<Product>;
     results?: Array<Product>;
@@ -96,7 +95,12 @@ export default function SearchModal(props: Props) {
 
   return (
     <>
-      <Modal visible={isVisible} animated={true} animationType="slide" onRequestClose={() => setVisible(false)}>
+      <Modal
+        visible={isVisible}
+        animated={true}
+        animationType="slide"
+        onRequestClose={() => setVisible(false)}
+      >
         <SafeAreaView style={styles.flex}>
           <View style={styles.searchInputContainer}>
             <IconButton
