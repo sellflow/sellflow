@@ -1,10 +1,10 @@
 import React, { ComponentProps } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput as NativeTextInput } from 'react-native';
 import { TextInput } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 
-type Props = ComponentProps<typeof TextInput>;
+type Props = ComponentProps<typeof NativeTextInput>;
 
 export default function SearchInput(props: Props) {
   let { style, ...otherProps } = props;
