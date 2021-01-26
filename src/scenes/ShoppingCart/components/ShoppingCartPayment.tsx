@@ -76,6 +76,9 @@ export default function ShoppingCartPayment(props: Props) {
             contentStyle={styles.addButton}
             labelStyle={defaultButtonLabel}
             onPress={onAddCode}
+            accessibilityStates
+            accessibilityTraits
+            accessibilityComponentType
           >
             {t('Add')}
           </Button>

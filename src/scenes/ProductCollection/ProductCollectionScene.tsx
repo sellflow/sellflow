@@ -26,10 +26,7 @@ export default function ProductCollectionScene() {
 
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
-  let [priceRange, setPriceRange] = useState<[number, number]>([
-    0,
-    maxPriceValue,
-  ]);
+  let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   const collectionHandle = params.collection.handle;
   let numColumns = useColumns();
@@ -44,7 +41,7 @@ export default function ProductCollectionScene() {
   } = useCollectionQuery(collectionHandle, first, priceRange);
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
-  let onSetFilter = (values: [number, number]) => {
+  let onSetFilter = (values: Array<number>) => {
     setPriceRange(values);
     refetch(
       'sort',
@@ -119,7 +116,14 @@ export default function ProductCollectionScene() {
   });
 
   if (loading && !isFetchingMore) {
-    return <ActivityIndicator style={[styles.container, styles.center]} />;
+    return (
+      <ActivityIndicator
+        style={[styles.container, styles.center]}
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
+      />
+    );
   }
 
   return (

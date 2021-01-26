@@ -9,10 +9,10 @@ import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
 export type PriceSliderProps = {
   minPrice: number;
   maxPrice: number;
-  initialSliderValues: [number, number];
+  initialSliderValues: Array<number>;
   sliderStep?: number;
   submitButtonText: string;
-  onSubmit: (values: [number, number]) => void;
+  onSubmit: (values: Array<number>) => void;
   onValuesChangeStart?: () => void;
   onValuesChangeFinish?: () => void;
 };
@@ -34,7 +34,7 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
   } = props;
 
   let [sliderLength, setSliderLength] = useState<number>(280); // default slider length
-  let [priceRange, setPriceRange] = useState<[number, number]>(
+  let [priceRange, setPriceRange] = useState<Array<number>>(
     initialSliderValues,
   );
 
@@ -92,7 +92,7 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
         max={maxPrice}
         step={sliderStep}
         onValuesChangeStart={onValuesChangeStart}
-        onValuesChangeFinish={(values: [number, number]) => {
+        onValuesChangeFinish={(values: Array<number>) => {
           setPriceRange(values);
           onValuesChangeFinish();
         }}
@@ -130,6 +130,9 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
         labelStyle={defaultButtonLabel}
         onPress={() => onSubmit(priceRange)}
         disabled={!(priceRange[1] >= priceRange[0])}
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
       >
         {submitButtonText}
       </Button>

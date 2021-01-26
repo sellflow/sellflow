@@ -107,6 +107,9 @@ export default function BottomActionBar(props: Props) {
         disabled={isButtonDisabled}
         loading={isLoading}
         onPress={addButtonAction}
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
       >
         {buttonLabel()}
       </Button>

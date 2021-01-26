@@ -21,9 +21,9 @@ type SortProps = {
 };
 
 type FilterProps = {
-  priceRange: [number, number];
+  priceRange: Array<number>;
   onClearFilter: () => void;
-  onSetFilter: (values: [number, number]) => void;
+  onSetFilter: (values: Array<number>) => void;
   onValuesChangeStart: () => void;
   onValuesChangeFinish: () => void;
 };
@@ -121,6 +121,9 @@ export default function ProductsView(props: Props) {
           uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleFilterModal}
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
         >
           {t('Filter')}
         </Button>
@@ -131,6 +134,9 @@ export default function ProductsView(props: Props) {
           uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleSortModal}
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
         >
           {t('Sort By')}
         </Button>
@@ -156,7 +162,12 @@ export default function ProductsView(props: Props) {
           onEndReachedThreshold={0.25}
           ListFooterComponent={() => {
             return hasMore ? (
-              <ActivityIndicator style={styles.activityIndicator} />
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                accessibilityStates
+                accessibilityTraits
+                accessibilityComponentType
+              />
             ) : null;
           }}
         />

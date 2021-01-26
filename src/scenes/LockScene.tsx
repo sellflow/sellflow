@@ -42,6 +42,9 @@ export default function LockScene() {
         onPress={() => {
           navigate('Auth', { initialRouteKey: 'Register' });
         }}
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
       >
         {t('Register')}
       </Button>

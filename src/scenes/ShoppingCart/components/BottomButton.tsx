@@ -16,6 +16,9 @@ export default function BottomButton(props: Props) {
       style={[defaultButton, styles.buttonStyle]}
       labelStyle={defaultButtonLabel}
       onPress={onPressAction}
+      accessibilityStates
+      accessibilityTraits
+      accessibilityComponentType
     >
       {label}
     </Button>

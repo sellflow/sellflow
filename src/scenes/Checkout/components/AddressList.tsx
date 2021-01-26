@@ -43,7 +43,12 @@ export default function AdddressList(props: Props) {
       onEndReachedThreshold={0.25}
       ListFooterComponent={() => {
         return hasMore ? (
-          <ActivityIndicator style={styles.activityIndicator} />
+          <ActivityIndicator
+            style={styles.activityIndicator}
+            accessibilityStates
+            accessibilityTraits
+            accessibilityComponentType
+          />
         ) : null;
       }}
       ListEmptyComponent={() => {

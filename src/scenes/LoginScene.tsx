@@ -218,6 +218,9 @@ export default function LoginScene() {
           style={defaultButton}
           labelStyle={defaultButtonLabel}
           onPress={onSubmit}
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
         >
           {!isLoading && t('Log in')}
         </Button>
