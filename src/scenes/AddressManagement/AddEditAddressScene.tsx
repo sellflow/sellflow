@@ -186,7 +186,14 @@ export default function AddEditAddressScene() {
   });
 
   if (loadingDeleteAddress) {
-    return <ActivityIndicator style={styles.centered} />;
+    return (
+      <ActivityIndicator
+        style={styles.centered}
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
+      />
+    );
   }
 
   return (
@@ -349,6 +356,9 @@ export default function AddEditAddressScene() {
           onPress={onPressSaveAddress}
           disabled={isAddressDataEmpty}
           loading={loadingAddNewAddress || loadingEditAddress}
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
         >
           <Text weight="medium" style={styles.buttonText}>
             {!loadingAddNewAddress && !loadingEditAddress && t('Save Address')}

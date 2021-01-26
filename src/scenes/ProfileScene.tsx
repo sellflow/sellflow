@@ -33,7 +33,14 @@ export default function ProfileScene() {
   });
 
   if (getAuthenticatedUserLoading || !authenticatedUser) {
-    return <ActivityIndicator style={styles.centered} />;
+    return (
+      <ActivityIndicator
+        style={styles.centered}
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
+      />
+    );
   }
 
   let onLogout = () => {

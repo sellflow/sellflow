@@ -25,7 +25,13 @@ export default function ModalBottomSheetMessage(props: Props) {
       </View>
       <Text style={styles.message}>{t(' {message}', { message })}</Text>
       {onPressModalButton ? (
-        <Button style={styles.buttonStyle} onPress={onPressModalButton}>
+        <Button
+          style={styles.buttonStyle}
+          onPress={onPressModalButton}
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
+        >
           <Text weight="medium" style={styles.buttonText}>
             {buttonText ? t('{buttonText}', { buttonText }) : t('Close')}
           </Text>

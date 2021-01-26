@@ -203,7 +203,12 @@ export default function ProductDetailsScene() {
   let isLandscape = screenSize === ScreenSize.Large;
 
   return isFirstLoading ? (
-    <ActivityIndicator style={styles.centered} />
+    <ActivityIndicator
+      style={styles.centered}
+      accessibilityStates
+      accessibilityTraits
+      accessibilityComponentType
+    />
   ) : (
     <View style={styles.flex}>
       <View style={[styles.flex, isLandscape && styles.flexRow]}>

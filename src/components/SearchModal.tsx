@@ -138,7 +138,11 @@ export default function SearchModal(props: Props) {
               {!searchText ? t('Recent Searches') : t('Search Results')}
             </Text>
             {searchLoading ? (
-              <ActivityIndicator />
+              <ActivityIndicator
+                accessibilityStates
+                accessibilityTraits
+                accessibilityComponentType
+              />
             ) : searchText !== '' ? (
               renderList({ results })
             ) : (

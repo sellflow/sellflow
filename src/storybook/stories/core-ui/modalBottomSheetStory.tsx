@@ -12,7 +12,13 @@ export default function modalBottomSheetStory() {
 
     return (
       <View>
-        <Button preset="invisible" onPress={() => setModalVisible(true)}>
+        <Button
+          preset="invisible"
+          onPress={() => setModalVisible(true)}
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
+        >
           {t('Open Error Modal')}
         </Button>
         <ModalBottomSheet
@@ -28,7 +34,13 @@ export default function modalBottomSheetStory() {
             buttonText={t('Try Again')}
           />
         </ModalBottomSheet>
-        <Button preset="invisible" onPress={() => setModalVisible(true)}>
+        <Button
+          preset="invisible"
+          onPress={() => setModalVisible(true)}
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
+        >
           {t('Open Success Modal')}
         </Button>
         <ModalBottomSheet
