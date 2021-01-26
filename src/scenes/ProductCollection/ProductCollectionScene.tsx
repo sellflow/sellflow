@@ -7,14 +7,14 @@ import { SearchModal } from '../../components';
 import { COLORS } from '../../constants/colors';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { useCollectionQuery } from '../../hooks/api/useCollection';
-
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { Product } from '../../types/types';
 import { useColumns } from '../../helpers/columns';
-import { ProductsView } from './components';
 import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
 import { formatSliderValue } from '../../helpers/formatSliderValue';
+
+import { ProductsView } from './components';
 
 export default function ProductCollectionScene() {
   let maxPrice = useGetHighestPrice();

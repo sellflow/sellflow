@@ -9,12 +9,10 @@ import {
   SetAuthenticatedUser,
   SetAuthenticatedUserVariables,
 } from '../../generated/client/SetAuthenticatedUser';
-
 import {
   SET_AUTHENTICATED_USER,
   GET_AUTHENTICATED_USER,
 } from '../../graphql/client/clientQueries';
-
 import { GetAuthenticatedUser } from '../../generated/client/GetAuthenticatedUser';
 import {
   InitiatePasswordReset,

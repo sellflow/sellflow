@@ -22,8 +22,9 @@ import {
 } from '../../types/types';
 import { useGetCustomerAddresses } from '../../hooks/api/useCustomer';
 import { useCheckoutUpdateAddress } from '../../hooks/api/useShopifyCart';
-import { ShippingAddressForm, AddressList } from './components';
 import useCurrencyFormatter from '../../hooks/api/useCurrencyFormatter';
+
+import { ShippingAddressForm, AddressList } from './components';
 
 export default function CheckoutScene() {
   let { navigate } = useNavigation<StackNavProp<'Checkout'>>();

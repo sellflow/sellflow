@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, View, FlatListProps } from 'react-native';
 
 import { Product } from '../types/types';
+
 import ProductItem from './ProductItem';
 
 type BaseProps = FlatListProps<Product>;

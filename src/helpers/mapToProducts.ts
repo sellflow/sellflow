@@ -5,6 +5,7 @@ import {
 import { GetFeaturedProductsAndCategories_products as FeaturedProducts } from '../generated/server/GetFeaturedProductsAndCategories';
 import { SearchResults_products as SearchResultProducts } from '../generated/server/SearchResults';
 import { Product } from '../types/types';
+
 import { getDiscount } from './getDiscount';
 
 type CompatibleType =

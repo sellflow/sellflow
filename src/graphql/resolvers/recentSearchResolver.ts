@@ -1,12 +1,13 @@
 import { ApolloCache } from 'apollo-cache';
+
 import { GetRecentSearch } from '../../generated/client/GetRecentSearch';
 import { GET_RECENT_SEARCH } from '../client/clientQueries';
 import { SetRecentSearchVariables } from '../../generated/client/SetRecentSearch';
 
 function recentSearchResolver(
-  _: object,
+  _: Record<string, unknown>,
   args: SetRecentSearchVariables,
-  { cache }: { cache: ApolloCache<object> },
+  { cache }: { cache: ApolloCache<Record<string, unknown>> },
 ) {
   let { search } = args;
 

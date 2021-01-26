@@ -21,10 +21,11 @@ import {
 } from '../../hooks/api/useShopifyCart';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 import { Toast, KeyboardAvoidingView } from '../../core-ui';
-import { ProductInfo, ImageModal, ImageList } from './components';
-import BottomActionBar from './components/BottomActionBar';
 import { COLORS } from '../../constants/colors';
 import { ScreenSize, useDimensions } from '../../helpers/dimensions';
+
+import { ProductInfo, ImageModal, ImageList } from './components';
+import BottomActionBar from './components/BottomActionBar';
 
 export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();

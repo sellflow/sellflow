@@ -13,12 +13,13 @@ import {
   CurrencyCode,
 } from '../../generated/server/globalTypes';
 import { GET_FEATURED_PRODUCTS_AND_CATEGORIES } from '../../graphql/server/categoriesAndFeaturedProducts';
-import useDefaultCurrency from './useDefaultCurrency';
 import mapToProducts from '../../helpers/mapToProducts';
 import {
   GetFeaturedProductsAndCategories,
   GetFeaturedProductsAndCategoriesVariables,
 } from '../../generated/server/GetFeaturedProductsAndCategories';
+
+import useDefaultCurrency from './useDefaultCurrency';
 function filterProducts(
   collectionProducts: CollectionProducts,
   priceRange: Array<number>,

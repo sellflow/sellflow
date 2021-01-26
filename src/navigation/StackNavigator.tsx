@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'exoflex';
+import { NavigationState, Route } from '@react-navigation/native';
 
 import {
   OrderDetailsScene,
@@ -24,10 +25,10 @@ import { COLORS } from '../constants/colors';
 import { StackParamList } from '../types/Navigation';
 import { useCartFilled } from '../helpers/cartFilled';
 import { useAuth } from '../helpers/useAuth';
-import TabNavigator from './TabNavigator';
 import { CurrencyPicker } from '../components';
-import { NavigationState, Route } from '@react-navigation/native';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
+
+import TabNavigator from './TabNavigator';
 
 const Stack = createStackNavigator<StackParamList>();
 

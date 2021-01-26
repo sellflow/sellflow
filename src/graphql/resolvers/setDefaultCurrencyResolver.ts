@@ -4,7 +4,7 @@ import { LocalCache } from '../../types/types';
 import { SetDefaultCurrencyVariables } from '../../generated/client/SetDefaultCurrency';
 
 function setDefaultCurrencyResolver(
-  _: object,
+  _: Record<string, unknown>,
   args: SetDefaultCurrencyVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {

@@ -6,7 +6,7 @@ import { GetWishlist } from '../../generated/client/GetWishlist';
 import { RemoveFromWishlistVariables } from '../../generated/client/RemoveFromWishlist';
 
 function removeFromWishlistResolver(
-  _: object,
+  _: Record<string, unknown>,
   args: RemoveFromWishlistVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {

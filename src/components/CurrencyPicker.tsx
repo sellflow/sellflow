@@ -29,6 +29,7 @@ export default function CurrencyPicker() {
   let animatedValue = new Animated.Value(0);
 
   Animated.timing(animatedValue, {
+    useNativeDriver: true,
     toValue: visible ? -180 : 0,
     duration: 300,
     useNativeDriver: false,

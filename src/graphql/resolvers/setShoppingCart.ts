@@ -1,9 +1,10 @@
 import { ApolloCache } from 'apollo-cache';
+
 import { LocalCache } from '../../types/types';
 import { SetShoppingCartVariables } from '../../generated/client/SetShoppingCart';
 
 function setShoppingCartResolver(
-  _: object,
+  _: Record<string, unknown>,
   args: SetShoppingCartVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {

@@ -1,4 +1,5 @@
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { useEffect, useState, useRef } from 'react';
 
 import {
   GetOrderHistory,
@@ -8,7 +9,7 @@ import { GET_ORDER_HISTORY } from '../../graphql/server/orderHistory';
 import { OrderRecord, AddressItem } from '../../types/types';
 import { emptyAddress } from '../../constants/defaultValues';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
-import { useEffect, useState, useRef } from 'react';
+
 import useDefaultCurrency from './useDefaultCurrency';
 
 function getOrders(

@@ -3,7 +3,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { useSearchProductsQuery } from '../../hooks/api/useSearchProduct';
-import { ProductsView } from './components';
 import { Product } from '../../types/types';
 import { ProductSortKeys } from '../../generated/server/globalTypes';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
@@ -12,6 +11,8 @@ import { formatSliderValue } from '../../helpers/formatSliderValue';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 import { SearchModal } from '../../components';
 import { useColumns } from '../../helpers/columns';
+
+import { ProductsView } from './components';
 
 export default function SearchResultsScene() {
   let maxPrice = useGetHighestPrice();

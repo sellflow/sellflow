@@ -1,7 +1,10 @@
-import useDefaultCurrency from './useDefaultCurrency';
+import { useCallback } from 'react';
+
 import { CURRENCIES, DEFAULT_CURRENCY } from '../../constants/currencies';
 import formatNumber from '../../helpers/formatNumber';
-import { useCallback } from 'react';
+
+import useDefaultCurrency from './useDefaultCurrency';
+
 
 export default function useCurrencyFormatter() {
   let { data: selectedCurrency } = useDefaultCurrency();

@@ -25,11 +25,12 @@ import {
   textInputLabel,
 } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
-import { DeleteAddressModal } from './components';
 import { CountryModal, ModalBottomSheetMessage } from '../../components';
 import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
 import { AddressItem } from '../../types/types';
 import { newAddress } from '../../constants/defaultValues';
+
+import { DeleteAddressModal } from './components';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();

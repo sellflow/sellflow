@@ -11,7 +11,6 @@ import {
   CustomerCreateToken,
   CustomerCreateTokenVariables,
 } from '../../generated/server/CustomerCreateToken';
-
 import {
   CUSTOMER_CREATE_TOKEN,
   GET_CUSTOMER_DATA,

@@ -4,7 +4,7 @@ import { LocalCache } from '../../types/types';
 import { SetAuthenticatedUserVariables } from '../../generated/client/SetAuthenticatedUser';
 
 function setAuthenticatedUserResolver(
-  _: object,
+  _: Record<string, unknown>,
   args: SetAuthenticatedUserVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {

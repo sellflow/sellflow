@@ -6,7 +6,7 @@ import { LocalCache } from '../../types/types';
 import { GetWishlist } from '../../generated/client/GetWishlist';
 
 function addToWishlistResolver(
-  _: object,
+  _: Record<string, unknown>,
   args: AddToWishlistVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {

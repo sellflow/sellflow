@@ -13,7 +13,7 @@ import { Button } from 'exoflex';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { useAuth } from '../helpers/useAuth';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
-import { successImage } from '../.././assets/images';
+import { successImage } from "../../assets/images";
 
 export default function OrderPlacedConfirmation() {
   let { reset, navigate } = useNavigation();

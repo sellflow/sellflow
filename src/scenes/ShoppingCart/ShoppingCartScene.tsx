@@ -40,8 +40,9 @@ import { mapToLineItems } from '../../helpers/mapToLineItems';
 import Toast from '../../core-ui/Toast';
 import { useAuth } from '../../helpers/useAuth';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
-import { ShoppingCartPayment, BottomButton } from './components';
 import { CheckoutErrorCode } from '../../generated/server/globalTypes';
+
+import { ShoppingCartPayment, BottomButton } from './components';
 
 function extractDataCheckout(
   checkout: CheckoutCreate | CheckoutReplace | CheckoutDiscountApply,

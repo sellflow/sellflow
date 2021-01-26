@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Button, ActivityIndicator } from 'exoflex';
 
-import SortModal from './SortModal';
-import FilterModal from './FilterModal';
 import { ProductList } from '../../../components';
 import { Product } from '../../../types/types';
-import SortRadioGroup from './SortRadioGroup';
-import PriceSlider from './PriceSlider';
 import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
 import { useColumns } from '../../../helpers/columns';
 import { COLORS } from '../../../constants/colors';
 import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
 import { useGetHighestPrice } from '../../../hooks/api/useHighestPriceProduct';
 import { formatSliderValue } from '../../../helpers/formatSliderValue';
+
+import PriceSlider from './PriceSlider';
+import SortRadioGroup from './SortRadioGroup';
+import FilterModal from './FilterModal';
+import SortModal from './SortModal';
 
 type SortProps = {
   radioButtonValue: string;

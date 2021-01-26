@@ -9,7 +9,7 @@ import {
 import { Text, Button, IconButton } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
-import { lock } from '../.././assets/images';
+import { lock } from "../../assets/images";
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { COLORS } from '../constants/colors';

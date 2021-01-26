@@ -16,9 +16,10 @@ import {
   useCustomerAddressDelete,
   useCustomerSetDefaultAddress,
 } from '../../hooks/api/useCustomerAddress';
-import { DeleteAddressModal } from './components/DeleteAddressModal';
 import { emptyAddressImage } from '../../../assets/images';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
+
+import { DeleteAddressModal } from './components/DeleteAddressModal';
 
 export default function AddressManagementScene() {
   let { navigate } = useNavigation<StackNavProp<'AddressManagement'>>();

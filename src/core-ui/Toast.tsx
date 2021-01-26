@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, TextStyle, StyleProp, ViewStyle } from 'react-native';
 import { Toast as ExoToast } from 'exoflex';
+import { ModeProps } from 'exoflex/lib/typescript/src/components/Toast';
 
 import { COLORS } from '../constants/colors';
-import { ModeProps } from 'exoflex/lib/typescript/src/components/Toast';
 
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;

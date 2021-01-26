@@ -7,6 +7,7 @@ export type CreditCard = {
   expirationDate: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function createCardVaulting(fetch: Function) {
   async function cardVaulting(
     id: string,
