@@ -31,6 +31,7 @@ export default function CurrencyPicker() {
   Animated.timing(animatedValue, {
     toValue: visible ? -180 : 0,
     duration: 300,
+    useNativeDriver: false,
   }).start();
 
   return (

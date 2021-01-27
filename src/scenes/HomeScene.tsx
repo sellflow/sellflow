@@ -64,7 +64,11 @@ export default function HomeScene() {
   if ((loadingHomeData || loadingCurrency || !products) && !isFetchingMore) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator />
+        <ActivityIndicator
+          accessibilityStates
+          accessibilityTraits
+          accessibilityComponentType
+        />
       </View>
     );
   }
@@ -123,7 +127,12 @@ export default function HomeScene() {
         onEndReachedThreshold={0.25}
         ListFooterComponent={() => {
           return hasMore ? (
-            <ActivityIndicator style={styles.activityIndicator} />
+            <ActivityIndicator
+              style={styles.activityIndicator}
+              accessibilityStates
+              accessibilityTraits
+              accessibilityComponentType
+            />
           ) : null;
         }}
       />

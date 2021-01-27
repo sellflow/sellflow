@@ -25,7 +25,7 @@
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
     "@apollo/react-testing": "^3.1.3",
-    "@react-native-community/masked-view": "^0.1.5",
+    "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.0.0-alpha.32",
     "@react-navigation/native": "^5.0.0-alpha.24",
     "@react-navigation/stack": "^5.0.0-alpha.56",
@@ -37,49 +37,49 @@
     "apollo-link-http": "^1.5.16",
     "card-validator": "^6.2.0",
     "exoflex": "^3.2.0",
-    "expo": "^36.0.2",
-    "expo-image-picker": "^8.0.2",
-    "expo-localization": "^8.0.0",
+    "expo": "^40.0.0",
+    "expo-image-picker": "~9.2.0",
+    "expo-localization": "~9.1.0",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
-    "react": "~16.9.0",
-    "react-dom": "~16.9.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
-    "react-native-gesture-handler": "^1.5.3",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+    "react-native-gesture-handler": "~1.8.0",
     "react-native-image-zoom-viewer": "^2.2.27",
     "react-native-paper": "^3.4.0",
-    "react-native-reanimated": "^1.4.0",
-    "react-native-safe-area-context": "0.6.0",
-    "react-native-screens": "2.0.0-alpha.12",
+    "react-native-reanimated": "~1.13.0",
+    "react-native-safe-area-context": "3.1.9",
+    "react-native-screens": "~2.15.2",
     "react-native-snap-carousel": "^3.8.4",
     "react-native-step-indicator": "^0.0.11",
-    "react-native-svg": "9.13.3",
+    "react-native-svg": "12.1.0",
     "react-native-tab-view": "^2.11.0",
-    "react-native-web": "~0.11.7",
-    "react-native-webview": "^8.1.2"
+    "react-native-web": "~0.13.12",
+    "react-native-webview": "11.0.0"
   },
   "devDependencies": {
     "@storybook/react-native": "^5.3.0",
     "@types/card-validator": "^4.1.0",
-    "@types/jest": "^24.0.23",
-    "@types/react": "~16.9.0",
-    "@types/react-native": "~0.60.23",
+    "@types/jest": "^26.0.20",
+    "@types/react": "~16.9.35",
+    "@types/react-native": "~0.63.2",
     "@types/react-native-snap-carousel": "^3.7.4",
     "@types/react-test-renderer": "^16.9.1",
     "apollo": "^2.21.3",
-    "babel-preset-expo": "~8.0.0",
+    "babel-preset-expo": "8.3.0",
     "cross-var": "^1.1.0",
     "eslint": "^6.8.0",
     "eslint-config-kodefox": "^0.1.0",
     "eslint-plugin-t": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
-    "jest": "^24.9.0",
-    "jest-expo": "^36.0.1",
+    "jest": "^26.6.3",
+    "jest-expo": "^40.0.0",
     "prettier": "^1.19.1",
     "react-native-testing-library": "^1.11.1",
     "react-test-renderer": "^16.12.0",
-    "ts-jest": "^24.2.0",
-    "typescript": "^3.7.4"
+    "ts-jest": "^26.4.4",
+    "typescript": "~4.0.0"
   },
   "eslintConfig": {
     "extends": "kodefox/react-native",
@@ -102,9 +102,8 @@
   "jest": {
     "preset": "jest-expo",
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
       "^.+\\.tsx?$": "ts-jest"
-    },
+  },
     "setupFiles": [
       "<rootDir>/src/__mocks__/setup.js"
     ],
@@ -131,7 +130,7 @@
     ],
     "globals": {
       "ts-jest": {
-        "tsConfig": {
+        "tsconfig": {
           "jsx": "react",
           "esModuleInterop": true
         }

@@ -52,6 +52,9 @@ export default function OrderPlacedConfirmation() {
             customerAccessToken: authToken,
           });
         }}
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
       >
         {t('View Order History')}
       </Button>
@@ -66,6 +69,9 @@ export default function OrderPlacedConfirmation() {
             routes: [{ name: 'Home' }],
           })
         }
+        accessibilityStates
+        accessibilityTraits
+        accessibilityComponentType
       >
         {t('Back To Home')}
       </Button>
