@@ -7,14 +7,14 @@ import { SearchModal } from '../../components';
 import { COLORS } from '../../constants/colors';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { useCollectionQuery } from '../../hooks/api/useCollection';
-
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { Product } from '../../types/types';
 import { useColumns } from '../../helpers/columns';
-import { ProductsView } from './components';
 import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
 import { formatSliderValue } from '../../helpers/formatSliderValue';
+
+import { ProductsView } from './components';
 
 export default function ProductCollectionScene() {
   let maxPrice = useGetHighestPrice();
@@ -26,7 +26,10 @@ export default function ProductCollectionScene() {
 
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
-  let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
+  let [priceRange, setPriceRange] = useState<[number, number]>([
+    0,
+    maxPriceValue,
+  ]);
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   const collectionHandle = params.collection.handle;
   let numColumns = useColumns();
@@ -41,7 +44,7 @@ export default function ProductCollectionScene() {
   } = useCollectionQuery(collectionHandle, first, priceRange);
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
-  let onSetFilter = (values: Array<number>) => {
+  let onSetFilter = (values: [number, number]) => {
     setPriceRange(values);
     refetch(
       'sort',
@@ -116,14 +119,7 @@ export default function ProductCollectionScene() {
   });
 
   if (loading && !isFetchingMore) {
-    return (
-      <ActivityIndicator
-        style={[styles.container, styles.center]}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
-      />
-    );
+    return <ActivityIndicator style={[styles.container, styles.center]} />;
   }
 
   return (

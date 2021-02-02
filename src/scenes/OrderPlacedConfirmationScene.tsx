@@ -13,7 +13,7 @@ import { Button } from 'exoflex';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { useAuth } from '../helpers/useAuth';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
-import { successImage } from '../.././assets/images';
+import { successImage } from '../../assets/images';
 
 export default function OrderPlacedConfirmation() {
   let { reset, navigate } = useNavigation();
@@ -52,9 +52,6 @@ export default function OrderPlacedConfirmation() {
             customerAccessToken: authToken,
           });
         }}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
       >
         {t('View Order History')}
       </Button>
@@ -69,9 +66,6 @@ export default function OrderPlacedConfirmation() {
             routes: [{ name: 'Home' }],
           })
         }
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
       >
         {t('Back To Home')}
       </Button>

@@ -13,15 +13,16 @@ import {
   CurrencyCode,
 } from '../../generated/server/globalTypes';
 import { GET_FEATURED_PRODUCTS_AND_CATEGORIES } from '../../graphql/server/categoriesAndFeaturedProducts';
-import useDefaultCurrency from './useDefaultCurrency';
 import mapToProducts from '../../helpers/mapToProducts';
 import {
   GetFeaturedProductsAndCategories,
   GetFeaturedProductsAndCategoriesVariables,
 } from '../../generated/server/GetFeaturedProductsAndCategories';
+
+import useDefaultCurrency from './useDefaultCurrency';
 function filterProducts(
   collectionProducts: CollectionProducts,
-  priceRange: Array<number>,
+  priceRange: [number, number],
 ) {
   let [minPrice, maxPrice] = priceRange;
   let productPriceRange =
@@ -36,7 +37,7 @@ function filterProducts(
 
 function getProducts(
   collectionData: GetCollection | undefined,
-  priceRange: Array<number>,
+  priceRange: [number, number],
 ): Array<Product> {
   if (collectionData && collectionData.collectionByHandle) {
     let filtered = {
@@ -52,7 +53,7 @@ function getProducts(
 function useCollectionQuery(
   collectionHandle: string,
   first: number,
-  priceRange: Array<number>,
+  priceRange: [number, number],
 ) {
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
   let [isReloading, setIsReloading] = useState<boolean>(true);
@@ -80,7 +81,7 @@ function useCollectionQuery(
     targetAmount: number,
     cursor: string | null,
     handle: string,
-    filter: Array<number>,
+    filter: [number, number],
   ) => {
     let result: Array<Product> = [];
     let moreData: Array<Product> = [];
@@ -118,7 +119,7 @@ function useCollectionQuery(
   let refetch = async (
     type: 'sort' | 'scroll',
     variables: GetCollectionVariables | undefined,
-    values?: Array<number>,
+    values?: [number, number],
   ) => {
     isFetchingMore.current = type === 'scroll';
     if (!isFetchingMore.current) {

@@ -8,6 +8,7 @@ import { persistCache } from 'apollo-cache-persist';
 import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types';
 
 import { STOREFRONT_API_URL, STOREFRONT_ACCESS_TOKEN } from '../constants/api';
+
 import { setAuthenticatedUserResolver } from './resolvers/setAuthenticatedUserResolver';
 import { addToWishlistResolver } from './resolvers/addToWishlistResolver';
 import { removeFromWishlistResolver } from './resolvers/removeFromWishlistResolver';

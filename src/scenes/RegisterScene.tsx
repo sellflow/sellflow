@@ -8,6 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { Text, TextInput, Button, Portal } from 'exoflex';
+import { useNavigation } from '@react-navigation/native';
 
 import { COLORS } from '../constants/colors';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
@@ -24,7 +25,6 @@ import {
   flatTextInputStyle,
   textInputLabel,
 } from '../constants/theme';
-import { useNavigation } from '@react-navigation/native';
 import { StackNavProp } from '../types/Navigation';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useCustomerRegister } from '../hooks/api/useCustomer';
@@ -301,9 +301,6 @@ export default function RegisterScene() {
           style={[defaultButton, styles.button]}
           disabled={isDisabled}
           labelStyle={defaultButtonLabel}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
         >
           {!isLoading && t('Register')}
         </Button>

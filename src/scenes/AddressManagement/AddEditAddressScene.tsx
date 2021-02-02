@@ -25,11 +25,12 @@ import {
   textInputLabel,
 } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
-import { DeleteAddressModal } from './components';
 import { CountryModal, ModalBottomSheetMessage } from '../../components';
 import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
 import { AddressItem } from '../../types/types';
 import { newAddress } from '../../constants/defaultValues';
+
+import { DeleteAddressModal } from './components';
 
 export default function AddEditAddressScene() {
   let { authToken: customerAccessToken } = useAuth();
@@ -186,14 +187,7 @@ export default function AddEditAddressScene() {
   });
 
   if (loadingDeleteAddress) {
-    return (
-      <ActivityIndicator
-        style={styles.centered}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
-      />
-    );
+    return <ActivityIndicator style={styles.centered} />;
   }
 
   return (
@@ -356,9 +350,6 @@ export default function AddEditAddressScene() {
           onPress={onPressSaveAddress}
           disabled={isAddressDataEmpty}
           loading={loadingAddNewAddress || loadingEditAddress}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
         >
           <Text weight="medium" style={styles.buttonText}>
             {!loadingAddNewAddress && !loadingEditAddress && t('Save Address')}

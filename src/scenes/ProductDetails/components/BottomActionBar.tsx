@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Share } from 'react-native';
 import { Button, IconButton } from 'exoflex';
+import { useQuery } from '@apollo/react-hooks';
 
 import {
   useAddItemToWishlist,
@@ -8,7 +9,6 @@ import {
 } from '../../../hooks/api/useWishlist';
 import { COLORS } from '../../../constants/colors';
 import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
-import { useQuery } from '@apollo/react-hooks';
 import { GetShop } from '../../../generated/server/GetShop';
 import { GET_SHOP } from '../../../graphql/server/shop';
 import { ProductDetails } from '../../../types/types';
@@ -107,9 +107,6 @@ export default function BottomActionBar(props: Props) {
         disabled={isButtonDisabled}
         loading={isLoading}
         onPress={addButtonAction}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
       >
         {buttonLabel()}
       </Button>

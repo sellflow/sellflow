@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import { GET_HIGHEST_PRICE } from '../../graphql/server/searchProduct';
 import { GetHighestPrice } from '../../generated/server/GetHighestPrice';
+
 import useDefaultCurrency from './useDefaultCurrency';
 
 function useGetHighestPrice() {

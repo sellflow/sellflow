@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import { RadioButton } from 'exoflex';
 
 import { addressItemData } from '../../../fixtures/AddressItemData';
 import { CheckoutAddress } from '../../../components';
-import { RadioButton } from 'exoflex';
 
 function CheckoutAddressList() {
   let [selectedIndex, setSelectedIndex] = useState<string>(

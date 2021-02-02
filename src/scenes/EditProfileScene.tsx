@@ -231,9 +231,6 @@ export default function EditProfileScene() {
             loading={saving}
             style={[defaultButton, styles.buttonSaveContainer]}
             labelStyle={defaultButtonLabel}
-            accessibilityStates
-            accessibilityTraits
-            accessibilityComponentType
           >
             {!saving && t('Save Changes')}
           </Button>

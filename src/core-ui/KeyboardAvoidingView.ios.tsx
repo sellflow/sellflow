@@ -6,6 +6,7 @@ import {
   Animated,
   StyleSheet,
 } from 'react-native';
+
 import { useKeyboardListener } from '../helpers/keyboardListener';
 
 type Props = KeyboardAvoidingViewProps & {

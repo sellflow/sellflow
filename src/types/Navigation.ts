@@ -1,6 +1,7 @@
 import { RouteProp as RoutePropBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+
 import { CategoryItem, OrderRecord, AddressItem, Cart } from './types';
 
 export type StackNavProp<T extends keyof StackParamList> = StackNavigationProp<

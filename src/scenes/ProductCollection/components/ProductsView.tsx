@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Button, ActivityIndicator } from 'exoflex';
 
-import SortModal from './SortModal';
-import FilterModal from './FilterModal';
 import { ProductList } from '../../../components';
 import { Product } from '../../../types/types';
-import SortRadioGroup from './SortRadioGroup';
-import PriceSlider from './PriceSlider';
 import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
 import { useColumns } from '../../../helpers/columns';
 import { COLORS } from '../../../constants/colors';
@@ -15,15 +11,20 @@ import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
 import { useGetHighestPrice } from '../../../hooks/api/useHighestPriceProduct';
 import { formatSliderValue } from '../../../helpers/formatSliderValue';
 
+import PriceSlider from './PriceSlider';
+import SortRadioGroup from './SortRadioGroup';
+import FilterModal from './FilterModal';
+import SortModal from './SortModal';
+
 type SortProps = {
   radioButtonValue: string;
   onPressRadioButton: (newValue: string) => void;
 };
 
 type FilterProps = {
-  priceRange: Array<number>;
+  priceRange: [number, number];
   onClearFilter: () => void;
-  onSetFilter: (values: Array<number>) => void;
+  onSetFilter: (values: [number, number]) => void;
   onValuesChangeStart: () => void;
   onValuesChangeFinish: () => void;
 };
@@ -121,9 +122,6 @@ export default function ProductsView(props: Props) {
           uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleFilterModal}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
         >
           {t('Filter')}
         </Button>
@@ -134,9 +132,6 @@ export default function ProductsView(props: Props) {
           uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleSortModal}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
         >
           {t('Sort By')}
         </Button>
@@ -162,12 +157,7 @@ export default function ProductsView(props: Props) {
           onEndReachedThreshold={0.25}
           ListFooterComponent={() => {
             return hasMore ? (
-              <ActivityIndicator
-                style={styles.activityIndicator}
-                accessibilityStates
-                accessibilityTraits
-                accessibilityComponentType
-              />
+              <ActivityIndicator style={styles.activityIndicator} />
             ) : null;
           }}
         />

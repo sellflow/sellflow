@@ -5,6 +5,7 @@ import React, {
   createContext,
   useEffect,
 } from 'react';
+
 import { getToken, removeToken, saveToken } from './authToken';
 
 type Context = {
