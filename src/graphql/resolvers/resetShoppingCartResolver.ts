@@ -4,8 +4,8 @@ import { LocalCache } from '../../types/types';
 import { initialData } from '../initialData';
 
 function resetShoppingCartResolver(
-  _: Record<string, unknown>,
-  __: Record<string, unknown>,
+  _: object,
+  __: object,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {
   cache.writeData({

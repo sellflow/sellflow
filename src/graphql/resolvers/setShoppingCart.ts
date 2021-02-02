@@ -4,7 +4,7 @@ import { LocalCache } from '../../types/types';
 import { SetShoppingCartVariables } from '../../generated/client/SetShoppingCart';
 
 function setShoppingCartResolver(
-  _: Record<string, unknown>,
+  _: object,
   args: SetShoppingCartVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {

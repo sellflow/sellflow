@@ -22,9 +22,9 @@ type SortProps = {
 };
 
 type FilterProps = {
-  priceRange: Array<number>;
+  priceRange: [number, number];
   onClearFilter: () => void;
-  onSetFilter: (values: Array<number>) => void;
+  onSetFilter: (values: [number, number]) => void;
   onValuesChangeStart: () => void;
   onValuesChangeFinish: () => void;
 };

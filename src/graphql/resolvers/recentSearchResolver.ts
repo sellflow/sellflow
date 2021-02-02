@@ -5,9 +5,9 @@ import { GET_RECENT_SEARCH } from '../client/clientQueries';
 import { SetRecentSearchVariables } from '../../generated/client/SetRecentSearch';
 
 function recentSearchResolver(
-  _: Record<string, unknown>,
+  _: object,
   args: SetRecentSearchVariables,
-  { cache }: { cache: ApolloCache<Record<string, unknown>> },
+  { cache }: { cache: ApolloCache<object> },
 ) {
   let { search } = args;
 

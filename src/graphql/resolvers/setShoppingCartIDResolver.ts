@@ -6,7 +6,7 @@ import { GetShoppingCart } from '../../generated/client/GetShoppingCart';
 import { SetShoppingCartIDVariables } from '../../generated/client/SetShoppingCartID';
 
 function setShoppingCartIDResolver(
-  _: Record<string, unknown>,
+  _: object,
   args: SetShoppingCartIDVariables,
   { cache }: { cache: ApolloCache<LocalCache> },
 ) {

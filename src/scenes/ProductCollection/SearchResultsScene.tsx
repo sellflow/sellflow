@@ -23,7 +23,10 @@ export default function SearchResultsScene() {
   let first = numColumns * 6;
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
-  let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
+  let [priceRange, setPriceRange] = useState<[number, number]>([
+    0,
+    maxPriceValue,
+  ]);
   let { params } = useRoute<StackRouteProp<'SearchResults'>>();
 
   let searchKeyword = params.searchKeyword;
@@ -61,7 +64,7 @@ export default function SearchResultsScene() {
   }, [searchKeyword]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
-  let onSetFilter = (values: Array<number>) => {
+  let onSetFilter = (values: [number, number]) => {
     setPriceRange(values);
     refetch('update', {
       first,
