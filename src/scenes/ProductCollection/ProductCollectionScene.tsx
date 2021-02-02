@@ -116,14 +116,7 @@ export default function ProductCollectionScene() {
   });
 
   if (loading && !isFetchingMore) {
-    return (
-      <ActivityIndicator
-        style={[styles.container, styles.center]}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
-      />
-    );
+    return <ActivityIndicator style={[styles.container, styles.center]} />;
   }
 
   return (

@@ -111,14 +111,7 @@ export default function AddressManagementScene() {
   let loading =
     loadingAddresses || loadingDeleteAddress || loadingSetDefaultAddress;
   if (loading && !isFetchingMore) {
-    return (
-      <ActivityIndicator
-        style={styles.centered}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
-      />
-    );
+    return <ActivityIndicator style={styles.centered} />;
   }
 
   return (
@@ -149,13 +142,7 @@ export default function AddressManagementScene() {
           onEndReached={onEndReached}
           onEndReachedThreshold={0.25}
           ListFooterComponent={() => {
-            return hasMore ? (
-              <ActivityIndicator
-                accessibilityStates
-                accessibilityTraits
-                accessibilityComponentType
-              />
-            ) : null;
+            return hasMore ? <ActivityIndicator /> : null;
           }}
         />
       ) : (
@@ -174,9 +161,6 @@ export default function AddressManagementScene() {
         onPress={addNewAddress}
         style={[defaultButton, styles.bottomButton]}
         labelStyle={defaultButtonLabel}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
       >
         {t('Add New Address')}
       </Button>

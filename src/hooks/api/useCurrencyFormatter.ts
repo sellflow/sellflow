@@ -5,7 +5,6 @@ import formatNumber from '../../helpers/formatNumber';
 
 import useDefaultCurrency from './useDefaultCurrency';
 
-
 export default function useCurrencyFormatter() {
   let { data: selectedCurrency } = useDefaultCurrency();
 

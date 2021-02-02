@@ -309,11 +309,7 @@ export default function ShoppingCartScene() {
   if (firstLoading) {
     return (
       <SafeAreaView style={styles.centered}>
-        <ActivityIndicator
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
-        />
+        <ActivityIndicator />
       </SafeAreaView>
     );
   }

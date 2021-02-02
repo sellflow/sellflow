@@ -122,9 +122,6 @@ export default function ProductsView(props: Props) {
           uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleFilterModal}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
         >
           {t('Filter')}
         </Button>
@@ -135,9 +132,6 @@ export default function ProductsView(props: Props) {
           uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleSortModal}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
         >
           {t('Sort By')}
         </Button>
@@ -163,12 +157,7 @@ export default function ProductsView(props: Props) {
           onEndReachedThreshold={0.25}
           ListFooterComponent={() => {
             return hasMore ? (
-              <ActivityIndicator
-                style={styles.activityIndicator}
-                accessibilityStates
-                accessibilityTraits
-                accessibilityComponentType
-              />
+              <ActivityIndicator style={styles.activityIndicator} />
             ) : null;
           }}
         />

@@ -130,9 +130,6 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
         labelStyle={defaultButtonLabel}
         onPress={() => onSubmit(priceRange)}
         disabled={!(priceRange[1] >= priceRange[0])}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
       >
         {submitButtonText}
       </Button>

@@ -179,11 +179,7 @@ export default function CheckoutScene() {
         <View style={styles.flex}>
           <Text style={styles.opacity}>{t('Shipping Address')}</Text>
           {loading ? (
-            <ActivityIndicator
-              accessibilityStates
-              accessibilityTraits
-              accessibilityComponentType
-            />
+            <ActivityIndicator />
           ) : (
             <AddressList
               addresses={addresses}
@@ -201,9 +197,6 @@ export default function CheckoutScene() {
             icon="plus"
             labelStyle={defaultButtonLabel}
             onPress={addNewAddress}
-            accessibilityStates
-            accessibilityTraits
-            accessibilityComponentType
           >
             {t('Add New Address')}
           </Button>
@@ -249,9 +242,6 @@ export default function CheckoutScene() {
         labelStyle={defaultButtonLabel}
         onPress={onProceedPressed}
         disabled={isDisabled || updateAddressLoading}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
       >
         {t('Proceed to payment')}
       </Button>

@@ -301,9 +301,6 @@ export default function RegisterScene() {
           style={[defaultButton, styles.button]}
           disabled={isDisabled}
           labelStyle={defaultButtonLabel}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
         >
           {!isLoading && t('Register')}
         </Button>

@@ -24,14 +24,7 @@ export default function OrderHistoryScene() {
 
   let { data } = useDefaultCurrency();
   if (loading && !isFetchingMore) {
-    return (
-      <ActivityIndicator
-        style={styles.center}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
-      />
-    );
+    return <ActivityIndicator style={styles.center} />;
   }
 
   let onEndReached = () => {
@@ -67,12 +60,7 @@ export default function OrderHistoryScene() {
       onEndReachedThreshold={0.25}
       ListFooterComponent={() => {
         return hasMore ? (
-          <ActivityIndicator
-            style={styles.activityIndicator}
-            accessibilityStates
-            accessibilityTraits
-            accessibilityComponentType
-          />
+          <ActivityIndicator style={styles.activityIndicator} />
         ) : null;
       }}
     />

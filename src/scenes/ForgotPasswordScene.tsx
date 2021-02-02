@@ -97,9 +97,6 @@ export default function ForgotPasswordScene() {
         labelStyle={defaultButtonLabel}
         onPress={onPressButton}
         loading={loading}
-        accessibilityStates
-        accessibilityTraits
-        accessibilityComponentType
       >
         {!loading && t('Reset Password')}
       </Button>

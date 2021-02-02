@@ -6,18 +6,14 @@ export function useKeyboardListener(keyboardVerticalOffset = 0) {
   useEffect(() => {
     let keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => {
       Animated.timing(keyboardHeight, {
-        useNativeDriver: true,
         duration: event.duration,
         toValue: event.endCoordinates.height + keyboardVerticalOffset,
-        useNativeDriver: false,
       }).start();
     });
     let keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => {
       Animated.timing(keyboardHeight, {
-        useNativeDriver: true,
         duration: event.duration,
         toValue: 0,
-        useNativeDriver: false,
       }).start();
     });
 

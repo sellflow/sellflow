@@ -14,7 +14,6 @@ configure(() => {
 const StorybookUIRoot = getStorybookUI({
   onDeviceUI: true,
   disableWebsockets: true,
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   asyncStorage: require('react-native').AsyncStorage || null,
 });
 
