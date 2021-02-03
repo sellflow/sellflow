@@ -1,4 +1,5 @@
 import { Card } from 'card-validator';
+
 import { cleanNumber, limitLength } from './utilities';
 
 export default function formatCardNumber(

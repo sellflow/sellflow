@@ -45,14 +45,7 @@ export default function WebScene() {
           return true;
         }}
         startInLoadingState={true}
-        renderLoading={() => (
-          <ActivityIndicator
-            style={styles.center}
-            accessibilityStates
-            accessibilityTraits
-            accessibilityComponentType
-          />
-        )}
+        renderLoading={() => <ActivityIndicator style={styles.center} />}
       />
     </SafeAreaView>
   ) : (

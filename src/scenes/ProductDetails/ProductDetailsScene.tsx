@@ -21,10 +21,11 @@ import {
 } from '../../hooks/api/useShopifyCart';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 import { Toast, KeyboardAvoidingView } from '../../core-ui';
-import { ProductInfo, ImageModal, ImageList } from './components';
-import BottomActionBar from './components/BottomActionBar';
 import { COLORS } from '../../constants/colors';
 import { ScreenSize, useDimensions } from '../../helpers/dimensions';
+
+import { ProductInfo, ImageModal, ImageList } from './components';
+import BottomActionBar from './components/BottomActionBar';
 
 export default function ProductDetailsScene() {
   let route = useRoute<StackRouteProp<'ProductDetails'>>();
@@ -203,12 +204,7 @@ export default function ProductDetailsScene() {
   let isLandscape = screenSize === ScreenSize.Large;
 
   return isFirstLoading ? (
-    <ActivityIndicator
-      style={styles.centered}
-      accessibilityStates
-      accessibilityTraits
-      accessibilityComponentType
-    />
+    <ActivityIndicator style={styles.centered} />
   ) : (
     <View style={styles.flex}>
       <View style={[styles.flex, isLandscape && styles.flexRow]}>

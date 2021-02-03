@@ -1,4 +1,5 @@
 import valid from 'card-validator';
+
 import formatCardNumber from '../formatCardNumber';
 
 it('should return the right format', () => {

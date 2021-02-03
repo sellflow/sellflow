@@ -5,6 +5,7 @@ import { Text } from 'exoflex';
 import { ModalBottomSheet } from '../../../core-ui';
 import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
 import { COLORS } from '../../../constants/colors';
+
 import PriceSlider, {
   PriceSliderProps,
   PriceSliderRefObject,

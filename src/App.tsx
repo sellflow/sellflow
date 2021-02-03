@@ -5,10 +5,11 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { Provider as ThemeProvider } from 'exoflex';
 import { StatusBar } from 'react-native';
 
+import { Provider as AuthProvider } from '../src/helpers/useAuth';
+
 import { client } from './graphql/client';
 import { CustomTheme } from './constants/theme';
 import AppNavigator from './navigation/AppNavigator';
-import { Provider as AuthProvider } from '../src/helpers/useAuth';
 
 function App() {
   return (

@@ -1,4 +1,5 @@
 import { useLazyQuery, useQuery, useMutation } from '@apollo/react-hooks';
+import { useState, useRef, useEffect } from 'react';
 
 import { Product } from '../../types/types';
 import { SEARCH_RESULTS } from '../../graphql/server/searchProduct';
@@ -15,7 +16,6 @@ import {
   SearchResultsVariables,
 } from '../../generated/server/SearchResults';
 import mapToProducts from '../../helpers/mapToProducts';
-import { useState, useRef, useEffect } from 'react';
 
 export default function getProducts(
   searchData: SearchResults | undefined,

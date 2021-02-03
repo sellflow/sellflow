@@ -1,4 +1,5 @@
 import { ApolloCache } from 'apollo-cache';
+
 import { LocalCache } from '../../types/types';
 import { initialData } from '../initialData';
 

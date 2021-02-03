@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Text, Button } from 'exoflex';
+
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { successImage, errorImage } from '../../assets/images';
@@ -25,13 +26,7 @@ export default function ModalBottomSheetMessage(props: Props) {
       </View>
       <Text style={styles.message}>{t(' {message}', { message })}</Text>
       {onPressModalButton ? (
-        <Button
-          style={styles.buttonStyle}
-          onPress={onPressModalButton}
-          accessibilityStates
-          accessibilityTraits
-          accessibilityComponentType
-        >
+        <Button style={styles.buttonStyle} onPress={onPressModalButton}>
           <Text weight="medium" style={styles.buttonText}>
             {buttonText ? t('{buttonText}', { buttonText }) : t('Close')}
           </Text>

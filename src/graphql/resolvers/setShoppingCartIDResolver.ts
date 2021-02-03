@@ -1,4 +1,5 @@
 import { ApolloCache } from 'apollo-cache';
+
 import { LocalCache } from '../../types/types';
 import { GET_SHOPPING_CART } from '../client/shoppingCartQueries';
 import { GetShoppingCart } from '../../generated/client/GetShoppingCart';
