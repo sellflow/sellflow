@@ -5,6 +5,11 @@ import React, {
   createContext,
   useEffect,
 } from 'react';
+import {
+  useGetAuthenticatedUser,
+  useSetAuthenticatedUser,
+} from '../hooks/api/useAuthenticatedUser';
+import { useCustomerRenewToken } from '../hooks/api/useCustomer';
 
 import { getToken, removeToken, saveToken } from './authToken';
 
@@ -24,10 +29,49 @@ let AuthContext = createContext<Context>({
 
 export function Provider(props: Props) {
   let [token, setToken] = useState<string>('');
+  let { data: userData } = useGetAuthenticatedUser();
+  let expiresAt = new Date(userData?.authenticatedUser.expiresAt || '');
+  let now = new Date();
+
+  now.setDate(now.getDate() + 42);
+
+  let { setUser } = useSetAuthenticatedUser();
+
+  let { renewToken } = useCustomerRenewToken({
+    variables: { customerAccessToken: token },
+    onCompleted: ({ customerAccessTokenRenew }) => {
+      if (
+        customerAccessTokenRenew &&
+        customerAccessTokenRenew.customerAccessToken
+      ) {
+        let {
+          accessToken,
+          expiresAt,
+        } = customerAccessTokenRenew.customerAccessToken;
+        setToken(accessToken);
+        if (userData && userData) {
+          setUser({
+            variables: {
+              user: {
+                ...userData?.authenticatedUser,
+                expiresAt: expiresAt,
+              },
+            },
+          });
+        }
+      }
+    },
+  });
+
+  console.log(expiresAt, now, token);
 
   useEffect(() => {
     getToken().then((token) => {
       // TODO: Check token expiration date
+      if (expiresAt < now) {
+        console.log('NOW IS THE TIME TO RENEW');
+        renewToken();
+      }
       setToken(token || '');
     });
   }, []);
