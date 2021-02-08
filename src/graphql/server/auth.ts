@@ -45,6 +45,17 @@ export const CUSTOMER_CREATE_TOKEN = gql`
   }
 `;
 
+export const CUSTOMER_RENEW_TOKEN = gql`
+  mutation CustomerAccessTokenRenew($customerAccessToken: String!) {
+    customerAccessTokenRenew(customerAccessToken: $customerAccessToken) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+    }
+  }
+`;
+
 export const GET_CUSTOMER_DATA = gql`
   query GetCustomerData($accessToken: String!) {
     customer(customerAccessToken: $accessToken) {
