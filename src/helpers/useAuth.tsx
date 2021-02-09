@@ -33,7 +33,7 @@ export function Provider(props: Props) {
   let expiresAt = new Date(userData?.authenticatedUser.expiresAt || '');
   let now = new Date();
 
-  now.setDate(now.getDate() + 1);
+  now.setDate(now.getDate() + 42);
 
   let { setUser } = useSetAuthenticatedUser();
 
@@ -66,12 +66,12 @@ export function Provider(props: Props) {
 
   useEffect(() => {
     getToken().then((token) => {
-      // TODO: Check token expiration date
       if (expiresAt < now) {
         renewToken();
       }
       setToken(token || '');
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let context = useMemo(
