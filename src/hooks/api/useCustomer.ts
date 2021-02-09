@@ -18,6 +18,7 @@ import {
   UPDATE_CUSTOMER_DATA,
   REMOVE_ACCESS_TOKEN,
   GET_CUSTOMER_ADDRESSES,
+  CUSTOMER_RENEW_TOKEN,
 } from '../../graphql/server/auth';
 import {
   GetCustomerData,
@@ -40,6 +41,10 @@ import {
   GetCustomerAddresses,
   GetCustomerAddressesVariables,
 } from '../../generated/server/GetCustomerAddresses';
+import {
+  CustomerAccessTokenRenew,
+  CustomerAccessTokenRenewVariables,
+} from '../../generated/server/CustomerAccessTokenRenew';
 
 function getCustomerAddresses(
   customerAddressData: GetCustomerAddresses | undefined,
@@ -101,6 +106,18 @@ function useCustomerCreateToken(
     CustomerCreateTokenVariables
   >(CUSTOMER_CREATE_TOKEN, { ...options });
   return { createToken, loading };
+}
+
+function useCustomerRenewToken(
+  options?: MutationHookOptions<
+    CustomerAccessTokenRenew,
+    CustomerAccessTokenRenewVariables
+  >,
+) {
+  let [renewToken, { loading }] = useMutation(CUSTOMER_RENEW_TOKEN, {
+    ...options,
+  });
+  return { renewToken, loading };
 }
 
 function useGetCustomerData(
@@ -225,4 +242,5 @@ export {
   useUpdateCustomer,
   useDeactivateCustomerToken,
   useGetCustomerAddresses,
+  useCustomerRenewToken,
 };
