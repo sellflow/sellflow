@@ -31,9 +31,9 @@ export function Provider(props: Props) {
   let [token, setToken] = useState<string>('');
   let { data: userData } = useGetAuthenticatedUser();
   let expiresAt = new Date(userData?.authenticatedUser.expiresAt || '');
+  let expiresLimit = new Date(userData?.authenticatedUser.expiresAt || '');
   let now = new Date();
-
-  now.setDate(now.getDate() + 42);
+  expiresAt.setDate(expiresAt.getDate() - 7);
 
   let { setUser } = useSetAuthenticatedUser();
 
@@ -66,8 +66,10 @@ export function Provider(props: Props) {
 
   useEffect(() => {
     getToken().then((token) => {
-      if (expiresAt < now) {
+      if (now > expiresAt && now <= expiresLimit) {
         renewToken();
+      } else {
+        removeToken();
       }
       setToken(token || '');
     });
