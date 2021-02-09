@@ -48,6 +48,8 @@ export function Provider(props: Props) {
           accessToken,
           expiresAt,
         } = customerAccessTokenRenew.customerAccessToken;
+        console.log(accessToken);
+        console.log('Token renewed');
         setToken(accessToken);
         if (userData && userData) {
           setUser({
@@ -61,15 +63,19 @@ export function Provider(props: Props) {
         }
       }
     },
+    onError: (e) => {
+      console.log(e);
+    },
   });
 
   console.log(expiresAt, now, token);
+  console.log(expiresAt < now);
 
   useEffect(() => {
     getToken().then((token) => {
       // TODO: Check token expiration date
       if (expiresAt < now) {
-        console.log('NOW IS THE TIME TO RENEW');
+        console.log('get here');
         renewToken();
       }
       setToken(token || '');
