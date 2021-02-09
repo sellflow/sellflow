@@ -12,8 +12,8 @@ import { CustomTheme } from './constants/theme';
 import AppNavigator from './navigation/AppNavigator';
 
 function App() {
-  console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
-  console.disableYellowBox = true;
+  // console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
+  // console.disableYellowBox = true;
   return (
     <ApolloProvider client={client}>
       <StatusBar barStyle="dark-content" />
