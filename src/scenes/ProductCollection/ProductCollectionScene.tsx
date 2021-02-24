@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ActivityIndicator, IconButton } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -104,15 +104,16 @@ export default function ProductCollectionScene() {
       });
     }
   };
-
-  setOptions({
-    headerRight: () => (
-      <IconButton
-        icon="magnify"
-        onPress={() => setSearchModalVisible(true)}
-        color={COLORS.primaryColor}
-      />
-    ),
+  useEffect(() => {
+    setOptions({
+      headerRight: () => (
+        <IconButton
+          icon="magnify"
+          onPress={() => setSearchModalVisible(true)}
+          color={COLORS.primaryColor}
+        />
+      ),
+    });
   });
 
   if (loading && !isFetchingMore) {

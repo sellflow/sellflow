@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import { SafeAreaView, StyleSheet } from 'react-native';
@@ -25,9 +25,10 @@ export default function WebScene() {
     default:
       title = t('Payment');
   }
-
-  setOptions({
-    title,
+  useEffect(() => {
+    setOptions({
+      title,
+    });
   });
 
   return webUrl ? (
