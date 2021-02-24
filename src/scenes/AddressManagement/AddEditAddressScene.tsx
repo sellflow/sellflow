@@ -170,20 +170,21 @@ export default function AddEditAddressScene() {
       }
     }
   };
-
-  setOptions({
-    title: address == null ? t('New Address') : t('Edit Address'),
-    headerRight: () => {
-      return address != null ? (
-        <Text
-          weight="medium"
-          style={styles.headerRightText}
-          onPress={toggleDeleteModal}
-        >
-          {t('Delete')}
-        </Text>
-      ) : null;
-    },
+  useEffect(() => {
+    setOptions({
+      title: address == null ? t('New Address') : t('Edit Address'),
+      headerRight: () => {
+        return address != null ? (
+          <Text
+            weight="medium"
+            style={styles.headerRightText}
+            onPress={toggleDeleteModal}
+          >
+            {t('Delete')}
+          </Text>
+        ) : null;
+      },
+    });
   });
 
   if (loadingDeleteAddress) {

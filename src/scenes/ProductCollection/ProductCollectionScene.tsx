@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ActivityIndicator, IconButton } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -26,10 +26,7 @@ export default function ProductCollectionScene() {
 
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
-  let [priceRange, setPriceRange] = useState<[number, number]>([
-    0,
-    maxPriceValue,
-  ]);
+  let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
   const collectionHandle = params.collection.handle;
   let numColumns = useColumns();
@@ -44,7 +41,7 @@ export default function ProductCollectionScene() {
   } = useCollectionQuery(collectionHandle, first, priceRange);
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
-  let onSetFilter = (values: [number, number]) => {
+  let onSetFilter = (values: Array<number>) => {
     setPriceRange(values);
     refetch(
       'sort',
@@ -88,16 +85,7 @@ export default function ProductCollectionScene() {
     navigate('SearchResults', {
       searchKeyword,
     });
-  let onValuesChangeStart = () => {
-    setOptions({
-      gestureEnabled: false,
-    });
-  };
-  let onValuesChangeFinish = () => {
-    setOptions({
-      gestureEnabled: true,
-    });
-  };
+
   let onEndReached = () => {
     if (!isFetchingMore && hasMore) {
       refetch('scroll', {
@@ -107,15 +95,16 @@ export default function ProductCollectionScene() {
       });
     }
   };
-
-  setOptions({
-    headerRight: () => (
-      <IconButton
-        icon="magnify"
-        onPress={() => setSearchModalVisible(true)}
-        color={COLORS.primaryColor}
-      />
-    ),
+  useEffect(() => {
+    setOptions({
+      headerRight: () => (
+        <IconButton
+          icon="magnify"
+          onPress={() => setSearchModalVisible(true)}
+          color={COLORS.primaryColor}
+        />
+      ),
+    });
   });
 
   if (loading && !isFetchingMore) {
@@ -134,8 +123,6 @@ export default function ProductCollectionScene() {
           priceRange,
           onClearFilter,
           onSetFilter,
-          onValuesChangeStart,
-          onValuesChangeFinish,
         }}
       />
       <SearchModal
