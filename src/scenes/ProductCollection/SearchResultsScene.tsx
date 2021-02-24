@@ -18,7 +18,7 @@ export default function SearchResultsScene() {
   let maxPrice = useGetHighestPrice();
   let { maxPriceValue } = formatSliderValue(maxPrice);
   let defaultCurrency = useDefaultCurrency().data;
-  let { navigate, setOptions } = useNavigation<StackNavProp<'SearchResults'>>();
+  let { navigate } = useNavigation<StackNavProp<'SearchResults'>>();
   let numColumns = useColumns();
   let first = numColumns * 6;
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
@@ -62,7 +62,6 @@ export default function SearchResultsScene() {
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
   let onSetFilter = (values: Array<number>) => {
-    console.log(priceRange, values);
     setPriceRange(values);
     refetch('update', {
       first,
