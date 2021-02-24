@@ -22,7 +22,7 @@ import {
 import useDefaultCurrency from './useDefaultCurrency';
 function filterProducts(
   collectionProducts: CollectionProducts,
-  priceRange: [number, number],
+  priceRange: Array<number>,
 ) {
   let [minPrice, maxPrice] = priceRange;
   let productPriceRange =
@@ -37,7 +37,7 @@ function filterProducts(
 
 function getProducts(
   collectionData: GetCollection | undefined,
-  priceRange: [number, number],
+  priceRange: Array<number>,
 ): Array<Product> {
   if (collectionData && collectionData.collectionByHandle) {
     let filtered = {
@@ -53,7 +53,7 @@ function getProducts(
 function useCollectionQuery(
   collectionHandle: string,
   first: number,
-  priceRange: [number, number],
+  priceRange: Array<number>,
 ) {
   let [isInitFetching, setInitFetching] = useState<boolean>(true);
   let [isReloading, setIsReloading] = useState<boolean>(true);
@@ -81,7 +81,7 @@ function useCollectionQuery(
     targetAmount: number,
     cursor: string | null,
     handle: string,
-    filter: [number, number],
+    filter: Array<number>,
   ) => {
     let result: Array<Product> = [];
     let moreData: Array<Product> = [];
@@ -119,7 +119,7 @@ function useCollectionQuery(
   let refetch = async (
     type: 'sort' | 'scroll',
     variables: GetCollectionVariables | undefined,
-    values?: [number, number],
+    values?: Array<number>,
   ) => {
     isFetchingMore.current = type === 'scroll';
     if (!isFetchingMore.current) {
