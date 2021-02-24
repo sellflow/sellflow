@@ -25,8 +25,8 @@ type FilterProps = {
   priceRange: Array<number>;
   onClearFilter: () => void;
   onSetFilter: (values: Array<number>) => void;
-  onValuesChangeStart: () => void;
-  onValuesChangeFinish: () => void;
+  onValuesChangeStart?: () => void;
+  onValuesChangeFinish?: () => void;
 };
 
 type Props = {

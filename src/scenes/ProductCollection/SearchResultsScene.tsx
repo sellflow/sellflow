@@ -86,17 +86,7 @@ export default function SearchResultsScene() {
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { productHandle: product.handle });
   };
-  let onValuesChangeStart = () => {
-    setOptions({
-      gestureEnabled: false,
-    });
-  };
-  let onValuesChangeFinish = () => {
-    console.log();
-    setOptions({
-      gestureEnabled: true,
-    });
-  };
+
   let onEndReached = () => {
     if (!isFetchingMore && hasMore) {
       refetch('scroll', {
@@ -119,8 +109,6 @@ export default function SearchResultsScene() {
           priceRange,
           onClearFilter,
           onSetFilter,
-          onValuesChangeStart,
-          onValuesChangeFinish,
         }}
       />
       <SearchModal

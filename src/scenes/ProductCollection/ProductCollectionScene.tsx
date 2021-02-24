@@ -85,16 +85,7 @@ export default function ProductCollectionScene() {
     navigate('SearchResults', {
       searchKeyword,
     });
-  let onValuesChangeStart = () => {
-    setOptions({
-      gestureEnabled: false,
-    });
-  };
-  let onValuesChangeFinish = () => {
-    setOptions({
-      gestureEnabled: true,
-    });
-  };
+
   let onEndReached = () => {
     if (!isFetchingMore && hasMore) {
       refetch('scroll', {
@@ -132,8 +123,6 @@ export default function ProductCollectionScene() {
           priceRange,
           onClearFilter,
           onSetFilter,
-          onValuesChangeStart,
-          onValuesChangeFinish,
         }}
       />
       <SearchModal
