@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -16,16 +16,17 @@ import { COLORS } from '../constants/colors';
 
 export default function LockScene() {
   let { navigate, setOptions } = useNavigation<StackNavProp<'LockScene'>>();
-
-  setOptions({
-    headerLeft: () => (
-      <IconButton
-        icon="chevron-left"
-        color={COLORS.primaryColor}
-        size={24}
-        onPress={() => navigate('Home')}
-      />
-    ),
+  useEffect(() => {
+    setOptions({
+      headerLeft: () => (
+        <IconButton
+          icon="chevron-left"
+          color={COLORS.primaryColor}
+          size={24}
+          onPress={() => navigate('Home')}
+        />
+      ),
+    });
   });
 
   return (
