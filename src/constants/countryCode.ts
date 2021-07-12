@@ -1,4 +1,5 @@
 export const COUNTRY_CODE = {
+  AC: 'Ascension Island',
   AD: 'Andorra',
   AE: 'United Arab Emirates',
   AF: 'Afghanistan',
@@ -241,4 +242,5 @@ export const COUNTRY_CODE = {
   ZA: 'South Africa',
   ZM: 'Zambia',
   ZW: 'Zimbabwe',
+  ZZ: 'Unknown Region',
 };
