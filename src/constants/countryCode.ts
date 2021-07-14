@@ -206,6 +206,7 @@ export const COUNTRY_CODE = {
   SX: 'Sint Maarten',
   SY: 'Syria',
   SZ: 'Eswatini',
+  TA: 'Tristan da Cunha',
   TC: 'Turks and Caicos Islands',
   TD: 'Chad',
   TF: 'French Southern Territories',
