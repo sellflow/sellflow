@@ -212,8 +212,6 @@ function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
       isFetchingMore.current = false;
     }
     if (isInitFetching && !!data) {
-      console.log('asdjhagsdjhagsdjhagsdjhagsdjhagsdjhg');
-      console.log(data.products);
       let products = mapToProducts(data.products);
       hasMore.current = !!data.products.pageInfo.hasNextPage;
 
