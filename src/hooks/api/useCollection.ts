@@ -186,7 +186,7 @@ function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
     GetFeaturedProductsAndCategories,
     GetFeaturedProductsAndCategoriesVariables
   >(GET_FEATURED_PRODUCTS_AND_CATEGORIES, {
-    variables: { first },
+    variables: { first, presentmentCurrencies: [currency] },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   });
@@ -212,6 +212,8 @@ function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
       isFetchingMore.current = false;
     }
     if (isInitFetching && !!data) {
+      console.log('asdjhagsdjhagsdjhagsdjhagsdjhagsdjhg');
+      console.log(data.products);
       let products = mapToProducts(data.products);
       hasMore.current = !!data.products.pageInfo.hasNextPage;
 
