@@ -20,7 +20,9 @@ import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 export default function CurrencyPicker() {
   let [visible, setVisible] = useState<boolean>(false);
   let { setDefaultCurrency, data: selectedCurrency } = useDefaultCurrency();
-  let { data: shopData } = useQuery<GetShop>(GET_SHOP);
+  let { data: shopData } = useQuery<GetShop>(GET_SHOP, {
+    fetchPolicy: 'no-cache',
+  });
 
   let isMultiCurrency =
     shopData &&

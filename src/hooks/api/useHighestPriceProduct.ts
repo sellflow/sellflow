@@ -9,6 +9,7 @@ function useGetHighestPrice() {
   let currentCurrency = useDefaultCurrency().data;
   let { data } = useQuery<GetHighestPrice>(GET_HIGHEST_PRICE, {
     variables: { presentmentCurrencies: currentCurrency },
+    fetchPolicy: 'no-cache',
   });
 
   let formattedPrice = Math.ceil(
