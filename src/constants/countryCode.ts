@@ -1,4 +1,5 @@
 export const COUNTRY_CODE = {
+  AC: 'Ascension Island',
   AD: 'Andorra',
   AE: 'United Arab Emirates',
   AF: 'Afghanistan',
@@ -205,6 +206,7 @@ export const COUNTRY_CODE = {
   SX: 'Sint Maarten',
   SY: 'Syria',
   SZ: 'Eswatini',
+  TA: 'Tristan da Cunha',
   TC: 'Turks and Caicos Islands',
   TD: 'Chad',
   TF: 'French Southern Territories',
@@ -241,4 +243,5 @@ export const COUNTRY_CODE = {
   ZA: 'South Africa',
   ZM: 'Zambia',
   ZW: 'Zimbabwe',
+  ZZ: 'Unknown Region',
 };
