@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Text, ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
@@ -8,7 +8,7 @@ import { COLORS } from '../constants/colors';
 import { StackNavProp, TabNavProp } from '../types/Navigation';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useAuth } from '../helpers/useAuth';
-import { Avatar } from '../core-ui';
+import { Avatar, Text } from '../core-ui';
 import { useDeactivateCustomerToken } from '../hooks/api/useCustomer';
 import { useResetCart } from '../hooks/api/useShoppingCart';
 import { useGetShop } from '../hooks/api/useCustomerAddress';

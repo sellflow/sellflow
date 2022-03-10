@@ -45,7 +45,7 @@ test('should render normally', async () => {
   let price = getByText('$158.00');
   expect(textInput).toBeTruthy();
 
-  fireEvent.changeText(textInput, 3);
+  fireEvent.changeText(textInput, '3');
   let label = getByText('$36.39');
   expect(label).toBeTruthy();
   expect(price).toBeTruthy();
@@ -57,19 +57,19 @@ test('should multiply the value correctly', async () => {
   let textInput = getByDisplayValue('2');
   expect(textInput).toBeTruthy();
 
-  fireEvent.changeText(textInput, 3);
+  fireEvent.changeText(textInput, '3');
   let discount = getByText('$36.39');
   let price = getByText('$237.00');
   expect(discount).toBeTruthy();
   expect(price).toBeTruthy();
 
-  fireEvent.changeText(textInput, 4);
+  fireEvent.changeText(textInput, '4');
   discount = getByText('$48.52');
   price = getByText('$316.00');
   expect(discount).toBeTruthy();
   expect(price).toBeTruthy();
 
-  fireEvent.changeText(textInput, 0);
+  fireEvent.changeText(textInput, '0');
   let labels = getAllByText('$0.00');
   discount = labels[0];
   price = labels[1];
@@ -82,11 +82,11 @@ test('should never go above maxQuantity value and below zero', async () => {
   let textInput = getByDisplayValue('2');
   expect(textInput).toBeTruthy();
 
-  fireEvent.changeText(textInput, 1111);
+  fireEvent.changeText(textInput, '1111');
   textInput = getByDisplayValue('1000');
   expect(textInput).toBeTruthy();
 
-  fireEvent.changeText(textInput, -100);
+  fireEvent.changeText(textInput, '-100');
   textInput = getByDisplayValue('0');
   expect(textInput).toBeTruthy();
 });

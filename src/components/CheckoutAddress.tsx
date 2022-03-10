@@ -6,18 +6,18 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import { Text, RadioButton } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { AddressItem } from '../types/types';
 import formatAddress from '../helpers/formatAddress';
 import { getFullName } from '../helpers/getFullName';
+import { RadioButton, Text } from '../core-ui';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
-  isSelected: boolean;
-  onSelect: () => void;
+  isSelected?: boolean;
+  onSelect?: () => void;
   data: AddressItem;
   onEditPressed: () => void;
 };

@@ -6,7 +6,6 @@ import {
   TextInput as TextInputType,
   ActivityIndicator,
 } from 'react-native';
-import { Button, TextInput } from 'exoflex';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { COLORS } from '../constants/colors';
@@ -30,7 +29,7 @@ import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/api/useAuthenticatedUser';
-import { KeyboardAvoidingView } from '../core-ui';
+import { Button, KeyboardAvoidingView, TextInput } from '../core-ui';
 
 export default function EditProfileScene() {
   let [firstName, setFirstName] = useState<string>('');

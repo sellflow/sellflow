@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { TabView as Tab, SceneMap, TabBar } from 'react-native-tab-view';
-import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { useDimensions } from '../helpers/dimensions';
 import { FONT_SIZE } from '../constants/fonts';
 import { TabRoute, Scene } from '../types/types';
+
+import Text from './Text';
 
 type Props = {
   initialRouteKey?: string;
@@ -41,7 +42,7 @@ export default function TabView(props: Props) {
         <TabBar
           {...props}
           renderLabel={({ route }) => (
-            <Text weight="500" style={styles.labelStyle}>
+            <Text weight="medium" style={styles.labelStyle}>
               {route.title}
             </Text>
           )}

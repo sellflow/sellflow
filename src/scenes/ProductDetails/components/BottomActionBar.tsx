@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Share } from 'react-native';
-import { Button, IconButton } from 'exoflex';
+import { IconButton } from 'react-native-paper';
 import { useQuery } from '@apollo/react-hooks';
 
+import { Button } from '../../../core-ui';
 import {
   useAddItemToWishlist,
   useRemoveItemFromWishlist,

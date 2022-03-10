@@ -7,8 +7,8 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import { Text, TextInput } from 'exoflex';
 
+import { Text, TextInput } from '../core-ui';
 import { COLORS } from '../constants/colors';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
@@ -89,7 +89,7 @@ export default function OrderItem(props: Props) {
                 ? onChangeQuantity(variantID, quantity <= 0 ? 1 : quantity)
                 : null;
             }}
-            onChangeText={(value) => {
+            onChangeText={(value: string) => {
               setQuantity(
                 valueBetweenZeroToMax(parseInt(value, 10), quantityAvailable),
               );

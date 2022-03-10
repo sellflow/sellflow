@@ -9,9 +9,8 @@ import {
   ImageStyle,
   ImageBackground,
 } from 'react-native';
-import { Text } from 'exoflex';
 
-import { DiscountBadge } from '../core-ui';
+import { DiscountBadge, Text } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { priceAfterDiscount } from '../helpers/priceAfterDiscount';

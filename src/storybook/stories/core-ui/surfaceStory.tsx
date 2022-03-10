@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 
-import { Surface } from '../../../core-ui';
+import { Surface, Text } from '../../../core-ui';
 import { COLORS } from '../../../constants/colors';
 import { FONT_SIZE, FONT_FAMILY } from '../../../constants/fonts';
 import { addressItemData } from '../../../fixtures/AddressItemData';

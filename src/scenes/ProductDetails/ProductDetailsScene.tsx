@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import { ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 
 import { VariantQueryData, OptionsData } from '../../types/types';
@@ -113,6 +113,10 @@ export default function ProductDetailsScene() {
     }, duration);
   };
 
+  let hideToast = () => {
+    setIsToastVisible(false);
+  };
+
   let extractOptionsData = (
     optionsData: OptionsData,
   ): Array<VariantQueryData> => {
@@ -152,7 +156,7 @@ export default function ProductDetailsScene() {
           lineItems: shoppingCartItems,
         },
       });
-      showToast(1100);
+      showToast(11000);
     },
   });
 
@@ -206,30 +210,25 @@ export default function ProductDetailsScene() {
   return isFirstLoading ? (
     <ActivityIndicator style={styles.centered} />
   ) : (
-    <View style={styles.flex}>
+    <KeyboardAvoidingView keyboardVerticalOffset={bottomButtonHeight}>
       <View style={[styles.flex, isLandscape && styles.flexRow]}>
         {isLandscape && (
           <ImageList product={productDetails} onImagePress={onPressImage} />
         )}
         <View style={styles.flex}>
-          <KeyboardAvoidingView keyboardVerticalOffset={-bottomButtonHeight}>
-            <ScrollView style={styles.flex}>
-              {!isLandscape && (
-                <ImageList
-                  product={productDetails}
-                  onImagePress={onPressImage}
-                />
-              )}
-              <ProductInfo
-                selectedOptions={selectedOptions}
-                onSelectionOptionChange={changeSelectedOptions}
-                quantity={quantity}
-                onChangeQuantity={setQuantity}
-                product={productDetails}
-                options={productDetails.options ? productDetails.options : []}
-              />
-            </ScrollView>
-          </KeyboardAvoidingView>
+          <ScrollView style={styles.flex}>
+            {!isLandscape && (
+              <ImageList product={productDetails} onImagePress={onPressImage} />
+            )}
+            <ProductInfo
+              selectedOptions={selectedOptions}
+              onSelectionOptionChange={changeSelectedOptions}
+              quantity={quantity}
+              onChangeQuantity={setQuantity}
+              product={productDetails}
+              options={productDetails.options ? productDetails.options : []}
+            />
+          </ScrollView>
           <View
             style={[
               styles.bottomContainer,
@@ -254,9 +253,9 @@ export default function ProductDetailsScene() {
       </View>
       <Toast
         data={{
-          message: t('Item Successfully Added'),
+          message: t('Item successfully added'),
           isVisible: isToastVisible,
-          mode: 'success',
+          hideToast,
         }}
       />
       <ImageModal
@@ -265,7 +264,7 @@ export default function ProductDetailsScene() {
         isVisible={isImageModalVisible}
         setVisible={setIsImageModalVisible}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

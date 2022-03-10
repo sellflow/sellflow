@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { Text } from 'exoflex';
 
-import { Surface } from '../core-ui';
+import { Surface, Text } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
 import { PaymentDetailsProps } from '../types/types';

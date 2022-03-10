@@ -3,7 +3,7 @@ import '../filterWarnings';
 import React from 'react';
 import { registerRootComponent } from 'expo';
 import { getStorybookUI, configure } from '@storybook/react-native';
-import { Provider } from 'exoflex';
+import { Provider } from 'react-native-paper';
 
 import { CustomTheme } from '../constants/theme';
 
@@ -14,7 +14,7 @@ configure(() => {
 const StorybookUIRoot = getStorybookUI({
   onDeviceUI: true,
   disableWebsockets: true,
-  asyncStorage: require('react-native').AsyncStorage || null,
+  asyncStorage: require('@react-native-async-storage/async-storage') || null,
 });
 
 function App() {

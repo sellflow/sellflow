@@ -1,8 +1,9 @@
 import React, { ComponentProps } from 'react';
 import { StyleSheet, TextInput as NativeTextInput } from 'react-native';
-import { TextInput } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
+
+import TextInput from './TextInput';
 
 type Props = ComponentProps<typeof NativeTextInput>;
 

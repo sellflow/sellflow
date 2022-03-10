@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, TextInput, Button } from 'exoflex';
 
+import { Button, Text, TextInput } from '../../../core-ui';
 import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
 import { PaymentDetails } from '../../../components';
 import { PaymentDetailsProps, PaymentData } from '../../../types/types';

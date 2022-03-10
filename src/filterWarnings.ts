@@ -1,6 +1,6 @@
-import { YellowBox } from 'react-native';
+import { LogBox } from 'react-native';
 
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
   'Warning: componentWillMount has been renamed',
   'Warning: componentWillReceiveProps has been renamed',
   'Warning: "RootErrorBoundary',

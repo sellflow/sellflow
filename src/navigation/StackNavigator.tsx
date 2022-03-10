@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
-import { IconButton } from 'exoflex';
-import { NavigationState, Route } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, Route } from '@react-navigation/native';
 
 import {
   OrderDetailsScene,
@@ -27,6 +27,7 @@ import { useCartFilled } from '../helpers/cartFilled';
 import { useAuth } from '../helpers/useAuth';
 import { CurrencyPicker } from '../components';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
+import { Text } from '../core-ui';
 
 import TabNavigator from './TabNavigator';
 
@@ -70,12 +71,8 @@ export default function StackNavigator() {
   let { authToken } = useAuth();
   let { data: userData } = useGetAuthenticatedUser();
 
-  function getTabSceneName(
-    route: { state?: NavigationState } & Pick<Route<string>, 'key' | 'name'>,
-  ) {
-    const routeName = route.state
-      ? route.state.routes[route.state.index].name
-      : 'HomeTab';
+  function getTabSceneName(route: Pick<Route<string>, 'key' | 'name'>) {
+    const routeName = getFocusedRouteNameFromRoute(route) || 'HomeTab';
     return routeName;
   }
 

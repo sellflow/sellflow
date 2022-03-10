@@ -8,14 +8,15 @@ import {
   Animated,
   StyleSheet,
 } from 'react-native';
-import { Menu } from 'react-native-paper';
+import { Menu, IconButton } from 'react-native-paper';
 import { useQuery } from '@apollo/react-hooks';
-import { IconButton, Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { GET_SHOP } from '../graphql/server/shop';
 import { GetShop } from '../generated/server/GetShop';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
+
+import { Text } from '../core-ui';
 
 export default function CurrencyPicker() {
   let [visible, setVisible] = useState<boolean>(false);
@@ -31,6 +32,7 @@ export default function CurrencyPicker() {
   Animated.timing(animatedValue, {
     toValue: visible ? -180 : 0,
     duration: 300,
+    useNativeDriver: true,
   }).start();
 
   return (

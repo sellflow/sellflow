@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { ActivityIndicator, Text } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 
+import { Text } from '../core-ui';
 import { StackRouteProp, StackNavProp } from '../types/Navigation';
 import { useResetCart } from '../hooks/api/useShoppingCart';
 
@@ -40,7 +41,7 @@ export default function WebScene() {
         onShouldStartLoadWithRequest={({ url }) => {
           if (url.endsWith('thank_you')) {
             resetShoppingCart();
-            navigate('OrderPlacedConfirmation');
+            navigate('OrderPlacedConfirmation', { orderNumber: '' });
             return false;
           }
           return true;

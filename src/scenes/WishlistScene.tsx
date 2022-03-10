@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
+import { Text } from '../core-ui';
 import { ProductList } from '../components';
 import { FONT_SIZE } from '../constants/fonts';
 import { StackNavProp } from '../types/Navigation';

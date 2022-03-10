@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, StyleSheet } from 'react-native';
-import { Button } from 'exoflex';
 
-import { ModalBottomSheet } from '../../../core-ui';
+import { Button, ModalBottomSheet } from '../../../core-ui';
 import { ModalBottomSheetMessage } from '../../../components';
 
 export default function modalBottomSheetStory() {
@@ -12,7 +11,11 @@ export default function modalBottomSheetStory() {
 
     return (
       <View>
-        <Button preset="invisible" onPress={() => setModalVisible(true)}>
+        <Button
+          preset="invisible"
+          onPress={() => setModalVisible(true)}
+          uppercase
+        >
           {t('Open Error Modal')}
         </Button>
         <ModalBottomSheet
@@ -28,7 +31,11 @@ export default function modalBottomSheetStory() {
             buttonText={t('Try Again')}
           />
         </ModalBottomSheet>
-        <Button preset="invisible" onPress={() => setModalVisible(true)}>
+        <Button
+          preset="invisible"
+          onPress={() => setModalVisible(true)}
+          uppercase
+        >
           {t('Open Success Modal')}
         </Button>
         <ModalBottomSheet

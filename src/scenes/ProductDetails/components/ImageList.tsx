@@ -47,11 +47,7 @@ export default function ImageList(props: Props) {
   }) => {
     return (
       <TouchableOpacity style={styles.flex} onPress={() => onImagePress(index)}>
-        <Image
-          source={{ uri: item }}
-          style={imageSize}
-          resizeMode={isLandscape ? 'cover' : 'contain'}
-        />
+        <Image source={{ uri: item }} style={imageSize} resizeMode="cover" />
         {product.discount > 0 ? (
           <DiscountBadge
             value={product.discount}

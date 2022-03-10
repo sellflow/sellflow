@@ -59,7 +59,7 @@ it('should never go above maximum price', () => {
   let maxPrice = getByDisplayValue('1,000');
   expect(maxPrice).toBeTruthy();
 
-  fireEvent.changeText(maxPrice, '1,001');
+  fireEvent.changeText(maxPrice, '1001');
   maxPrice = getByDisplayValue('1,000');
   expect(maxPrice).toBeTruthy();
 });
@@ -77,7 +77,7 @@ it('should not let minimum price be higher than maximum price', () => {
   let minPrice = getByDisplayValue('10');
   expect(minPrice).toBeTruthy();
 
-  fireEvent.changeText(minPrice, '1,001');
+  fireEvent.changeText(minPrice, '1001');
   minPrice = getByDisplayValue('999');
   expect(minPrice).toBeTruthy();
 });
@@ -134,7 +134,7 @@ it('should not let minimum price be equal to maximum price except for 0', () => 
   let minPrice = getByDisplayValue('10');
   expect(minPrice).toBeTruthy();
 
-  fireEvent.changeText(minPrice, '1,000');
+  fireEvent.changeText(minPrice, '1000');
   minPrice = getByDisplayValue('999');
   expect(minPrice).toBeTruthy();
 });

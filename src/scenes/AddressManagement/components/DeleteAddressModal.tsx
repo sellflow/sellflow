@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Portal, Modal } from 'exoflex';
+import { Portal, Modal } from 'react-native-paper';
 
+import { Text } from '../../../core-ui';
 import { COLORS } from '../../../constants/colors';
 import { FONT_SIZE } from '../../../constants/fonts';
 

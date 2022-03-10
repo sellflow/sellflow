@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { ActivityIndicator, IconButton } from 'exoflex';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { SearchModal } from '../../components';
@@ -39,6 +39,12 @@ export default function ProductCollectionScene() {
     refetch,
     isFetchingMore,
   } = useCollectionQuery(collectionHandle, first, priceRange);
+
+  useEffect(() => {
+    if (maxPriceValue) {
+      setPriceRange([0, maxPriceValue]);
+    }
+  }, [maxPriceValue]);
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
   let onSetFilter = (values: Array<number>) => {

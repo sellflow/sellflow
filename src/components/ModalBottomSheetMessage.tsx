@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-import { Text, Button } from 'exoflex';
 
+import { Button, Text } from '../core-ui';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { successImage, errorImage } from '../../assets/images';

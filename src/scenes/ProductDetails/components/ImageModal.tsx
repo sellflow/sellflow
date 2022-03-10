@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, StyleSheet } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { IconButton } from 'exoflex';
+import { IconButton } from 'react-native-paper';
 
 import { COLORS } from '../../../constants/colors';
 
@@ -38,6 +38,7 @@ export default function ImageModal(props: Props) {
         enableSwipeDown
         onSwipeDown={() => setVisible(false)}
         renderHeader={renderHeader}
+        useNativeDriver={true}
       />
     </Modal>
   );

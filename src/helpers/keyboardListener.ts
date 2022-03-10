@@ -8,12 +8,14 @@ export function useKeyboardListener(keyboardVerticalOffset = 0) {
       Animated.timing(keyboardHeight, {
         duration: event.duration,
         toValue: event.endCoordinates.height + keyboardVerticalOffset,
+        useNativeDriver: true,
       }).start();
     });
     let keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => {
       Animated.timing(keyboardHeight, {
         duration: event.duration,
         toValue: 0,
+        useNativeDriver: true,
       }).start();
     });
 

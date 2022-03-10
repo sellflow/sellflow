@@ -3,13 +3,12 @@ import {
   StyleSheet,
   SafeAreaView,
   Image,
-  Text,
   View,
   ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Button } from 'exoflex';
 
+import { Button, Text } from '../core-ui';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { useAuth } from '../helpers/useAuth';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';

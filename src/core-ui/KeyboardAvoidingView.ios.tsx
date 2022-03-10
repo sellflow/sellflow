@@ -3,11 +3,9 @@ import {
   StyleProp,
   ViewStyle,
   KeyboardAvoidingViewProps,
-  Animated,
   StyleSheet,
+  KeyboardAvoidingView as NativeKeyboardAvoidingView,
 } from 'react-native';
-
-import { useKeyboardListener } from '../helpers/keyboardListener';
 
 type Props = KeyboardAvoidingViewProps & {
   style?: StyleProp<ViewStyle>;
@@ -15,20 +13,16 @@ type Props = KeyboardAvoidingViewProps & {
 };
 
 export default function KeyboardAvoidingView(props: Props) {
-  let { keyboardHeight } = useKeyboardListener(props.keyboardVerticalOffset);
-
-  let animatedViewStyle = () => {
-    return [
-      {
-        paddingBottom: keyboardHeight,
-      },
-    ];
-  };
+  const { children, behavior = 'padding', style, ...otherProps } = props;
 
   return (
-    <Animated.View style={[styles.flex, animatedViewStyle()]}>
-      {props.children}
-    </Animated.View>
+    <NativeKeyboardAvoidingView
+      behavior={behavior}
+      style={[styles.flex, style]}
+      {...otherProps}
+    >
+      {children}
+    </NativeKeyboardAvoidingView>
   );
 }
 

@@ -8,10 +8,11 @@ import {
   TextStyle,
   ScrollView,
 } from 'react-native';
-import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
+
+import Text from './Text';
 
 type Props<T> = {
   containerStyle?: StyleProp<ViewStyle>;

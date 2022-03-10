@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { Carousel, CategoryList, SearchInput } from '../core-ui';
+import { Carousel, CategoryList, SearchInput, Text } from '../core-ui';
 import { ProductList, SearchModal } from '../components';
 import { carouselData } from '../fixtures/carousel';
 import { StackNavProp } from '../types/Navigation';
@@ -114,7 +114,7 @@ export default function HomeScene() {
       />
 
       <ProductList
-        ListHeaderComponent={renderHeaderComponent}
+        ListHeaderComponent={renderHeaderComponent()}
         data={products}
         numColumns={numColumns}
         onItemPress={onItemPress}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
-import { RadioButton } from 'exoflex';
 
 import { addressItemData } from '../../../fixtures/AddressItemData';
 import { CheckoutAddress } from '../../../components';
+import { RadioButton } from '../../../core-ui';
 
 function CheckoutAddressList() {
   let [selectedIndex, setSelectedIndex] = useState<string>(
@@ -12,7 +12,11 @@ function CheckoutAddressList() {
   );
   return (
     <SafeAreaView style={styles.container}>
-      <RadioButton.Group value="Address List">
+      <RadioButton.Group
+        // value="Address List"
+        onValueChange={(newValue) => setSelectedIndex(newValue)}
+        value={selectedIndex}
+      >
         <FlatList
           data={addressItemData}
           renderItem={({ item }) => (
@@ -20,8 +24,8 @@ function CheckoutAddressList() {
               onEditPressed={() => {}}
               data={item}
               style={styles.addressItem}
-              isSelected={selectedIndex === item.id}
-              onSelect={() => setSelectedIndex(item.id)}
+              // isSelected={selectedIndex === item.id}
+              // onSelect={() => setSelectedIndex(item.id)}
             />
           )}
         />

@@ -1,9 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { Text } from 'exoflex';
 
-import { Surface } from '../core-ui';
+import { Surface, Text } from '../core-ui';
 import { FONT_SIZE } from '../constants/fonts';
 import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem, PaymentDetails } from '../components';

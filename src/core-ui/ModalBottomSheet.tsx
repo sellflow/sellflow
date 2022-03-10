@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
-import { Modal, Portal, Text } from 'exoflex';
+import { Modal, Portal } from 'react-native-paper';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { useDimensions, ScreenSize } from '../helpers/dimensions';
 import { useKeyboardListener } from '../helpers/keyboardListener';
+
+import Text from './Text';
 
 type Props = {
   isModalVisible: boolean;
@@ -60,7 +62,11 @@ export default function ModalBottomSheet(props: Props) {
     if (dimensions.screenSize === ScreenSize.Small) {
       return [
         {
-          paddingBottom: keyboardHeight,
+          transform: [
+            {
+              translateY: Animated.multiply(keyboardHeight, -1),
+            },
+          ],
         },
       ];
     } else {
@@ -74,6 +80,7 @@ export default function ModalBottomSheet(props: Props) {
         visible={isModalVisible}
         onDismiss={toggleModal}
         contentContainerStyle={modalStyle()}
+        style={{ marginBottom: 0 }}
       >
         <Animated.View style={[styles.defaultModal, animatedViewStyle()]}>
           <ModalHeader

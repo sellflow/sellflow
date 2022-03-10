@@ -6,8 +6,8 @@ import {
   ViewStyle,
   TouchableOpacity,
 } from 'react-native';
-import { Text } from 'exoflex';
 
+import { Text } from '../core-ui';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { OrderRecord } from '../types/types';

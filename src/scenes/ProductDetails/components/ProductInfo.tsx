@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
-import { Text, TextInput } from 'exoflex';
+import { StyleSheet, View } from 'react-native';
 
 import { FONT_SIZE } from '../../../constants/fonts';
 import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
-import { RichRadioGroup } from '../../../core-ui';
+import { RichRadioGroup, Text, TextInput } from '../../../core-ui';
 import { OptionsData, Options, ProductDetails } from '../../../types/types';
 import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
 import { COLORS } from '../../../constants/colors';
@@ -67,45 +66,43 @@ export default function ProductInfo(props: Props) {
 
   return (
     <>
-      <KeyboardAvoidingView>
-        <View style={styles.padding}>
-          <Text style={styles.productInfoTitle}>{product.title}</Text>
-          {product.discount > 0 ? (
-            <View style={styles.flexRow}>
-              <Text weight="bold" style={styles.productInfoPrice}>
-                {formatCurrency(afterDiscount)}
-              </Text>
-              <Text weight="bold" style={styles.productInfoOriginalPrice}>
-                {formatCurrency(product.price)}
-              </Text>
-            </View>
-          ) : (
+      <View style={styles.padding}>
+        <Text style={styles.productInfoTitle}>{product.title}</Text>
+        {product.discount > 0 ? (
+          <View style={styles.flexRow}>
             <Text weight="bold" style={styles.productInfoPrice}>
+              {formatCurrency(afterDiscount)}
+            </Text>
+            <Text weight="bold" style={styles.productInfoOriginalPrice}>
               {formatCurrency(product.price)}
             </Text>
-          )}
-        </View>
-        {radioGroupRenderView}
-        <View style={styles.paddingHorizontal}>
-          <Text style={styles.quantityText}>{t('Quantity')}</Text>
-          <TextInput
-            containerStyle={[outlinedTextInput, styles.textInputWidth]}
-            style={outlinedTextInput}
-            value={quantity.toString()}
-            onBlur={() => {}}
-            onChangeText={(value) =>
-              onChangeQuantity(
-                valueBetweenZeroToMax(parseInt(value, 10), quantityAvailable),
-              )
-            }
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={[styles.paddingHorizontal, styles.description]}>
-          <Text style={styles.labelStyle}>{t('Description')}</Text>
-          <Text>{product.description || t('No description')}</Text>
-        </View>
-      </KeyboardAvoidingView>
+          </View>
+        ) : (
+          <Text weight="bold" style={styles.productInfoPrice}>
+            {formatCurrency(product.price)}
+          </Text>
+        )}
+      </View>
+      {radioGroupRenderView}
+      <View style={styles.paddingHorizontal}>
+        <Text style={styles.quantityText}>{t('Quantity')}</Text>
+        <TextInput
+          containerStyle={[outlinedTextInput, styles.textInputWidth]}
+          style={outlinedTextInput}
+          value={quantity.toString()}
+          onBlur={() => {}}
+          onChangeText={(value: string) =>
+            onChangeQuantity(
+              valueBetweenZeroToMax(parseInt(value, 10), quantityAvailable),
+            )
+          }
+          keyboardType="numeric"
+        />
+      </View>
+      <View style={[styles.paddingHorizontal, styles.description]}>
+        <Text style={styles.labelStyle}>{t('Description')}</Text>
+        <Text>{product.description || t('No description')}</Text>
+      </View>
     </>
   );
 }

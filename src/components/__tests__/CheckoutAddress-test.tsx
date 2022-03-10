@@ -4,6 +4,12 @@ import { render, act, fireEvent } from 'react-native-testing-library';
 import { CheckoutAddress } from '..';
 import { addressItemData } from '../../fixtures/AddressItemData';
 
+/*
+  Used to fix Error: Call retries were exceeded at second test. Not sure why tho.
+  Ref: https://stackoverflow.com/questions/60817275/jest-call-retries-were-exceeded
+*/
+jest.useFakeTimers();
+
 test('should render normally', () => {
   let { queryByProps, getByText } = render(
     <CheckoutAddress

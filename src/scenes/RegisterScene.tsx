@@ -7,7 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import { Text, TextInput, Button, Portal } from 'exoflex';
+import { Portal } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { COLORS } from '../constants/colors';
@@ -29,12 +29,18 @@ import { StackNavProp } from '../types/Navigation';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useCustomerRegister } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
-import { ModalBottomSheet, KeyboardAvoidingView } from '../core-ui';
+import {
+  ModalBottomSheet,
+  KeyboardAvoidingView,
+  Button,
+  Text,
+  TextInput,
+} from '../core-ui';
 import { ModalBottomSheetMessage } from '../components';
 import { useGetShop } from '../hooks/api/useCustomerAddress';
 
 export default function RegisterScene() {
-  let navigation = useNavigation<StackNavProp<'Register'>>();
+  let { navigate, reset } = useNavigation<StackNavProp<'Register'>>();
   let { setAuthToken } = useAuth();
   let [firstName, setFirstName] = useState<string>('');
   let [lastName, setLastName] = useState<string>('');
@@ -58,7 +64,7 @@ export default function RegisterScene() {
     });
   };
   let onTermsPressed = () => {
-    navigation.navigate('WebView', {
+    navigate('WebView', {
       webUrl: data?.shop.termsOfService?.url,
       type: 'terms',
     });
@@ -144,9 +150,16 @@ export default function RegisterScene() {
     loading: setAuthenticatedUserLoading,
   } = useSetAuthenticatedUser({
     onCompleted: () => {
-      navigation.reset({
+      reset({
         index: 0,
-        routes: [{ name: 'Profile' }],
+        routes: [
+          {
+            name: 'Home',
+            state: {
+              routes: [{ name: 'ProfileTab' }],
+            },
+          },
+        ],
       });
     },
   });
@@ -168,8 +181,8 @@ export default function RegisterScene() {
           />
         </ModalBottomSheet>
       </Portal>
-      <KeyboardAvoidingView keyboardVerticalOffset={-bottomButtonHeight}>
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView keyboardVerticalOffset={bottomButtonHeight}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <TextInput
             autoFocus={false}
             clearTextOnFocus={false}

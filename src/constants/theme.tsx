@@ -1,49 +1,42 @@
 import React from 'react';
 import { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { BottomTabBarOptions } from '@react-navigation/bottom-tabs';
-import { DefaultTheme, Theme, IconButton } from 'exoflex';
+import { DefaultTheme, IconButton } from 'react-native-paper';
 import { StackNavigationOptions } from '@react-navigation/stack';
 
 import { COLORS } from './colors';
-import { FONT_SIZE, FONT_FAMILY, FONT } from './fonts';
+import { FONT_SIZE, FONT_FAMILY } from './fonts';
 
-export const ColorTheme = {
+const ColorTheme: ReactNativePaper.ThemeColors = {
   ...DefaultTheme.colors,
   primary: COLORS.primaryColor,
   accent: COLORS.primaryColor,
+  border: COLORS.lightGrey,
 };
 
-export const CustomTheme: Theme = {
-  ...DefaultTheme,
-  fonts: {
-    ...DefaultTheme.fonts,
-    default: {
-      ...DefaultTheme.fonts.default,
-      normal: {
-        name: FONT_FAMILY.REGULAR,
-        weight: 'normal',
-        source: FONT.REGULAR,
-      },
-      medium: {
-        name: FONT_FAMILY.MEDIUM,
-        weight: '500',
-        source: FONT.MEDIUM,
-      },
-      bold: {
-        name: FONT_FAMILY.BOLD,
-        weight: '700',
-        source: FONT.BOLD,
-      },
-    },
-    italic: {
-      ...DefaultTheme.fonts.italic,
-      normal: {
-        name: FONT_FAMILY.ITALIC,
-        weight: 'normal',
-        source: FONT.ITALIC,
-      },
-    },
+const DefaultFonts: ReactNativePaper.ThemeFonts = {
+  ...DefaultTheme.fonts,
+  regular: {
+    fontFamily: FONT_FAMILY.REGULAR,
+    fontWeight: 'normal',
   },
+  medium: {
+    fontFamily: FONT_FAMILY.MEDIUM,
+    fontWeight: '500',
+  },
+  bold: {
+    fontFamily: FONT_FAMILY.BOLD,
+    fontWeight: '700',
+  },
+  italic: {
+    fontFamily: FONT_FAMILY.ITALIC,
+    fontWeight: 'normal',
+  },
+};
+
+export const CustomTheme: ReactNativePaper.Theme = {
+  ...DefaultTheme,
+  fonts: DefaultFonts,
   colors: ColorTheme,
   roundness: 2,
 };

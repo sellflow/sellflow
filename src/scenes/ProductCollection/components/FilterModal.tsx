@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from 'exoflex';
 
-import { ModalBottomSheet } from '../../../core-ui';
+import { ModalBottomSheet, Text } from '../../../core-ui';
 import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
 import { COLORS } from '../../../constants/colors';
 

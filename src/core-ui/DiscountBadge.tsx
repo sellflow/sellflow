@@ -6,9 +6,10 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
+
+import Text from './Text';
 
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;

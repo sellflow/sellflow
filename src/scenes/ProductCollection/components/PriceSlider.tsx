@@ -1,10 +1,12 @@
 import React, { useState, useImperativeHandle, forwardRef, Ref } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Slider, TextInput, Button } from 'exoflex';
+import MultiSlider from 'react-native-multi-slider';
 
+import { Button, TextInput } from '../../../core-ui';
 import formatNumber from '../../../helpers/formatNumber';
 import parseNumber from '../../../helpers/parseNumber';
 import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
+import { ScreenSize, useDimensions } from '../../../helpers/dimensions';
 
 export type PriceSliderProps = {
   minPrice: number;
@@ -38,6 +40,7 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
   let [priceRange, setPriceRange] = useState<Array<number>>(
     initialSliderValues,
   );
+  let { screenSize } = useDimensions();
 
   useImperativeHandle(ref, () => ({
     clear: () => {
@@ -82,13 +85,12 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
         setSliderLength(width);
       }}
     >
-      <Slider
+      <MultiSlider
         sliderLength={sliderLength}
         values={[
           priceRange[0],
           priceRange[1] < priceRange[0] ? priceRange[0] + 1 : priceRange[1],
         ]}
-        showLabel={false}
         min={minPrice}
         max={maxPrice}
         step={sliderStep}
@@ -97,7 +99,10 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
           setPriceRange(values);
           onValuesChangeFinish();
         }}
-        containerStyle={styles.sliderContainer}
+        containerStyle={{
+          ...styles.sliderContainer,
+          marginVertical: screenSize === ScreenSize.Small ? 8 : 24,
+        }}
       />
       <View style={styles.textInputContainer}>
         <TextInput
@@ -144,7 +149,6 @@ const styles = StyleSheet.create({
   sliderContainer: {
     alignItems: 'center',
     flex: 1,
-    marginVertical: 8,
   },
   textInputContainer: {
     flex: 1,

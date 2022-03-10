@@ -6,10 +6,11 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_FAMILY } from '../constants/fonts';
+
+import Text from './Text';
 
 type Props = {
   firstName: string;

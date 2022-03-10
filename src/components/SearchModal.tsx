@@ -7,11 +7,11 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import { Text, IconButton, ActivityIndicator } from 'exoflex';
+import { IconButton, ActivityIndicator } from 'react-native-paper';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
-import { SearchInput } from '../core-ui';
+import { SearchInput, Text } from '../core-ui';
 import { Product } from '../types/types';
 import {
   useSearchProductsQuery,

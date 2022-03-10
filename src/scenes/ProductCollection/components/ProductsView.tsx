@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Text, Button, ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 
+import { Button, Text } from '../../../core-ui';
 import { ProductList } from '../../../components';
 import { Product } from '../../../types/types';
 import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
@@ -119,7 +120,6 @@ export default function ProductsView(props: Props) {
           preset="invisible"
           style={[styles.flex, styles.filter]}
           contentStyle={styles.center}
-          uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleFilterModal}
         >
@@ -129,7 +129,6 @@ export default function ProductsView(props: Props) {
           icon="swap-vertical"
           preset="invisible"
           style={styles.flex}
-          uppercase={false}
           labelStyle={styles.buttonLabel}
           onPress={toggleSortModal}
         >

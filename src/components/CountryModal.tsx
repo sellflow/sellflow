@@ -7,7 +7,7 @@ import {
   Image,
   Animated,
 } from 'react-native';
-import { Text, Portal, Modal, TextInput } from 'exoflex';
+import { Portal, Modal } from 'react-native-paper';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -16,6 +16,7 @@ import { useGetShop } from '../hooks/api/useCustomerAddress';
 import { CountryCode } from '../generated/server/globalTypes';
 import { checkAddressImage, searchImage } from '../../assets/images';
 import { useKeyboardListener } from '../helpers/keyboardListener';
+import { Text, TextInput } from '../core-ui';
 
 type Props = {
   countryVisible: boolean;
@@ -29,7 +30,7 @@ function EmptyCountryList(searchCountry: string) {
       <Image source={searchImage} style={styles.searchImage} />
       <View style={styles.flexRow}>
         <Text>{t("There's no result for")}</Text>
-        <Text weight="medium"> {searchCountry}</Text>
+        <Text weight="medium">{searchCountry}</Text>
       </View>
       <Text>{t('Please try another word')}</Text>
     </View>
@@ -65,7 +66,11 @@ export default function CountryModal(props: Props) {
   let animatedViewStyle = () => {
     return [
       {
-        paddingBottom: keyboardHeight,
+        transform: [
+          {
+            translateY: Animated.multiply(keyboardHeight, -1),
+          },
+        ],
       },
     ];
   };

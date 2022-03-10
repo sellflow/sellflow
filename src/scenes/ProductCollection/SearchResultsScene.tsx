@@ -26,6 +26,12 @@ export default function SearchResultsScene() {
   let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let { params } = useRoute<StackRouteProp<'SearchResults'>>();
 
+  useEffect(() => {
+    if (maxPriceValue) {
+      setPriceRange([0, maxPriceValue]);
+    }
+  }, [maxPriceValue]);
+
   let searchKeyword = params.searchKeyword;
   let {
     searchProducts,

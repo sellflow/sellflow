@@ -10,11 +10,12 @@ import {
   FlatListProps,
   ImageBackground,
 } from 'react-native';
-import { Text } from 'exoflex';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { CategoryItem } from '../types/types';
+
+import Text from './Text';
 
 type BaseProps = FlatListProps<CategoryItem>;
 

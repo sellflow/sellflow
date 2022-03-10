@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Text } from 'exoflex';
 
+import { Text } from '../core-ui';
 import { CarouselItem } from '../types/types';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';

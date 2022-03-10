@@ -5,8 +5,8 @@ import {
   TextInput as TextInputType,
   TouchableOpacity,
 } from 'react-native';
-import { Text, TextInput } from 'exoflex';
 
+import { Text, TextInput } from '../../../core-ui';
 import { AddressItem } from '../../../types/types';
 import { CountryModal } from '../../../components';
 import {
@@ -57,7 +57,9 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="name"
         mode="flat"
         value={address.firstName}
-        onChangeText={(firstName) => onChangeAddress({ ...address, firstName })}
+        onChangeText={(firstName: string) =>
+          onChangeAddress({ ...address, firstName })
+        }
         returnKeyType="next"
         labelStyle={textInputLabel}
         onSubmitEditing={() => lastNameRef.current?.focus()}
@@ -72,7 +74,9 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="name"
         mode="flat"
         value={address.lastName}
-        onChangeText={(lastName) => onChangeAddress({ ...address, lastName })}
+        onChangeText={(lastName: string) =>
+          onChangeAddress({ ...address, lastName })
+        }
         returnKeyType="next"
         labelStyle={textInputLabel}
         onSubmitEditing={() => address1Ref.current?.focus()}
@@ -87,7 +91,9 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="streetAddressLine1"
         mode="flat"
         value={address.address1}
-        onChangeText={(address1) => onChangeAddress({ ...address, address1 })}
+        onChangeText={(address1: string) =>
+          onChangeAddress({ ...address, address1 })
+        }
         returnKeyType="next"
         labelStyle={textInputLabel}
         onSubmitEditing={() => address2Ref.current?.focus()}
@@ -102,7 +108,9 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="streetAddressLine2"
         mode="flat"
         value={address.address2}
-        onChangeText={(address2) => onChangeAddress({ ...address, address2 })}
+        onChangeText={(address2: string) =>
+          onChangeAddress({ ...address, address2 })
+        }
         returnKeyType="next"
         labelStyle={textInputLabel}
         onSubmitEditing={() => cityRef.current?.focus()}
@@ -117,7 +125,7 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="addressCity"
         mode="flat"
         value={address.city}
-        onChangeText={(city) => onChangeAddress({ ...address, city })}
+        onChangeText={(city: string) => onChangeAddress({ ...address, city })}
         returnKeyType="next"
         labelStyle={textInputLabel}
         onSubmitEditing={() => provinceRef.current?.focus()}
@@ -132,7 +140,9 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="addressState"
         mode="flat"
         value={address.province}
-        onChangeText={(province) => onChangeAddress({ ...address, province })}
+        onChangeText={(province: string) =>
+          onChangeAddress({ ...address, province })
+        }
         returnKeyType="next"
         labelStyle={textInputLabel}
         onSubmitEditing={toggleCountryModal}
@@ -163,7 +173,7 @@ export default function ShippingAddressForm(props: Props) {
         keyboardType="number-pad"
         mode="flat"
         value={address.zip}
-        onChangeText={(zip) => onChangeAddress({ ...address, zip })}
+        onChangeText={(zip: string) => onChangeAddress({ ...address, zip })}
         returnKeyType="next"
         labelStyle={textInputLabel}
         onSubmitEditing={() => phoneRef.current?.focus()}
@@ -177,7 +187,7 @@ export default function ShippingAddressForm(props: Props) {
         textContentType="telephoneNumber"
         mode="flat"
         value={address.phone}
-        onChangeText={(phone) => onChangeAddress({ ...address, phone })}
+        onChangeText={(phone: string) => onChangeAddress({ ...address, phone })}
         returnKeyType="done"
         keyboardType="number-pad"
         labelStyle={textInputLabel}

@@ -6,10 +6,10 @@ import {
   SafeAreaView,
   Image,
 } from 'react-native';
-import { Text, ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-import { KeyboardAvoidingView } from '../../core-ui';
+import { KeyboardAvoidingView, Text } from '../../core-ui';
 import { COLORS } from '../../constants/colors';
 import { OrderItem } from '../../components';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
@@ -140,6 +140,10 @@ export default function ShoppingCartScene() {
     setTimeout(() => {
       setIsToastVisible(false);
     }, duration);
+  };
+
+  let hideToast = () => {
+    setIsToastVisible(false);
   };
 
   let changeItemQuantity = (variantIDSearched: string, amount: number) => {
@@ -347,53 +351,49 @@ export default function ShoppingCartScene() {
   return (
     <>
       {screenSize === ScreenSize.Large ? (
-        <KeyboardAvoidingView>
-          <SafeAreaView style={styles.horizontalLayout}>
-            <ScrollView
-              style={styles.flex}
-              contentContainerStyle={styles.horizontalCart}
-              contentInsetAdjustmentBehavior="automatic"
-            >
-              {renderCartView()}
-            </ScrollView>
-            <View style={styles.horizontalPaymentView}>
+        <KeyboardAvoidingView style={styles.horizontalLayout}>
+          <ScrollView
+            style={styles.flex}
+            contentContainerStyle={styles.horizontalCart}
+            contentInsetAdjustmentBehavior="automatic"
+          >
+            {renderCartView()}
+          </ScrollView>
+          <View style={styles.horizontalPaymentView}>
+            {renderPaymentView()}
+            <BottomButton
+              label={t('Checkout')}
+              onPressAction={() => navigate('Checkout', { cartData })}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      ) : (
+        <KeyboardAvoidingView style={styles.flex}>
+          <ScrollView
+            style={styles.flex}
+            contentContainerStyle={[
+              screenSize === ScreenSize.Small
+                ? styles.scrollContentSmall
+                : styles.scrollContentMedium,
+              styles.flexGrow,
+            ]}
+          >
+            {renderCartView()}
+            <View style={styles.verticalPaymentView}>
               {renderPaymentView()}
               <BottomButton
                 label={t('Checkout')}
                 onPressAction={() => navigate('Checkout', { cartData })}
               />
             </View>
-          </SafeAreaView>
+          </ScrollView>
         </KeyboardAvoidingView>
-      ) : (
-        <SafeAreaView style={styles.flex}>
-          <KeyboardAvoidingView>
-            <ScrollView
-              style={styles.flex}
-              contentContainerStyle={[
-                screenSize === ScreenSize.Small
-                  ? styles.scrollContentSmall
-                  : styles.scrollContentMedium,
-                styles.flexGrow,
-              ]}
-            >
-              {renderCartView()}
-              <View style={styles.verticalPaymentView}>
-                {renderPaymentView()}
-                <BottomButton
-                  label={t('checkout')}
-                  onPressAction={() => navigate('Checkout', { cartData })}
-                />
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
       )}
       <Toast
         data={{
           message: t('Item successfully removed'),
           isVisible: isToastVisible,
-          mode: 'success',
+          hideToast,
         }}
       />
     </>

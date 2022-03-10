@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-import { Avatar } from '../../../core-ui';
+import { Avatar, Text } from '../../../core-ui';
 
 export default function avatarStory() {
   return storiesOf('Avatar', module).add('Avatar', () => (

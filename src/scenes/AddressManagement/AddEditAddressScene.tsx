@@ -6,7 +6,7 @@ import {
   TextInput as TextInputType,
   TouchableOpacity,
 } from 'react-native';
-import { Text, TextInput, Button, ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../../constants/fonts';
@@ -26,7 +26,13 @@ import {
 } from '../../constants/theme';
 import { useAuth } from '../../helpers/useAuth';
 import { CountryModal, ModalBottomSheetMessage } from '../../components';
-import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
+import {
+  Button,
+  KeyboardAvoidingView,
+  ModalBottomSheet,
+  Text,
+  TextInput,
+} from '../../core-ui';
 import { AddressItem } from '../../types/types';
 import { newAddress } from '../../constants/defaultValues';
 
@@ -192,7 +198,7 @@ export default function AddEditAddressScene() {
   }
 
   return (
-    <View style={styles.flex}>
+    <KeyboardAvoidingView keyboardVerticalOffset={bottomButtonHeight}>
       <ModalBottomSheet
         title={t('An Error Occured!')}
         isModalVisible={isModalVisible}
@@ -205,141 +211,145 @@ export default function AddEditAddressScene() {
           buttonText={t('Close')}
         />
       </ModalBottomSheet>
-      <KeyboardAvoidingView keyboardVerticalOffset={-bottomButtonHeight}>
-        <DeleteAddressModal
-          deleteVisible={isDeleteModalVisible}
-          toggleModal={toggleDeleteModal}
-          onPressCancel={onPressCancel}
-          onPressDelete={onPressDelete}
+      <DeleteAddressModal
+        deleteVisible={isDeleteModalVisible}
+        toggleModal={toggleDeleteModal}
+        onPressCancel={onPressCancel}
+        onPressDelete={onPressDelete}
+      />
+      <CountryModal
+        countryVisible={isCountryModalVisible}
+        toggleModal={toggleCountryModal}
+        onPressCountry={onPressCountry}
+      />
+      <ScrollView
+        style={styles.paddingHorizontal}
+        showsVerticalScrollIndicator={false}
+      >
+        <TextInput
+          onSubmitEditing={() => {
+            lastNameRef.current && lastNameRef.current.focus();
+          }}
+          returnKeyType="next"
+          mode="flat"
+          label={t('First Name')}
+          labelStyle={textInputLabel}
+          value={addressData.firstName}
+          onChangeText={(firstName: string) =>
+            setAddressData({ ...addressData, firstName })
+          }
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
         />
-        <CountryModal
-          countryVisible={isCountryModalVisible}
-          toggleModal={toggleCountryModal}
-          onPressCountry={onPressCountry}
+        <TextInput
+          onSubmitEditing={() => {
+            address1Ref.current && address1Ref.current.focus();
+          }}
+          ref={lastNameRef}
+          returnKeyType="next"
+          mode="flat"
+          label={t('Last Name')}
+          labelStyle={textInputLabel}
+          value={addressData.lastName}
+          onChangeText={(lastName: string) =>
+            setAddressData({ ...addressData, lastName })
+          }
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
         />
-        <ScrollView
-          style={styles.paddingHorizontal}
-          showsVerticalScrollIndicator={false}
-        >
+        <TextInput
+          onSubmitEditing={toggleCountryModal}
+          returnKeyType="next"
+          ref={address1Ref}
+          mode="flat"
+          label={t('Address')}
+          labelStyle={textInputLabel}
+          value={addressData.address1}
+          onChangeText={(address1: string) =>
+            setAddressData({ ...addressData, address1 })
+          }
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
+          autoCapitalize="words"
+        />
+        <TouchableOpacity onPress={toggleCountryModal}>
           <TextInput
-            onSubmitEditing={() => {
-              lastNameRef.current && lastNameRef.current.focus();
-            }}
-            returnKeyType="next"
             mode="flat"
-            label={t('First Name')}
+            label={t('Country')}
             labelStyle={textInputLabel}
-            value={addressData.firstName}
-            onChangeText={(firstName) =>
-              setAddressData({ ...addressData, firstName })
-            }
+            value={addressData.country}
+            pointerEvents="none"
+            editable={false}
             containerStyle={flatTextInputContainerStyle}
             style={flatTextInputStyle}
           />
-          <TextInput
-            onSubmitEditing={() => {
-              address1Ref.current && address1Ref.current.focus();
-            }}
-            ref={lastNameRef}
-            returnKeyType="next"
-            mode="flat"
-            label={t('Last Name')}
-            labelStyle={textInputLabel}
-            value={addressData.lastName}
-            onChangeText={(lastName) =>
-              setAddressData({ ...addressData, lastName })
-            }
-            containerStyle={flatTextInputContainerStyle}
-            style={flatTextInputStyle}
-          />
-          <TextInput
-            onSubmitEditing={toggleCountryModal}
-            returnKeyType="next"
-            ref={address1Ref}
-            mode="flat"
-            label={t('Address')}
-            labelStyle={textInputLabel}
-            value={addressData.address1}
-            onChangeText={(address1) =>
-              setAddressData({ ...addressData, address1 })
-            }
-            containerStyle={flatTextInputContainerStyle}
-            style={flatTextInputStyle}
-            autoCapitalize="words"
-          />
-          <TouchableOpacity onPress={toggleCountryModal}>
-            <TextInput
-              mode="flat"
-              label={t('Country')}
-              labelStyle={textInputLabel}
-              value={addressData.country}
-              pointerEvents="none"
-              editable={false}
-              containerStyle={flatTextInputContainerStyle}
-              style={flatTextInputStyle}
-            />
-          </TouchableOpacity>
-          <TextInput
-            onSubmitEditing={() => {
-              cityRef.current && cityRef.current.focus();
-            }}
-            returnKeyType="next"
-            ref={provinceRef}
-            mode="flat"
-            label={t('State / Province')}
-            labelStyle={textInputLabel}
-            value={addressData.province}
-            onChangeText={(province) =>
-              setAddressData({ ...addressData, province })
-            }
-            containerStyle={flatTextInputContainerStyle}
-            style={flatTextInputStyle}
-            autoCapitalize="words"
-          />
-          <TextInput
-            onSubmitEditing={() => {
-              zipRef.current && zipRef.current.focus();
-            }}
-            returnKeyType="next"
-            ref={cityRef}
-            mode="flat"
-            label={t('City')}
-            labelStyle={textInputLabel}
-            value={addressData.city}
-            onChangeText={(city) => setAddressData({ ...addressData, city })}
-            containerStyle={flatTextInputContainerStyle}
-            style={flatTextInputStyle}
-            autoCapitalize="words"
-          />
-          <TextInput
-            onSubmitEditing={() => {
-              phoneRef.current && phoneRef.current.focus();
-            }}
-            returnKeyType="next"
-            ref={zipRef}
-            mode="flat"
-            label={t('Postal / Zip Code')}
-            labelStyle={textInputLabel}
-            value={addressData.zip}
-            onChangeText={(zip) => setAddressData({ ...addressData, zip })}
-            containerStyle={flatTextInputContainerStyle}
-            style={flatTextInputStyle}
-          />
-          <TextInput
-            returnKeyType="done"
-            ref={phoneRef}
-            mode="flat"
-            label={t('Phone Number')}
-            labelStyle={textInputLabel}
-            value={addressData.phone}
-            onChangeText={(phone) => setAddressData({ ...addressData, phone })}
-            keyboardType="number-pad"
-            textContentType="telephoneNumber"
-            containerStyle={flatTextInputContainerStyle}
-            style={flatTextInputStyle}
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </TouchableOpacity>
+        <TextInput
+          onSubmitEditing={() => {
+            cityRef.current && cityRef.current.focus();
+          }}
+          returnKeyType="next"
+          ref={provinceRef}
+          mode="flat"
+          label={t('State / Province')}
+          labelStyle={textInputLabel}
+          value={addressData.province}
+          onChangeText={(province: string) =>
+            setAddressData({ ...addressData, province })
+          }
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
+          autoCapitalize="words"
+        />
+        <TextInput
+          onSubmitEditing={() => {
+            zipRef.current && zipRef.current.focus();
+          }}
+          returnKeyType="next"
+          ref={cityRef}
+          mode="flat"
+          label={t('City')}
+          labelStyle={textInputLabel}
+          value={addressData.city}
+          onChangeText={(city: string) =>
+            setAddressData({ ...addressData, city })
+          }
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
+          autoCapitalize="words"
+        />
+        <TextInput
+          onSubmitEditing={() => {
+            phoneRef.current && phoneRef.current.focus();
+          }}
+          returnKeyType="next"
+          ref={zipRef}
+          mode="flat"
+          label={t('Postal / Zip Code')}
+          labelStyle={textInputLabel}
+          value={addressData.zip}
+          onChangeText={(zip: string) =>
+            setAddressData({ ...addressData, zip })
+          }
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
+        />
+        <TextInput
+          returnKeyType="done"
+          ref={phoneRef}
+          mode="flat"
+          label={t('Phone Number')}
+          labelStyle={textInputLabel}
+          value={addressData.phone}
+          onChangeText={(phone: string) =>
+            setAddressData({ ...addressData, phone })
+          }
+          keyboardType="number-pad"
+          textContentType="telephoneNumber"
+          containerStyle={flatTextInputContainerStyle}
+          style={flatTextInputStyle}
+        />
+      </ScrollView>
       <View
         onLayout={({ nativeEvent }) =>
           setBottomButtonHeight(nativeEvent.layout.height)
@@ -357,14 +367,11 @@ export default function AddEditAddressScene() {
           </Text>
         </Button>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
   centered: {
     flex: 1,
     justifyContent: 'center',

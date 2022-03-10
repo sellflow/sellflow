@@ -6,7 +6,6 @@ import {
   TextInput as TextInputType,
   SafeAreaView,
 } from 'react-native';
-import { Text, TextInput, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import { FONT_SIZE } from '../constants/fonts';
@@ -27,7 +26,7 @@ import {
 } from '../hooks/api/useCustomer';
 import { useAuth } from '../helpers/useAuth';
 import { useSetShoppingCart } from '../hooks/api/useShoppingCart';
-import { ModalBottomSheet } from '../core-ui';
+import { Button, ModalBottomSheet, Text, TextInput } from '../core-ui';
 import { ModalBottomSheetMessage } from '../components';
 
 export default function LoginScene() {
@@ -76,9 +75,15 @@ export default function LoginScene() {
     onCompleted: () => {
       reset({
         index: 0,
-        routes: [{ name: 'Profile' }],
+        routes: [
+          {
+            name: 'Home',
+            state: {
+              routes: [{ name: 'ProfileTab' }],
+            },
+          },
+        ],
       });
-      navigate('Home');
     },
   });
 

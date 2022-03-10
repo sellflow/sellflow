@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { RadioButton } from 'exoflex';
 
 import { FONT_SIZE, FONT_FAMILY } from '../../../constants/fonts';
 import { COLORS } from '../../../constants/colors';
 import { PRODUCT_SORT_VALUES } from '../../../constants/values';
+import { RadioButton } from '../../../core-ui';
 
 type Props = {
   radioButtonValue: string;
@@ -22,7 +22,12 @@ export default function SortRadioGroup(props: Props) {
   ];
 
   return (
-    <RadioButton.Group value={radioButtonValue} onValueChange={onValueChange}>
+    <RadioButton.Group
+      value={
+        !!radioButtonValue ? radioButtonValue : PRODUCT_SORT_VALUES.POPULARITY
+      }
+      onValueChange={onValueChange}
+    >
       <RadioButton
         value={PRODUCT_SORT_VALUES.POPULARITY}
         label={PRODUCT_SORT_VALUES.POPULARITY}

@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { View, SafeAreaView, FlatList, StyleSheet, Image } from 'react-native';
-import { Text, Button, ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 import {
   useNavigation,
   useFocusEffect,
   useRoute,
 } from '@react-navigation/native';
 
+import { Button, Text } from '../../core-ui';
 import { ManageAddress } from '../../components';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { useGetCustomerAddresses } from '../../hooks/api/useCustomer';

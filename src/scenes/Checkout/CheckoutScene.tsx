@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import { Text, Button, ActivityIndicator } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 import {
   useNavigation,
   useRoute,
@@ -8,7 +8,12 @@ import {
 } from '@react-navigation/native';
 
 import { ModalBottomSheetMessage, PaymentDetails } from '../../components';
-import { ModalBottomSheet, KeyboardAvoidingView } from '../../core-ui';
+import {
+  Button,
+  KeyboardAvoidingView,
+  ModalBottomSheet,
+  Text,
+} from '../../core-ui';
 import { useDimensions, ScreenSize } from '../../helpers/dimensions';
 import { COLORS } from '../../constants/colors';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
@@ -193,7 +198,6 @@ export default function CheckoutScene() {
           <Button
             preset="secondary"
             style={[defaultButton, styles.newAddressButton]}
-            uppercase={false}
             icon="plus"
             labelStyle={defaultButtonLabel}
             onPress={addNewAddress}

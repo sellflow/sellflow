@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, FlatList, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { ActivityIndicator, Text } from 'exoflex';
+import { ActivityIndicator } from 'react-native-paper';
 
+import { Text } from '../core-ui';
 import { OrderHistoryItem } from '../components';
 import { StackNavProp, StackRouteProp } from '../types/Navigation';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';

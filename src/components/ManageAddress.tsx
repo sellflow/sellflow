@@ -6,9 +6,9 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import { Text, IconButton } from 'exoflex';
-import { Menu } from 'react-native-paper';
+import { IconButton, Menu } from 'react-native-paper';
 
+import { Text } from '../core-ui';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { AddressItem } from '../types/types';

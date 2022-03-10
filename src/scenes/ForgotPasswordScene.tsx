@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
-import { TextInput, Button } from 'exoflex';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -11,7 +10,7 @@ import {
 } from '../constants/theme';
 import { StackNavProp } from '../types/Navigation';
 import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
-import { ModalBottomSheet } from '../core-ui';
+import { Button, ModalBottomSheet, TextInput } from '../core-ui';
 import { ModalBottomSheetMessage } from '../components';
 
 export default function ForgotPasswordScene() {
