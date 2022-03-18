@@ -1,15 +1,37 @@
-import { useQuery } from '@apollo/react-hooks';
+import { QueryHookOptions, useQuery } from '@apollo/react-hooks';
 
 import { GET_HIGHEST_PRICE } from '../../graphql/server/searchProduct';
-import { GetHighestPrice } from '../../generated/server/GetHighestPrice';
+import {
+  GetHighestPrice,
+  GetHighestPriceVariables,
+} from '../../generated/server/GetHighestPrice';
 
 import useDefaultCurrency from './useDefaultCurrency';
 
-function useGetHighestPrice() {
+function useGetHighestPrice(
+  options: Omit<
+    QueryHookOptions<GetHighestPrice, GetHighestPriceVariables>,
+    'onCompleted'
+  > & { onCompleted: (value: number) => void },
+) {
+  let { onCompleted, ...otherOptions } = options;
   let currentCurrency = useDefaultCurrency().data;
-  let { data } = useQuery<GetHighestPrice>(GET_HIGHEST_PRICE, {
-    variables: { presentmentCurrencies: currentCurrency },
-  });
+  let { data, error, loading, refetch } = useQuery<GetHighestPrice>(
+    GET_HIGHEST_PRICE,
+    {
+      variables: { presentmentCurrencies: currentCurrency },
+      ...otherOptions,
+      onCompleted: ({ products }) => {
+        let formattedPrice = Math.ceil(
+          Number(
+            products.edges[0].node.presentmentPriceRanges.edges[0].node
+              .maxVariantPrice.amount,
+          ),
+        );
+        onCompleted(formattedPrice);
+      },
+    },
+  );
 
   let formattedPrice = Math.ceil(
     Number(
@@ -18,7 +40,7 @@ function useGetHighestPrice() {
     ),
   );
 
-  return formattedPrice;
+  return { formattedPrice, error, loading, refetch };
 }
 
 export { useGetHighestPrice };

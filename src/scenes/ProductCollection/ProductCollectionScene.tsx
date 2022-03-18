@@ -12,20 +12,17 @@ import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { Product } from '../../types/types';
 import { useColumns } from '../../helpers/columns';
 import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
-import { formatSliderValue } from '../../helpers/formatSliderValue';
 
 import { ProductsView } from './components';
 
 export default function ProductCollectionScene() {
-  let maxPrice = useGetHighestPrice();
-  let { maxPriceValue } = formatSliderValue(maxPrice);
-
   let { navigate, setOptions } = useNavigation<
     StackNavProp<'ProductCollection'>
   >();
 
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
+  let [maxPriceValue, setMaxPrice] = useState<number>(0);
   let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let {
     params: {
@@ -44,11 +41,13 @@ export default function ProductCollectionScene() {
     isFetchingMore,
   } = useCollectionQuery(collectionHandle, first, priceRange);
 
-  useEffect(() => {
-    if (maxPriceValue) {
-      setPriceRange([0, maxPriceValue]);
-    }
-  }, [maxPriceValue]);
+  let { loading: maxPriceLoading } = useGetHighestPrice({
+    onCompleted: (value) => {
+      setMaxPrice(value);
+      setPriceRange([0, value]);
+    },
+    skip: maxPriceValue !== 0,
+  });
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
   let onSetFilter = (values: Array<number>) => {
@@ -117,7 +116,7 @@ export default function ProductCollectionScene() {
     });
   });
 
-  if (loading && !isFetchingMore) {
+  if (loading && !isFetchingMore && maxPriceLoading) {
     return <ActivityIndicator style={[styles.container, styles.center]} />;
   }
 
@@ -130,6 +129,7 @@ export default function ProductCollectionScene() {
         hasMore={hasMore}
         sortProps={{ radioButtonValue, onPressRadioButton }}
         filterProps={{
+          maxPrice: maxPriceValue,
           priceRange,
           onClearFilter,
           onSetFilter,

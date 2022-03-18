@@ -9,7 +9,6 @@ import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
 import { useColumns } from '../../../helpers/columns';
 import { COLORS } from '../../../constants/colors';
 import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
-import { useGetHighestPrice } from '../../../hooks/api/useHighestPriceProduct';
 import { formatSliderValue } from '../../../helpers/formatSliderValue';
 
 import PriceSlider from './PriceSlider';
@@ -24,6 +23,7 @@ type SortProps = {
 
 type FilterProps = {
   priceRange: Array<number>;
+  maxPrice: number;
   onClearFilter: () => void;
   onSetFilter: (values: Array<number>) => void;
   onValuesChangeStart?: () => void;
@@ -40,9 +40,6 @@ type Props = {
 };
 
 export default function ProductsView(props: Props) {
-  let maxPrice = useGetHighestPrice();
-  let { sliderStep, maxPriceValue } = formatSliderValue(maxPrice);
-
   let {
     onItemPress,
     products,
@@ -51,6 +48,8 @@ export default function ProductsView(props: Props) {
     onEndReached,
     hasMore,
   } = props;
+
+  let { sliderStep, maxPriceValue } = formatSliderValue(filterProps.maxPrice);
   let { radioButtonValue, onPressRadioButton } = sortProps;
   let {
     priceRange,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
@@ -7,7 +8,6 @@ import { Product } from '../../types/types';
 import { ProductSortKeys } from '../../generated/server/globalTypes';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
-import { formatSliderValue } from '../../helpers/formatSliderValue';
 import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 import { SearchModal } from '../../components';
 import { useColumns } from '../../helpers/columns';
@@ -15,24 +15,24 @@ import { useColumns } from '../../helpers/columns';
 import { ProductsView } from './components';
 
 export default function SearchResultsScene() {
-  let maxPrice = useGetHighestPrice();
-  let { maxPriceValue } = formatSliderValue(maxPrice);
   let { data: defaultCurrency } = useDefaultCurrency();
   let { navigate } = useNavigation<StackNavProp<'SearchResults'>>();
   let numColumns = useColumns();
   let first = numColumns * 6;
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
+  let [maxPriceValue, setMaxPrice] = useState<number>(0);
   let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let {
     params: { searchKeyword },
   } = useRoute<StackRouteProp<'SearchResults'>>();
 
-  useEffect(() => {
-    if (maxPriceValue) {
-      setPriceRange([0, maxPriceValue]);
-    }
-  }, [maxPriceValue]);
+  let { loading: maxPriceLoading } = useGetHighestPrice({
+    onCompleted: (value) => {
+      setMaxPrice(value);
+    },
+    skip: maxPriceValue !== 0,
+  });
 
   let {
     searchProducts,
@@ -103,6 +103,10 @@ export default function SearchResultsScene() {
     }
   };
 
+  if (!isFetchingMore && maxPriceLoading) {
+    return <ActivityIndicator style={[styles.container, styles.center]} />;
+  }
+
   return (
     <>
       <ProductsView
@@ -112,6 +116,7 @@ export default function SearchResultsScene() {
         onEndReached={onEndReached}
         sortProps={{ radioButtonValue, onPressRadioButton }}
         filterProps={{
+          maxPrice: maxPriceValue,
           priceRange,
           onClearFilter,
           onSetFilter,
@@ -126,3 +131,13 @@ export default function SearchResultsScene() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
