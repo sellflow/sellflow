@@ -17,8 +17,8 @@ type Props = {
 };
 
 export default function TabView(props: Props) {
-  let dimensions = useDimensions();
-  const initialLayout = { width: dimensions.width };
+  let { width: dimensionsWidth } = useDimensions();
+  const initialLayout = { width: dimensionsWidth };
   const { routes, containerStyle, isScrollEnabled, initialRouteKey } = props;
 
   let indexInitialRoute = 0;

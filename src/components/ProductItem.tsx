@@ -25,8 +25,12 @@ type Props = {
 };
 
 export default function ProductItem(props: Props) {
-  let { product, onPress, containerStyle, imageStyle } = props;
-  let { title, images, price, discount, availableForSale } = product;
+  let {
+    product: { title, images, price, discount, availableForSale },
+    onPress,
+    containerStyle,
+    imageStyle,
+  } = props;
   let afterDiscount = priceAfterDiscount(price, discount || 0);
   let formatCurrency = useCurrencyFormatter();
 

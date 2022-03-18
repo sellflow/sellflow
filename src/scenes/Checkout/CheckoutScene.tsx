@@ -33,12 +33,15 @@ import { ShippingAddressForm, AddressList } from './components';
 
 export default function CheckoutScene() {
   let { navigate } = useNavigation<StackNavProp<'Checkout'>>();
-  let { params } = useRoute<StackRouteProp<'Checkout'>>();
+  let {
+    params: {
+      cartData: { id: cartId, subtotalPrice: cartSubtotalPrice, totalPrice },
+    },
+  } = useRoute<StackRouteProp<'Checkout'>>();
 
-  let { id: cartId } = params.cartData;
   let [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
-    subtotalPrice: params.cartData.subtotalPrice,
-    totalPrice: params.cartData.totalPrice,
+    subtotalPrice: cartSubtotalPrice,
+    totalPrice: totalPrice,
   });
   let { subtotalPrice } = paymentInfo;
   let { authToken } = useAuth();

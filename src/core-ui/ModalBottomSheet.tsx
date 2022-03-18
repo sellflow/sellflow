@@ -35,7 +35,7 @@ function ModalHeader(props: HeaderProps) {
 }
 
 export default function ModalBottomSheet(props: Props) {
-  let dimensions = useDimensions();
+  let { screenSize } = useDimensions();
 
   let {
     isModalVisible,
@@ -51,7 +51,7 @@ export default function ModalBottomSheet(props: Props) {
   let { keyboardHeight } = useKeyboardListener();
 
   let modalStyle = () => {
-    if (dimensions.screenSize === ScreenSize.Small) {
+    if (screenSize === ScreenSize.Small) {
       return styles.modalPhone;
     } else {
       return [styles.modalTablet, { width, height }];
@@ -59,7 +59,7 @@ export default function ModalBottomSheet(props: Props) {
   };
 
   let animatedViewStyle = () => {
-    if (dimensions.screenSize === ScreenSize.Small) {
+    if (screenSize === ScreenSize.Small) {
       return [
         {
           transform: [

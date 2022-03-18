@@ -12,20 +12,21 @@ import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import { PaymentDetailsProps } from '../types/types';
 
 export default function OrderDetailsScene() {
-  let route = useRoute<StackRouteProp<'OrderDetails'>>();
-  let { order } = route.params;
-  let { screenSize } = useDimensions();
   let {
-    address,
-    lineItems,
-    orderNumber,
-    orderTime,
-    totalPayment,
-    shippingPrice,
-    subtotalPayment,
-  } = order;
+    params: {
+      order: {
+        address: { address1, city, country, name, phone, province, zip },
+        lineItems,
+        orderNumber,
+        orderTime,
+        totalPayment,
+        shippingPrice,
+        subtotalPayment,
+      },
+    },
+  } = useRoute<StackRouteProp<'OrderDetails'>>();
+  let { screenSize } = useDimensions();
 
-  let { address1, city, country, name, phone, province, zip } = address;
   let formatCurrency = useCurrencyFormatter();
 
   let paymentData: Array<PaymentDetailsProps> = [

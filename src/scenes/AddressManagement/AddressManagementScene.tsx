@@ -24,8 +24,9 @@ import { DeleteAddressModal } from './components/DeleteAddressModal';
 
 export default function AddressManagementScene() {
   let { navigate } = useNavigation<StackNavProp<'AddressManagement'>>();
-  let route = useRoute<StackRouteProp<'AddressManagement'>>();
-  let { customerAccessToken } = route.params;
+  let {
+    params: { customerAccessToken },
+  } = useRoute<StackRouteProp<'AddressManagement'>>();
   let [addressId, setAddressId] = useState<string>('');
   let [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
     false,

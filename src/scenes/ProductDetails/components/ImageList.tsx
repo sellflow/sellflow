@@ -35,7 +35,7 @@ export default function ImageList(props: Props) {
       }
     : {
         width,
-        height: screenSize === ScreenSize.Small ? 320 : 576,
+        height: isPhone ? 320 : 576,
       };
 
   let renderProductImage = ({

@@ -28,8 +28,9 @@ import { ProductInfo, ImageModal, ImageList } from './components';
 import BottomActionBar from './components/BottomActionBar';
 
 export default function ProductDetailsScene() {
-  let route = useRoute<StackRouteProp<'ProductDetails'>>();
-  let { productHandle } = route.params;
+  let {
+    params: { productHandle },
+  } = useRoute<StackRouteProp<'ProductDetails'>>();
 
   let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
   let [isWishlistActive, setWishlistActive] = useState<boolean>(false);

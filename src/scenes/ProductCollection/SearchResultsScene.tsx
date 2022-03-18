@@ -17,14 +17,16 @@ import { ProductsView } from './components';
 export default function SearchResultsScene() {
   let maxPrice = useGetHighestPrice();
   let { maxPriceValue } = formatSliderValue(maxPrice);
-  let defaultCurrency = useDefaultCurrency().data;
+  let { data: defaultCurrency } = useDefaultCurrency();
   let { navigate } = useNavigation<StackNavProp<'SearchResults'>>();
   let numColumns = useColumns();
   let first = numColumns * 6;
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
   let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
-  let { params } = useRoute<StackRouteProp<'SearchResults'>>();
+  let {
+    params: { searchKeyword },
+  } = useRoute<StackRouteProp<'SearchResults'>>();
 
   useEffect(() => {
     if (maxPriceValue) {
@@ -32,7 +34,6 @@ export default function SearchResultsScene() {
     }
   }, [maxPriceValue]);
 
-  let searchKeyword = params.searchKeyword;
   let {
     searchProducts,
     results,

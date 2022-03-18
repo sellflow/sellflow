@@ -52,7 +52,7 @@ export default function RegisterScene() {
   let toggleModalVisible = () => setIsVisible(!isVisible);
   let { data } = useGetShop();
 
-  let dimensions = useDimensions();
+  let { screenSize } = useDimensions();
   let onSubmit = () => {
     register({
       variables: {
@@ -78,7 +78,7 @@ export default function RegisterScene() {
 
   let containerStyle = () => {
     let styleApplied;
-    if (dimensions.screenSize === ScreenSize.Small) {
+    if (screenSize === ScreenSize.Small) {
       styleApplied = styles.container;
     } else {
       styleApplied = [styles.container, { marginHorizontal: 36 }];

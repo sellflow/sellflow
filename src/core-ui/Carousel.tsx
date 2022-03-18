@@ -21,8 +21,8 @@ type Props = {
 };
 
 export default function Carousel(props: Props) {
-  let dimensions = useDimensions();
-  let { data, width = dimensions.width, height } = props;
+  let { width: dimensionsWidth } = useDimensions();
+  let { data, width = dimensionsWidth, height } = props;
   let [activeIndex, setActiveIndex] = useState<number>(0);
 
   return (

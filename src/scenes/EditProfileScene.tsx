@@ -44,12 +44,14 @@ export default function EditProfileScene() {
   let emailRef = useRef<TextInputType>(null);
   let phoneNumberRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
-  let dimensions = useDimensions();
+  let { screenSize } = useDimensions();
   let { goBack } = useNavigation<StackNavProp<'EditProfile'>>();
-  let { params } = useRoute<StackRouteProp<'EditProfile'>>();
+  let {
+    params: { customerAccessToken },
+  } = useRoute<StackRouteProp<'EditProfile'>>();
 
   let containerStyle = () => {
-    if (dimensions.screenSize === ScreenSize.Small) {
+    if (screenSize === ScreenSize.Small) {
       return styles.container;
     } else {
       return [styles.container, { marginHorizontal: 36 }];
@@ -60,7 +62,7 @@ export default function EditProfileScene() {
       updateCustomerData({
         variables: {
           email,
-          customerAccessToken: params.customerAccessToken,
+          customerAccessToken,
           firstName,
           lastName,
         },
@@ -69,7 +71,7 @@ export default function EditProfileScene() {
       updateCustomerData({
         variables: {
           email,
-          customerAccessToken: params.customerAccessToken,
+          customerAccessToken,
           firstName,
           lastName,
           password,

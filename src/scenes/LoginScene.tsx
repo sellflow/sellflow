@@ -41,12 +41,12 @@ export default function LoginScene() {
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);
 
-  let dimensions = useDimensions();
+  let { screenSize } = useDimensions();
 
   let containerStyle = () => {
     let styleApplied;
 
-    switch (dimensions.screenSize) {
+    switch (screenSize) {
       case ScreenSize.Small: {
         styleApplied = styles.normal;
         break;

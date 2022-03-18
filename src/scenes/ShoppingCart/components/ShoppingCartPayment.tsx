@@ -23,14 +23,13 @@ type Props = {
 
 export default function ShoppingCartPayment(props: Props) {
   let {
-    data,
+    data: { total, subtotal },
     onVoucherCodeChange,
     voucherCode,
     onAddCode,
     applyLoading,
     isVoucherCodeValid,
   } = props;
-  let { total, subtotal } = data;
   let formatCurrency = useCurrencyFormatter();
   let paymentData: Array<PaymentDetailsProps> = [
     {

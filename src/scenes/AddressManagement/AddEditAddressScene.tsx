@@ -43,8 +43,9 @@ export default function AddEditAddressScene() {
   let { navigate, setOptions } = useNavigation<
     StackNavProp<'AddEditAddress'>
   >();
-  let route = useRoute<StackRouteProp<'AddEditAddress'>>();
-  let { address, rootScene } = route.params;
+  let {
+    params: { address, rootScene },
+  } = useRoute<StackRouteProp<'AddEditAddress'>>();
 
   let [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
     false,

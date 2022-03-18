@@ -9,13 +9,12 @@ import LoginScene from './LoginScene';
 import RegisterScene from './RegisterScene';
 
 export default function AuthScene() {
-  const FirstRoute = LoginScene;
-  const SecondRoute = RegisterScene;
-  let route = useRoute<StackRouteProp<'Auth'>>();
-  let { initialRouteKey } = route.params;
+  let {
+    params: { initialRouteKey },
+  } = useRoute<StackRouteProp<'Auth'>>();
   const routes: Array<TabRoute> = [
-    { key: 'Login', title: 'Login', scene: FirstRoute },
-    { key: 'Register', title: 'Register', scene: SecondRoute },
+    { key: 'Login', title: 'Login', scene: LoginScene },
+    { key: 'Register', title: 'Register', scene: RegisterScene },
   ];
   return (
     <TabView

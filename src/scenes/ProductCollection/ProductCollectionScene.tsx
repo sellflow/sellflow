@@ -27,8 +27,12 @@ export default function ProductCollectionScene() {
   let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
   let [radioButtonValue, setRadioButtonValue] = useState<string>('');
   let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
-  let { params } = useRoute<StackRouteProp<'ProductCollection'>>();
-  const collectionHandle = params.collection.handle;
+  let {
+    params: {
+      collection: { handle },
+    },
+  } = useRoute<StackRouteProp<'ProductCollection'>>();
+  const collectionHandle = handle;
   let numColumns = useColumns();
   let first = numColumns * 6;
 

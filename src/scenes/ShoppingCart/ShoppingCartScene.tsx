@@ -47,11 +47,17 @@ import { ShoppingCartPayment, BottomButton } from './components';
 function extractDataCheckout(
   checkout: CheckoutCreate | CheckoutReplace | CheckoutDiscountApply,
 ): Cart {
-  let id = checkout.id;
-  let lineItemsPrice = Number(checkout.lineItemsSubtotalPrice.amount);
-  let subtotalPrice = Number(checkout.subtotalPriceV2.amount);
-  let totalPrice = Number(checkout.paymentDueV2.amount);
-  let lineItems: Array<LineItem> = mapToLineItems(checkout.lineItems);
+  let {
+    id,
+    lineItems: checkoutLineItems,
+    lineItemsSubtotalPrice,
+    subtotalPriceV2,
+    paymentDueV2,
+  } = checkout;
+  let lineItemsPrice = Number(lineItemsSubtotalPrice.amount);
+  let subtotalPrice = Number(subtotalPriceV2.amount);
+  let totalPrice = Number(paymentDueV2.amount);
+  let lineItems: Array<LineItem> = mapToLineItems(checkoutLineItems);
 
   return {
     id,

@@ -21,7 +21,7 @@ type Props = {
 
 export default function ProductInfo(props: Props) {
   let {
-    product,
+    product: { title, description, price, discount, quantityAvailable = 0 },
     options,
     quantity,
     selectedOptions,
@@ -29,10 +29,8 @@ export default function ProductInfo(props: Props) {
     onSelectionOptionChange,
   } = props;
   let formatCurrency = useCurrencyFormatter();
-  let quantityAvailable =
-    product.quantityAvailable != null ? product.quantityAvailable : 0;
 
-  let afterDiscount = priceAfterDiscount(product.price, product.discount || 0);
+  let afterDiscount = priceAfterDiscount(price, discount || 0);
   let radioGroupRenderView = null;
   if (
     !(
@@ -67,19 +65,19 @@ export default function ProductInfo(props: Props) {
   return (
     <>
       <View style={styles.padding}>
-        <Text style={styles.productInfoTitle}>{product.title}</Text>
-        {product.discount > 0 ? (
+        <Text style={styles.productInfoTitle}>{title}</Text>
+        {discount > 0 ? (
           <View style={styles.flexRow}>
             <Text weight="bold" style={styles.productInfoPrice}>
               {formatCurrency(afterDiscount)}
             </Text>
             <Text weight="bold" style={styles.productInfoOriginalPrice}>
-              {formatCurrency(product.price)}
+              {formatCurrency(price)}
             </Text>
           </View>
         ) : (
           <Text weight="bold" style={styles.productInfoPrice}>
-            {formatCurrency(product.price)}
+            {formatCurrency(price)}
           </Text>
         )}
       </View>
@@ -101,7 +99,7 @@ export default function ProductInfo(props: Props) {
       </View>
       <View style={[styles.paddingHorizontal, styles.description]}>
         <Text style={styles.labelStyle}>{t('Description')}</Text>
-        <Text>{product.description || t('No description')}</Text>
+        <Text>{description || t('No description')}</Text>
       </View>
     </>
   );

@@ -9,9 +9,10 @@ import { StackRouteProp, StackNavProp } from '../types/Navigation';
 import { useResetCart } from '../hooks/api/useShoppingCart';
 
 export default function WebScene() {
-  let { params } = useRoute<StackRouteProp<'WebView'>>();
+  let {
+    params: { type, webUrl },
+  } = useRoute<StackRouteProp<'WebView'>>();
   let { navigate, setOptions } = useNavigation<StackNavProp<'WebView'>>();
-  let { type, webUrl } = params;
   let { resetShoppingCart } = useResetCart();
 
   let title: string;
