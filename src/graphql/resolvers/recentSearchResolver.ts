@@ -1,8 +1,8 @@
 import { ApolloCache } from 'apollo-cache';
 
 import { GetRecentSearch } from '../../generated/client/GetRecentSearch';
-import { GET_RECENT_SEARCH } from '../client/clientQueries';
 import { SetRecentSearchVariables } from '../../generated/client/SetRecentSearch';
+import { GET_RECENT_SEARCH } from '../client/clientQueries';
 
 function recentSearchResolver(
   _: object,

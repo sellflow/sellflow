@@ -1,16 +1,16 @@
 import React from 'react';
 import {
-  TouchableOpacity,
   FlatList,
   Image,
-  StyleSheet,
   StyleProp,
+  StyleSheet,
+  TouchableOpacity,
   ViewStyle,
 } from 'react-native';
 
-import { DiscountBadge } from '../../../core-ui';
 import { FONT_SIZE } from '../../../constants/fonts';
-import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
+import { DiscountBadge } from '../../../core-ui';
+import { ScreenSize, useDimensions } from '../../../helpers/dimensions';
 import { Product } from '../../../types/types';
 
 type Props = {

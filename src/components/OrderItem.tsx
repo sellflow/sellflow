@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import {
-  View,
-  StyleSheet,
   Image,
-  TouchableOpacity,
   StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 
-import { Text, TextInput } from '../core-ui';
 import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
+import { outlinedTextInput } from '../constants/theme';
+import { Text, TextInput } from '../core-ui';
 import { valueBetweenZeroToMax } from '../helpers/valueBetweenZeroToMax';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
-import { FONT_SIZE } from '../constants/fonts';
 import { OrderItem as OrderItemType } from '../types/types';
-import { outlinedTextInput } from '../constants/theme';
 
 type Props = {
   containerStyle?: StyleProp<ViewStyle>;
@@ -35,8 +35,8 @@ export default function OrderItem(props: Props) {
     onChangeQuantity,
   } = props.orderItem;
   let { containerStyle, cardType } = props;
-  let [quantity, setQuantity] = useState<number>(props.orderItem.quantity);
-  let [itemPrice] = useState<number>(originalPrice);
+  let [quantity, setQuantity] = useState(props.orderItem.quantity);
+  let [itemPrice] = useState(originalPrice);
   let formatCurrency = useCurrencyFormatter();
   return (
     <View style={[styles.container, containerStyle]}>

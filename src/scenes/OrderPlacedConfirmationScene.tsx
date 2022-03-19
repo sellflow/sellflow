@@ -1,18 +1,19 @@
 import React from 'react';
 import {
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  View,
   ActivityIndicator,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  View,
 } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { Button, Text } from '../core-ui';
+import { successImage } from '../../assets/images';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
+import { Button, Text } from '../core-ui';
 import { useAuth } from '../helpers/useAuth';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
-import { successImage } from '../../assets/images';
 
 export default function OrderPlacedConfirmation() {
   let { reset, navigate } = useNavigation();

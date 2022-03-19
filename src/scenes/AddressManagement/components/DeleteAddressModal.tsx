@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Portal, Modal } from 'react-native-paper';
+import { Modal, Portal } from 'react-native-paper';
 
-import { Text } from '../../../core-ui';
 import { COLORS } from '../../../constants/colors';
 import { FONT_SIZE } from '../../../constants/fonts';
+import { Text } from '../../../core-ui';
 
 type Props = {
   deleteVisible: boolean;

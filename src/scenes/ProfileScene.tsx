@@ -1,17 +1,18 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
-import { StackNavProp, TabNavProp } from '../types/Navigation';
-import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
-import { useAuth } from '../helpers/useAuth';
+import { FONT_FAMILY, FONT_SIZE } from '../constants/fonts';
 import { Avatar, Text } from '../core-ui';
+import { useAuth } from '../helpers/useAuth';
+import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useDeactivateCustomerToken } from '../hooks/api/useCustomer';
-import { useResetCart } from '../hooks/api/useShoppingCart';
 import { useGetShop } from '../hooks/api/useCustomerAddress';
+import { useResetCart } from '../hooks/api/useShoppingCart';
+import { StackNavProp, TabNavProp } from '../types/Navigation';
 
 export default function ProfileScene() {
   let { navigate } = useNavigation<
@@ -32,7 +33,7 @@ export default function ProfileScene() {
     onCompleted: () => onLogout(),
   });
 
-  if (getAuthenticatedUserLoading || !authenticatedUser) {
+  if (getAuthenticatedUserLoading || !authenticatedUser?.authenticatedUser.id) {
     return <ActivityIndicator style={styles.centered} />;
   }
 

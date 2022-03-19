@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { WebView } from 'react-native-webview';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
+
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { Text } from '../core-ui';
-import { StackRouteProp, StackNavProp } from '../types/Navigation';
 import { useResetCart } from '../hooks/api/useShoppingCart';
+import { StackNavProp, StackRouteProp } from '../types/Navigation';
 
 export default function WebScene() {
   let {

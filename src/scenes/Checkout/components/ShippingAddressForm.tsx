@@ -22,9 +22,7 @@ type Props = {
 
 export default function ShippingAddressForm(props: Props) {
   let { address, onChangeAddress } = props;
-  let [isCountryModalVisible, setCountryModalVisible] = useState<boolean>(
-    false,
-  );
+  let [isCountryModalVisible, setCountryModalVisible] = useState(false);
 
   let toggleCountryModal = () => {
     setCountryModalVisible(!isCountryModalVisible);

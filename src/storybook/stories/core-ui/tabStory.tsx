@@ -1,6 +1,7 @@
 import React from 'react';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+
 import { storiesOf } from '@storybook/react-native';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
 
 import { TabView } from '../../../core-ui';
 import { useDimensions } from '../../../helpers/dimensions';

@@ -1,18 +1,18 @@
 import React from 'react';
 import {
-  View,
   Image,
-  TouchableOpacity,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  ImageStyle,
   ImageBackground,
+  ImageStyle,
+  StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
-import { DiscountBadge, Text } from '../core-ui';
-import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
+import { DiscountBadge, Text } from '../core-ui';
 import { priceAfterDiscount } from '../helpers/priceAfterDiscount';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
 import { Product } from '../types/types';

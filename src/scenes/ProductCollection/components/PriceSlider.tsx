@@ -1,12 +1,12 @@
-import React, { useState, useImperativeHandle, forwardRef, Ref } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import MultiSlider from 'react-native-multi-slider';
 
+import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
 import { Button, TextInput } from '../../../core-ui';
+import { ScreenSize, useDimensions } from '../../../helpers/dimensions';
 import formatNumber from '../../../helpers/formatNumber';
 import parseNumber from '../../../helpers/parseNumber';
-import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
-import { ScreenSize, useDimensions } from '../../../helpers/dimensions';
 
 export type PriceSliderProps = {
   minPrice: number;
@@ -36,7 +36,7 @@ function PriceSlider(props: PriceSliderProps, ref: Ref<PriceSliderRefObject>) {
     onValuesChangeFinish = () => {},
   } = props;
 
-  let [sliderLength, setSliderLength] = useState<number>(280); // default slider length
+  let [sliderLength, setSliderLength] = useState(280); // default slider length
   let [priceRange, setPriceRange] = useState<Array<number>>(
     initialSliderValues,
   );

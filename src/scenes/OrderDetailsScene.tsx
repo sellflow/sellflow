@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+
 import { useRoute } from '@react-navigation/native';
 
-import { Surface, Text } from '../core-ui';
-import { FONT_SIZE } from '../constants/fonts';
-import formatDateTime from '../helpers/formatDateTime';
 import { OrderItem, PaymentDetails } from '../components';
-import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { StackRouteProp } from '../types/Navigation';
+import { FONT_SIZE } from '../constants/fonts';
+import { Surface, Text } from '../core-ui';
+import { ScreenSize, useDimensions } from '../helpers/dimensions';
+import formatDateTime from '../helpers/formatDateTime';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
+import { StackRouteProp } from '../types/Navigation';
 import { PaymentDetailsProps } from '../types/types';
 
 export default function OrderDetailsScene() {

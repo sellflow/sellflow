@@ -1,14 +1,14 @@
-import React, { useState, useCallback, forwardRef, Ref } from 'react';
+import React, { forwardRef, Ref, useCallback, useState } from 'react';
 import {
   NativeSyntheticEvent,
-  TextInputFocusEventData,
-  TextInput as NativeTextInput,
-  TextInputProps as NativeTextInputProps,
+  StyleProp,
   StyleSheet,
+  TextInput as NativeTextInput,
+  TextInputFocusEventData,
+  TextInputProps as NativeTextInputProps,
+  TextStyle,
   View,
   ViewStyle,
-  StyleProp,
-  TextStyle,
 } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 

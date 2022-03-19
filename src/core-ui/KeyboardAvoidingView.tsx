@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import {
-  View,
   KeyboardAvoidingViewProps,
   StyleProp,
-  ViewStyle,
   StyleSheet,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 type Props = KeyboardAvoidingViewProps & {

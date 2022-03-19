@@ -1,33 +1,34 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { createStackNavigator } from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute, Route } from '@react-navigation/native';
 
-import {
-  OrderDetailsScene,
-  OrderHistoryScene,
-  ProductDetailsScene,
-  ProductCollectionScene,
-  ForgotPasswordScene,
-  ShoppingCartScene,
-  CheckoutScene,
-  AddressManagementScene,
-  AddEditAddressScene,
-  EditProfileScene,
-  AuthScene,
-  SearchResultsScene,
-  OrderPlacedConfirmationScene,
-  WebViewScene,
-} from '../scenes';
-import { headerOptions } from '../constants/theme';
+import { getFocusedRouteNameFromRoute, Route } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { CurrencyPicker } from '../components';
 import { COLORS } from '../constants/colors';
-import { StackParamList } from '../types/Navigation';
+import { headerOptions } from '../constants/theme';
+import { Text } from '../core-ui';
 import { useCartFilled } from '../helpers/cartFilled';
 import { useAuth } from '../helpers/useAuth';
-import { CurrencyPicker } from '../components';
 import { useGetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
-import { Text } from '../core-ui';
+import {
+  AddEditAddressScene,
+  AddressManagementScene,
+  AuthScene,
+  CheckoutScene,
+  EditProfileScene,
+  ForgotPasswordScene,
+  OrderDetailsScene,
+  OrderHistoryScene,
+  OrderPlacedConfirmationScene,
+  ProductCollectionScene,
+  ProductDetailsScene,
+  SearchResultsScene,
+  ShoppingCartScene,
+  WebViewScene,
+} from '../scenes';
+import { StackParamList } from '../types/Navigation';
 
 import TabNavigator from './TabNavigator';
 

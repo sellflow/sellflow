@@ -1,13 +1,14 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-import { View, StyleSheet } from 'react-native';
-import { MockedProvider } from '@apollo/react-testing';
+import { StyleSheet, View } from 'react-native';
 
+import { MockedProvider } from '@apollo/react-testing';
+import { storiesOf } from '@storybook/react-native';
+
+import { MOCKED_SHOP } from '../../../__mocks__/mockedData';
 import { ProductList } from '../../../components';
 import { wishlist } from '../../../fixtures/wishlist';
-import { useColumns } from '../../../helpers/columns';
-import { MOCKED_SHOP } from '../../../__mocks__/mockedData';
 import { setDefaultCurrencyResolver } from '../../../graphql/resolvers/setDefaultCurrencyResolver';
+import { useColumns } from '../../../helpers/columns';
 
 function ProductListStory() {
   let numColumns = useColumns();

@@ -1,12 +1,7 @@
-import { useLazyQuery, useQuery, useMutation } from '@apollo/react-hooks';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { Product } from '../../types/types';
-import { SEARCH_RESULTS } from '../../graphql/server/searchProduct';
-import {
-  GET_RECENT_SEARCH,
-  SET_RECENT_SEARCH,
-} from '../../graphql/client/clientQueries';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
+
 import {
   SetRecentSearch,
   SetRecentSearchVariables,
@@ -15,7 +10,13 @@ import {
   SearchResults,
   SearchResultsVariables,
 } from '../../generated/server/SearchResults';
+import {
+  GET_RECENT_SEARCH,
+  SET_RECENT_SEARCH,
+} from '../../graphql/client/clientQueries';
+import { SEARCH_RESULTS } from '../../graphql/server/searchProduct';
 import mapToProducts from '../../helpers/mapToProducts';
+import { Product } from '../../types/types';
 
 export default function getProducts(
   searchData: SearchResults | undefined,
@@ -28,7 +29,7 @@ export default function getProducts(
 
 function useSearchProductsQuery() {
   let [results, setResults] = useState<Array<Product>>([]);
-  let [isSearching, setIsSearching] = useState<boolean>(true);
+  let [isSearching, setIsSearching] = useState(true);
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
 

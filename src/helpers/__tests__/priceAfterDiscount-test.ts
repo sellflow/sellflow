@@ -1,4 +1,5 @@
 import { priceAfterDiscount } from '../priceAfterDiscount';
+
 it('should return discounted value if discount under 100 && above 0', () => {
   expect(priceAfterDiscount(100, 40)).toBe(60);
 });

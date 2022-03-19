@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 
+import { ModalBottomSheetMessage } from '../components';
 import {
   defaultButton,
   defaultButtonLabel,
   flatTextInputContainerStyle,
   flatTextInputStyle,
 } from '../constants/theme';
-import { StackNavProp } from '../types/Navigation';
-import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
 import { Button, ModalBottomSheet, TextInput } from '../core-ui';
-import { ModalBottomSheetMessage } from '../components';
+import { useForgotPasswordMutation } from '../hooks/api/useAuthenticatedUser';
+import { StackNavProp } from '../types/Navigation';
 
 export default function ForgotPasswordScene() {
   let { navigate } = useNavigation<StackNavProp<'ForgotPassword'>>();
 
-  let [emailValue, setEmailValue] = useState<string>('');
-  let [isVisible, setVisible] = useState<boolean>(false);
-  let [error, setError] = useState<string>('');
+  let [emailValue, setEmailValue] = useState('');
+  let [isVisible, setVisible] = useState(false);
+  let [error, setError] = useState('');
 
   const isError = error !== '';
 

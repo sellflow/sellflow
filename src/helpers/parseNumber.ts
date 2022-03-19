@@ -1,5 +1,5 @@
-import { LOCALE } from './translate';
 import { getSeparators } from './formatNumber';
+import { LOCALE } from './translate';
 
 // Wrap this in a function for testing.
 export function createParser(locale: string = LOCALE) {

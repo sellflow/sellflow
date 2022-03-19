@@ -1,18 +1,18 @@
 import React from 'react';
 import {
-  View,
-  StyleSheet,
   StyleProp,
-  ViewStyle,
+  StyleSheet,
   TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
-import { Text } from '../core-ui';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
-import { OrderRecord } from '../types/types';
+import { Text } from '../core-ui';
 import formatDateTime from '../helpers/formatDateTime';
 import useCurrencyFormatter from '../hooks/api/useCurrencyFormatter';
+import { OrderRecord } from '../types/types';
 
 type Props = {
   order: OrderRecord;

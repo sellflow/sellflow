@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Animated } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 
 import { COLORS } from '../constants/colors';
-import { FONT_SIZE, FONT_FAMILY } from '../constants/fonts';
-import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import { FONT_FAMILY, FONT_SIZE } from '../constants/fonts';
+import { ScreenSize, useDimensions } from '../helpers/dimensions';
 import { useKeyboardListener } from '../helpers/keyboardListener';
 
 import Text from './Text';

@@ -1,18 +1,18 @@
 import React from 'react';
 import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
   StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
-import { AddressItem } from '../types/types';
+import { RadioButton, Text } from '../core-ui';
 import formatAddress from '../helpers/formatAddress';
 import { getFullName } from '../helpers/getFullName';
-import { RadioButton, Text } from '../core-ui';
+import { AddressItem } from '../types/types';
 
 type Props = {
   style?: StyleProp<ViewStyle>;

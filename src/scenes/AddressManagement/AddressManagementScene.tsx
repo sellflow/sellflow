@@ -1,36 +1,35 @@
 import React, { useCallback, useState } from 'react';
-import { View, SafeAreaView, FlatList, StyleSheet, Image } from 'react-native';
+import { FlatList, Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+
 import {
-  useNavigation,
   useFocusEffect,
+  useNavigation,
   useRoute,
 } from '@react-navigation/native';
 
-import { Button, Text } from '../../core-ui';
+import { emptyAddressImage } from '../../../assets/images';
 import { ManageAddress } from '../../components';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
+import { Button, Text } from '../../core-ui';
+import { ScreenSize, useDimensions } from '../../helpers/dimensions';
 import { useGetCustomerAddresses } from '../../hooks/api/useCustomer';
-import { AddressItem } from '../../types/types';
-import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import {
   useCustomerAddressDelete,
   useCustomerSetDefaultAddress,
 } from '../../hooks/api/useCustomerAddress';
-import { emptyAddressImage } from '../../../assets/images';
-import { useDimensions, ScreenSize } from '../../helpers/dimensions';
+import { StackNavProp, StackRouteProp } from '../../types/Navigation';
+import { AddressItem } from '../../types/types';
 
-import { DeleteAddressModal } from './components/DeleteAddressModal';
+import { DeleteAddressModal } from './components';
 
 export default function AddressManagementScene() {
   let { navigate } = useNavigation<StackNavProp<'AddressManagement'>>();
   let {
     params: { customerAccessToken },
   } = useRoute<StackRouteProp<'AddressManagement'>>();
-  let [addressId, setAddressId] = useState<string>('');
-  let [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
-    false,
-  );
+  let [addressId, setAddressId] = useState('');
+  let [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   let { screenSize } = useDimensions();
   let first = screenSize === ScreenSize.Medium ? 10 : 5;
 

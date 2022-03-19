@@ -1,9 +1,9 @@
 import React from 'react';
 import {
+  SafeAreaView,
+  StyleProp,
   StyleSheet,
   TextStyle,
-  StyleProp,
-  SafeAreaView,
   ViewStyle,
 } from 'react-native';
 import { IconButton, Surface, useTheme } from 'react-native-paper';

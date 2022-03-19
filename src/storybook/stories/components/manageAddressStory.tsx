@@ -1,6 +1,7 @@
 import React from 'react';
+import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+
 import { storiesOf } from '@storybook/react-native';
-import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
 
 import { ManageAddress } from '../../../components';
 import { addressItemData } from '../../../fixtures/AddressItemData';

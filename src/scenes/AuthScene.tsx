@@ -1,10 +1,10 @@
 import React from 'react';
+
 import { useRoute } from '@react-navigation/native';
 
-import TabView from '../core-ui/TabView';
+import { TabView } from '../core-ui';
 import { StackRouteProp } from '../types/Navigation';
 import { TabRoute } from '../types/types';
-
 import LoginScene from './LoginScene';
 import RegisterScene from './RegisterScene';
 

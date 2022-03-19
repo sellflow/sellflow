@@ -47,18 +47,14 @@ export default function AddEditAddressScene() {
     params: { address, rootScene },
   } = useRoute<StackRouteProp<'AddEditAddress'>>();
 
-  let [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
-    false,
-  );
-  let [isCountryModalVisible, setIsCountryModalVisible] = useState<boolean>(
-    false,
-  );
+  let [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  let [isCountryModalVisible, setIsCountryModalVisible] = useState(false);
   let [addressData, setAddressData] = useState<
     Omit<AddressItem, 'id' | 'name'>
   >(newAddress);
-  let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  let [errorMessage, setErrorMessage] = useState<string>('');
-  let [bottomButtonHeight, setBottomButtonHeight] = useState<number>(0);
+  let [isModalVisible, setIsModalVisible] = useState(false);
+  let [errorMessage, setErrorMessage] = useState('');
+  let [bottomButtonHeight, setBottomButtonHeight] = useState(0);
 
   let isAddressDataEmpty =
     addressData.address1 === '' ||

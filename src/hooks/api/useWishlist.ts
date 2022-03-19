@@ -1,19 +1,19 @@
-import { useMutation, QueryHookOptions, useQuery } from '@apollo/react-hooks';
+import { QueryHookOptions, useMutation, useQuery } from '@apollo/react-hooks';
 
 import {
   AddToWishlist,
   AddToWishlistVariables,
 } from '../../generated/client/AddToWishlist';
-import {
-  ADD_TO_WISHLIST,
-  REMOVE_FROM_WISHLIST,
-  GET_WISHLIST,
-} from '../../graphql/client/clientQueries';
+import { GetWishlist } from '../../generated/client/GetWishlist';
 import {
   RemoveFromWishlist,
   RemoveFromWishlistVariables,
 } from '../../generated/client/RemoveFromWishlist';
-import { GetWishlist } from '../../generated/client/GetWishlist';
+import {
+  ADD_TO_WISHLIST,
+  GET_WISHLIST,
+  REMOVE_FROM_WISHLIST,
+} from '../../graphql/client/clientQueries';
 
 function useAddItemToWishlist() {
   let [addToWishlist, { loading }] = useMutation<

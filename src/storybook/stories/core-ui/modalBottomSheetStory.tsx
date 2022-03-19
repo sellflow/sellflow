@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { storiesOf } from '@storybook/react-native';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { Button, ModalBottomSheet } from '../../../core-ui';
+import { storiesOf } from '@storybook/react-native';
+
 import { ModalBottomSheetMessage } from '../../../components';
+import { Button, ModalBottomSheet } from '../../../core-ui';
 
 export default function modalBottomSheetStory() {
   const ModalBottomSheetStory = () => {
-    let [isModalVisible, setModalVisible] = useState<boolean>(false);
+    let [isModalVisible, setModalVisible] = useState(false);
 
     return (
       <View>

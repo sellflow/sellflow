@@ -1,25 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import { useQuery } from '@apollo/react-hooks';
 
-import { Product, CategoryItem } from '../../types/types';
-import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import {
   GetCollection,
-  GetCollectionVariables,
   GetCollection_collectionByHandle_products_edges as CollectionProducts,
+  GetCollectionVariables,
 } from '../../generated/server/GetCollection';
-import {
-  ProductCollectionSortKeys,
-  CurrencyCode,
-} from '../../generated/server/globalTypes';
-import { GET_FEATURED_PRODUCTS_AND_CATEGORIES } from '../../graphql/server/categoriesAndFeaturedProducts';
-import mapToProducts from '../../helpers/mapToProducts';
 import {
   GetFeaturedProductsAndCategories,
   GetFeaturedProductsAndCategoriesVariables,
 } from '../../generated/server/GetFeaturedProductsAndCategories';
+import {
+  CurrencyCode,
+  ProductCollectionSortKeys,
+} from '../../generated/server/globalTypes';
+import { GET_FEATURED_PRODUCTS_AND_CATEGORIES } from '../../graphql/server/categoriesAndFeaturedProducts';
+import { GET_COLLECTION } from '../../graphql/server/productCollection';
+import mapToProducts from '../../helpers/mapToProducts';
+import { CategoryItem, Product } from '../../types/types';
 
 import useDefaultCurrency from './useDefaultCurrency';
+
 function filterProducts(
   collectionProducts: CollectionProducts,
   priceRange: Array<number>,
@@ -55,8 +57,8 @@ function useCollectionQuery(
   first: number,
   priceRange: Array<number>,
 ) {
-  let [isInitFetching, setInitFetching] = useState<boolean>(true);
-  let [isReloading, setIsReloading] = useState<boolean>(true);
+  let [isInitFetching, setInitFetching] = useState(true);
+  let [isReloading, setIsReloading] = useState(true);
   let [collection, setCollection] = useState<Array<Product>>([]);
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
@@ -178,7 +180,7 @@ function useCollectionQuery(
 function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
   let [categories, setCategories] = useState<Array<CategoryItem>>([]);
   let [products, setProducts] = useState<Array<Product>>([]);
-  let [isInitFetching, setInitFetching] = useState<boolean>(true);
+  let [isInitFetching, setInitFetching] = useState(true);
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
 

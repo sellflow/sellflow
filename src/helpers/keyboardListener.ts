@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Keyboard, Animated } from 'react-native';
+import { Animated, Keyboard } from 'react-native';
 
 export function useKeyboardListener(keyboardVerticalOffset = 0) {
   let keyboardHeight = useMemo(() => new Animated.Value(0), []);

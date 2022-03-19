@@ -1,5 +1,5 @@
-import { Platform, Animated } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Animated, Platform } from 'react-native';
 
 function useFadingAnimation(
   targetVisibility: boolean,

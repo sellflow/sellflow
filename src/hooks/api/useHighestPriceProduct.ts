@@ -1,11 +1,10 @@
 import { QueryHookOptions, useQuery } from '@apollo/react-hooks';
 
-import { GET_HIGHEST_PRICE } from '../../graphql/server/searchProduct';
 import {
   GetHighestPrice,
   GetHighestPriceVariables,
 } from '../../generated/server/GetHighestPrice';
-
+import { GET_HIGHEST_PRICE } from '../../graphql/server/searchProduct';
 import useDefaultCurrency from './useDefaultCurrency';
 
 function useGetHighestPrice(

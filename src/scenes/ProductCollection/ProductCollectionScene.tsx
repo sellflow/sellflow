@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ActivityIndicator, IconButton } from 'react-native-paper';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { SearchModal } from '../../components';
 import { COLORS } from '../../constants/colors';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
-import { useCollectionQuery } from '../../hooks/api/useCollection';
-import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
-import { Product } from '../../types/types';
 import { useColumns } from '../../helpers/columns';
+import { useCollectionQuery } from '../../hooks/api/useCollection';
 import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
+import { StackNavProp, StackRouteProp } from '../../types/Navigation';
+import { Product } from '../../types/types';
 
 import { ProductsView } from './components';
 
@@ -20,9 +21,9 @@ export default function ProductCollectionScene() {
     StackNavProp<'ProductCollection'>
   >();
 
-  let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
-  let [radioButtonValue, setRadioButtonValue] = useState<string>('');
-  let [maxPriceValue, setMaxPrice] = useState<number>(0);
+  let [isSearchModalVisible, setSearchModalVisible] = useState(false);
+  let [radioButtonValue, setRadioButtonValue] = useState('');
+  let [maxPriceValue, setMaxPrice] = useState(0);
   let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let {
     params: {

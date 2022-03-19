@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleProp, ViewStyle, TextStyle } from 'react-native';
-import { BottomTabBarOptions } from '@react-navigation/bottom-tabs';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { DefaultTheme, IconButton } from 'react-native-paper';
+
+import { BottomTabBarOptions } from '@react-navigation/bottom-tabs';
 import { StackNavigationOptions } from '@react-navigation/stack';
 
 import { COLORS } from './colors';
-import { FONT_SIZE, FONT_FAMILY } from './fonts';
+import { FONT_FAMILY, FONT_SIZE } from './fonts';
 
 const ColorTheme: ReactNativePaper.ThemeColors = {
   ...DefaultTheme.colors,

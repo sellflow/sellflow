@@ -1,12 +1,13 @@
 import React from 'react';
 import { render } from 'react-native-testing-library';
+
 import { MockedProvider } from '@apollo/react-testing';
 
+import { ProductItem, ProductList } from '../';
 import { MOCKED_SHOP } from '../../__mocks__/mockedData';
-import { ProductList, ProductItem } from '..';
-import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
 import wait from '../../__mocks__/wait';
 import { wishlist } from '../../fixtures/wishlist';
+import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
 
 test('should render normally with discount', async () => {
   let { getAllByType } = render(

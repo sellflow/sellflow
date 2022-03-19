@@ -1,7 +1,7 @@
-import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout_lineItems as CartReplaceLineItems } from '../generated/server/ShoppingCartReplaceItem';
-import { ShoppingCartCreate_checkoutCreate_checkout_lineItems as CartCreateLineItems } from '../generated/server/ShoppingCartCreate';
 import { GetOrderHistory_customer_orders_edges_node_lineItems as OrderHistoryLineItems } from '../generated/server/GetOrderHistory';
+import { ShoppingCartCreate_checkoutCreate_checkout_lineItems as CartCreateLineItems } from '../generated/server/ShoppingCartCreate';
 import { ShoppingCartDiscountCodeApply_checkoutDiscountCodeApplyV2_checkout_lineItems as DiscountApplyLineItems } from '../generated/server/ShoppingCartDiscountCodeApply';
+import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout_lineItems as CartReplaceLineItems } from '../generated/server/ShoppingCartReplaceItem';
 import { LineItem } from '../types/types';
 
 type CompatibleType =

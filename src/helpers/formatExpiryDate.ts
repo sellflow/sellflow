@@ -1,4 +1,4 @@
-import { limitLength, cleanNumber } from './utilities';
+import { cleanNumber, limitLength } from './utilities';
 
 export default function formatExpiryDate(expiryDate: string) {
   let cleaned = limitLength(cleanNumber(expiryDate), 4);

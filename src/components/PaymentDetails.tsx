@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { Surface, Text } from '../core-ui';
-import { FONT_SIZE } from '../constants/fonts';
 import { COLORS } from '../constants/colors';
+import { FONT_SIZE } from '../constants/fonts';
+import { Surface, Text } from '../core-ui';
 import { PaymentDetailsProps } from '../types/types';
 
 type Props = {

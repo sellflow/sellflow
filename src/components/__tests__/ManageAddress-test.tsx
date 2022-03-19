@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { render, act, fireEvent } from 'react-native-testing-library';
+import { act, fireEvent, render } from 'react-native-testing-library';
 
+import { ManageAddress } from '../';
 import { addressItemData } from '../../fixtures/AddressItemData';
-import { ManageAddress } from '..';
-import { AddressItem } from '../../types/types';
 import { getFullName } from '../../helpers/getFullName';
+import { AddressItem } from '../../types/types';
 
 test('should render normally', () => {
   let { getByText } = render(

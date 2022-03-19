@@ -1,31 +1,31 @@
 import {
-  useMutation,
   MutationHookOptions,
-  useQuery,
   QueryHookOptions,
+  useMutation,
+  useQuery,
 } from '@apollo/react-hooks';
 
-import { ResetShoppingCart } from '../../generated/client/ResetShoppingCart';
 import {
-  RESET_SHOPPING_CART,
-  ADD_TO_SHOPPING_CART,
-  GET_SHOPPING_CART,
-  SET_SHOPPING_CART_ID,
-  SET_SHOPPING_CART,
-} from '../../graphql/client/shoppingCartQueries';
-import {
-  AddToShoppingCartVariables,
   AddToShoppingCart,
+  AddToShoppingCartVariables,
 } from '../../generated/client/AddToShoppingCart';
 import { GetShoppingCart } from '../../generated/client/GetShoppingCart';
+import { ResetShoppingCart } from '../../generated/client/ResetShoppingCart';
+import {
+  SetShoppingCart,
+  SetShoppingCartVariables,
+} from '../../generated/client/SetShoppingCart';
 import {
   SetShoppingCartID,
   SetShoppingCartIDVariables,
 } from '../../generated/client/SetShoppingCartID';
 import {
-  SetShoppingCart,
-  SetShoppingCartVariables,
-} from '../../generated/client/SetShoppingCart';
+  ADD_TO_SHOPPING_CART,
+  GET_SHOPPING_CART,
+  RESET_SHOPPING_CART,
+  SET_SHOPPING_CART,
+  SET_SHOPPING_CART_ID,
+} from '../../graphql/client/shoppingCartQueries';
 
 function useResetCart() {
   let [resetShoppingCart, { loading }] = useMutation<ResetShoppingCart>(

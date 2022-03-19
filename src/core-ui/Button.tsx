@@ -1,3 +1,4 @@
+import color from 'color';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -9,7 +10,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import color from 'color';
 import { IconButton, useTheme } from 'react-native-paper';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 

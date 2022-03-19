@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { TabView as Tab, SceneMap, TabBar } from 'react-native-tab-view';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { SceneMap, TabBar, TabView as Tab } from 'react-native-tab-view';
 
 import { COLORS } from '../constants/colors';
-import { useDimensions } from '../helpers/dimensions';
 import { FONT_SIZE } from '../constants/fonts';
-import { TabRoute, Scene } from '../types/types';
+import { useDimensions } from '../helpers/dimensions';
+import { Scene, TabRoute } from '../types/types';
 
 import Text from './Text';
 
@@ -35,7 +35,7 @@ export default function TabView(props: Props) {
   }
   const renderScene = SceneMap(data);
 
-  const [index, setIndex] = useState<number>(indexInitialRoute);
+  const [index, setIndex] = useState(indexInitialRoute);
   return (
     <Tab
       renderTabBar={(props) => (

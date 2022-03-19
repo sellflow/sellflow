@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import { Button, Text } from '../../../core-ui';
 import { ProductList } from '../../../components';
-import { Product } from '../../../types/types';
-import { useDimensions, ScreenSize } from '../../../helpers/dimensions';
-import { useColumns } from '../../../helpers/columns';
 import { COLORS } from '../../../constants/colors';
 import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
+import { Button, Text } from '../../../core-ui';
+import { useColumns } from '../../../helpers/columns';
+import { ScreenSize, useDimensions } from '../../../helpers/dimensions';
 import { formatSliderValue } from '../../../helpers/formatSliderValue';
-
-import PriceSlider from './PriceSlider';
-import SortRadioGroup from './SortRadioGroup';
+import { Product } from '../../../types/types';
 import FilterModal from './FilterModal';
+import PriceSlider from './PriceSlider';
 import SortModal from './SortModal';
+import SortRadioGroup from './SortRadioGroup';
 
 type SortProps = {
   radioButtonValue: string;
@@ -59,8 +58,8 @@ export default function ProductsView(props: Props) {
     onValuesChangeFinish,
   } = filterProps;
 
-  let [isSortModalVisible, setSortModalVisible] = useState<boolean>(false);
-  let [isFilterModalVisible, setFilterModalVisible] = useState<boolean>(false);
+  let [isSortModalVisible, setSortModalVisible] = useState(false);
+  let [isFilterModalVisible, setFilterModalVisible] = useState(false);
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
 

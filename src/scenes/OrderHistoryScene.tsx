@@ -1,13 +1,14 @@
 import React from 'react';
-import { StyleSheet, FlatList, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import { Text } from '../core-ui';
+import { useNavigation, useRoute } from '@react-navigation/native';
+
 import { OrderHistoryItem } from '../components';
-import { StackNavProp, StackRouteProp } from '../types/Navigation';
-import { useOrderHistory } from '../hooks/api/useOrderHistory';
+import { Text } from '../core-ui';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
+import { useOrderHistory } from '../hooks/api/useOrderHistory';
+import { StackNavProp, StackRouteProp } from '../types/Navigation';
 
 export default function OrderHistoryScene() {
   let { navigate } = useNavigation<StackNavProp<'OrderHistory'>>();
@@ -24,6 +25,7 @@ export default function OrderHistoryScene() {
   } = useOrderHistory(first, customerAccessToken);
 
   let { data } = useDefaultCurrency();
+
   if (loading && !isFetchingMore) {
     return <ActivityIndicator style={styles.center} />;
   }

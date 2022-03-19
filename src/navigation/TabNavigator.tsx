@@ -1,13 +1,14 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { IconButton } from 'react-native-paper';
 
-import { Text } from '../core-ui';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { FONT_SIZE } from '../constants/fonts';
 import { tabBarOptions } from '../constants/theme';
-import { TabParamList } from '../types/Navigation';
-import { HomeScene, WishlistScene, ProfileScene, LockScene } from '../scenes';
+import { Text } from '../core-ui';
 import { useAuth } from '../helpers/useAuth';
+import { HomeScene, LockScene, ProfileScene, WishlistScene } from '../scenes';
+import { TabParamList } from '../types/Navigation';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 

@@ -1,24 +1,18 @@
 import {
-  useMutation,
   MutationHookOptions,
   QueryHookOptions,
+  useMutation,
   useQuery,
 } from '@apollo/react-hooks';
 
 import {
-  CustomerAddressDelete,
-  CustomerAddressDeleteVariables,
-} from '../../generated/server/CustomerAddressDelete';
-import {
-  CUSTOMER_ADDRESS_DELETE,
-  CUSTOMER_ADD_NEW_ADDRESS,
-  CUSTOMER_EDIT_ADDRESS,
-  CUSTOMER_SET_DEFAULT_ADDRESS,
-} from '../../graphql/server/customerAddress';
-import {
   CustomerAddNewAddress,
   CustomerAddNewAddressVariables,
 } from '../../generated/server/CustomerAddNewAddress';
+import {
+  CustomerAddressDelete,
+  CustomerAddressDeleteVariables,
+} from '../../generated/server/CustomerAddressDelete';
 import {
   CustomerEditAddress,
   CustomerEditAddressVariables,
@@ -28,6 +22,12 @@ import {
   CustomerSetDefaultAddressVariables,
 } from '../../generated/server/CustomerSetDefaultAddress';
 import { GetShop } from '../../generated/server/GetShop';
+import {
+  CUSTOMER_ADD_NEW_ADDRESS,
+  CUSTOMER_ADDRESS_DELETE,
+  CUSTOMER_EDIT_ADDRESS,
+  CUSTOMER_SET_DEFAULT_ADDRESS,
+} from '../../graphql/server/customerAddress';
 import { GET_SHOP } from '../../graphql/server/shop';
 
 function useCustomerAddNewAddress(

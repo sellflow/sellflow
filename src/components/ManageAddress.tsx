@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
   StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 import { IconButton, Menu } from 'react-native-paper';
 
-import { Text } from '../core-ui';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
-import { AddressItem } from '../types/types';
+import { Text } from '../core-ui';
 import formatAddress from '../helpers/formatAddress';
 import { getFullName } from '../helpers/getFullName';
+import { AddressItem } from '../types/types';
 
 type Props = {
   data: AddressItem;
@@ -29,7 +29,7 @@ export default function ManageAddress(props: Props) {
 
   let fullName = getFullName(firstName, lastName);
 
-  let [showMenu, setShowMenu] = useState<boolean>(false);
+  let [showMenu, setShowMenu] = useState(false);
 
   return (
     <TouchableOpacity style={[styles.container, style]}>

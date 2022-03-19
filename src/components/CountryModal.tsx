@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Image,
   Animated,
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Portal, Modal } from 'react-native-paper';
+import { Modal, Portal } from 'react-native-paper';
 
-import { COLORS } from '../constants/colors';
-import { FONT_SIZE } from '../constants/fonts';
-import { COUNTRY_CODE } from '../constants/countryCode';
-import { useGetShop } from '../hooks/api/useCustomerAddress';
-import { CountryCode } from '../generated/server/globalTypes';
 import { checkAddressImage, searchImage } from '../../assets/images';
-import { useKeyboardListener } from '../helpers/keyboardListener';
+import { COLORS } from '../constants/colors';
+import { COUNTRY_CODE } from '../constants/countryCode';
+import { FONT_SIZE } from '../constants/fonts';
 import { Text, TextInput } from '../core-ui';
+import { CountryCode } from '../generated/server/globalTypes';
+import { useKeyboardListener } from '../helpers/keyboardListener';
+import { useGetShop } from '../hooks/api/useCustomerAddress';
 
 type Props = {
   countryVisible: boolean;
@@ -42,8 +42,8 @@ export default function CountryModal(props: Props) {
 
   let { keyboardHeight } = useKeyboardListener();
 
-  let [searchCountry, setSearchCountry] = useState<string>('');
-  let [selectedCountry, setSelectedCountry] = useState<string>('');
+  let [searchCountry, setSearchCountry] = useState('');
+  let [selectedCountry, setSelectedCountry] = useState('');
   let [countryList, setCountryList] = useState<Array<CountryCode>>([]);
 
   let { data } = useGetShop();

@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  StyleSheet,
-  View,
-  StyleProp,
-  ViewStyle,
-  TouchableOpacity,
-  TextStyle,
   ScrollView,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 import { COLORS } from '../constants/colors';

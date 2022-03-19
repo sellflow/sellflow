@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
   ImageBackground,
-  View,
+  StyleSheet,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import {
   default as SnapCarousel,
@@ -11,8 +11,8 @@ import {
 } from 'react-native-snap-carousel';
 
 import { COLORS } from '../constants/colors';
-import { CarouselItem } from '../types/types';
 import { useDimensions } from '../helpers/dimensions';
+import { CarouselItem } from '../types/types';
 
 type Props = {
   data: Array<CarouselItem>;
@@ -23,7 +23,7 @@ type Props = {
 export default function Carousel(props: Props) {
   let { width: dimensionsWidth } = useDimensions();
   let { data, width = dimensionsWidth, height } = props;
-  let [activeIndex, setActiveIndex] = useState<number>(0);
+  let [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <View style={[styles.carouselContainer, { height }]}>

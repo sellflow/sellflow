@@ -1,9 +1,11 @@
 import '../polyfills';
 import '../filterWarnings';
-import React from 'react';
+
 import { registerRootComponent } from 'expo';
-import { getStorybookUI, configure } from '@storybook/react-native';
+import React from 'react';
 import { Provider } from 'react-native-paper';
+
+import { configure, getStorybookUI } from '@storybook/react-native';
 
 import { CustomTheme } from '../constants/theme';
 

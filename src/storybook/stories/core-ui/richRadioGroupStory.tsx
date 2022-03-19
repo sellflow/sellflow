@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+
 import { storiesOf } from '@storybook/react-native';
-import { StyleSheet, SafeAreaView } from 'react-native';
 
 import { RichRadioGroup } from '../../../core-ui';
 
@@ -19,7 +20,7 @@ type Props = {
 
 function RadioGroupWithState(props: Props) {
   let { name, values } = props;
-  let [selectedValue, setSelectedValue] = useState<string>(values[0]);
+  let [selectedValue, setSelectedValue] = useState(values[0]);
   return (
     <RichRadioGroup
       name={name}

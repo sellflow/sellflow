@@ -1,42 +1,43 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput as TextInputType,
   SafeAreaView,
+  StyleSheet,
+  TextInput as TextInputType,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { FONT_SIZE } from '../constants/fonts';
+import { ModalBottomSheetMessage } from '../components';
 import { COLORS } from '../constants/colors';
-import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import { FONT_SIZE } from '../constants/fonts';
 import {
-  defaultButtonLabel,
   defaultButton,
+  defaultButtonLabel,
   flatTextInputContainerStyle,
   flatTextInputStyle,
   textInputLabel,
 } from '../constants/theme';
-import { StackNavProp } from '../types/Navigation';
+import { Button, ModalBottomSheet, Text, TextInput } from '../core-ui';
+import { ScreenSize, useDimensions } from '../helpers/dimensions';
+import { useAuth } from '../helpers/useAuth';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import {
   useCustomerCreateToken,
   useGetCustomerData,
 } from '../hooks/api/useCustomer';
-import { useAuth } from '../helpers/useAuth';
 import { useSetShoppingCart } from '../hooks/api/useShoppingCart';
-import { Button, ModalBottomSheet, Text, TextInput } from '../core-ui';
-import { ModalBottomSheetMessage } from '../components';
+import { StackNavProp } from '../types/Navigation';
 
 export default function LoginScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Login'>>();
   let { setAuthToken } = useAuth();
-  let [email, setEmail] = useState<string>('');
-  let [password, setPassword] = useState<string>('');
-  let [expiresDate, setExpiresDate] = useState<string>('');
-  let [errorMessage, setErrorMessage] = useState<string>('');
-  let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  let [email, setEmail] = useState('');
+  let [password, setPassword] = useState('');
+  let [expiresDate, setExpiresDate] = useState('');
+  let [errorMessage, setErrorMessage] = useState('');
+  let [isModalVisible, setIsModalVisible] = useState(false);
 
   let emailRef = useRef<TextInputType>(null);
   let passwordRef = useRef<TextInputType>(null);

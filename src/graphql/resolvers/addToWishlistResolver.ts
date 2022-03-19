@@ -1,9 +1,9 @@
 import { ApolloCache } from 'apollo-cache';
 
 import { AddToWishlistVariables } from '../../generated/client/AddToWishlist';
-import { GET_WISHLIST } from '../client/clientQueries';
-import { LocalCache } from '../../types/types';
 import { GetWishlist } from '../../generated/client/GetWishlist';
+import { LocalCache } from '../../types/types';
+import { GET_WISHLIST } from '../client/clientQueries';
 
 function addToWishlistResolver(
   _: object,

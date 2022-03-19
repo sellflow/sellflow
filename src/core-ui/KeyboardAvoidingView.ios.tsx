@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import {
-  StyleProp,
-  ViewStyle,
-  KeyboardAvoidingViewProps,
-  StyleSheet,
   KeyboardAvoidingView as NativeKeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
 } from 'react-native';
 
 type Props = KeyboardAvoidingViewProps & {

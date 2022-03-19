@@ -1,11 +1,12 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-import { View, StyleSheet, FlatList } from 'react-native';
-import { MockedProvider } from '@apollo/react-testing';
+import { FlatList, StyleSheet, View } from 'react-native';
 
+import { MockedProvider } from '@apollo/react-testing';
+import { storiesOf } from '@storybook/react-native';
+
+import { MOCKED_SHOP } from '../../../__mocks__/mockedData';
 import { OrderItem } from '../../../components';
 import { OrderData } from '../../../fixtures/OrderItemData';
-import { MOCKED_SHOP } from '../../../__mocks__/mockedData';
 import { setDefaultCurrencyResolver } from '../../../graphql/resolvers/setDefaultCurrencyResolver';
 
 export default function orderItemStory() {

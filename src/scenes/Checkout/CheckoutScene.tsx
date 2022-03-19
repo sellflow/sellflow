@@ -1,35 +1,36 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+
 import {
+  useFocusEffect,
   useNavigation,
   useRoute,
-  useFocusEffect,
 } from '@react-navigation/native';
 
 import { ModalBottomSheetMessage, PaymentDetails } from '../../components';
+import { COLORS } from '../../constants/colors';
+import { emptyAddress } from '../../constants/defaultValues';
+import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import {
   Button,
   KeyboardAvoidingView,
   ModalBottomSheet,
   Text,
 } from '../../core-ui';
-import { useDimensions, ScreenSize } from '../../helpers/dimensions';
-import { COLORS } from '../../constants/colors';
-import { defaultButton, defaultButtonLabel } from '../../constants/theme';
-import { StackNavProp, StackRouteProp } from '../../types/Navigation';
+import { ScreenSize, useDimensions } from '../../helpers/dimensions';
 import { useAuth } from '../../helpers/useAuth';
-import { emptyAddress } from '../../constants/defaultValues';
-import {
-  AddressItem,
-  PaymentInfo,
-  PaymentDetailsProps,
-} from '../../types/types';
+import useCurrencyFormatter from '../../hooks/api/useCurrencyFormatter';
 import { useGetCustomerAddresses } from '../../hooks/api/useCustomer';
 import { useCheckoutUpdateAddress } from '../../hooks/api/useShopifyCart';
-import useCurrencyFormatter from '../../hooks/api/useCurrencyFormatter';
+import { StackNavProp, StackRouteProp } from '../../types/Navigation';
+import {
+  AddressItem,
+  PaymentDetailsProps,
+  PaymentInfo,
+} from '../../types/types';
 
-import { ShippingAddressForm, AddressList } from './components';
+import { AddressList, ShippingAddressForm } from './components';
 
 export default function CheckoutScene() {
   let { navigate } = useNavigation<StackNavProp<'Checkout'>>();
@@ -49,7 +50,7 @@ export default function CheckoutScene() {
   let [selectedAddress, setSelectedAddress] = useState<AddressItem>(
     emptyAddress,
   );
-  let [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  let [isModalVisible, setIsModalVisible] = useState(false);
   let { screenSize } = useDimensions();
   const first = 5;
   let formatCurrency = useCurrencyFormatter();

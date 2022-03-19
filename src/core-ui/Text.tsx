@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import {
-  TextProps as NativeTextProps,
   StyleSheet,
+  TextProps as NativeTextProps,
   TextStyle,
 } from 'react-native';
 import { Text as PaperText, useTheme } from 'react-native-paper';

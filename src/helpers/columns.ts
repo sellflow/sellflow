@@ -1,4 +1,4 @@
-import { useDimensions, ScreenSize } from './dimensions';
+import { ScreenSize, useDimensions } from './dimensions';
 
 export const NUM_COLUMNS = {
   SMALL: 2,

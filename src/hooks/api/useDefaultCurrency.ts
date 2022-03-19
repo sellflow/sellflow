@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import {
-  GET_DEFAULT_CURRENCY,
-  SET_DEFAULT_CURRENCY,
-} from '../../graphql/client/clientQueries';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+
 import { GetDefaultCurrency } from '../../generated/client/GetDefaultCurrency';
-import { CurrencyCode } from '../../generated/server/globalTypes';
 import {
   SetDefaultCurrency,
   SetDefaultCurrencyVariables,
 } from '../../generated/client/SetDefaultCurrency';
 import { GetShop } from '../../generated/server/GetShop';
+import { CurrencyCode } from '../../generated/server/globalTypes';
+import {
+  GET_DEFAULT_CURRENCY,
+  SET_DEFAULT_CURRENCY,
+} from '../../graphql/client/clientQueries';
 import { GET_SHOP } from '../../graphql/server/shop';
 
 export default function useDefaultCurrency() {

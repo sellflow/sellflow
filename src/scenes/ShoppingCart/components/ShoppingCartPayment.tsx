@@ -1,16 +1,16 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Button, Text, TextInput } from '../../../core-ui';
-import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
 import { PaymentDetails } from '../../../components';
-import { PaymentDetailsProps, PaymentData } from '../../../types/types';
+import { COLORS } from '../../../constants/colors';
 import {
   defaultButton,
   defaultButtonLabel,
   outlinedTextInput,
 } from '../../../constants/theme';
-import { COLORS } from '../../../constants/colors';
+import { Button, Text, TextInput } from '../../../core-ui';
+import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
+import { PaymentData, PaymentDetailsProps } from '../../../types/types';
 
 type Props = {
   data: PaymentData;

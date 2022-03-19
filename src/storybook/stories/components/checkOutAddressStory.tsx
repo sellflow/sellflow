@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { storiesOf } from '@storybook/react-native';
-import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
 
-import { addressItemData } from '../../../fixtures/AddressItemData';
+import { storiesOf } from '@storybook/react-native';
+
 import { CheckoutAddress } from '../../../components';
 import { RadioButton } from '../../../core-ui';
+import { addressItemData } from '../../../fixtures/AddressItemData';
 
 function CheckoutAddressList() {
-  let [selectedIndex, setSelectedIndex] = useState<string>(
-    addressItemData[0].id,
-  );
+  let [selectedIndex, setSelectedIndex] = useState(addressItemData[0].id);
   return (
     <SafeAreaView style={styles.container}>
       <RadioButton.Group

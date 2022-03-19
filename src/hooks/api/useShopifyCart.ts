@@ -1,25 +1,9 @@
 import { MutationHookOptions, useMutation } from '@apollo/react-hooks';
 
 import {
-  ShoppingCartReplaceItem,
-  ShoppingCartReplaceItemVariables,
-} from '../../generated/server/ShoppingCartReplaceItem';
-import {
-  SHOPPING_CART_REPLACE_ITEMS,
-  SHOPPING_CART_CREATE,
-  SHOPPING_CART_UPDATE_ADDRESS,
-  SHOPPING_CART_CUSTOMER_ASSOCIATE,
-  SHOPPING_CART_DISCOUNT_CODE_APPLY,
-  SHOPPING_CART_DISCOUNT_CODE_REMOVE,
-} from '../../graphql/server/shoppingCart';
-import {
   ShoppingCartCreate,
   ShoppingCartCreateVariables,
 } from '../../generated/server/ShoppingCartCreate';
-import {
-  ShoppingCartUpdateAddress,
-  ShoppingCartUpdateAddressVariables,
-} from '../../generated/server/ShoppingCartUpdateAddress';
 import {
   ShoppingCartCustomerAssociate,
   ShoppingCartCustomerAssociateVariables,
@@ -32,6 +16,22 @@ import {
   ShoppingCartDiscountCodeRemove,
   ShoppingCartDiscountCodeRemoveVariables,
 } from '../../generated/server/ShoppingCartDiscountCodeRemove';
+import {
+  ShoppingCartReplaceItem,
+  ShoppingCartReplaceItemVariables,
+} from '../../generated/server/ShoppingCartReplaceItem';
+import {
+  ShoppingCartUpdateAddress,
+  ShoppingCartUpdateAddressVariables,
+} from '../../generated/server/ShoppingCartUpdateAddress';
+import {
+  SHOPPING_CART_CREATE,
+  SHOPPING_CART_CUSTOMER_ASSOCIATE,
+  SHOPPING_CART_DISCOUNT_CODE_APPLY,
+  SHOPPING_CART_DISCOUNT_CODE_REMOVE,
+  SHOPPING_CART_REPLACE_ITEMS,
+  SHOPPING_CART_UPDATE_ADDRESS,
+} from '../../graphql/server/shoppingCart';
 
 function useCheckoutReplaceItem(
   options?: MutationHookOptions<
@@ -39,11 +39,15 @@ function useCheckoutReplaceItem(
     ShoppingCartReplaceItemVariables
   >,
 ) {
-  let [shoppingCartReplaceItems, { loading }] = useMutation<
+  let [shoppingCartReplaceItems, { loading, error }] = useMutation<
     ShoppingCartReplaceItem,
     ShoppingCartReplaceItemVariables
-  >(SHOPPING_CART_REPLACE_ITEMS, { fetchPolicy: 'no-cache', ...options });
-  return { shoppingCartReplaceItems, loading };
+  >(SHOPPING_CART_REPLACE_ITEMS, {
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    ...options,
+  });
+  return { shoppingCartReplaceItems, loading, error };
 }
 
 function useCheckoutCreate(

@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 
 import { CURRENCIES, DEFAULT_CURRENCY } from '../../constants/currencies';
 import formatNumber from '../../helpers/formatNumber';
-
 import useDefaultCurrency from './useDefaultCurrency';
 
 export default function useCurrencyFormatter() {

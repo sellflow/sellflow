@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { FONT_SIZE } from '../../../constants/fonts';
-import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
-import { RichRadioGroup, Text, TextInput } from '../../../core-ui';
-import { OptionsData, Options, ProductDetails } from '../../../types/types';
-import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
 import { COLORS } from '../../../constants/colors';
-import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
+import { FONT_SIZE } from '../../../constants/fonts';
 import { outlinedTextInput } from '../../../constants/theme';
+import { RichRadioGroup, Text, TextInput } from '../../../core-ui';
+import { priceAfterDiscount } from '../../../helpers/priceAfterDiscount';
+import { valueBetweenZeroToMax } from '../../../helpers/valueBetweenZeroToMax';
+import useCurrencyFormatter from '../../../hooks/api/useCurrencyFormatter';
+import { Options, OptionsData, ProductDetails } from '../../../types/types';
 
 type Props = {
   onSelectionOptionChange: (key: string, value: string) => void;

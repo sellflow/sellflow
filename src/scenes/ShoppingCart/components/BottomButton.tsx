@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Button } from '../../../core-ui';
 import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
+import { Button } from '../../../core-ui';
 
 type Props = {
   label: string;

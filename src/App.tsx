@@ -1,18 +1,20 @@
 import './filterWarnings';
 import './polyfills';
-import React from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
-import {
-  Provider as ThemeProvider,
-  ActivityIndicator,
-} from 'react-native-paper';
-import { StatusBar } from 'react-native';
+
 import { useFonts } from 'expo-font';
+import React from 'react';
+import { StatusBar } from 'react-native';
+import {
+  ActivityIndicator,
+  Provider as ThemeProvider,
+} from 'react-native-paper';
+
+import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Provider as AuthProvider } from '../src/helpers/useAuth';
 
-import { client } from './graphql/client';
 import { CustomTheme } from './constants/theme';
+import { client } from './graphql/client';
 import AppNavigator from './navigation/AppNavigator';
 
 function App() {

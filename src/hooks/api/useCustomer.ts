@@ -1,50 +1,51 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import {
-  useMutation,
   MutationHookOptions,
-  useLazyQuery,
   QueryHookOptions,
+  useLazyQuery,
+  useMutation,
   useQuery,
 } from '@apollo/react-hooks';
 
+import {
+  CustomerAccessTokenRenew,
+  CustomerAccessTokenRenewVariables,
+} from '../../generated/server/CustomerAccessTokenRenew';
 import {
   CustomerCreateToken,
   CustomerCreateTokenVariables,
 } from '../../generated/server/CustomerCreateToken';
 import {
-  CUSTOMER_CREATE_TOKEN,
-  GET_CUSTOMER_DATA,
-  CUSTOMER_REGISTER,
-  UPDATE_CUSTOMER_DATA,
-  REMOVE_ACCESS_TOKEN,
-  GET_CUSTOMER_ADDRESSES,
-  CUSTOMER_RENEW_TOKEN,
-} from '../../graphql/server/auth';
-import {
-  GetCustomerData,
-  GetCustomerDataVariables,
-} from '../../generated/server/GetCustomerData';
-import {
   CustomerRegister,
   CustomerRegisterVariables,
 } from '../../generated/server/CustomerRegister';
-import {
-  UpdateCustomerData,
-  UpdateCustomerDataVariables,
-} from '../../generated/server/UpdateCustomerData';
-import {
-  RemoveAccessToken,
-  RemoveAccessTokenVariables,
-} from '../../generated/server/RemoveAccessToken';
-import { AddressItem } from '../../types/types';
 import {
   GetCustomerAddresses,
   GetCustomerAddressesVariables,
 } from '../../generated/server/GetCustomerAddresses';
 import {
-  CustomerAccessTokenRenew,
-  CustomerAccessTokenRenewVariables,
-} from '../../generated/server/CustomerAccessTokenRenew';
+  GetCustomerData,
+  GetCustomerDataVariables,
+} from '../../generated/server/GetCustomerData';
+import {
+  RemoveAccessToken,
+  RemoveAccessTokenVariables,
+} from '../../generated/server/RemoveAccessToken';
+import {
+  UpdateCustomerData,
+  UpdateCustomerDataVariables,
+} from '../../generated/server/UpdateCustomerData';
+import {
+  CUSTOMER_CREATE_TOKEN,
+  CUSTOMER_REGISTER,
+  CUSTOMER_RENEW_TOKEN,
+  GET_CUSTOMER_ADDRESSES,
+  GET_CUSTOMER_DATA,
+  REMOVE_ACCESS_TOKEN,
+  UPDATE_CUSTOMER_DATA,
+} from '../../graphql/server/auth';
+import { AddressItem } from '../../types/types';
 
 function getCustomerAddresses(
   customerAddressData: GetCustomerAddresses | undefined,
@@ -147,7 +148,7 @@ function useGetCustomerAddresses(
     GetCustomerAddressesVariables
   >,
 ) {
-  let [isInitFetching, setInitFetching] = useState<boolean>(true);
+  let [isInitFetching, setInitFetching] = useState(true);
   let [addresses, setAddresses] = useState<Array<AddressItem>>([]);
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);

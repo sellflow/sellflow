@@ -1,54 +1,55 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
-  View,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   TextInput as TextInputType,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
+  View,
 } from 'react-native';
 import { Portal } from 'react-native-paper';
+
 import { useNavigation } from '@react-navigation/native';
 
+import { ModalBottomSheetMessage } from '../components';
 import { COLORS } from '../constants/colors';
-import { useDimensions, ScreenSize } from '../helpers/dimensions';
+import {
+  defaultButton,
+  defaultButtonLabel,
+  flatTextInputContainerStyle,
+  flatTextInputStyle,
+  textInputLabel,
+} from '../constants/theme';
+import {
+  Button,
+  KeyboardAvoidingView,
+  ModalBottomSheet,
+  Text,
+  TextInput,
+} from '../core-ui';
+import { ScreenSize, useDimensions } from '../helpers/dimensions';
+import { useAuth } from '../helpers/useAuth';
 import {
   INVALID_EMAIL_MESSAGE,
   INVALID_PASSWORD_MESSAGE,
   validateEmail,
   validatePassword,
 } from '../helpers/validation';
-import {
-  defaultButtonLabel,
-  defaultButton,
-  flatTextInputContainerStyle,
-  flatTextInputStyle,
-  textInputLabel,
-} from '../constants/theme';
-import { StackNavProp } from '../types/Navigation';
 import { useSetAuthenticatedUser } from '../hooks/api/useAuthenticatedUser';
 import { useCustomerRegister } from '../hooks/api/useCustomer';
-import { useAuth } from '../helpers/useAuth';
-import {
-  ModalBottomSheet,
-  KeyboardAvoidingView,
-  Button,
-  Text,
-  TextInput,
-} from '../core-ui';
-import { ModalBottomSheetMessage } from '../components';
 import { useGetShop } from '../hooks/api/useCustomerAddress';
+import { StackNavProp } from '../types/Navigation';
 
 export default function RegisterScene() {
   let { navigate, reset } = useNavigation<StackNavProp<'Register'>>();
   let { setAuthToken } = useAuth();
-  let [firstName, setFirstName] = useState<string>('');
-  let [lastName, setLastName] = useState<string>('');
-  let [email, setEmail] = useState<string>('');
-  let [password, setPassword] = useState<string>('');
-  let [confirmPassword, setConfirmPassword] = useState<string>('');
-  let [isVisible, setIsVisible] = useState<boolean>(false);
-  let [errorMessage, setErrorMessage] = useState<string>('');
+  let [firstName, setFirstName] = useState('');
+  let [lastName, setLastName] = useState('');
+  let [email, setEmail] = useState('');
+  let [password, setPassword] = useState('');
+  let [confirmPassword, setConfirmPassword] = useState('');
+  let [isVisible, setIsVisible] = useState(false);
+  let [errorMessage, setErrorMessage] = useState('');
   let toggleModalVisible = () => setIsVisible(!isVisible);
   let { data } = useGetShop();
 
@@ -85,12 +86,10 @@ export default function RegisterScene() {
     }
     return styleApplied;
   };
-  let [isEmailValid, setIsEmailValid] = useState<boolean>(true);
-  let [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
-  let [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState<boolean>(
-    true,
-  );
-  let [bottomButtonHeight, setBottomButtonHeight] = useState<number>(0);
+  let [isEmailValid, setIsEmailValid] = useState(true);
+  let [isPasswordValid, setIsPasswordValid] = useState(true);
+  let [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  let [bottomButtonHeight, setBottomButtonHeight] = useState(0);
 
   let isDisabled =
     !firstName ||

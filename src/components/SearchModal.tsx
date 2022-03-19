@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  View,
   FlatList,
   Modal,
   SafeAreaView,
+  StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import { IconButton, ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { SearchInput, Text } from '../core-ui';
-import { Product } from '../types/types';
 import {
-  useSearchProductsQuery,
   useGetRecentSearch,
+  useSearchProductsQuery,
   useSetRecentSearch,
 } from '../hooks/api/useSearchProduct';
+import { Product } from '../types/types';
 
 type Props = {
   onItemPress: (product: Product) => void;
@@ -27,8 +27,8 @@ type Props = {
 };
 
 export default function SearchModal(props: Props) {
-  let [searchText, setSearchText] = useState<string>('');
-  let [debouncedSearchText, setDebouncedSearchtext] = useState<string>('');
+  let [searchText, setSearchText] = useState('');
+  let [debouncedSearchText, setDebouncedSearchtext] = useState('');
   let { isVisible, setVisible, onItemPress, onSubmit } = props;
 
   let {

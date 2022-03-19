@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { QueryHookOptions, useLazyQuery, useQuery } from '@apollo/react-hooks';
 
+import { emptyProduct } from '../../constants/defaultValues';
+import {
+  GetProductByHandle,
+  GetProductByHandleVariables,
+} from '../../generated/server/GetProductByHandle';
 import {
   GetProductVariant,
   GetProductVariantVariables,
 } from '../../generated/server/GetProductVariant';
 import {
-  GET_PRODUCT_VARIANT,
   GET_PRODUCT_BY_HANDLE,
+  GET_PRODUCT_VARIANT,
 } from '../../graphql/server/productByHandle';
-import {
-  GetProductByHandle,
-  GetProductByHandleVariables,
-} from '../../generated/server/GetProductByHandle';
 import { getDiscount } from '../../helpers/getDiscount';
 import { ProductDetails } from '../../types/types';
-import { emptyProduct } from '../../constants/defaultValues';
 
 function useGetProductDetails(
   options?: QueryHookOptions<GetProductByHandle, GetProductByHandleVariables>,

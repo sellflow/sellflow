@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react';
 import {
-  StyleSheet,
-  View,
-  SafeAreaView,
   Image,
+  SafeAreaView,
+  StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import { IconButton } from 'react-native-paper';
+
 import { useNavigation } from '@react-navigation/native';
 
 import { lock } from '../../assets/images';
-import { defaultButton, defaultButtonLabel } from '../constants/theme';
-import { StackNavProp } from '../types/Navigation';
 import { COLORS } from '../constants/colors';
+import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { Button, Text } from '../core-ui';
+import { StackNavProp } from '../types/Navigation';
 
 export default function LockScene() {
   let { navigate, setOptions } = useNavigation<StackNavProp<'LockScene'>>();

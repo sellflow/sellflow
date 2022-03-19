@@ -1,23 +1,23 @@
 import {
-  useMutation,
-  useQuery,
   MutationHookOptions,
   QueryHookOptions,
+  useMutation,
+  useQuery,
 } from '@apollo/react-hooks';
 
+import { GetAuthenticatedUser } from '../../generated/client/GetAuthenticatedUser';
 import {
   SetAuthenticatedUser,
   SetAuthenticatedUserVariables,
 } from '../../generated/client/SetAuthenticatedUser';
 import {
-  SET_AUTHENTICATED_USER,
-  GET_AUTHENTICATED_USER,
-} from '../../graphql/client/clientQueries';
-import { GetAuthenticatedUser } from '../../generated/client/GetAuthenticatedUser';
-import {
   InitiatePasswordReset,
   InitiatePasswordResetVariables,
 } from '../../generated/server/InitiatePasswordReset';
+import {
+  GET_AUTHENTICATED_USER,
+  SET_AUTHENTICATED_USER,
+} from '../../graphql/client/clientQueries';
 import { INITIATE_PASSWORD_RESET } from '../../graphql/server/auth';
 
 function useSetAuthenticatedUser(

@@ -1,33 +1,27 @@
 import React, { useState } from 'react';
 import {
+  Image,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   View,
-  ScrollView,
-  SafeAreaView,
-  Image,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { KeyboardAvoidingView, Text } from '../../core-ui';
-import { COLORS } from '../../constants/colors';
+import { cartPlaceholder } from '../../../assets/images';
 import { OrderItem } from '../../components';
-import { useDimensions, ScreenSize } from '../../helpers/dimensions';
-import { StackNavProp } from '../../types/Navigation';
+import { COLORS } from '../../constants/colors';
+import { KeyboardAvoidingView, Text, Toast } from '../../core-ui';
+import { CheckoutErrorCode } from '../../generated/server/globalTypes';
 import { ShoppingCartCreate_checkoutCreate_checkout as CheckoutCreate } from '../../generated/server/ShoppingCartCreate';
-import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../../generated/server/ShoppingCartReplaceItem';
 import { ShoppingCartDiscountCodeApply_checkoutDiscountCodeApplyV2_checkout as CheckoutDiscountApply } from '../../generated/server/ShoppingCartDiscountCodeApply';
-import {
-  Cart,
-  LineItem,
-  OrderItem as OrderItemType,
-  PaymentData,
-} from '../../types/types';
-import {
-  useGetCart,
-  useSetShoppingCartID,
-  useSetShoppingCart,
-} from '../../hooks/api/useShoppingCart';
+import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutReplace } from '../../generated/server/ShoppingCartReplaceItem';
+import { ScreenSize, useDimensions } from '../../helpers/dimensions';
+import { mapToLineItems } from '../../helpers/mapToLineItems';
+import { useAuth } from '../../helpers/useAuth';
+import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 import {
   useCheckoutCreate,
   useCheckoutCustomerAssociate,
@@ -35,14 +29,20 @@ import {
   useCheckoutDiscountRemove,
   useCheckoutReplaceItem,
 } from '../../hooks/api/useShopifyCart';
-import { cartPlaceholder } from '../../../assets/images';
-import { mapToLineItems } from '../../helpers/mapToLineItems';
-import Toast from '../../core-ui/Toast';
-import { useAuth } from '../../helpers/useAuth';
-import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
-import { CheckoutErrorCode } from '../../generated/server/globalTypes';
+import {
+  useGetCart,
+  useSetShoppingCart,
+  useSetShoppingCartID,
+} from '../../hooks/api/useShoppingCart';
+import { StackNavProp } from '../../types/Navigation';
+import {
+  Cart,
+  LineItem,
+  OrderItem as OrderItemType,
+  PaymentData,
+} from '../../types/types';
 
-import { ShoppingCartPayment, BottomButton } from './components';
+import { BottomButton, ShoppingCartPayment } from './components';
 
 function extractDataCheckout(
   checkout: CheckoutCreate | CheckoutReplace | CheckoutDiscountApply,
@@ -93,11 +93,11 @@ export default function ShoppingCartScene() {
     totalPrice: 0,
     lineItems: [],
   });
-  let [cartID, setCartID] = useState<string>('');
-  let [firstLoading, setFirstLoading] = useState<boolean>(true);
-  let [voucherCode, setVoucherCode] = useState<string>('');
-  let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
-  let [isVoucherCodeValid, setIsVoucherCodeValid] = useState<boolean>(true);
+  let [cartID, setCartID] = useState('');
+  let [firstLoading, setFirstLoading] = useState(true);
+  let [voucherCode, setVoucherCode] = useState('');
+  let [isToastVisible, setIsToastVisible] = useState(false);
+  let [isVoucherCodeValid, setIsVoucherCodeValid] = useState(true);
   let { data } = useDefaultCurrency();
 
   let setVoucherCodeValue = (value: string) => {

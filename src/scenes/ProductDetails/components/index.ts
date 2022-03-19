@@ -1,6 +1,6 @@
-import BotttomActionBar from './BottomActionBar';
-import ProductInfo from './ProductInfo';
-import ImageModal from './ImageModal';
+import BottomActionBar from './BottomActionBar';
 import ImageList from './ImageList';
+import ImageModal from './ImageModal';
+import ProductInfo from './ProductInfo';
 
-export { BotttomActionBar, ProductInfo, ImageModal, ImageList };
+export { BottomActionBar, ImageList, ImageModal, ProductInfo };

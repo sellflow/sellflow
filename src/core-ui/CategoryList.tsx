@@ -1,14 +1,14 @@
 import React from 'react';
 import {
-  StyleSheet,
-  View,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
   FlatList,
-  TouchableOpacity,
   FlatListProps,
   ImageBackground,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 import { COLORS } from '../constants/colors';

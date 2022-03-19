@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { useDimensions, ScreenSize } from '../helpers/dimensions';
-import { Carousel, CategoryList, SearchInput, Text } from '../core-ui';
 import { ProductList, SearchModal } from '../components';
+import { COLORS } from '../constants/colors';
+import { Carousel, CategoryList, SearchInput, Text } from '../core-ui';
 import { carouselData } from '../fixtures/carousel';
+import { useColumns } from '../helpers/columns';
+import { ScreenSize, useDimensions } from '../helpers/dimensions';
+import { useProductsAndCategoriesQuery } from '../hooks/api/useCollection';
+import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { StackNavProp } from '../types/Navigation';
 import { Product } from '../types/types';
-import { useColumns } from '../helpers/columns';
-import { useProductsAndCategoriesQuery } from '../hooks/api/useCollection';
-import { COLORS } from '../constants/colors';
-import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 
 export default function HomeScene() {
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let first = numColumns * 6;
-  let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
+  let [isSearchModalVisible, setSearchModalVisible] = useState(false);
 
   let {
     loading: loadingCurrency,

@@ -1,16 +1,16 @@
 import React, {
+  createContext,
+  useContext,
+  useEffect,
   useMemo,
   useState,
-  useContext,
-  createContext,
-  useEffect,
 } from 'react';
+
 import {
   useGetAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/api/useAuthenticatedUser';
 import { useCustomerRenewToken } from '../hooks/api/useCustomer';
-
 import { getToken, removeToken, saveToken } from './authToken';
 
 type Context = {
@@ -28,7 +28,7 @@ let AuthContext = createContext<Context>({
 });
 
 export function Provider(props: Props) {
-  let [token, setToken] = useState<string>('');
+  let [token, setToken] = useState('');
   let { data: userData } = useGetAuthenticatedUser();
   let expiresAt = new Date(userData?.authenticatedUser.expiresAt || '');
   let expiresLimit = new Date(userData?.authenticatedUser.expiresAt || '');

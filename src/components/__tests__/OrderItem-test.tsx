@@ -1,12 +1,13 @@
 import React from 'react';
-import { render, fireEvent } from 'react-native-testing-library';
+import { fireEvent, render } from 'react-native-testing-library';
+
 import { MockedProvider } from '@apollo/react-testing';
 
-import { OrderItem } from '..';
-import { OrderItem as OrderItemType } from '../../types/types';
-import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
+import { OrderItem } from '../';
 import { MOCKED_SHOP } from '../../__mocks__/mockedData';
 import wait from '../../__mocks__/wait';
+import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
+import { OrderItem as OrderItemType } from '../../types/types';
 
 let initialData: OrderItemType = {
   quantityAvailable: 1000,

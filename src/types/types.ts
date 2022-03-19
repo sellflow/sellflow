@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
 import { GetAuthenticatedUser_authenticatedUser as AuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
-import { GetWishlist_wishlist as Wishlist } from '../generated/client/GetWishlist';
-import { GetShoppingCart_shoppingCart as ShoppingCart } from '../generated/client/GetShoppingCart';
 import { GetRecentSearch_recentSearch as RecentSearch } from '../generated/client/GetRecentSearch';
+import { GetShoppingCart_shoppingCart as ShoppingCart } from '../generated/client/GetShoppingCart';
+import { GetWishlist_wishlist as Wishlist } from '../generated/client/GetWishlist';
 
 export type CarouselItem = {
   render?: () => ReactNode;

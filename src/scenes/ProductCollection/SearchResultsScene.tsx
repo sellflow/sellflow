@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { StackNavProp, StackRouteProp } from '../../types/Navigation';
-import { useSearchProductsQuery } from '../../hooks/api/useSearchProduct';
-import { Product } from '../../types/types';
-import { ProductSortKeys } from '../../generated/server/globalTypes';
-import { PRODUCT_SORT_VALUES } from '../../constants/values';
-import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
-import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 import { SearchModal } from '../../components';
+import { PRODUCT_SORT_VALUES } from '../../constants/values';
+import { ProductSortKeys } from '../../generated/server/globalTypes';
 import { useColumns } from '../../helpers/columns';
+import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
+import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
+import { useSearchProductsQuery } from '../../hooks/api/useSearchProduct';
+import { StackNavProp, StackRouteProp } from '../../types/Navigation';
+import { Product } from '../../types/types';
 
 import { ProductsView } from './components';
 
@@ -19,9 +20,9 @@ export default function SearchResultsScene() {
   let { navigate } = useNavigation<StackNavProp<'SearchResults'>>();
   let numColumns = useColumns();
   let first = numColumns * 6;
-  let [isSearchModalVisible, setSearchModalVisible] = useState<boolean>(false);
-  let [radioButtonValue, setRadioButtonValue] = useState<string>('');
-  let [maxPriceValue, setMaxPrice] = useState<number>(0);
+  let [isSearchModalVisible, setSearchModalVisible] = useState(false);
+  let [radioButtonValue, setRadioButtonValue] = useState('');
+  let [maxPriceValue, setMaxPrice] = useState(0);
   let [priceRange, setPriceRange] = useState<Array<number>>([0, maxPriceValue]);
   let {
     params: { searchKeyword },

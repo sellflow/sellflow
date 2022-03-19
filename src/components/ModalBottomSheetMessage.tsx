@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
-import { Button, Text } from '../core-ui';
+import { errorImage, successImage } from '../../assets/images';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
-import { successImage, errorImage } from '../../assets/images';
+import { Button, Text } from '../core-ui';
 
 type Props = {
   isError: boolean;

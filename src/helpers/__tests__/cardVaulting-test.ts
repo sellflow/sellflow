@@ -1,6 +1,6 @@
+import { SHOPIFY_CARD_VAULT_URL } from '../../constants/api';
 import { createCardVaulting } from '../cardVaulting';
 import formatNumber from '../formatNumber';
-import { SHOPIFY_CARD_VAULT_URL } from '../../constants/api';
 
 type HeadersObject = { [key: string]: string };
 

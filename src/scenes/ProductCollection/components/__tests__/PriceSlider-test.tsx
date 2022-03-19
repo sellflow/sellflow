@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from 'react-native-testing-library';
+import { fireEvent, render } from 'react-native-testing-library';
 
 import { PriceSlider } from '../../components';
 

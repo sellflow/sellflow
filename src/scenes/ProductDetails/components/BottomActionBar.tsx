@@ -1,17 +1,18 @@
 import React from 'react';
-import { View, StyleSheet, Share } from 'react-native';
+import { Share, StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
+
 import { useQuery } from '@apollo/react-hooks';
 
+import { COLORS } from '../../../constants/colors';
+import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
 import { Button } from '../../../core-ui';
+import { GetShop } from '../../../generated/server/GetShop';
+import { GET_SHOP } from '../../../graphql/server/shop';
 import {
   useAddItemToWishlist,
   useRemoveItemFromWishlist,
 } from '../../../hooks/api/useWishlist';
-import { COLORS } from '../../../constants/colors';
-import { defaultButton, defaultButtonLabel } from '../../../constants/theme';
-import { GetShop } from '../../../generated/server/GetShop';
-import { GET_SHOP } from '../../../graphql/server/shop';
 import { ProductDetails } from '../../../types/types';
 
 type Props = {

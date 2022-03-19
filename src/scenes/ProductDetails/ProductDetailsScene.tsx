@@ -1,44 +1,49 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useRoute, useFocusEffect } from '@react-navigation/native';
 
-import { VariantQueryData, OptionsData } from '../../types/types';
-import { useGetWishlistData } from '../../hooks/api/useWishlist';
-import { StackRouteProp } from '../../types/Navigation';
-import {
-  useAddToCart,
-  useSetShoppingCartID,
-  useGetCart,
-} from '../../hooks/api/useShoppingCart';
-import { useGetProductDetails } from '../../hooks/api/useProduct';
-import { useGetCustomerData } from '../../hooks/api/useCustomer';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
+
+import { COLORS } from '../../constants/colors';
+import { KeyboardAvoidingView, Toast } from '../../core-ui';
+import { ScreenSize, useDimensions } from '../../helpers/dimensions';
 import { useAuth } from '../../helpers/useAuth';
+import { useGetCustomerData } from '../../hooks/api/useCustomer';
+import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
+import { useGetProductDetails } from '../../hooks/api/useProduct';
 import {
   useCheckoutCreate,
   useCheckoutCustomerAssociate,
   useCheckoutReplaceItem,
 } from '../../hooks/api/useShopifyCart';
-import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
-import { Toast, KeyboardAvoidingView } from '../../core-ui';
-import { COLORS } from '../../constants/colors';
-import { ScreenSize, useDimensions } from '../../helpers/dimensions';
+import {
+  useAddToCart,
+  useGetCart,
+  useSetShoppingCartID,
+} from '../../hooks/api/useShoppingCart';
+import { useGetWishlistData } from '../../hooks/api/useWishlist';
+import { StackRouteProp } from '../../types/Navigation';
+import { OptionsData, VariantQueryData } from '../../types/types';
 
-import { ProductInfo, ImageModal, ImageList } from './components';
-import BottomActionBar from './components/BottomActionBar';
+import {
+  BottomActionBar,
+  ImageList,
+  ImageModal,
+  ProductInfo,
+} from './components';
 
 export default function ProductDetailsScene() {
   let {
     params: { productHandle },
   } = useRoute<StackRouteProp<'ProductDetails'>>();
 
-  let [isToastVisible, setIsToastVisible] = useState<boolean>(false);
-  let [isWishlistActive, setWishlistActive] = useState<boolean>(false);
-  let [quantity, setQuantity] = useState<number>(1);
+  let [isToastVisible, setIsToastVisible] = useState(false);
+  let [isWishlistActive, setWishlistActive] = useState(false);
+  let [quantity, setQuantity] = useState(1);
   let [selectedOptions, setSelectedOptions] = useState<OptionsData>({});
-  let [isImageModalVisible, setIsImageModalVisible] = useState<boolean>(false);
-  let [activeIndex, setActiveIndex] = useState<number>(0);
-  let [bottomButtonHeight, setBottomButtonHeight] = useState<number>(0);
+  let [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  let [activeIndex, setActiveIndex] = useState(0);
+  let [bottomButtonHeight, setBottomButtonHeight] = useState(0);
 
   let { authToken } = useAuth();
   let { setShoppingCartID } = useSetShoppingCartID();
@@ -203,7 +208,7 @@ export default function ProductDetailsScene() {
     addToCart({ variables: { variantId: productDetails.id, quantity } });
   };
 
-  let isFirstLoading = !wishlistData || !productDetails;
+  let isFirstLoading = !wishlistData || !productDetails.id;
 
   let { screenSize } = useDimensions();
   let isLandscape = screenSize === ScreenSize.Large;
@@ -280,12 +285,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  headerIcon: {
-    position: 'absolute',
-    left: 0,
-    top: 17,
-    zIndex: 14,
   },
   bottomContainer: {
     flexDirection: 'row',

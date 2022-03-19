@@ -1,4 +1,4 @@
-import ShoppingCartPayment from './ShoppingCartPayment';
 import BottomButton from './BottomButton';
+import ShoppingCartPayment from './ShoppingCartPayment';
 
-export { ShoppingCartPayment, BottomButton };
+export { BottomButton, ShoppingCartPayment };

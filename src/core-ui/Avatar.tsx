@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  View,
-  StyleSheet,
   StyleProp,
-  ViewStyle,
+  StyleSheet,
   TextStyle,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 import { COLORS } from '../constants/colors';

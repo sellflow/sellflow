@@ -1,14 +1,15 @@
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import { QueryHookOptions, useQuery } from '@apollo/react-hooks';
+
+import { emptyAddress } from '../../constants/defaultValues';
 import {
   GetOrderHistory,
   GetOrderHistoryVariables,
 } from '../../generated/server/GetOrderHistory';
 import { GET_ORDER_HISTORY } from '../../graphql/server/orderHistory';
-import { OrderRecord, AddressItem } from '../../types/types';
-import { emptyAddress } from '../../constants/defaultValues';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
+import { AddressItem, OrderRecord } from '../../types/types';
 
 import useDefaultCurrency from './useDefaultCurrency';
 
@@ -82,7 +83,7 @@ function useOrderHistory(
   customerAccessToken: string,
   options?: QueryHookOptions<GetOrderHistory, GetOrderHistoryVariables>,
 ) {
-  let [isInitFetching, setInitFetching] = useState<boolean>(true);
+  let [isInitFetching, setInitFetching] = useState(true);
   let [orderHistory, setOrderHistory] = useState<Array<OrderRecord>>([]);
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);

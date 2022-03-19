@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { FONT_SIZE, FONT_FAMILY } from '../../../constants/fonts';
 import { COLORS } from '../../../constants/colors';
+import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
 import { PRODUCT_SORT_VALUES } from '../../../constants/values';
 import { RadioButton } from '../../../core-ui';
 

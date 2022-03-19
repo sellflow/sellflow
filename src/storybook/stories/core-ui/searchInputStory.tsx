@@ -1,6 +1,7 @@
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
+
 import { storiesOf } from '@storybook/react-native';
-import { View, StyleSheet } from 'react-native';
 
 import { SearchInput } from '../../../core-ui';
 

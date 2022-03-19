@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import {
-  TouchableOpacity,
-  View,
-  FlatList,
-  TouchableWithoutFeedback,
-  Platform,
   Animated,
+  FlatList,
+  Platform,
   StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import { Menu, IconButton } from 'react-native-paper';
+import { IconButton, Menu } from 'react-native-paper';
+
 import { useQuery } from '@apollo/react-hooks';
 
 import { COLORS } from '../constants/colors';
-import { GET_SHOP } from '../graphql/server/shop';
+import { Text } from '../core-ui';
 import { GetShop } from '../generated/server/GetShop';
+import { GET_SHOP } from '../graphql/server/shop';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 
-import { Text } from '../core-ui';
-
 export default function CurrencyPicker() {
-  let [visible, setVisible] = useState<boolean>(false);
+  let [visible, setVisible] = useState(false);
   let { setDefaultCurrency, data: selectedCurrency } = useDefaultCurrency();
   let { data: shopData } = useQuery<GetShop>(GET_SHOP);
 

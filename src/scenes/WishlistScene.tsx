@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { Text } from '../core-ui';
 import { ProductList } from '../components';
+import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
-import { StackNavProp } from '../types/Navigation';
+import { Text } from '../core-ui';
 import { useColumns } from '../helpers/columns';
 import { useGetWishlistData } from '../hooks/api/useWishlist';
-import { COLORS } from '../constants/colors';
+import { StackNavProp } from '../types/Navigation';
 
 export default function WishlistScene() {
   let { navigate } = useNavigation<StackNavProp<'Wishlist'>>();

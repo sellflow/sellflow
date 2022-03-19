@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, FlatListProps } from 'react-native';
+import { FlatList, FlatListProps, View } from 'react-native';
 
 import { Product } from '../types/types';
 

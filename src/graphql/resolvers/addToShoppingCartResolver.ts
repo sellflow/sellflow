@@ -1,9 +1,9 @@
 import { ApolloCache } from 'apollo-cache';
 
+import { AddToShoppingCartVariables } from '../../generated/client/AddToShoppingCart';
+import { GetShoppingCart } from '../../generated/client/GetShoppingCart';
 import { LocalCache } from '../../types/types';
 import { GET_SHOPPING_CART } from '../client/shoppingCartQueries';
-import { GetShoppingCart } from '../../generated/client/GetShoppingCart';
-import { AddToShoppingCartVariables } from '../../generated/client/AddToShoppingCart';
 
 async function addToShoppingCartResolver(
   _: object,

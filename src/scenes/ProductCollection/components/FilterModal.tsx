@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import { ModalBottomSheet, Text } from '../../../core-ui';
-import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
 import { COLORS } from '../../../constants/colors';
-
+import { FONT_FAMILY, FONT_SIZE } from '../../../constants/fonts';
+import { ModalBottomSheet, Text } from '../../../core-ui';
 import PriceSlider, {
   PriceSliderProps,
   PriceSliderRefObject,

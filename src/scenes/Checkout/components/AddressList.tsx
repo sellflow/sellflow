@@ -2,8 +2,8 @@ import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import { Text } from '../../../core-ui';
 import { CheckoutAddress } from '../../../components';
+import { Text } from '../../../core-ui';
 import { AddressItem } from '../../../types/types';
 
 type Props = {

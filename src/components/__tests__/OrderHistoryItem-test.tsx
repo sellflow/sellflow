@@ -1,12 +1,13 @@
 import React from 'react';
 import { render } from 'react-native-testing-library';
+
 import { MockedProvider } from '@apollo/react-testing';
 
-import { orderHistory } from '../../fixtures/OrderHistoryItem';
-import { OrderHistoryItem } from '..';
+import { OrderHistoryItem } from '../';
 import { MOCKED_SHOP } from '../../__mocks__/mockedData';
-import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
 import wait from '../../__mocks__/wait';
+import { orderHistory } from '../../fixtures/OrderHistoryItem';
+import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
 
 test('should render normally', async () => {
   let { getByText } = render(

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { render, act, fireEvent } from 'react-native-testing-library';
+import { act, fireEvent, render } from 'react-native-testing-library';
 
-import { CheckoutAddress } from '..';
+import { CheckoutAddress } from '../';
 import { addressItemData } from '../../fixtures/AddressItemData';
 
 /*
@@ -25,7 +25,7 @@ test('should render normally', () => {
 
 test('should checked the address', () => {
   const App = () => {
-    let [isSelected, setSelected] = useState<boolean>(false);
+    let [isSelected, setSelected] = useState(false);
     return (
       <CheckoutAddress
         onEditPressed={() => {}}
