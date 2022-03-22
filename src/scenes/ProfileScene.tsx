@@ -4,6 +4,7 @@ import { ActivityIndicator } from 'react-native-paper';
 
 import { useNavigation } from '@react-navigation/native';
 
+import { ErrorPage } from '../components';
 import { COLORS } from '../constants/colors';
 import { FONT_FAMILY, FONT_SIZE } from '../constants/fonts';
 import { Avatar, Text } from '../core-ui';
@@ -25,13 +26,19 @@ export default function ProfileScene() {
 
   let {
     data: authenticatedUser,
+    error: getAuthenticatedUserError,
     loading: getAuthenticatedUserLoading,
+    refetch: getAuthenticatedUserRefetch,
   } = useGetAuthenticatedUser();
 
   let { deactivateCustomerToken } = useDeactivateCustomerToken({
     variables: { customerAccessToken: authToken },
     onCompleted: () => onLogout(),
   });
+
+  if (getAuthenticatedUserError) {
+    return <ErrorPage onRetry={getAuthenticatedUserRefetch} />;
+  }
 
   if (getAuthenticatedUserLoading || !authenticatedUser?.authenticatedUser.id) {
     return <ActivityIndicator style={styles.centered} />;

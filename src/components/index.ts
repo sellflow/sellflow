@@ -1,6 +1,7 @@
 import CheckoutAddress from './CheckoutAddress';
 import CountryModal from './CountryModal';
 import CurrencyPicker from './CurrencyPicker';
+import ErrorPage from './ErrorPage';
 import ManageAddress from './ManageAddress';
 import ModalBottomSheetMessage from './ModalBottomSheetMessage';
 import OrderHistoryItem from './OrderHistoryItem';
@@ -11,6 +12,7 @@ import ProductList from './ProductList';
 import SearchModal from './SearchModal';
 
 export {
+  ErrorPage,
   OrderItem,
   OrderHistoryItem,
   ProductItem,

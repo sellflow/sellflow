@@ -4,7 +4,7 @@ import { ActivityIndicator, IconButton } from 'react-native-paper';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { SearchModal } from '../../components';
+import { ErrorPage, SearchModal } from '../../components';
 import { COLORS } from '../../constants/colors';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
@@ -40,6 +40,7 @@ export default function ProductCollectionScene() {
     hasMore,
     refetch,
     isFetchingMore,
+    error,
   } = useCollectionQuery(collectionHandle, first, priceRange);
 
   let { loading: maxPriceLoading } = useGetHighestPrice({
@@ -105,6 +106,7 @@ export default function ProductCollectionScene() {
       });
     }
   };
+
   useEffect(() => {
     setOptions({
       headerRight: () => (
@@ -115,8 +117,21 @@ export default function ProductCollectionScene() {
         />
       ),
     });
-  });
+  }, [setOptions]);
 
+  if (error) {
+    return (
+      <ErrorPage
+        onRetry={() =>
+          refetch('sort', {
+            collectionHandle,
+            first,
+            after: null,
+          })
+        }
+      />
+    );
+  }
   if (loading && !isFetchingMore && maxPriceLoading) {
     return <ActivityIndicator style={[styles.container, styles.center]} />;
   }

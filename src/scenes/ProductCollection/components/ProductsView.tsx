@@ -10,6 +10,7 @@ import { useColumns } from '../../../helpers/columns';
 import { ScreenSize, useDimensions } from '../../../helpers/dimensions';
 import { formatSliderValue } from '../../../helpers/formatSliderValue';
 import { Product } from '../../../types/types';
+
 import FilterModal from './FilterModal';
 import PriceSlider from './PriceSlider';
 import SortModal from './SortModal';

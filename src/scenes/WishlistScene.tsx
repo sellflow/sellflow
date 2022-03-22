@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { ProductList } from '../components';
+import { ErrorPage, ProductList } from '../components';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { Text } from '../core-ui';
@@ -15,7 +15,11 @@ export default function WishlistScene() {
   let { navigate } = useNavigation<StackNavProp<'Wishlist'>>();
   let numColumns = useColumns();
 
-  let { data: wishlistData } = useGetWishlistData();
+  let { data: wishlistData, error, refetch } = useGetWishlistData();
+
+  if (error && !wishlistData?.wishlist.length) {
+    return <ErrorPage onRetry={refetch} />;
+  }
 
   if (!wishlistData || wishlistData.wishlist.length === 0) {
     return (

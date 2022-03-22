@@ -11,7 +11,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { cartPlaceholder } from '../../../assets/images';
-import { OrderItem } from '../../components';
+import { ErrorPage, OrderItem } from '../../components';
 import { COLORS } from '../../constants/colors';
 import { KeyboardAvoidingView, Text, Toast } from '../../core-ui';
 import { CheckoutErrorCode } from '../../generated/server/globalTypes';
@@ -115,7 +115,14 @@ export default function ShoppingCartScene() {
     },
   });
 
-  let { shoppingCartDiscountRemove } = useCheckoutDiscountRemove();
+  let {
+    shoppingCartDiscountRemove,
+    error: discountError,
+  } = useCheckoutDiscountRemove({
+    onError: () => {
+      setFirstLoading(false);
+    },
+  });
 
   let onAddVoucherCode = async () => {
     let result = await shoppingCartDiscountApply({
@@ -202,12 +209,12 @@ export default function ShoppingCartScene() {
     }
   };
 
-  useGetCart({
-    fetchPolicy: 'cache-only',
+  let { refetch, loading: getCartLoading } = useGetCart({
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     onCompleted: async ({ shoppingCart }) => {
-      setCartID(shoppingCart.id);
-      if (shoppingCart.id === '') {
+      setCartID(shoppingCart?.id);
+      if (shoppingCart?.id === '') {
         createCheckout();
       } else {
         shoppingCartItems = shoppingCart.items.map(
@@ -227,6 +234,9 @@ export default function ShoppingCartScene() {
         });
       }
     },
+    onError: () => {
+      setFirstLoading(false);
+    },
   });
 
   let { setShoppingCart } = useSetShoppingCart();
@@ -235,6 +245,7 @@ export default function ShoppingCartScene() {
   let {
     shoppingCartReplaceItems,
     loading: replaceLoading,
+    error,
   } = useCheckoutReplaceItem({
     fetchPolicy: 'no-cache',
     onCompleted: async ({ checkoutLineItemsReplace }) => {
@@ -266,11 +277,18 @@ export default function ShoppingCartScene() {
         setFirstLoading(false);
       }
     },
+    onError: () => {
+      setFirstLoading(false);
+    },
   });
 
   let { shoppingCartCustomerAssociate } = useCheckoutCustomerAssociate();
 
-  let { createCheckout } = useCheckoutCreate({
+  let {
+    createCheckout,
+    error: checkoutCreateError,
+    loading: checkoutCreateLoading,
+  } = useCheckoutCreate({
     variables: {
       checkoutCreateInput: { lineItems: shoppingCartItems },
     },
@@ -285,6 +303,9 @@ export default function ShoppingCartScene() {
         });
         setFirstLoading(false);
       }
+    },
+    onError: () => {
+      setFirstLoading(false);
     },
   });
 
@@ -316,11 +337,27 @@ export default function ShoppingCartScene() {
     />
   );
 
-  if (firstLoading) {
+  if (
+    firstLoading ||
+    getCartLoading ||
+    checkoutCreateLoading ||
+    replaceLoading
+  ) {
     return (
       <SafeAreaView style={styles.centered}>
         <ActivityIndicator />
       </SafeAreaView>
+    );
+  }
+
+  if (error || checkoutCreateError || discountError) {
+    return (
+      <ErrorPage
+        onRetry={() => {
+          refetch();
+          setFirstLoading(true);
+        }}
+      />
     );
   }
 

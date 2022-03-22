@@ -65,7 +65,7 @@ function useCollectionQuery(
 
   let defaultCurrency = useDefaultCurrency().data;
 
-  let { data, loading, refetch: refetchQuery } = useQuery<
+  let { data, error, loading, refetch: refetchQuery } = useQuery<
     GetCollection,
     GetCollectionVariables
   >(GET_COLLECTION, {
@@ -170,6 +170,7 @@ function useCollectionQuery(
 
   return {
     collection,
+    error,
     loading: isReloading,
     hasMore: hasMore.current,
     isFetchingMore: isFetchingMore.current,
@@ -184,7 +185,7 @@ function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
 
-  let { loading, data, refetch: refetchQuery } = useQuery<
+  let { data, error, loading, refetch: refetchQuery } = useQuery<
     GetFeaturedProductsAndCategories,
     GetFeaturedProductsAndCategoriesVariables
   >(GET_FEATURED_PRODUCTS_AND_CATEGORIES, {
@@ -235,6 +236,7 @@ function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
 
   return {
     products,
+    error,
     loading,
     categories,
     refetch,

@@ -4,22 +4,24 @@ import { ActivityIndicator } from 'react-native-paper';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { ProductList, SearchModal } from '../components';
+import { ErrorPage, ProductList, SearchModal } from '../components';
 import { COLORS } from '../constants/colors';
 import { Carousel, CategoryList, SearchInput, Text } from '../core-ui';
 import { carouselData } from '../fixtures/carousel';
 import { useColumns } from '../helpers/columns';
 import { ScreenSize, useDimensions } from '../helpers/dimensions';
+import { useNetwork } from '../helpers/useNetwork';
 import { useProductsAndCategoriesQuery } from '../hooks/api/useCollection';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { StackNavProp } from '../types/Navigation';
-import { Product } from '../types/types';
+import { NetworkStateEnum, Product } from '../types/types';
 
 export default function HomeScene() {
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
   let { screenSize } = useDimensions();
   let numColumns = useColumns();
   let first = numColumns * 6;
+  let { isConnected } = useNetwork();
   let [isSearchModalVisible, setSearchModalVisible] = useState(false);
 
   let {
@@ -34,6 +36,7 @@ export default function HomeScene() {
     refetch,
     hasMore,
     isFetchingMore,
+    error,
   } = useProductsAndCategoriesQuery(selectedCurrency, first);
 
   useEffect(() => {
@@ -47,10 +50,11 @@ export default function HomeScene() {
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { productHandle: product.handle });
   };
-  let onSubmit = (searchKeyword: string) =>
+  let onSubmit = (searchKeyword: string) => {
     navigate('SearchResults', {
       searchKeyword,
     });
+  };
 
   let onProductsEndReached = () => {
     if (!isFetchingMore && hasMore) {
@@ -61,6 +65,20 @@ export default function HomeScene() {
       });
     }
   };
+
+  if (isConnected === NetworkStateEnum.NOT_CONNECTED || error) {
+    return (
+      <ErrorPage
+        onRetry={() =>
+          refetch('update', {
+            presentmentCurrencies: [selectedCurrency],
+            first,
+            after: null,
+          })
+        }
+      />
+    );
+  }
 
   if ((loadingHomeData || loadingCurrency || !products) && !isFetchingMore) {
     return (

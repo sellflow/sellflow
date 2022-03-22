@@ -4,7 +4,7 @@ import { ActivityIndicator } from 'react-native-paper';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { OrderHistoryItem } from '../components';
+import { ErrorPage, OrderHistoryItem } from '../components';
 import { Text } from '../core-ui';
 import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
@@ -18,6 +18,7 @@ export default function OrderHistoryScene() {
   let first = 10;
   let {
     orderHistory,
+    error,
     loading,
     refetch,
     isFetchingMore,
@@ -26,6 +27,20 @@ export default function OrderHistoryScene() {
 
   let { data } = useDefaultCurrency();
 
+  if (error) {
+    return (
+      <ErrorPage
+        onRetry={() =>
+          refetch({
+            customerAccessToken,
+            first,
+            after: orderHistory[orderHistory.length - 1].cursor || null,
+            currencyCode: [data],
+          })
+        }
+      />
+    );
+  }
   if (loading && !isFetchingMore) {
     return <ActivityIndicator style={styles.center} />;
   }

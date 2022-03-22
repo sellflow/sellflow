@@ -10,17 +10,36 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import { successImage } from '../../assets/images';
+import { ErrorPage } from '../components';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { Button, Text } from '../core-ui';
 import { useAuth } from '../helpers/useAuth';
+import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
 
 export default function OrderPlacedConfirmation() {
   let { reset, navigate } = useNavigation();
   let { authToken } = useAuth();
+  let first = 10;
 
-  let { orderHistory, loading } = useOrderHistory(1, authToken);
+  let { orderHistory, loading, error, refetch } = useOrderHistory(1, authToken);
   let orderNumber = orderHistory.length > 0 ? orderHistory[0].orderNumber : '';
+  let { data } = useDefaultCurrency();
+
+  if (error) {
+    return (
+      <ErrorPage
+        onRetry={() =>
+          refetch({
+            customerAccessToken: authToken,
+            first,
+            after: orderHistory[orderHistory.length - 1].cursor || null,
+            currencyCode: [data],
+          })
+        }
+      />
+    );
+  }
 
   return loading ? (
     <ActivityIndicator style={styles.centered} />

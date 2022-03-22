@@ -45,10 +45,13 @@ function useAddToCart(
 }
 
 function useGetCart(options?: QueryHookOptions<GetShoppingCart>) {
-  let { data, loading } = useQuery<GetShoppingCart>(GET_SHOPPING_CART, {
-    ...options,
-  });
-  return { data, loading };
+  let { data, error, loading, refetch } = useQuery<GetShoppingCart>(
+    GET_SHOPPING_CART,
+    {
+      ...options,
+    },
+  );
+  return { data, error, loading, refetch };
 }
 
 function useSetShoppingCartID() {

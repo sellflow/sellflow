@@ -25,7 +25,7 @@ function useGetProductDetails(
     emptyProduct,
   );
 
-  let { loading, data } = useQuery<
+  let { data, error, loading, refetch } = useQuery<
     GetProductByHandle,
     GetProductByHandleVariables
   >(GET_PRODUCT_BY_HANDLE, { ...options });
@@ -128,6 +128,8 @@ function useGetProductDetails(
     getVariant,
     data: productDetails,
     loading: loading || variantLoading,
+    error,
+    refetch,
   };
 }
 

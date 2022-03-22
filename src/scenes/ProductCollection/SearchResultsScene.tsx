@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet } from 'react-native';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { SearchModal } from '../../components';
+import { ErrorPage, SearchModal } from '../../components';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { ProductSortKeys } from '../../generated/server/globalTypes';
 import { useColumns } from '../../helpers/columns';
@@ -14,10 +14,12 @@ import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { Product } from '../../types/types';
 
 import { ProductsView } from './components';
+import { IconButton } from 'react-native-paper';
+import { COLORS } from '../../constants/colors';
 
 export default function SearchResultsScene() {
   let { data: defaultCurrency } = useDefaultCurrency();
-  let { navigate } = useNavigation<StackNavProp<'SearchResults'>>();
+  let { navigate, setOptions } = useNavigation<StackNavProp<'SearchResults'>>();
   let numColumns = useColumns();
   let first = numColumns * 6;
   let [isSearchModalVisible, setSearchModalVisible] = useState(false);
@@ -31,6 +33,7 @@ export default function SearchResultsScene() {
   let { loading: maxPriceLoading } = useGetHighestPrice({
     onCompleted: (value) => {
       setMaxPrice(value);
+      setPriceRange([0, value]);
     },
     skip: maxPriceValue !== 0,
   });
@@ -41,6 +44,8 @@ export default function SearchResultsScene() {
     refetch,
     isFetchingMore,
     hasMore,
+    error,
+    loading,
   } = useSearchProductsQuery();
 
   let getSortKeys = (value: string) => {
@@ -58,33 +63,45 @@ export default function SearchResultsScene() {
   };
 
   useEffect(() => {
-    searchProducts({
-      variables: {
-        first,
-        presentmentCurrencies: [defaultCurrency],
-        searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
-        sortKey: ProductSortKeys.BEST_SELLING,
-      },
+    setOptions({
+      headerRight: () => (
+        <IconButton
+          icon="magnify"
+          onPress={() => setSearchModalVisible(true)}
+          color={COLORS.primaryColor}
+        />
+      ),
     });
-  }, [searchKeyword]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setOptions]);
+
+  useEffect(() => {
+    let { sortKey, reverse } = getSortKeys(radioButtonValue);
+    if (priceRange[1] > 0) {
+      searchProducts({
+        variables: {
+          first,
+          presentmentCurrencies: [defaultCurrency],
+          searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
+          sortKey: sortKey,
+          reverse,
+        },
+      });
+    }
+  }, [
+    defaultCurrency,
+    first,
+    priceRange,
+    radioButtonValue,
+    searchKeyword,
+    searchProducts,
+  ]);
 
   let onClearFilter = () => setPriceRange([0, maxPriceValue]);
   let onSetFilter = (values: Array<number>) => {
     setPriceRange(values);
-    refetch('update', {
-      first,
-      searchText: `${searchKeyword} variants.price:>=${values[0]} variants.price:<=${values[1]}`,
-    });
   };
   let onPressRadioButton = (newValue: string) => {
     setRadioButtonValue(newValue);
-    let { sortKey, reverse } = getSortKeys(newValue);
-    refetch('update', {
-      first,
-      searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
-      sortKey,
-      reverse,
-    });
   };
   let onSubmit = (searchKeyword: string) =>
     navigate('SearchResults', {
@@ -104,7 +121,20 @@ export default function SearchResultsScene() {
     }
   };
 
-  if (!isFetchingMore && maxPriceLoading) {
+  if (error) {
+    return (
+      <ErrorPage
+        onRetry={() =>
+          refetch('update', {
+            first,
+            searchText: `${searchKeyword}`,
+          })
+        }
+      />
+    );
+  }
+
+  if (isFetchingMore || maxPriceLoading || loading) {
     return <ActivityIndicator style={[styles.container, styles.center]} />;
   }
 

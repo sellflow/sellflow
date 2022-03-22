@@ -9,6 +9,7 @@ import {
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+import { ErrorPage } from '../components';
 import { COLORS } from '../constants/colors';
 import {
   defaultButton,
@@ -96,7 +97,11 @@ export default function EditProfileScene() {
     },
   });
 
-  let { loading: getAuthenticatedUserLoading } = useGetAuthenticatedUser({
+  let {
+    loading: getAuthenticatedUserLoading,
+    error,
+    refetch,
+  } = useGetAuthenticatedUser({
     onCompleted({ authenticatedUser }) {
       let { email, firstName, lastName, expiresAt } = authenticatedUser;
       setFirstName(firstName);
@@ -105,6 +110,10 @@ export default function EditProfileScene() {
       setExpiresAt(expiresAt);
     },
   });
+
+  if (error) {
+    return <ErrorPage onRetry={refetch} />;
+  }
 
   if (getAuthenticatedUserLoading) {
     return <ActivityIndicator style={styles.centered} />;

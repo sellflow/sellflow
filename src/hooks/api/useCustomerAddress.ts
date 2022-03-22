@@ -89,12 +89,12 @@ function useCustomerSetDefaultAddress(
 }
 
 function useGetShop(options?: QueryHookOptions<GetShop>) {
-  let { data, loading } = useQuery<GetShop>(GET_SHOP, {
+  let { data, error, loading, refetch } = useQuery<GetShop>(GET_SHOP, {
     ...options,
     fetchPolicy: 'no-cache',
   });
 
-  return { data, loading };
+  return { data, error, loading, refetch };
 }
 
 export {

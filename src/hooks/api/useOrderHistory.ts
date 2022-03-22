@@ -89,7 +89,7 @@ function useOrderHistory(
   let hasMore = useRef<boolean>(true);
   let { data: currencyCode } = useDefaultCurrency();
 
-  let { data, loading, refetch: refetchQuery } = useQuery<
+  let { data, error, loading, refetch: refetchQuery } = useQuery<
     GetOrderHistory,
     GetOrderHistoryVariables
   >(GET_ORDER_HISTORY, {
@@ -126,6 +126,7 @@ function useOrderHistory(
 
   return {
     orderHistory,
+    error,
     loading,
     refetch,
     isFetchingMore: isFetchingMore.current,

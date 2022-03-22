@@ -153,7 +153,7 @@ function useGetCustomerAddresses(
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
 
-  let { data, loading, refetch: refetchQuery } = useQuery<
+  let { data, error, loading, refetch: refetchQuery } = useQuery<
     GetCustomerAddresses,
     GetCustomerAddressesVariables
   >(GET_CUSTOMER_ADDRESSES, {
@@ -196,6 +196,7 @@ function useGetCustomerAddresses(
 
   return {
     addresses,
+    error,
     loading,
     hasMore: hasMore.current,
     isFetchingMore: isFetchingMore.current,

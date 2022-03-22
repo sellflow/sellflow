@@ -12,6 +12,7 @@ import {
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Provider as AuthProvider } from '../src/helpers/useAuth';
+import { Provider as NetworkProvider } from '../src/helpers/useNetwork';
 
 import { CustomTheme } from './constants/theme';
 import { client } from './graphql/client';
@@ -33,9 +34,11 @@ function App() {
     <ApolloProvider client={client}>
       <StatusBar barStyle="dark-content" />
       <ThemeProvider theme={CustomTheme}>
-        <AuthProvider>
-          <AppNavigator />
-        </AuthProvider>
+        <NetworkProvider>
+          <AuthProvider>
+            <AppNavigator />
+          </AuthProvider>
+        </NetworkProvider>
       </ThemeProvider>
     </ApolloProvider>
   );

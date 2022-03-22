@@ -9,7 +9,7 @@ import {
 } from '@react-navigation/native';
 
 import { emptyAddressImage } from '../../../assets/images';
-import { ManageAddress } from '../../components';
+import { ErrorPage, ManageAddress } from '../../components';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
 import { Button, Text } from '../../core-ui';
 import { ScreenSize, useDimensions } from '../../helpers/dimensions';
@@ -35,6 +35,7 @@ export default function AddressManagementScene() {
 
   let {
     addresses,
+    error,
     loading: loadingAddresses,
     hasMore,
     isFetchingMore,
@@ -108,6 +109,20 @@ export default function AddressManagementScene() {
       });
     }
   };
+
+  if (error) {
+    return (
+      <ErrorPage
+        onRetry={() => {
+          refetchAddresses('update', {
+            first,
+            customerAccessToken,
+            after: null,
+          });
+        }}
+      />
+    );
+  }
 
   let loading =
     loadingAddresses || loadingDeleteAddress || loadingSetDefaultAddress;

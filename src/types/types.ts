@@ -150,3 +150,11 @@ export type TabRoute = {
   title: string;
   scene: Scene;
 };
+
+export enum NetworkStateEnum {
+  CONNECTED = 'connected',
+  CONNECTING = 'connecting',
+  NOT_CONNECTED = 'notConnected',
+}
+
+export type NetworkState = NetworkStateEnum;

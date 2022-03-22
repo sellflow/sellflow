@@ -219,9 +219,6 @@ export default function StackNavigator() {
         component={SearchResultsScene}
         options={() => ({
           title: t('Search Results'),
-          headerRight: () => (
-            <HeaderIconButton icon="magnify" onPress={() => {}} />
-          ),
         })}
       />
       <Stack.Screen

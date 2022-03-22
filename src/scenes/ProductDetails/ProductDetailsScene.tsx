@@ -4,6 +4,7 @@ import { ActivityIndicator } from 'react-native-paper';
 
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 
+import { ErrorPage } from '../../components';
 import { COLORS } from '../../constants/colors';
 import { KeyboardAvoidingView, Toast } from '../../core-ui';
 import { ScreenSize, useDimensions } from '../../helpers/dimensions';
@@ -170,6 +171,8 @@ export default function ProductDetailsScene() {
     getVariant,
     data: productDetails,
     loading: getProductDetailsLoading,
+    error: getProductDetailsError,
+    refetch: getProductDetailsRefetch,
   } = useGetProductDetails({
     variables: { productHandle, presentmentCurrencies: [currencyCode] },
     fetchPolicy: 'network-only',
@@ -212,6 +215,10 @@ export default function ProductDetailsScene() {
 
   let { screenSize } = useDimensions();
   let isLandscape = screenSize === ScreenSize.Large;
+
+  if (getProductDetailsError) {
+    return <ErrorPage onRetry={getProductDetailsRefetch} />;
+  }
 
   return isFirstLoading ? (
     <ActivityIndicator style={styles.centered} />

@@ -53,11 +53,15 @@ function useCheckoutReplaceItem(
 function useCheckoutCreate(
   options: MutationHookOptions<ShoppingCartCreate, ShoppingCartCreateVariables>,
 ) {
-  let [createCheckout, { loading }] = useMutation<
+  let [createCheckout, { loading, error }] = useMutation<
     ShoppingCartCreate,
     ShoppingCartCreateVariables
-  >(SHOPPING_CART_CREATE, { fetchPolicy: 'no-cache', ...options });
-  return { createCheckout, loading };
+  >(SHOPPING_CART_CREATE, {
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    ...options,
+  });
+  return { createCheckout, loading, error };
 }
 
 function useCheckoutUpdateAddress(
@@ -116,7 +120,7 @@ function useCheckoutDiscountRemove(
     ShoppingCartDiscountCodeRemoveVariables
   >,
 ) {
-  let [shoppingCartDiscountRemove, { data, loading }] = useMutation<
+  let [shoppingCartDiscountRemove, { data, loading, error }] = useMutation<
     ShoppingCartDiscountCodeRemove,
     ShoppingCartDiscountCodeRemoveVariables
   >(SHOPPING_CART_DISCOUNT_CODE_REMOVE, {
@@ -127,6 +131,7 @@ function useCheckoutDiscountRemove(
     shoppingCartDiscountRemove,
     data,
     loading,
+    error,
   };
 }
 

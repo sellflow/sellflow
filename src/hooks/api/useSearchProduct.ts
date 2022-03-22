@@ -33,12 +33,12 @@ function useSearchProductsQuery() {
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
 
-  let [searchProducts, { data, loading, refetch: refetchQuery }] = useLazyQuery<
-    SearchResults,
-    SearchResultsVariables
-  >(SEARCH_RESULTS, {
+  let [
+    searchProducts,
+    { data, loading, refetch: refetchQuery, error },
+  ] = useLazyQuery<SearchResults, SearchResultsVariables>(SEARCH_RESULTS, {
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'network-only',
   });
 
   let refetch = async (
@@ -78,12 +78,13 @@ function useSearchProductsQuery() {
     refetch,
     isFetchingMore: isFetchingMore.current,
     hasMore: hasMore.current,
+    error,
   };
 }
 
 function useGetRecentSearch() {
-  let { data, loading, refetch } = useQuery(GET_RECENT_SEARCH);
-  return { data, loading, refetch };
+  let { data, error, loading, refetch } = useQuery(GET_RECENT_SEARCH);
+  return { data, error, loading, refetch };
 }
 
 function useSetRecentSearch() {

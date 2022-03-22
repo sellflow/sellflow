@@ -8,7 +8,11 @@ import {
   useRoute,
 } from '@react-navigation/native';
 
-import { ModalBottomSheetMessage, PaymentDetails } from '../../components';
+import {
+  ErrorPage,
+  ModalBottomSheetMessage,
+  PaymentDetails,
+} from '../../components';
 import { COLORS } from '../../constants/colors';
 import { emptyAddress } from '../../constants/defaultValues';
 import { defaultButton, defaultButtonLabel } from '../../constants/theme';
@@ -29,7 +33,6 @@ import {
   PaymentDetailsProps,
   PaymentInfo,
 } from '../../types/types';
-
 import { AddressList, ShippingAddressForm } from './components';
 
 export default function CheckoutScene() {
@@ -79,6 +82,7 @@ export default function CheckoutScene() {
 
   let {
     addresses,
+    error,
     refetch: refetchAddresses,
     hasMore,
     isFetchingMore,
@@ -181,6 +185,16 @@ export default function CheckoutScene() {
       !address.phone ||
       !address.province ||
       !address.zip;
+
+  if (error) {
+    return (
+      <ErrorPage
+        onRetry={() => {
+          refetchAddresses('update', { first, customerAccessToken: authToken });
+        }}
+      />
+    );
+  }
 
   let renderShippingAddress = () => {
     if (authToken) {

@@ -37,7 +37,7 @@ function useSetAuthenticatedUser(
 function useGetAuthenticatedUser(
   options?: QueryHookOptions<GetAuthenticatedUser>,
 ) {
-  let { loading, data } = useQuery<GetAuthenticatedUser>(
+  let { data, error, loading, refetch } = useQuery<GetAuthenticatedUser>(
     GET_AUTHENTICATED_USER,
     {
       fetchPolicy: 'cache-only',
@@ -45,7 +45,7 @@ function useGetAuthenticatedUser(
       ...options,
     },
   );
-  return { data, loading };
+  return { data, error, loading, refetch };
 }
 
 function useForgotPasswordMutation(
