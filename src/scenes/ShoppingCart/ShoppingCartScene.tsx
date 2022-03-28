@@ -210,7 +210,7 @@ export default function ShoppingCartScene() {
   };
 
   let { refetch, loading: getCartLoading } = useGetCart({
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     onCompleted: async ({ shoppingCart }) => {
       setCartID(shoppingCart?.id);
@@ -245,7 +245,7 @@ export default function ShoppingCartScene() {
   let {
     shoppingCartReplaceItems,
     loading: replaceLoading,
-    error,
+    error: replaceError,
   } = useCheckoutReplaceItem({
     fetchPolicy: 'no-cache',
     onCompleted: async ({ checkoutLineItemsReplace }) => {
@@ -350,7 +350,7 @@ export default function ShoppingCartScene() {
     );
   }
 
-  if (error || checkoutCreateError || discountError) {
+  if (checkoutCreateError || discountError || replaceError) {
     return (
       <ErrorPage
         onRetry={() => {
