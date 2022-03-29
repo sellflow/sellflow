@@ -81,6 +81,7 @@ export const SEARCH_RESULTS = gql`
           variants(first: 1) {
             edges {
               node {
+                id
                 quantityAvailable
                 presentmentPrices(
                   first: 1
