@@ -7,7 +7,7 @@ import { OrderHistoryItem } from '../';
 import { MOCKED_SHOP } from '../../__mocks__/mockedData';
 import wait from '../../__mocks__/wait';
 import { orderHistory } from '../../fixtures/OrderHistoryItem';
-import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
+import { setDefaultCountryResolver } from '../../graphql/resolvers/setDefaultCountryResolver';
 
 test('should render normally', async () => {
   let { getByText } = render(
@@ -16,7 +16,7 @@ test('should render normally', async () => {
       addTypename={false}
       resolvers={{
         Mutation: {
-          setDefaultCurrency: setDefaultCurrencyResolver,
+          setDefaultCountry: setDefaultCountryResolver,
         },
       }}
     >

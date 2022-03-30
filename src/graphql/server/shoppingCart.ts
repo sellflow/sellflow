@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 export const SHOPPING_CART_CREATE = gql`
   mutation ShoppingCartCreate(
     $checkoutCreateInput: CheckoutCreateInput!
-    $currencyCode: [CurrencyCode!]
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     checkoutCreate(input: $checkoutCreateInput) {
       checkoutUserErrors {
         message
@@ -36,22 +36,13 @@ export const SHOPPING_CART_CREATE = gql`
               variant {
                 id
                 quantityAvailable
-                presentmentPrices(
-                  first: 1
-                  presentmentCurrencies: $currencyCode
-                ) {
-                  edges {
-                    node {
-                      compareAtPrice {
-                        amount
-                        currencyCode
-                      }
-                      price {
-                        amount
-                        currencyCode
-                      }
-                    }
-                  }
+                compareAtPriceV2 {
+                  amount
+                  currencyCode
+                }
+                priceV2 {
+                  amount
+                  currencyCode
                 }
                 selectedOptions {
                   name
@@ -74,8 +65,8 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
   mutation ShoppingCartReplaceItem(
     $lineItems: [CheckoutLineItemInput!]!
     $checkoutID: ID!
-    $currencyCode: [CurrencyCode!]
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     checkoutLineItemsReplace(lineItems: $lineItems, checkoutId: $checkoutID) {
       checkout {
         lineItemsSubtotalPrice {
@@ -104,22 +95,13 @@ export const SHOPPING_CART_REPLACE_ITEMS = gql`
               variant {
                 id
                 quantityAvailable
-                presentmentPrices(
-                  first: 1
-                  presentmentCurrencies: $currencyCode
-                ) {
-                  edges {
-                    node {
-                      compareAtPrice {
-                        amount
-                        currencyCode
-                      }
-                      price {
-                        amount
-                        currencyCode
-                      }
-                    }
-                  }
+                compareAtPriceV2 {
+                  amount
+                  currencyCode
+                }
+                priceV2 {
+                  amount
+                  currencyCode
                 }
                 selectedOptions {
                   name
@@ -228,8 +210,8 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
   mutation ShoppingCartDiscountCodeApply(
     $checkoutId: ID!
     $discountCode: String!
-    $currencyCode: [CurrencyCode!]
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     checkoutDiscountCodeApplyV2(
       checkoutId: $checkoutId
       discountCode: $discountCode
@@ -268,22 +250,13 @@ export const SHOPPING_CART_DISCOUNT_CODE_APPLY = gql`
               variant {
                 quantityAvailable
                 id
-                presentmentPrices(
-                  first: 1
-                  presentmentCurrencies: $currencyCode
-                ) {
-                  edges {
-                    node {
-                      compareAtPrice {
-                        amount
-                        currencyCode
-                      }
-                      price {
-                        amount
-                        currencyCode
-                      }
-                    }
-                  }
+                compareAtPriceV2 {
+                  amount
+                  currencyCode
+                }
+                priceV2 {
+                  amount
+                  currencyCode
                 }
                 selectedOptions {
                   name

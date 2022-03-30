@@ -1,6 +1,6 @@
 import CheckoutAddress from './CheckoutAddress';
 import CountryModal from './CountryModal';
-import CurrencyPicker from './CurrencyPicker';
+import LocalizationPicker from './LocalizationPicker';
 import ErrorPage from './ErrorPage';
 import ManageAddress from './ManageAddress';
 import ModalBottomSheetMessage from './ModalBottomSheetMessage';
@@ -20,7 +20,7 @@ export {
   ManageAddress,
   ProductList,
   SearchModal,
-  CurrencyPicker,
+  LocalizationPicker,
   CountryModal,
   ModalBottomSheetMessage,
   PaymentDetails,

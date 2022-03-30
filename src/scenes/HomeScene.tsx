@@ -12,9 +12,9 @@ import { useColumns } from '../helpers/columns';
 import { ScreenSize, useDimensions } from '../helpers/dimensions';
 import { useNetwork } from '../helpers/useNetwork';
 import { useProductsAndCategoriesQuery } from '../hooks/api/useCollection';
-import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { StackNavProp } from '../types/Navigation';
 import { NetworkStateEnum, Product } from '../types/types';
+import useDefaultCountry from '../hooks/api/useDefaultCountry';
 
 export default function HomeScene() {
   let { navigate } = useNavigation<StackNavProp<'Home'>>();
@@ -25,9 +25,9 @@ export default function HomeScene() {
   let [isSearchModalVisible, setSearchModalVisible] = useState(false);
 
   let {
-    loading: loadingCurrency,
-    data: selectedCurrency,
-  } = useDefaultCurrency();
+    data: { countryCode },
+    loading: loadingCountryCode,
+  } = useDefaultCountry();
 
   let {
     loading: loadingHomeData,
@@ -37,15 +37,15 @@ export default function HomeScene() {
     hasMore,
     isFetchingMore,
     error,
-  } = useProductsAndCategoriesQuery(selectedCurrency, first);
+  } = useProductsAndCategoriesQuery(first);
 
   useEffect(() => {
     refetch('update', {
-      presentmentCurrencies: [selectedCurrency],
       first,
       after: null,
+      country: countryCode,
     });
-  }, [selectedCurrency]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [countryCode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let onItemPress = (product: Product) => {
     navigate('ProductDetails', { productHandle: product.handle });
@@ -59,9 +59,9 @@ export default function HomeScene() {
   let onProductsEndReached = () => {
     if (!isFetchingMore && hasMore) {
       refetch('scroll', {
-        presentmentCurrencies: [selectedCurrency],
         first,
         after: products[products.length - 1].cursor || null,
+        country: countryCode,
       });
     }
   };
@@ -71,16 +71,16 @@ export default function HomeScene() {
       <ErrorPage
         onRetry={() =>
           refetch('update', {
-            presentmentCurrencies: [selectedCurrency],
             first,
             after: null,
+            country: countryCode,
           })
         }
       />
     );
   }
 
-  if ((loadingHomeData || loadingCurrency || !products) && !isFetchingMore) {
+  if ((loadingHomeData || loadingCountryCode || !products) && !isFetchingMore) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator />

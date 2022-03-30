@@ -15,6 +15,7 @@ import { StackNavProp, StackRouteProp } from '../../types/Navigation';
 import { Product } from '../../types/types';
 
 import { ProductsView } from './components';
+import useDefaultCountry from '../../hooks/api/useDefaultCountry';
 
 export default function ProductCollectionScene() {
   let { navigate, setOptions } = useNavigation<
@@ -33,6 +34,9 @@ export default function ProductCollectionScene() {
   const collectionHandle = handle;
   let numColumns = useColumns();
   let first = numColumns * 6;
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
 
   let {
     collection,
@@ -60,6 +64,7 @@ export default function ProductCollectionScene() {
         collectionHandle,
         first,
         after: null,
+        country: countryCode,
       },
       values,
     );
@@ -73,6 +78,7 @@ export default function ProductCollectionScene() {
       after: null,
       sortKey,
       reverse,
+      country: countryCode,
     });
   };
   let getSortKeys = (value: string) => {
@@ -103,6 +109,7 @@ export default function ProductCollectionScene() {
         collectionHandle,
         first,
         after: collection[collection.length - 1].cursor || null,
+        country: countryCode,
       });
     }
   };
@@ -127,6 +134,7 @@ export default function ProductCollectionScene() {
             collectionHandle,
             first,
             after: null,
+            country: countryCode,
           })
         }
       />

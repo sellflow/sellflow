@@ -14,8 +14,8 @@ import { ErrorPage } from '../components';
 import { defaultButton, defaultButtonLabel } from '../constants/theme';
 import { Button, Text } from '../core-ui';
 import { useAuth } from '../helpers/useAuth';
-import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
+import useDefaultCountry from '../hooks/api/useDefaultCountry';
 
 export default function OrderPlacedConfirmation() {
   let { reset, navigate } = useNavigation();
@@ -24,7 +24,9 @@ export default function OrderPlacedConfirmation() {
 
   let { orderHistory, loading, error, refetch } = useOrderHistory(1, authToken);
   let orderNumber = orderHistory.length > 0 ? orderHistory[0].orderNumber : '';
-  let { data } = useDefaultCurrency();
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
 
   if (error) {
     return (
@@ -34,7 +36,7 @@ export default function OrderPlacedConfirmation() {
             customerAccessToken: authToken,
             first,
             after: orderHistory[orderHistory.length - 1].cursor || null,
-            currencyCode: [data],
+            country: countryCode,
           })
         }
       />

@@ -1,4 +1,4 @@
-import { GET_DEFAULT_CURRENCY } from '../graphql/client/clientQueries';
+import { GET_DEFAULT_COUNTRY } from '../graphql/client/clientQueries';
 import { GET_SHOP } from '../graphql/server/shop';
 
 export const MOCKED_SHOP = [
@@ -37,12 +37,14 @@ export const MOCKED_SHOP = [
   },
   {
     request: {
-      query: GET_DEFAULT_CURRENCY,
+      query: GET_DEFAULT_COUNTRY,
     },
     result: {
       data: {
-        defaultCurrency: {
-          currency: 'USD',
+        defaultCountry: {
+          countryCode: 'US',
+          currencyCode: 'USD',
+          currencySymbol: '$',
         },
       },
     },

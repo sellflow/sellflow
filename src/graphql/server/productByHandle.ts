@@ -1,10 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_PRODUCT_BY_HANDLE = gql`
-  query GetProductByHandle(
-    $productHandle: String!
-    $presentmentCurrencies: [CurrencyCode!]
-  ) {
+  query GetProductByHandle($productHandle: String!, $country: CountryCode!)
+    @inContext(country: $country) {
     productByHandle(handle: $productHandle) {
       id
       title
@@ -31,22 +29,13 @@ export const GET_PRODUCT_BY_HANDLE = gql`
           node {
             id
             quantityAvailable
-            presentmentPrices(
-              first: 1
-              presentmentCurrencies: $presentmentCurrencies
-            ) {
-              edges {
-                node {
-                  compareAtPrice {
-                    amount
-                    currencyCode
-                  }
-                  price {
-                    amount
-                    currencyCode
-                  }
-                }
-              }
+            compareAtPriceV2 {
+              amount
+              currencyCode
+            }
+            priceV2 {
+              amount
+              currencyCode
             }
           }
         }
@@ -59,30 +48,21 @@ export const GET_PRODUCT_VARIANT = gql`
   query GetProductVariant(
     $selectedOptions: [SelectedOptionInput!]!
     $handle: String!
-    $presentmentCurrencies: [CurrencyCode!]
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     productByHandle(handle: $handle) {
       id
       variantBySelectedOptions(selectedOptions: $selectedOptions) {
         id
         availableForSale
         quantityAvailable
-        presentmentPrices(
-          first: 1
-          presentmentCurrencies: $presentmentCurrencies
-        ) {
-          edges {
-            node {
-              compareAtPrice {
-                amount
-                currencyCode
-              }
-              price {
-                amount
-                currencyCode
-              }
-            }
-          }
+        compareAtPriceV2 {
+          amount
+          currencyCode
+        }
+        priceV2 {
+          amount
+          currencyCode
         }
       }
     }

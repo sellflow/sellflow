@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react-native';
 import { MOCKED_SHOP } from '../../../__mocks__/mockedData';
 import { OrderItem } from '../../../components';
 import { OrderData } from '../../../fixtures/OrderItemData';
-import { setDefaultCurrencyResolver } from '../../../graphql/resolvers/setDefaultCurrencyResolver';
+import { setDefaultCountryResolver } from '../../../graphql/resolvers/setDefaultCountryResolver';
 
 export default function orderItemStory() {
   return storiesOf('OrderItem', module).add('OrderItem', () => (
@@ -16,7 +16,7 @@ export default function orderItemStory() {
       addTypename={false}
       resolvers={{
         Mutation: {
-          setDefaultCurrency: setDefaultCurrencyResolver,
+          setDefaultCountry: setDefaultCountryResolver,
         },
       }}
     >

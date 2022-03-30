@@ -5,7 +5,7 @@ import { IconButton } from 'react-native-paper';
 import { getFocusedRouteNameFromRoute, Route } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { CurrencyPicker } from '../components';
+import { LocalizationPicker } from '../components';
 import { COLORS } from '../constants/colors';
 import { headerOptions } from '../constants/theme';
 import { Text } from '../core-ui';
@@ -94,7 +94,7 @@ export default function StackNavigator() {
                 authToken && userData?.authenticatedUser.firstName
                   ? `${t('Hello')}, ${userData.authenticatedUser.firstName}`
                   : t('Hello'),
-              headerLeft: () => <CurrencyPicker />,
+              headerLeft: () => <LocalizationPicker />,
               headerRight: () => (
                 <HeaderIconButton
                   icon="cart"

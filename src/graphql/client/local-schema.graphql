@@ -59,8 +59,10 @@ type ProductDetail {
   image: String!
 }
 
-type DefaultCurrency {
-  currency: String!
+type DefaultCountry {
+  countryCode: String!
+  currencyCode: String!
+  currencySymbol: String!
 }
 
 type Query {
@@ -68,7 +70,7 @@ type Query {
   wishlist: [WishlistProduct!]!
   shoppingCart: ShoppingCart!
   recentSearch: [SearchDetail!]!
-  defaultCurrency: DefaultCurrency!
+  defaultCountry: DefaultCountry!
 }
 
 type Mutation {
@@ -80,5 +82,5 @@ type Mutation {
   setShoppingCartID(id: String!): ShoppingCart!
   setRecentSearch(search: String!): [SearchDetail]!
   setShoppingCart(items: [LineItemInput!]!, id: String!): ShoppingCart!
-  setDefaultCurrency(currency: String!): DefaultCurrency!
+  setDefaultCountry(countryCode: String!): DefaultCountry!
 }

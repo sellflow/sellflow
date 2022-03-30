@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react-native';
 import { MOCKED_SHOP } from '../../../__mocks__/mockedData';
 import { ProductList } from '../../../components';
 import { wishlist } from '../../../fixtures/wishlist';
-import { setDefaultCurrencyResolver } from '../../../graphql/resolvers/setDefaultCurrencyResolver';
+import { setDefaultCountryResolver } from '../../../graphql/resolvers/setDefaultCountryResolver';
 import { useColumns } from '../../../helpers/columns';
 
 function ProductListStory() {
@@ -18,7 +18,7 @@ function ProductListStory() {
       addTypename={false}
       resolvers={{
         Mutation: {
-          setDefaultCurrency: setDefaultCurrencyResolver,
+          setDefaultCountry: setDefaultCountryResolver,
         },
       }}
     >

@@ -12,6 +12,7 @@ import { ActivityIndicator, IconButton } from 'react-native-paper';
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
 import { SearchInput, Text } from '../core-ui';
+import useDefaultCountry from '../hooks/api/useDefaultCountry';
 import {
   useGetRecentSearch,
   useSearchProductsQuery,
@@ -38,6 +39,9 @@ export default function SearchModal(props: Props) {
   } = useSearchProductsQuery();
   let { data: recentSearch } = useGetRecentSearch();
   let { setRecentSearch } = useSetRecentSearch();
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -53,9 +57,10 @@ export default function SearchModal(props: Props) {
       variables: {
         first: 10,
         searchText: debouncedSearchText,
+        country: countryCode,
       },
     });
-  }, [debouncedSearchText, searchProducts]);
+  }, [countryCode, debouncedSearchText, searchProducts]);
 
   let renderList = (props: {
     recent?: Array<Product>;

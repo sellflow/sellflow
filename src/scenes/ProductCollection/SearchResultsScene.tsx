@@ -7,7 +7,7 @@ import { ErrorPage, SearchModal } from '../../components';
 import { PRODUCT_SORT_VALUES } from '../../constants/values';
 import { ProductSortKeys } from '../../generated/server/globalTypes';
 import { useColumns } from '../../helpers/columns';
-import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
+import useDefaultCountry from '../../hooks/api/useDefaultCountry';
 import { useGetHighestPrice } from '../../hooks/api/useHighestPriceProduct';
 import { useSearchProductsQuery } from '../../hooks/api/useSearchProduct';
 import { StackNavProp, StackRouteProp } from '../../types/Navigation';
@@ -18,7 +18,9 @@ import { IconButton } from 'react-native-paper';
 import { COLORS } from '../../constants/colors';
 
 export default function SearchResultsScene() {
-  let { data: defaultCurrency } = useDefaultCurrency();
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
   let { navigate, setOptions } = useNavigation<StackNavProp<'SearchResults'>>();
   let numColumns = useColumns();
   let first = numColumns * 6;
@@ -80,15 +82,15 @@ export default function SearchResultsScene() {
       searchProducts({
         variables: {
           first,
-          presentmentCurrencies: [defaultCurrency],
           searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
           sortKey: sortKey,
           reverse,
+          country: countryCode,
         },
       });
     }
   }, [
-    defaultCurrency,
+    countryCode,
     first,
     priceRange,
     radioButtonValue,
@@ -117,6 +119,7 @@ export default function SearchResultsScene() {
         searchText: `${searchKeyword} variants.price:>=${priceRange[0]} variants.price:<=${priceRange[1]}`,
         first,
         after: results[results.length - 1].cursor || null,
+        country: countryCode,
       });
     }
   };
@@ -128,6 +131,7 @@ export default function SearchResultsScene() {
           refetch('update', {
             first,
             searchText: `${searchKeyword}`,
+            country: countryCode,
           })
         }
       />

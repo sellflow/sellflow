@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react-native';
 import { MOCKED_SHOP } from '../../../__mocks__/mockedData';
 import { OrderHistoryItem } from '../../../components';
 import { orderHistory } from '../../../fixtures/OrderHistoryItem';
-import { setDefaultCurrencyResolver } from '../../../graphql/resolvers/setDefaultCurrencyResolver';
+import { setDefaultCountryResolver } from '../../../graphql/resolvers/setDefaultCountryResolver';
 
 export default function orderHistoryItemStory() {
   return storiesOf('Order History Item', module).add(
@@ -19,7 +19,7 @@ export default function orderHistoryItemStory() {
           addTypename={false}
           resolvers={{
             Mutation: {
-              setDefaultCurrency: setDefaultCurrencyResolver,
+              setDefaultCountry: setDefaultCountryResolver,
             },
           }}
         >

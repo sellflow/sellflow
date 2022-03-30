@@ -16,9 +16,9 @@ import { recentSearchResolver } from './resolvers/recentSearchResolver';
 import { removeFromWishlistResolver } from './resolvers/removeFromWishlistResolver';
 import { resetShoppingCartResolver } from './resolvers/resetShoppingCartResolver';
 import { setAuthenticatedUserResolver } from './resolvers/setAuthenticatedUserResolver';
-import { setDefaultCurrencyResolver } from './resolvers/setDefaultCurrencyResolver';
 import { setShoppingCartResolver } from './resolvers/setShoppingCart';
 import { setShoppingCartIDResolver } from './resolvers/setShoppingCartIDResolver';
+import { setDefaultCountryResolver } from './resolvers/setDefaultCountryResolver';
 
 const cache = new InMemoryCache();
 
@@ -60,7 +60,7 @@ function setupApolloClient() {
         setShoppingCartID: setShoppingCartIDResolver,
         resetShoppingCart: resetShoppingCartResolver,
         setRecentSearch: recentSearchResolver,
-        setDefaultCurrency: setDefaultCurrencyResolver,
+        setDefaultCountry: setDefaultCountryResolver,
       },
     },
     cache,

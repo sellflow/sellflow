@@ -7,7 +7,7 @@ import { ProductItem } from '../';
 import { MOCKED_SHOP } from '../../__mocks__/mockedData';
 import wait from '../../__mocks__/wait';
 import { ProductItemData } from '../../fixtures/ProductItemData';
-import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
+import { setDefaultCountryResolver } from '../../graphql/resolvers/setDefaultCountryResolver';
 
 test('should render normally with discount', async () => {
   let { getByText } = render(
@@ -16,7 +16,7 @@ test('should render normally with discount', async () => {
       addTypename={false}
       resolvers={{
         Mutation: {
-          setDefaultCurrency: setDefaultCurrencyResolver,
+          setDefaultCountry: setDefaultCountryResolver,
         },
       }}
     >
@@ -36,7 +36,7 @@ test('should render normally when product is out of stock', async () => {
       addTypename={false}
       resolvers={{
         Mutation: {
-          setDefaultCurrency: setDefaultCurrencyResolver,
+          setDefaultCountry: setDefaultCountryResolver,
         },
       }}
     >

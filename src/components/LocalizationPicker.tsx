@@ -10,22 +10,21 @@ import {
 } from 'react-native';
 import { IconButton, Menu } from 'react-native-paper';
 
-import { useQuery } from '@apollo/react-hooks';
-
 import { COLORS } from '../constants/colors';
 import { Text } from '../core-ui';
-import { GetShop } from '../generated/server/GetShop';
-import { GET_SHOP } from '../graphql/server/shop';
-import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
+import useDefaultCountry from '../hooks/api/useDefaultCountry';
+import useLocalization from '../hooks/api/useLocalization';
 
 export default function CurrencyPicker() {
   let [visible, setVisible] = useState(false);
-  let { setDefaultCurrency, data: selectedCurrency } = useDefaultCurrency();
-  let { data: shopData } = useQuery<GetShop>(GET_SHOP);
+  let {
+    setDefaultCountryCode,
+    data: selectedCountryCode,
+  } = useDefaultCountry();
 
-  let isMultiCurrency =
-    shopData &&
-    shopData.shop.paymentSettings.enabledPresentmentCurrencies.length > 1;
+  let { data } = useLocalization();
+
+  let isMultiCurrency = data && data.localization.availableCountries.length > 1;
 
   let animatedValue = new Animated.Value(0);
 
@@ -46,7 +45,7 @@ export default function CurrencyPicker() {
           anchor={
             <TouchableWithoutFeedback onPress={() => setVisible(true)}>
               <View style={styles.titleContainer}>
-                <Text weight="medium">{selectedCurrency}</Text>
+                <Text weight="medium">{selectedCountryCode.countryCode}</Text>
                 <Animated.View
                   style={{
                     transform: [
@@ -77,27 +76,31 @@ export default function CurrencyPicker() {
           <View style={styles.menuItemContainer}>
             <FlatList
               style={styles.menuListContainer}
-              data={
-                shopData?.shop.paymentSettings.enabledPresentmentCurrencies ||
-                []
-              }
+              data={data?.localization.availableCountries || []}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => {
-                    setDefaultCurrency({ variables: { currency: item } });
+                    let { isoCode, currency } = item;
+                    setDefaultCountryCode({
+                      variables: {
+                        countryCode: isoCode,
+                        currencyCode: currency.isoCode,
+                        currencySymbol: currency.symbol,
+                      },
+                    });
                     setVisible(false);
                   }}
                 >
-                  <Text weight="medium">{item}</Text>
+                  <Text weight="medium">{item.isoCode}</Text>
                 </TouchableOpacity>
               )}
-              keyExtractor={(item) => item}
+              keyExtractor={(item) => item.isoCode}
             />
           </View>
         </Menu>
       ) : (
-        <Text weight="medium">{selectedCurrency}</Text>
+        <Text weight="medium">{selectedCountryCode.countryCode}</Text>
       )}
     </View>
   );

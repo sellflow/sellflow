@@ -6,7 +6,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { OrderItem } from '../';
 import { MOCKED_SHOP } from '../../__mocks__/mockedData';
 import wait from '../../__mocks__/wait';
-import { setDefaultCurrencyResolver } from '../../graphql/resolvers/setDefaultCurrencyResolver';
+import { setDefaultCountryResolver } from '../../graphql/resolvers/setDefaultCountryResolver';
 import { OrderItem as OrderItemType } from '../../types/types';
 
 let initialData: OrderItemType = {
@@ -28,7 +28,7 @@ async function renderComponent() {
       addTypename={false}
       resolvers={{
         Mutation: {
-          setDefaultCurrency: setDefaultCurrencyResolver,
+          setDefaultCountry: setDefaultCountryResolver,
         },
       }}
     >

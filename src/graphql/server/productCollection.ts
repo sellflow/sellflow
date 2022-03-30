@@ -7,8 +7,8 @@ export const GET_COLLECTION = gql`
     $reverse: Boolean
     $first: Int!
     $after: String
-    $presentmentCurrencies: [CurrencyCode!]
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     collectionByHandle(handle: $collectionHandle) {
       id
       title
@@ -30,21 +30,14 @@ export const GET_COLLECTION = gql`
             handle
             availableForSale
             productType
-            presentmentPriceRanges(
-              first: 1
-              presentmentCurrencies: $presentmentCurrencies
-            ) {
-              edges {
-                node {
-                  minVariantPrice {
-                    amount
-                    currencyCode
-                  }
-                  maxVariantPrice {
-                    amount
-                    currencyCode
-                  }
-                }
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+              maxVariantPrice {
+                amount
+                currencyCode
               }
             }
             images(first: 1) {
@@ -62,22 +55,13 @@ export const GET_COLLECTION = gql`
                 node {
                   id
                   quantityAvailable
-                  presentmentPrices(
-                    first: 1
-                    presentmentCurrencies: $presentmentCurrencies
-                  ) {
-                    edges {
-                      node {
-                        compareAtPrice {
-                          amount
-                          currencyCode
-                        }
-                        price {
-                          amount
-                          currencyCode
-                        }
-                      }
-                    }
+                  compareAtPriceV2 {
+                    amount
+                    currencyCode
+                  }
+                  priceV2 {
+                    amount
+                    currencyCode
                   }
                 }
               }

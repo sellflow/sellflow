@@ -21,7 +21,6 @@ import { ShoppingCartReplaceItem_checkoutLineItemsReplace_checkout as CheckoutRe
 import { ScreenSize, useDimensions } from '../../helpers/dimensions';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
 import { useAuth } from '../../helpers/useAuth';
-import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
 import {
   useCheckoutCreate,
   useCheckoutCustomerAssociate,
@@ -43,6 +42,7 @@ import {
 } from '../../types/types';
 
 import { BottomButton, ShoppingCartPayment } from './components';
+import useDefaultCountry from '../../hooks/api/useDefaultCountry';
 
 function extractDataCheckout(
   checkout: CheckoutCreate | CheckoutReplace | CheckoutDiscountApply,
@@ -98,7 +98,9 @@ export default function ShoppingCartScene() {
   let [voucherCode, setVoucherCode] = useState('');
   let [isToastVisible, setIsToastVisible] = useState(false);
   let [isVoucherCodeValid, setIsVoucherCodeValid] = useState(true);
-  let { data } = useDefaultCurrency();
+  let {
+    data: { countryCode, currencyCode },
+  } = useDefaultCountry();
 
   let setVoucherCodeValue = (value: string) => {
     setVoucherCode(value);
@@ -129,7 +131,7 @@ export default function ShoppingCartScene() {
       variables: {
         checkoutId: cartID,
         discountCode: voucherCode,
-        currencyCode: [data],
+        country: countryCode,
       },
     });
 
@@ -177,7 +179,7 @@ export default function ShoppingCartScene() {
       variables: {
         lineItems: shoppingCartItems,
         checkoutID: cartID,
-        currencyCode: [data],
+        country: countryCode,
       },
     });
   };
@@ -195,6 +197,7 @@ export default function ShoppingCartScene() {
       variables: {
         lineItems: shoppingCartItems,
         checkoutID: cartID,
+        country: countryCode,
       },
     });
     setShoppingCart({ variables: { items: shoppingCartItems, id: cartID } });
@@ -229,7 +232,7 @@ export default function ShoppingCartScene() {
           variables: {
             checkoutID: shoppingCart.id,
             lineItems: shoppingCartItems,
-            currencyCode: [data],
+            country: countryCode,
           },
         });
       }
@@ -261,14 +264,13 @@ export default function ShoppingCartScene() {
           },
         );
 
-        if (checkoutLineItemsReplace.checkout.currencyCode !== data) {
+        if (checkoutLineItemsReplace.checkout.currencyCode !== currencyCode) {
           await createCheckout({
             variables: {
               checkoutCreateInput: {
-                presentmentCurrencyCode: data,
                 lineItems: shoppingCartItems,
               },
-              currencyCode: [data],
+              country: countryCode,
             },
           });
           return;
@@ -291,6 +293,7 @@ export default function ShoppingCartScene() {
   } = useCheckoutCreate({
     variables: {
       checkoutCreateInput: { lineItems: shoppingCartItems },
+      country: countryCode,
     },
     onCompleted: async ({ checkoutCreate }) => {
       if (checkoutCreate && checkoutCreate.checkout) {

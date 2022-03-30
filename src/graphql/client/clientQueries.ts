@@ -82,18 +82,30 @@ export const GET_WISHLIST = gql`
   }
 `;
 
-export const GET_DEFAULT_CURRENCY = gql`
-  query GetDefaultCurrency {
-    defaultCurrency @client {
-      currency
+export const GET_DEFAULT_COUNTRY = gql`
+  query GetDefaultCountry {
+    defaultCountry @client {
+      countryCode
+      currencyCode
+      currencySymbol
     }
   }
 `;
 
-export const SET_DEFAULT_CURRENCY = gql`
-  mutation SetDefaultCurrency($currency: String!) {
-    setDefaultCurrency(currency: $currency) @client {
-      currency
+export const SET_DEFAULT_COUNTRY = gql`
+  mutation SetDefaultCountry(
+    $countryCode: String!
+    $currencyCode: String!
+    $currencySymbol: String!
+  ) {
+    setDefaultCountry(
+      countryCode: $countryCode
+      currencyCode: $currencyCode
+      currencySymbol: $currencySymbol
+    ) @client {
+      countryCode
+      currencyCode
+      currencySymbol
     }
   }
 `;

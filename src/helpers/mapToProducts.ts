@@ -22,14 +22,10 @@ export default function mapToProducts(
     let quantityAvailable =
       product.variants.edges[0].node.quantityAvailable ?? 0;
     let originalProductPrice = Number(
-      product.variants.edges[0].node.presentmentPrices.edges[0].node
-        .compareAtPrice?.amount,
+      product.variants.edges[0].node.compareAtPriceV2?.amount,
     );
 
-    let productPrice = Number(
-      product.variants.edges[0].node.presentmentPrices.edges[0].node.price
-        .amount,
-    );
+    let productPrice = Number(product.variants.edges[0].node.priceV2.amount);
 
     let { price, discount } = getDiscount(originalProductPrice, productPrice);
 

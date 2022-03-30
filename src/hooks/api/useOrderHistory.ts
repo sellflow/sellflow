@@ -11,7 +11,7 @@ import { GET_ORDER_HISTORY } from '../../graphql/server/orderHistory';
 import { mapToLineItems } from '../../helpers/mapToLineItems';
 import { AddressItem, OrderRecord } from '../../types/types';
 
-import useDefaultCurrency from './useDefaultCurrency';
+import useDefaultCountry from './useDefaultCountry';
 
 function getOrders(
   customerData: GetOrderHistory | undefined,
@@ -87,7 +87,9 @@ function useOrderHistory(
   let [orderHistory, setOrderHistory] = useState<Array<OrderRecord>>([]);
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
-  let { data: currencyCode } = useDefaultCurrency();
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
 
   let { data, error, loading, refetch: refetchQuery } = useQuery<
     GetOrderHistory,
@@ -96,7 +98,7 @@ function useOrderHistory(
     variables: {
       customerAccessToken,
       first,
-      currencyCode: [currencyCode],
+      country: countryCode,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',

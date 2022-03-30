@@ -1,18 +1,21 @@
 import { useCallback } from 'react';
+import { DECIMAL_CURRENCIES } from '../../constants/decimalCurrencies';
 
-import { CURRENCIES, DEFAULT_CURRENCY } from '../../constants/currencies';
 import formatNumber from '../../helpers/formatNumber';
-import useDefaultCurrency from './useDefaultCurrency';
+import useDefaultCountry from './useDefaultCountry';
 
 export default function useCurrencyFormatter() {
-  let { data: selectedCurrency } = useDefaultCurrency();
+  let { data: selectedCountryCode } = useDefaultCountry();
 
   const formatCurrency = useCallback(
     (value: number) => {
-      let currency = CURRENCIES[selectedCurrency] || DEFAULT_CURRENCY;
-      return currency.symbol + formatNumber(value, currency.decimalDigits);
+      let { currencyCode, currencySymbol } = selectedCountryCode;
+      let decimalDigit = DECIMAL_CURRENCIES[currencyCode] || 2;
+
+      // TODO: Need to find a way to give decimal digits based on country
+      return currencySymbol + formatNumber(value, decimalDigit);
     },
-    [selectedCurrency],
+    [selectedCountryCode],
   );
 
   return formatCurrency;

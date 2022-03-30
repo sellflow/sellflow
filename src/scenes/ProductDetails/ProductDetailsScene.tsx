@@ -10,7 +10,7 @@ import { KeyboardAvoidingView, Toast } from '../../core-ui';
 import { ScreenSize, useDimensions } from '../../helpers/dimensions';
 import { useAuth } from '../../helpers/useAuth';
 import { useGetCustomerData } from '../../hooks/api/useCustomer';
-import useDefaultCurrency from '../../hooks/api/useDefaultCurrency';
+import useDefaultCountry from '../../hooks/api/useDefaultCountry';
 import { useGetProductDetails } from '../../hooks/api/useProduct';
 import {
   useCheckoutCreate,
@@ -49,7 +49,9 @@ export default function ProductDetailsScene() {
   let { authToken } = useAuth();
   let { setShoppingCartID } = useSetShoppingCartID();
   let { shoppingCartCustomerAssociate } = useCheckoutCustomerAssociate();
-  let { data: currencyCode } = useDefaultCurrency();
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
 
   let onPressImage = (index: number) => {
     setIsImageModalVisible(!isImageModalVisible);
@@ -81,8 +83,8 @@ export default function ProductDetailsScene() {
           variables: {
             checkoutCreateInput: {
               lineItems: [],
-              presentmentCurrencyCode: currencyCode,
             },
+            country: countryCode,
           },
         });
       }
@@ -106,8 +108,8 @@ export default function ProductDetailsScene() {
           variables: {
             checkoutCreateInput: {
               lineItems: [],
-              presentmentCurrencyCode: currencyCode,
             },
+            country: countryCode,
           },
         });
       }
@@ -161,6 +163,7 @@ export default function ProductDetailsScene() {
         variables: {
           checkoutID: addToShoppingCart.id,
           lineItems: shoppingCartItems,
+          country: countryCode,
         },
       });
       showToast(11000);
@@ -174,7 +177,10 @@ export default function ProductDetailsScene() {
     error: getProductDetailsError,
     refetch: getProductDetailsRefetch,
   } = useGetProductDetails({
-    variables: { productHandle, presentmentCurrencies: [currencyCode] },
+    variables: {
+      productHandle,
+      country: countryCode,
+    },
     fetchPolicy: 'network-only',
 
     onCompleted(value) {
@@ -192,7 +198,7 @@ export default function ProductDetailsScene() {
       variables: {
         selectedOptions: queryVariantID,
         handle: productHandle,
-        presentmentCurrencies: [currencyCode],
+        country: countryCode,
       },
     });
   }, [selectedOptions, getVariant]); // eslint-disable-line react-hooks/exhaustive-deps

@@ -5,7 +5,7 @@ import {
   GetHighestPriceVariables,
 } from '../../generated/server/GetHighestPrice';
 import { GET_HIGHEST_PRICE } from '../../graphql/server/searchProduct';
-import useDefaultCurrency from './useDefaultCurrency';
+import useDefaultCountry from './useDefaultCountry';
 
 function useGetHighestPrice(
   options: Omit<
@@ -14,18 +14,15 @@ function useGetHighestPrice(
   > & { onCompleted: (value: number) => void },
 ) {
   let { onCompleted, ...otherOptions } = options;
-  let currentCurrency = useDefaultCurrency().data;
+  let { countryCode } = useDefaultCountry().data;
   let { data, error, loading, refetch } = useQuery<GetHighestPrice>(
     GET_HIGHEST_PRICE,
     {
-      variables: { presentmentCurrencies: currentCurrency },
+      variables: { country: countryCode },
       ...otherOptions,
       onCompleted: ({ products }) => {
         let formattedPrice = Math.ceil(
-          Number(
-            products.edges[0].node.presentmentPriceRanges.edges[0].node
-              .maxVariantPrice.amount,
-          ),
+          Number(products.edges[0].node.priceRange.maxVariantPrice.amount),
         );
         onCompleted(formattedPrice);
       },
@@ -33,10 +30,7 @@ function useGetHighestPrice(
   );
 
   let formattedPrice = Math.ceil(
-    Number(
-      data?.products.edges[0].node.presentmentPriceRanges.edges[0].node
-        .maxVariantPrice.amount,
-    ),
+    Number(data?.products.edges[0].node.priceRange.maxVariantPrice.amount),
   );
 
   return { formattedPrice, error, loading, refetch };

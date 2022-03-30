@@ -11,27 +11,23 @@ import {
   GetFeaturedProductsAndCategories,
   GetFeaturedProductsAndCategoriesVariables,
 } from '../../generated/server/GetFeaturedProductsAndCategories';
-import {
-  CurrencyCode,
-  ProductCollectionSortKeys,
-} from '../../generated/server/globalTypes';
+import { ProductCollectionSortKeys } from '../../generated/server/globalTypes';
 import { GET_FEATURED_PRODUCTS_AND_CATEGORIES } from '../../graphql/server/categoriesAndFeaturedProducts';
 import { GET_COLLECTION } from '../../graphql/server/productCollection';
 import mapToProducts from '../../helpers/mapToProducts';
 import { CategoryItem, Product } from '../../types/types';
 
-import useDefaultCurrency from './useDefaultCurrency';
+import useDefaultCountry from './useDefaultCountry';
 
 function filterProducts(
   collectionProducts: CollectionProducts,
   priceRange: Array<number>,
 ) {
   let [minPrice, maxPrice] = priceRange;
-  let productPriceRange =
-    collectionProducts.node.presentmentPriceRanges.edges[0];
+  let { minVariantPrice } = collectionProducts.node.priceRange;
   if (
-    Number(productPriceRange.node.minVariantPrice.amount) <= maxPrice &&
-    Number(productPriceRange.node.minVariantPrice.amount) >= minPrice
+    Number(minVariantPrice.amount) <= maxPrice &&
+    Number(minVariantPrice.amount) >= minPrice
   ) {
     return collectionProducts.node;
   }
@@ -63,7 +59,9 @@ function useCollectionQuery(
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
 
-  let defaultCurrency = useDefaultCurrency().data;
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
 
   let { data, error, loading, refetch: refetchQuery } = useQuery<
     GetCollection,
@@ -73,7 +71,7 @@ function useCollectionQuery(
       collectionHandle,
       first,
       sortKey: ProductCollectionSortKeys.BEST_SELLING,
-      presentmentCurrencies: [defaultCurrency],
+      country: countryCode,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
@@ -92,6 +90,7 @@ function useCollectionQuery(
       first,
       collectionHandle: handle,
       after: cursor,
+      country: countryCode,
     });
 
     let productsData = getProducts(data, filter);
@@ -178,18 +177,24 @@ function useCollectionQuery(
   };
 }
 
-function useProductsAndCategoriesQuery(currency: CurrencyCode, first: number) {
+function useProductsAndCategoriesQuery(first: number) {
   let [categories, setCategories] = useState<Array<CategoryItem>>([]);
   let [products, setProducts] = useState<Array<Product>>([]);
   let [isInitFetching, setInitFetching] = useState(true);
   let isFetchingMore = useRef<boolean>(false);
   let hasMore = useRef<boolean>(true);
 
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
   let { data, error, loading, refetch: refetchQuery } = useQuery<
     GetFeaturedProductsAndCategories,
     GetFeaturedProductsAndCategoriesVariables
   >(GET_FEATURED_PRODUCTS_AND_CATEGORIES, {
-    variables: { first },
+    variables: {
+      first,
+      country: countryCode,
+    },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   });

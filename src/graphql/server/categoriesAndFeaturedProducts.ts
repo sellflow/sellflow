@@ -2,10 +2,10 @@ import gql from 'graphql-tag';
 
 export const GET_FEATURED_PRODUCTS_AND_CATEGORIES = gql`
   query GetFeaturedProductsAndCategories(
-    $presentmentCurrencies: [CurrencyCode!]
     $first: Int!
     $after: String
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     collections(first: 250) {
       edges {
         cursor
@@ -34,21 +34,14 @@ export const GET_FEATURED_PRODUCTS_AND_CATEGORIES = gql`
           handle
           availableForSale
           productType
-          presentmentPriceRanges(
-            first: 1
-            presentmentCurrencies: $presentmentCurrencies
-          ) {
-            edges {
-              node {
-                minVariantPrice {
-                  amount
-                  currencyCode
-                }
-                maxVariantPrice {
-                  amount
-                  currencyCode
-                }
-              }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+            maxVariantPrice {
+              amount
+              currencyCode
             }
           }
           images(first: 1) {
@@ -66,22 +59,13 @@ export const GET_FEATURED_PRODUCTS_AND_CATEGORIES = gql`
               node {
                 id
                 quantityAvailable
-                presentmentPrices(
-                  first: 1
-                  presentmentCurrencies: $presentmentCurrencies
-                ) {
-                  edges {
-                    node {
-                      compareAtPrice {
-                        amount
-                        currencyCode
-                      }
-                      price {
-                        amount
-                        currencyCode
-                      }
-                    }
-                  }
+                compareAtPriceV2 {
+                  amount
+                  currencyCode
+                }
+                priceV2 {
+                  amount
+                  currencyCode
                 }
               }
             }

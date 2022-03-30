@@ -1,21 +1,14 @@
 import gql from 'graphql-tag';
 
 export const GET_HIGHEST_PRICE = gql`
-  query GetHighestPrice($presentmentCurrencies: [CurrencyCode!]) {
+  query GetHighestPrice($country: CountryCode!) @inContext(country: $country) {
     products(first: 1, sortKey: PRICE, reverse: true) {
       edges {
         node {
-          presentmentPriceRanges(
-            first: 1
-            presentmentCurrencies: $presentmentCurrencies
-          ) {
-            edges {
-              node {
-                maxVariantPrice {
-                  amount
-                  currencyCode
-                }
-              }
+          priceRange {
+            maxVariantPrice {
+              amount
+              currencyCode
             }
           }
         }
@@ -26,13 +19,13 @@ export const GET_HIGHEST_PRICE = gql`
 
 export const SEARCH_RESULTS = gql`
   query SearchResults(
-    $presentmentCurrencies: [CurrencyCode!]
     $searchText: String!
     $sortKey: ProductSortKeys
     $reverse: Boolean
     $first: Int!
     $after: String
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     products(
       first: $first
       query: $searchText
@@ -51,21 +44,14 @@ export const SEARCH_RESULTS = gql`
           availableForSale
           productType
           handle
-          presentmentPriceRanges(
-            first: 1
-            presentmentCurrencies: $presentmentCurrencies
-          ) {
-            edges {
-              node {
-                minVariantPrice {
-                  amount
-                  currencyCode
-                }
-                maxVariantPrice {
-                  amount
-                  currencyCode
-                }
-              }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+            maxVariantPrice {
+              amount
+              currencyCode
             }
           }
           images(first: 1) {
@@ -83,22 +69,13 @@ export const SEARCH_RESULTS = gql`
               node {
                 id
                 quantityAvailable
-                presentmentPrices(
-                  first: 1
-                  presentmentCurrencies: $presentmentCurrencies
-                ) {
-                  edges {
-                    node {
-                      compareAtPrice {
-                        amount
-                        currencyCode
-                      }
-                      price {
-                        amount
-                        currencyCode
-                      }
-                    }
-                  }
+                compareAtPriceV2 {
+                  amount
+                  currencyCode
+                }
+                priceV2 {
+                  amount
+                  currencyCode
                 }
               }
             }

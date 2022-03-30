@@ -5,8 +5,8 @@ export const GET_ORDER_HISTORY = gql`
     $customerAccessToken: String!
     $first: Int!
     $after: String
-    $currencyCode: [CurrencyCode!]
-  ) {
+    $country: CountryCode!
+  ) @inContext(country: $country) {
     customer(customerAccessToken: $customerAccessToken) {
       id
       orders(
@@ -58,22 +58,13 @@ export const GET_ORDER_HISTORY = gql`
                   variant {
                     id
                     quantityAvailable
-                    presentmentPrices(
-                      first: 1
-                      presentmentCurrencies: $currencyCode
-                    ) {
-                      edges {
-                        node {
-                          compareAtPrice {
-                            amount
-                            currencyCode
-                          }
-                          price {
-                            amount
-                            currencyCode
-                          }
-                        }
-                      }
+                    compareAtPriceV2 {
+                      amount
+                      currencyCode
+                    }
+                    priceV2 {
+                      amount
+                      currencyCode
                     }
                     selectedOptions {
                       name

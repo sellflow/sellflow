@@ -6,9 +6,9 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { ErrorPage, OrderHistoryItem } from '../components';
 import { Text } from '../core-ui';
-import useDefaultCurrency from '../hooks/api/useDefaultCurrency';
 import { useOrderHistory } from '../hooks/api/useOrderHistory';
 import { StackNavProp, StackRouteProp } from '../types/Navigation';
+import useDefaultCountry from '../hooks/api/useDefaultCountry';
 
 export default function OrderHistoryScene() {
   let { navigate } = useNavigation<StackNavProp<'OrderHistory'>>();
@@ -25,7 +25,9 @@ export default function OrderHistoryScene() {
     hasMore,
   } = useOrderHistory(first, customerAccessToken);
 
-  let { data } = useDefaultCurrency();
+  let {
+    data: { countryCode },
+  } = useDefaultCountry();
 
   if (error) {
     return (
@@ -35,7 +37,7 @@ export default function OrderHistoryScene() {
             customerAccessToken,
             first,
             after: orderHistory[orderHistory.length - 1].cursor || null,
-            currencyCode: [data],
+            country: countryCode,
           })
         }
       />
@@ -51,7 +53,7 @@ export default function OrderHistoryScene() {
         customerAccessToken,
         first,
         after: orderHistory[orderHistory.length - 1].cursor || null,
-        currencyCode: [data],
+        country: countryCode,
       });
     }
   };

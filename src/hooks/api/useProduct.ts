@@ -48,13 +48,11 @@ function useGetProductDetails(
         (item) => item.node.originalSrc,
       );
       let originalProductPrice = Number(
-        productByHandle.variants.edges[0].node.presentmentPrices.edges[0].node
-          .compareAtPrice?.amount,
+        productByHandle.variants.edges[0].node.compareAtPriceV2?.amount,
       );
 
       let productPrice = Number(
-        productByHandle.variants.edges[0].node.presentmentPrices.edges[0].node
-          .price.amount,
+        productByHandle.variants.edges[0].node.priceV2.amount,
       );
 
       let { price, discount } = getDiscount(originalProductPrice, productPrice);
@@ -78,15 +76,15 @@ function useGetProductDetails(
         } else {
           let {
             id,
-            presentmentPrices,
+            compareAtPriceV2,
+            priceV2,
             availableForSale,
             quantityAvailable,
           } = variantProductByHandle.variantBySelectedOptions;
-          let { compareAtPrice, price } = presentmentPrices.edges[0].node;
-          if (compareAtPrice) {
-            let originalPrice = compareAtPrice.amount;
+          if (compareAtPriceV2) {
+            let originalPrice = compareAtPriceV2.amount;
             let discount =
-              (Math.abs(originalPrice - price.amount) / originalPrice) * 100;
+              (Math.abs(originalPrice - priceV2.amount) / originalPrice) * 100;
             setProductDetails({
               ...productDetails,
               price: Number(originalPrice),
@@ -98,7 +96,7 @@ function useGetProductDetails(
           } else {
             setProductDetails({
               ...productDetails,
-              price: Number(price.amount),
+              price: Number(priceV2.amount),
               discount: 0,
               availableForSale,
               id,

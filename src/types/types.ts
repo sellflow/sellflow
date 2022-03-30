@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { GetAuthenticatedUser_authenticatedUser as AuthenticatedUser } from '../generated/client/GetAuthenticatedUser';
 import { GetRecentSearch_recentSearch as RecentSearch } from '../generated/client/GetRecentSearch';
 import { GetShoppingCart_shoppingCart as ShoppingCart } from '../generated/client/GetShoppingCart';
+import { GetDefaultCountry_defaultCountry as DefaultCountry } from '../generated/client/GetDefaultCountry';
 import { GetWishlist_wishlist as Wishlist } from '../generated/client/GetWishlist';
 
 export type CarouselItem = {
@@ -89,7 +90,7 @@ export type LocalData = {
   wishlist: Array<Wishlist>;
   shoppingCart: ShoppingCart;
   recentSearch: Array<RecentSearch>;
-  defaultCurrency: string;
+  defaultCountry: DefaultCountry;
 };
 
 export type LocalCache = {

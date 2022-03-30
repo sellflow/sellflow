@@ -16,5 +16,10 @@ export const initialData: LocalData = {
     items: [],
   },
   recentSearch: [],
-  defaultCurrency: '',
+  defaultCountry: {
+    __typename: 'DefaultCountry',
+    countryCode: '',
+    currencyCode: '',
+    currencySymbol: '',
+  },
 };
