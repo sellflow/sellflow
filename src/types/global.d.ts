@@ -5,6 +5,9 @@ declare global {
 
 declare global {
   namespace ReactNativePaper {
+    interface Theme {
+      isRTL: boolean;
+    }
     interface ThemeFonts {
       bold: ThemeFont;
       italic: ThemeFont;

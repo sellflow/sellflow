@@ -3,12 +3,11 @@ import './polyfills';
 
 import { useFonts } from 'expo-font';
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { I18nManager, StatusBar } from 'react-native';
 import {
   ActivityIndicator,
   Provider as ThemeProvider,
 } from 'react-native-paper';
-
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Provider as AuthProvider } from '../src/helpers/useAuth';
@@ -17,6 +16,8 @@ import { Provider as NetworkProvider } from '../src/helpers/useNetwork';
 import { CustomTheme } from './constants/theme';
 import { client } from './graphql/client';
 import AppNavigator from './navigation/AppNavigator';
+
+I18nManager.forceRTL(CustomTheme.isRTL); // experimental
 
 function App() {
   let [fontsLoaded] = useFonts({

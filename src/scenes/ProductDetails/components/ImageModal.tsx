@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, StyleSheet } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { IconButton } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
 
 import { COLORS } from '../../../constants/colors';
 
@@ -14,11 +14,12 @@ type Props = {
 
 export default function ImageModal(props: Props) {
   let { activeIndex, images, isVisible, setVisible } = props;
+  let { isRTL } = useTheme();
   let imagesUrls = images.map((url) => ({ url }));
 
   let renderHeader = () => (
     <IconButton
-      icon="chevron-left"
+      icon={isRTL ? 'chevron-right' : 'chevron-left'}
       color={COLORS.white}
       size={35}
       onPress={() => setVisible(false)}

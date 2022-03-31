@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ActivityIndicator, IconButton } from 'react-native-paper';
+import { ActivityIndicator, IconButton, useTheme } from 'react-native-paper';
 
 import { COLORS } from '../constants/colors';
 import { FONT_SIZE } from '../constants/fonts';
@@ -31,6 +31,7 @@ export default function SearchModal(props: Props) {
   let [searchText, setSearchText] = useState('');
   let [debouncedSearchText, setDebouncedSearchtext] = useState('');
   let { isVisible, setVisible, onItemPress, onSubmit } = props;
+  let { isRTL } = useTheme();
 
   let {
     searchProducts,
@@ -109,7 +110,7 @@ export default function SearchModal(props: Props) {
         <SafeAreaView style={styles.flex}>
           <View style={styles.searchInputContainer}>
             <IconButton
-              icon="chevron-left"
+              icon={isRTL ? 'chevron-right' : 'chevron-left'}
               style={styles.closeIcon}
               color={COLORS.primaryColor}
               onPress={() => {

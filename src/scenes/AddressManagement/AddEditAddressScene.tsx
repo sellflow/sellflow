@@ -220,7 +220,7 @@ export default function AddEditAddressScene() {
         onPressCountry={onPressCountry}
       />
       <ScrollView
-        style={styles.paddingHorizontal}
+        style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
         <TextInput
@@ -374,10 +374,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  paddingHorizontal: {
-    marginTop: 14,
-    paddingHorizontal: 24,
-  },
   headerRightText: {
     marginRight: 24,
     fontSize: FONT_SIZE.medium,
@@ -390,5 +386,9 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.medium,
     color: COLORS.white,
     textTransform: 'uppercase',
+  },
+  scrollView: {
+    marginTop: 14,
+    marginHorizontal: 24,
   },
 });

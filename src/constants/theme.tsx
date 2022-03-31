@@ -40,6 +40,7 @@ export const CustomTheme: ReactNativePaper.Theme = {
   fonts: DefaultFonts,
   colors: ColorTheme,
   roundness: 2,
+  isRTL: false, // experimental
 };
 
 export const headerOptions: StackNavigationOptions = {
@@ -60,7 +61,7 @@ export const headerOptions: StackNavigationOptions = {
   headerTitleAlign: 'center',
   headerLeft: ({ onPress }) => (
     <IconButton
-      icon="chevron-left"
+      icon={CustomTheme.isRTL ? 'chevron-right' : 'chevron-left'}
       color={COLORS.primaryColor}
       size={24}
       onPress={onPress}

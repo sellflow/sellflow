@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -18,11 +18,12 @@ import { StackNavProp } from '../types/Navigation';
 
 export default function LockScene() {
   let { navigate, setOptions } = useNavigation<StackNavProp<'LockScene'>>();
+  let { isRTL } = useTheme();
   useEffect(() => {
     setOptions({
       headerLeft: () => (
         <IconButton
-          icon="chevron-left"
+          icon={isRTL ? 'chevron-right' : 'chevron-left'}
           color={COLORS.primaryColor}
           size={24}
           onPress={() => navigate('Home')}

@@ -47,7 +47,7 @@ function TextInput(props: Props, ref: Ref<NativeTextInput>) {
     ...otherProps
   } = props;
 
-  let { colors, roundness } = useTheme();
+  let { colors, roundness, isRTL } = useTheme();
 
   let [isFocused, setIsFocused] = useState(false);
 
@@ -165,6 +165,7 @@ function TextInput(props: Props, ref: Ref<NativeTextInput>) {
             { color: disabled ? colors.placeholder : colors.text },
             style,
           ]}
+          textAlign={isRTL ? 'right' : 'left'}
           {...otherProps}
         />
         {isError && showErrorIcon && (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
 
 import { getFocusedRouteNameFromRoute, Route } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -71,6 +71,7 @@ function HeaderIconButton(props: HeaderIconButtonProps) {
 export default function StackNavigator() {
   let { authToken } = useAuth();
   let { data: userData } = useGetAuthenticatedUser();
+  let { isRTL } = useTheme();
 
   function getTabSceneName(route: Pick<Route<string>, 'key' | 'name'>) {
     const routeName = getFocusedRouteNameFromRoute(route) || 'HomeTab';
@@ -121,7 +122,7 @@ export default function StackNavigator() {
                   headerLeft: () =>
                     !authToken && (
                       <HeaderIconButton
-                        icon="chevron-left"
+                        icon={isRTL ? 'chevron-right' : 'chevron-left'}
                         onPress={() => navigation.navigate('HomeTab')}
                       />
                     ),
