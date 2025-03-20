@@ -2,8 +2,9 @@
 <img width="300" alt="Sellflow Logo" src="https://user-images.githubusercontent.com/369384/73599036-f5cfcf00-44f3-11ea-9696-91e9c56b6e49.png">
 </p>
 <h3 align="center">An open-source, pre-built mobile app for your <a href="https://www.shopify.com/plus/solutions/headless-commerce">Headless Shopify app</a>!</h3>
-# Welcome to your Shopify app 🛍️
-A pre-build cross-platform Shopify app.
+
+> [!Warning]
+> This project is currently under development and is not intended for production use.
 
 ## Get started
 Prerequisites:
