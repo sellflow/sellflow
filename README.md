@@ -9,6 +9,9 @@
 ## Get started
 Prerequisites:
 
+> [!Important]
+> Web client requires HTTPS for most of it's function
+
 - Make sure you have [Node.js](https://nodejs.org) installed
 - [Get an API key](https://help.shopify.com/en/api/getting-started/authentication/private-authentication#generate-credentials-from-the-shopify-admin) for the Shopify Storefront API for your Shopify store.
 
