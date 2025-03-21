@@ -10,7 +10,7 @@
 Prerequisites:
 
 > [!Important]
-> Web client requires HTTPS for most of it's function
+> Web client requires HTTPS for most of it's functionality such as user authentication, as well as the car and will not work locally. To test these features locally you must use an API Gateway such as Ngrok or Cloudflare Tunnels and add the domains to your Shopify headless redirect and Javscript Origin URL's. These features will also not work with the Expo Go app.
 
 - Make sure you have [Node.js](https://nodejs.org) installed
 - [Get an API key](https://help.shopify.com/en/api/getting-started/authentication/private-authentication#generate-credentials-from-the-shopify-admin) for the Shopify Storefront API for your Shopify store.
