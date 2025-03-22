@@ -2,8 +2,6 @@ import OrderItem from "@/components/OrderItem";
 import { getOrders } from "@/shopify/order";
 import { refreshUser } from "@/lib/auth";
 import { discovery, getAccessToken, getRefreshToken } from "@/lib/tokens";
-import { Image } from "expo-image";
-import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -71,19 +69,22 @@ export default function Orders() {
   }, []);
   return (
     <View style={styles.Container}>
-      <Text style={{ color: "white" }}>Orders</Text>
       {loading ? (
         typeof orders === "object" && Object.keys(orders).length > 0 ? (
-          <FlatList
-            data={orders.data.customer.orders.edges}
-            style={styles.ListStyle}
-            keyExtractor={(item) => item.node.id}
-            renderItem={({ item }) => (
-              <View style={styles.ItemContainer}>
-                <OrderItem item={item} />
-              </View>
-            )}
-          />
+          <>
+            <Text style={{ color: "white" }}>Orders</Text>
+
+            <FlatList
+              data={orders.data.customer.orders.edges}
+              style={styles.ListStyle}
+              keyExtractor={(item) => item.node.id}
+              renderItem={({ item }) => (
+                <View style={styles.ItemContainer}>
+                  <OrderItem item={item} />
+                </View>
+              )}
+            />
+          </>
         ) : (
           <Text>No orders yet!</Text>
         )

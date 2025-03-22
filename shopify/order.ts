@@ -20,14 +20,11 @@ export const getOrders = async (accessToken: string) =>
                       isPickedUp
                       latestShipmentStatus
                       requiresShipping
-                      trackingInformation {
-                        number
-                        url
-                      }
                       fulfillmentLineItems (first: 1) {
                         edges {
                           node {
                             lineItem {
+                              name
                               image {
                                 url
                               }

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { ClientResponse } from "@shopify/storefront-api-client";
 import { ProductQuery } from "@/types/storefront.generated";
 import { getProductOptions } from "@/shopify/client";
-import Button from "@/components/Button";
 import { getProduct } from "@/shopify/product";
 import { ProductProvider } from "@shopify/hydrogen-react";
 import Product from "@/components/Product";
