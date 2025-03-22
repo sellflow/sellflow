@@ -4,7 +4,7 @@
     "slug": "Sellflow",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/favicon.png",
+    "icon": "./images/favicon.png",
     "scheme": "shop.72278704345.app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
