@@ -1,4 +1,10 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { getProducts } from "@/shopify/product";
 import { GetProductsQuery } from "@/types/storefront.generated";
@@ -28,18 +34,20 @@ export default function Index() {
 
   return (
     <View>
-      <Text style={styles.heading}>Products</Text>
       {products ? (
-        <FlatList
-          data={products?.data?.products.edges}
-          renderItem={({ item }) => (
-            <Product item={item} key={item.node.handle} />
-          )}
-          contentContainerStyle={styles.productContainer}
-          horizontal
-        />
+        <>
+          <Text style={styles.heading}>Products</Text>
+          <FlatList
+            data={products?.data?.products.edges}
+            renderItem={({ item }) => (
+              <Product item={item} key={item.node.handle} />
+            )}
+            contentContainerStyle={styles.productContainer}
+            horizontal
+          />
+        </>
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator color="#fff" />
       )}
     </View>
   );

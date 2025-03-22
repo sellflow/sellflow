@@ -5,7 +5,13 @@ import { discovery, getAccessToken, getRefreshToken } from "@/lib/tokens";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Text, View, StyleSheet } from "react-native";
+import {
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 
 const imageSize = 100;
 
@@ -82,7 +88,7 @@ export default function Orders() {
           <Text>No orders yet!</Text>
         )
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator color="#fff" />
       )}
     </View>
   );

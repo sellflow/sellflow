@@ -1,4 +1,4 @@
-import { ScrollView, Text, StyleSheet } from "react-native";
+import { ScrollView, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ClientResponse } from "@shopify/storefront-api-client";
@@ -46,7 +46,7 @@ export default function Page() {
           <Product search={search} />
         </ProductProvider>
       ) : (
-        <Text style={{ color: "white" }}>Loading...</Text>
+        <ActivityIndicator color="#fff" />
       )}
     </ScrollView>
   );
