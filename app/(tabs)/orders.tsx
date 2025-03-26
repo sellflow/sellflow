@@ -46,16 +46,6 @@ export default function Orders() {
     }
   };
 
-  const getImageURL = (url: string) => {
-    if (url) {
-      const imageUrl = new URL(url);
-      imageUrl.searchParams.append("height", String(imageSize));
-      return imageUrl.toString();
-    }
-
-    return null;
-  };
-
   useEffect(() => {
     const loadOrders = async () => {
       setLoading(true);
