@@ -7,8 +7,8 @@ export const SECURE_AUTH_REFRESH_KEY =
   process.env.EXPO_PUBLIC_AUTH_REFRESH_KEY!;
 
 export const discovery = {
-  authorizationEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT}/authorize`,
-  tokenEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT}/token`,
+  authorizationEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT}/oauth/authorize`,
+  tokenEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT}/oauth/token`,
   revocationEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT}/logout`,
 };
 
