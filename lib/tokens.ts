@@ -7,10 +7,9 @@ export const SECURE_AUTH_REFRESH_KEY =
   process.env.EXPO_PUBLIC_AUTH_REFRESH_KEY!;
 
 export const discovery = {
-  authorizationEndpoint:
-    "https://shopify.com/authentication/72278704345/oauth/authorize",
-  tokenEndpoint: "https://shopify.com/authentication/72278704345/oauth/token",
-  revocationEndpoint: "https://shopify.com/authentication/72278704345/logout",
+  authorizationEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_API_ENDPOINT}/authorize`,
+  tokenEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_API_ENDPOINT}/token`,
+  revocationEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_API_ENDPOINT}/logout`,
 };
 
 export const getAccessToken = async () => {
