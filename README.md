@@ -23,6 +23,7 @@ Prerequisites:
   EXPO_PUBLIC_AUTH_REFRESH_KEY=
   EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT=
   EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_TOKEN=
+  EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_ENDPOINT=
   ```
   All environment variables are prefixed with EXPO_PUBLIC to be available through the expo client this may change in the future. All of these variable names are also subject to change because the naming is terrible.
   - `STORE_TOKEN` is your Storefront Public API Token

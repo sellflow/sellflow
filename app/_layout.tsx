@@ -28,10 +28,6 @@ export default function RootLayout() {
     getUser();
   }, []);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <ShopifyProvider
