@@ -1,14 +1,7 @@
 import { Image } from "expo-image";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import {
-  BuyNowButton,
-  mapSelectedProductOptionToObject,
-  useCart,
-  useProduct,
-} from "@shopify/hydrogen-react";
+import { BuyNowButton, useCart, useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
-import { useEffect } from "react";
-import { SelectedOptionInput } from "@shopify/hydrogen-react/storefront-api-types";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
