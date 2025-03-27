@@ -1,10 +1,17 @@
-import { Image } from "expo-image";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  FlatList,
+} from "react-native";
 import { BuyNowButton, useCart, useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
+import { useRef } from "react";
+import ProductImage from "./ProductImage";
 
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Product({ search }: { search: UnknownOutputParams }) {
   const {
@@ -16,6 +23,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     isOptionInStock,
   } = useProduct();
   const { linesAdd } = useCart();
+  const flatListRef = useRef(null);
 
   const addToCart = () => {
     const merchandise = { merchandiseId: selectedVariant!.id };
@@ -24,95 +32,123 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     }
   };
 
+  const getImageUrl = (url: string) => {
+    if (url) {
+      const imageURL = new URL(url);
+      imageURL.searchParams.append(
+        "height",
+        String(SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH),
+      );
+      return imageURL.toString();
+    }
+    return "";
+  };
+
   return (
-    <View>
-      {product!.media!.edges!.map((media, index) => (
-        <Image
-          key={index}
-          source={{
-            uri: media!.node?.image.url,
-          }}
-          placeholder={{ blurhash }}
-          style={{
-            width: 300,
-            height: 300,
-          }}
-        />
-      ))}
-      <Text style={{ color: "white", fontSize: 48, fontWeight: 600 }}>
-        {product!.title}
-      </Text>
-      <>
-        {options &&
-          options.map(
-            (option, index) =>
-              options.length! > 1 && (
-                <View key={option!.name}>
-                  <Text style={{ color: "white" }}>{option!.name}</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      gap: 8,
-                    }}
-                  >
-                    {option?.values &&
-                      option.values
-                        .sort((a, b) => a - b)
-                        .map((optionVal) => (
-                          <Link
-                            onPress={() =>
-                              setSelectedOption(option.name, optionVal)
-                            }
-                            style={[
-                              styles.Option,
-                              {
-                                color:
-                                  optionVal == selectedOptions[option.name]
-                                    ? "red"
-                                    : "white",
-                              },
-                            ]}
-                            key={optionVal}
-                            href={{
-                              pathname: "/product/[handle]",
-                              params: {
-                                ...search,
-                                handle: product!.handle,
-                                [option?.name]: optionVal,
-                              },
-                            }}
-                          >
-                            {optionVal}
-                          </Link>
-                        ))}
+    <View
+      style={{
+        flexDirection: SCREEN_WIDTH > 640 ? "row" : "column",
+        gap: 64,
+      }}
+    >
+      <FlatList
+        ref={flatListRef}
+        data={product!.media!.edges}
+        renderItem={({ item }) => (
+          <ProductImage url={getImageUrl(item!.node?.image?.url)} />
+        )}
+        keyExtractor={(item) => item.node.image.url}
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH}
+        decelerationRate={"fast"}
+        contentContainerStyle={{
+          width: SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
+        }}
+        horizontal
+        pagingEnabled
+      />
+      <View>
+        <Text style={{ color: "white", fontSize: 48, fontWeight: 600 }}>
+          {product!.title}
+        </Text>
+        <>
+          {options &&
+            options.map(
+              (option, index) =>
+                options.length! > 1 && (
+                  <View key={option!.name}>
+                    <Text style={{ color: "white" }}>{option!.name}</Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "flex-start",
+                        gap: 8,
+                      }}
+                    >
+                      {option?.values &&
+                        option.values
+                          .sort((a, b) => a - b)
+                          .map((optionVal) => (
+                            <Link
+                              onPress={() =>
+                                setSelectedOption(option.name, optionVal)
+                              }
+                              style={[
+                                styles.Option,
+                                {
+                                  backgroundColor:
+                                    optionVal == selectedOptions[option.name]
+                                      ? "black"
+                                      : "white",
+                                  color:
+                                    optionVal == selectedOptions[option.name]
+                                      ? "white"
+                                      : "black",
+                                },
+                              ]}
+                              key={optionVal}
+                              href={{
+                                pathname: "/product/[handle]",
+                                params: {
+                                  ...search,
+                                  handle: product!.handle,
+                                  [option?.name]: optionVal,
+                                },
+                              }}
+                            >
+                              {optionVal}
+                            </Link>
+                          ))}
+                    </View>
                   </View>
-                </View>
-              ),
-          )}
-      </>
-      {selectedVariant?.priceV2?.amount && (
-        <Text style={{ color: "white", fontSize: 24 }}>
-          ${selectedVariant.priceV2.amount}
-        </Text>
-      )}
-      <TouchableOpacity
-        style={styles.AddToCartButton}
-        onPress={() => addToCart()}
-        disabled={!selectedVariant}
-      >
-        <Text style={{ textAlign: "center", fontWeight: 600 }}>
-          Add to Cart
-        </Text>
-      </TouchableOpacity>
-      {selectedVariant?.id && (
-        <BuyNowButton
-          variantId={selectedVariant?.id}
-          style={styles.BuyNowButton}
+                ),
+            )}
+        </>
+        {selectedVariant?.priceV2?.amount && (
+          <Text style={{ color: "white", fontSize: 24 }}>
+            ${selectedVariant.priceV2.amount}
+          </Text>
+        )}
+        <TouchableOpacity
+          style={styles.AddToCartButton}
+          onPress={() => addToCart()}
+          disabled={!selectedVariant}
         >
-          <Text style={{ textAlign: "center", fontWeight: 600 }}>Buy now</Text>
-        </BuyNowButton>
-      )}
+          <Text style={{ textAlign: "center", fontWeight: 600 }}>
+            Add to Cart
+          </Text>
+        </TouchableOpacity>
+        {selectedVariant?.id && (
+          <BuyNowButton
+            variantId={selectedVariant?.id}
+            style={styles.BuyNowButton}
+          >
+            <Text style={{ textAlign: "center", fontWeight: 600 }}>
+              Buy now
+            </Text>
+          </BuyNowButton>
+        )}
+      </View>
     </View>
   );
 }
@@ -120,9 +156,12 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
 const styles = StyleSheet.create({
   Option: {
     padding: 2,
-    backgroundColor: "slategray",
     borderColor: "slategray",
-    borderRadius: "100%",
+    paddingRight: 8,
+    paddingLeft: 8,
+    paddingBottom: 4,
+    paddingTop: 4,
+    borderRadius: 4,
     borderWidth: 1,
   },
   AddToCartButton: {
@@ -131,7 +170,6 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     paddingTop: 4,
     paddingBottom: 4,
-    flex: 1,
   },
   BuyNowButton: {
     marginTop: 8,
@@ -139,6 +177,5 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     paddingTop: 4,
     paddingBottom: 4,
-    flex: 1,
   },
 });
