@@ -42,8 +42,9 @@ export default function Index() {
             renderItem={({ item }) => (
               <Product item={item} key={item.node.handle} />
             )}
+            keyExtractor={(item) => item.node.handle}
+            numColumns={2}
             contentContainerStyle={styles.productContainer}
-            horizontal
           />
         </>
       ) : (
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "flex-start",
     gap: 16,
     paddingTop: 16,
