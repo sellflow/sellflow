@@ -76,7 +76,7 @@ export default function Index() {
         <Link style={styles.OptionButton} href="/orders">
           Orders
         </Link>
-        <Link style={styles.OptionButton} href="/">
+        <Link style={styles.OptionButton} href="/account">
           Account
         </Link>
         <Link style={styles.OptionButton} href="/">
