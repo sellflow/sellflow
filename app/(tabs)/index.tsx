@@ -1,15 +1,19 @@
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   ScrollView,
   StyleSheet,
   Text,
+  View,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { getProducts } from "@/shopify/product";
 import { GetProductsQuery } from "@/types/storefront.generated";
 import { ClientResponse } from "@shopify/storefront-api-client";
 import Product from "@/components/ProductCard";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Index() {
   const [products, setProducts] = useState<
@@ -33,18 +37,25 @@ export default function Index() {
   }, []);
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       {products ? (
         <>
           <Text style={styles.heading}>Products</Text>
           <FlatList
             data={products?.data?.products.edges}
-            renderItem={({ item }) => (
-              <Product item={item} key={item.node.handle} />
+            renderItem={({ item }) => <Product item={item} />}
+            keyExtractor={(item) => item.node.id}
+            horizontal={SCREEN_WIDTH > 640 ? true : false}
+            numColumns={SCREEN_WIDTH > 640 ? 1 : 2}
+            ItemSeparatorComponent={() => (
+              <View style={{ width: SCREEN_WIDTH > 640 ? 16 : 0 }} />
             )}
-            keyExtractor={(item) => item.node.handle}
-            numColumns={2}
-            contentContainerStyle={styles.productContainer}
+            style={styles.productContainer}
+            {...(SCREEN_WIDTH < 640 && {
+              columnWrapperStyle: {
+                ...{ justifyContent: "space-between", width: "100%" },
+              },
+            })}
           />
         </>
       ) : (
@@ -55,18 +66,18 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+  },
   heading: {
     fontSize: 20,
     fontWeight: 600,
     color: "white",
-    paddingLeft: 16,
+    paddingLeft: 8,
   },
   productContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "flex-start",
-    gap: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
+    gap: SCREEN_WIDTH > 640 ? 16 : 4,
+    paddingVertical: 16,
+    paddingHorizontal: 8,
   },
 });

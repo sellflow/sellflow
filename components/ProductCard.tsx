@@ -7,17 +7,21 @@ import {
   TouchableOpacity,
   StyleSheet,
   GestureResponderEvent,
-  View,
+  Dimensions,
 } from "react-native";
 
-const imageSize = 300;
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const imageSize = SCREEN_WIDTH > 640 ? 300 : SCREEN_WIDTH / 2 - 12;
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function Product({ item }: { item: { node: ShopifyProduct } }) {
   const { linesAdd } = useCart();
-  const imageUrl = new URL(item?.node?.featuredImage?.url);
-  imageUrl.searchParams.append("height", String(imageSize));
+  const getImageUrl = (url: string) => {
+    const imageUrl = new URL(url);
+    imageUrl.searchParams.append("height", String(imageSize));
+    return imageUrl.toString();
+  };
 
   const addToCart = (e: GestureResponderEvent) => {
     e.stopPropagation();
@@ -41,7 +45,7 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
       <TouchableOpacity>
         <Image
           //@ts-ignore
-          source={{ uri: imageUrl.toString() }}
+          source={{ uri: getImageUrl(item.node.featuredImage.url) }}
           placeholder={{ blurhash }}
           style={{
             width: imageSize,
@@ -87,8 +91,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    paddingRight: 16,
-    paddingLeft: 16,
   },
   image: {
     backgroundColor: "white",
@@ -98,8 +100,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 8,
     color: "white",
-    fontSize: 24,
-    maxWidth: "100%",
+    fontSize: 20,
+    maxWidth: imageSize,
   },
   price: {
     color: "white",
