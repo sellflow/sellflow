@@ -1,9 +1,9 @@
 import {
   ActivityIndicator,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { getProducts } from "@/shopify/product";
@@ -33,7 +33,7 @@ export default function Index() {
   }, []);
 
   return (
-    <View>
+    <ScrollView>
       {products ? (
         <>
           <Text style={styles.heading}>Products</Text>
@@ -50,7 +50,7 @@ export default function Index() {
       ) : (
         <ActivityIndicator color="#fff" />
       )}
-    </View>
+    </ScrollView>
   );
 }
 
