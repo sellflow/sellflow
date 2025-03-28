@@ -68,11 +68,8 @@ export default function Orders() {
               data={orders.data.customer.orders.edges}
               style={styles.ListStyle}
               keyExtractor={(item) => item.node.id}
-              renderItem={({ item }) => (
-                <View style={styles.ItemContainer}>
-                  <OrderItem item={item} />
-                </View>
-              )}
+              renderItem={({ item }) => <OrderItem item={item} />}
+              contentContainerStyle={styles.ItemContainer}
             />
           </>
         ) : (
