@@ -1,12 +1,13 @@
 import { Product as ShopifyProduct } from "@/types/storefront.types";
 import { useCart } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import {
   Text,
   TouchableOpacity,
   StyleSheet,
   GestureResponderEvent,
+  View,
 } from "react-native";
 
 const imageSize = 300;
@@ -15,9 +16,6 @@ const blurhash =
 
 export default function Product({ item }: { item: { node: ShopifyProduct } }) {
   const { linesAdd } = useCart();
-  const redirectToProduct = (handle: string) => {
-    router.push(`/product/${handle}`);
-  };
   const imageUrl = new URL(item?.node?.featuredImage?.url);
   imageUrl.searchParams.append("height", String(imageSize));
 
@@ -32,12 +30,14 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
   };
 
   return (
-    <>
-      <TouchableOpacity
-        key={item.node.handle}
-        onPress={() => redirectToProduct(item.node?.handle)}
-        style={styles.container}
-      >
+    <Link
+      href={{
+        pathname: "/(tabs)/product/[id]",
+        params: { id: item.node.id },
+      }}
+      style={styles.container}
+    >
+      <TouchableOpacity key={item.node.id}>
         <Image
           //@ts-ignore
           source={{ uri: item.node?.featuredImage.url }}
@@ -67,7 +67,7 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
           </TouchableOpacity>
         )}
       </TouchableOpacity>
-    </>
+    </Link>
   );
 }
 
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flex: 1,
-    alignItems: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
     paddingRight: 16,
     paddingLeft: 16,
   },

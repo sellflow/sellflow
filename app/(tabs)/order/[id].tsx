@@ -53,6 +53,7 @@ export default function Order() {
       const order = await fetchOrder();
       if (order) {
         setOrder(order);
+        console.log(order);
       }
       setLoading(false);
     };
@@ -64,15 +65,6 @@ export default function Order() {
     <View style={styles.Container}>
       {loading ? (
         <ActivityIndicator color="#fff" />
-      ) : order?.data?.order?.fulfillments?.edges[0]?.node
-          ?.latestShipmentStatus !== "DELIVERED" ? (
-        <Text style={{ color: "white" }}>
-          Arriving:{" "}
-          {order?.data?.order?.fulfillments?.edges[0]?.node?.estimatedDeliveryAt
-            ? order?.data?.order?.fulfillments?.edges[0]?.node
-                ?.estimatedDeliveryAt
-            : "Unknown"}
-        </Text>
       ) : (
         <OrderDetails order={order} />
       )}

@@ -18,10 +18,7 @@ export default function Page() {
   useEffect(() => {
     try {
       const fetchProduct = async () => {
-        const data = await getProduct(
-          search?.handle as string,
-          selectedOptions,
-        );
+        const data = await getProduct(search?.id as string, selectedOptions);
         if (data?.errors?.graphQLErrors) {
           //@ts-ignore
           throw new Error(data.errors.graphQLErrors);

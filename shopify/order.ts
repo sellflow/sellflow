@@ -36,6 +36,11 @@ export const getOrder = async (accessToken: string, orderId: string) =>
                 }
                 name
                 quantity
+                variantOptions {
+                  name
+                  value
+                }
+                productId
               }
             }
             pageInfo {

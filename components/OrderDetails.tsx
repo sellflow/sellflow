@@ -1,4 +1,6 @@
+import { mapSelectedProductOptionToObject } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
+import { Link } from "expo-router";
 import { Button } from "react-native";
 import { Text, View } from "react-native";
 
@@ -59,28 +61,38 @@ export default function OrderDetails({ order }: { order: any }) {
               }}
             >
               {order.data.order.lineItems.edges.map((item: any) => (
-                <View
-                  key={item.node.image.url}
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <View style={{ flexDirection: "row", gap: 4 }}>
-                    <Image
-                      source={{ uri: item.node.image.url }}
-                      style={{ width: 75, height: 75, borderRadius: 4 }}
-                    />
-                    <View style={{ gap: 4 }}>
-                      <Text style={{ color: "white" }}>{item.node.name}</Text>
-                      <Text style={{ color: "white" }}>
-                        Quantity: {item.node.quantity}
-                      </Text>
+                <View key={item.node.image.url} style={{ width: "100%" }}>
+                  <Link
+                    href={{
+                      pathname: "/(tabs)/product/[id]",
+                      params: {
+                        id: item.node.productId,
+                        ...mapSelectedProductOptionToObject(
+                          item!.node!.variantOptions,
+                        ),
+                      },
+                    }}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View style={{ flexDirection: "row", gap: 4 }}>
+                      <Image
+                        source={{ uri: item.node.image.url }}
+                        style={{ width: 75, height: 75, borderRadius: 4 }}
+                      />
+                      <View style={{ gap: 4 }}>
+                        <Text style={{ color: "white" }}>{item.node.name}</Text>
+                        <Text style={{ color: "white" }}>
+                          Quantity: {item.node.quantity}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                  <Text style={{ color: "white" }}>
-                    ${item.node.price.amount}
-                  </Text>
+                    <Text style={{ color: "white" }}>
+                      ${item.node.price.amount}
+                    </Text>
+                  </Link>
                 </View>
               ))}
             </View>

@@ -2,19 +2,18 @@ import { SelectedOptionInput } from "@/types/storefront.types";
 import { client } from "./client";
 
 export const getProduct = async (
-  handle: string,
+  id: string,
   selectedOptions: SelectedOptionInput[],
 ) =>
   await client.request(
     `#graphql
     query Product(
-        $handle: String!
+        $id: ID!
         $selectedOptions: [SelectedOptionInput!]!
       ) {
-        product(handle: $handle) {
+        product(id: $id) {
           id
           title
-          handle
           description
           options {
             name
@@ -36,7 +35,7 @@ export const getProduct = async (
                 id
                 title
                 quantityAvailable
-                priceV2 {
+                price {
                   amount
                   currencyCode
                   }
@@ -94,18 +93,11 @@ export const getProduct = async (
     `,
     {
       variables: {
-        handle,
+        id,
         selectedOptions,
       },
     },
   );
-
-const setSelectedOptions = (selectedOptions: SelectedOptionInput[]): string =>
-  `
-    fragment ProductVariantFragment on node {
-      ${selectedOptions}
-    }
-  `;
 
 export const getProducts = async () =>
   await client.request(
@@ -114,7 +106,7 @@ export const getProducts = async () =>
     products(first: $first) {
       edges {
         node {
-          handle
+          id
           title
           variantsCount {
             count

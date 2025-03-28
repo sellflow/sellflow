@@ -19,13 +19,12 @@ export default function LineItem() {
     imageUrl.searchParams.append("height", String(imageSize));
   }
 
-  console.log(line);
   return (
     <Link
       href={{
-        pathname: "/product/[handle]",
+        pathname: "/product/[id]",
         params: {
-          handle: line.merchandise!.product!.handle!,
+          id: line.merchandise!.product!.id!,
           ...mapSelectedProductOptionToObject(
             //@ts-ignore
             line.merchandise!.selectedOptions!,
