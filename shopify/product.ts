@@ -1,6 +1,40 @@
 import { SelectedOptionInput } from "@/types/storefront.types";
 import { client } from "./client";
 
+//Returns a list of recommended items given a product id
+export const getProductRecommendations = async (productId: string) =>
+  await client.request(
+    `
+  #graphql
+  query productRecommendations($productId: ID!) {
+    productRecommendations(productId: $productId) {
+      id
+      featuredImage {
+        altText
+        url
+      }
+      title
+      priceRange {
+        minVariantPrice {
+          amount
+        }
+      }
+      selectedOrFirstAvailableVariant {
+        id
+      }
+      variantsCount {
+        count
+      }
+    }
+  }
+  `,
+    {
+      variables: {
+        productId,
+      },
+    },
+  );
+
 export const getProduct = async (
   id: string,
   selectedOptions: SelectedOptionInput[],

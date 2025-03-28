@@ -1,18 +1,27 @@
-import { ScrollView, Text, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  FlatList,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ClientResponse } from "@shopify/storefront-api-client";
 import { ProductQuery } from "@/types/storefront.generated";
 import { getProductOptions } from "@/shopify/client";
-import { getProduct } from "@/shopify/product";
+import { getProduct, getProductRecommendations } from "@/shopify/product";
 import { ProductProvider } from "@shopify/hydrogen-react";
 import Product from "@/components/Product";
+import RecommendedProduct from "@/components/RecommendedProduct";
 
 export default function Page() {
   const search = useLocalSearchParams();
   const [product, setProduct] = useState<
     ClientResponse<ProductQuery> | undefined
   >();
+  const [recommended, setRecommended] = useState<ClientResponse<any>>();
   const selectedOptions = getProductOptions(search);
 
   useEffect(() => {
@@ -27,6 +36,18 @@ export default function Page() {
         setProduct(data);
       };
       fetchProduct();
+
+      const fetchRecommended = async () => {
+        const data = await getProductRecommendations(search?.id as string);
+        if (data?.errors?.graphQLErrors) {
+          //@ts-ignore
+          throw new Error(data.errors?.graphQLErrors);
+        }
+
+        setRecommended(data);
+      };
+
+      fetchRecommended();
     } catch (e) {
       console.error(e);
     }
@@ -35,12 +56,25 @@ export default function Page() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {product ? (
-        <ProductProvider
-          data={product!.data!.product}
-          initialVariantId={product!.data!.product?.selectedVariant?.id}
-        >
-          <Product search={search} />
-        </ProductProvider>
+        <View style={{ paddingTop: 64 }}>
+          <ProductProvider
+            data={product!.data!.product}
+            initialVariantId={product!.data!.product?.selectedVariant?.id}
+          >
+            <Product search={search} />
+          </ProductProvider>
+          <Text style={styles.recommendedHeading}>Recommended</Text>
+          {recommended?.data?.productRecommendations && (
+            <FlatList
+              data={recommended.data.productRecommendations}
+              renderItem={({ item }) => <RecommendedProduct item={item} />}
+              keyExtractor={(item) => item.id}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.recommendedItemsContainer}
+            />
+          )}
+        </View>
       ) : (
         <ActivityIndicator color="#fff" />
       )}
@@ -51,8 +85,19 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#25292e",
     alignItems: "center",
+  },
+  recommendedHeading: {
+    fontSize: 20,
+    fontWeight: 600,
+    color: "white",
+    paddingTop: 128,
+    paddingBottom: 4,
+  },
+  recommendedItemsContainer: {
+    maxWidth: 1000,
+    gap: 16,
+    paddingBottom: 256,
   },
   imageContainer: {
     flex: 1,

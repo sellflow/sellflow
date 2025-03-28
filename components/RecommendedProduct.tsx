@@ -1,28 +1,30 @@
-import { Product as ShopifyProduct } from "@/types/storefront.types";
 import { useCart } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import {
+  GestureResponderEvent,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  GestureResponderEvent,
-  View,
 } from "react-native";
 
-const imageSize = 300;
+const imageSize = 200;
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-export default function Product({ item }: { item: { node: ShopifyProduct } }) {
+export default function RecommendedProduct({ item }: { item: any }) {
   const { linesAdd } = useCart();
-  const imageUrl = new URL(item?.node?.featuredImage?.url);
-  imageUrl.searchParams.append("height", String(imageSize));
-
+  const getImageUrl = (url: string) => {
+    if (url) {
+      const imageUrl = new URL(url);
+      imageUrl.searchParams.append("height", String(imageSize));
+      return imageUrl.toString();
+    }
+  };
   const addToCart = (e: GestureResponderEvent) => {
     e.stopPropagation();
     const merchandise = {
-      merchandiseId: item.node.selectedOrFirstAvailableVariant!.id,
+      merchandiseId: item.selectedOrFirstAvailableVariant!.id,
     };
     if (merchandise?.merchandiseId) {
       linesAdd([merchandise]);
@@ -33,15 +35,15 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
     <Link
       href={{
         pathname: "/(tabs)/product/[id]",
-        params: { id: item.node.id },
+        params: { id: item.id },
       }}
       style={styles.container}
-      key={item.node.id}
+      key={item.id}
     >
       <TouchableOpacity>
         <Image
           //@ts-ignore
-          source={{ uri: imageUrl.toString() }}
+          source={{ uri: getImageUrl(item?.featuredImage?.url) }}
           placeholder={{ blurhash }}
           style={{
             width: imageSize,
@@ -50,14 +52,14 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
           }}
         />
         <Text numberOfLines={1} style={styles.heading}>
-          {item.node?.title}
+          {item?.title}
         </Text>
-        {item?.node?.priceRange?.minVariantPrice && (
+        {item?.priceRange?.minVariantPrice && (
           <Text style={styles.price}>
-            ${item.node.priceRange.minVariantPrice.amount}
+            ${item.priceRange.minVariantPrice.amount}
           </Text>
         )}
-        {item?.node?.variantsCount!.count === 1 && (
+        {item?.variantsCount?.count === 1 && (
           <TouchableOpacity
             style={styles.AddToCartButton}
             onPress={(e) => addToCart(e)}
@@ -71,7 +73,6 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
     </Link>
   );
 }
-
 const styles = StyleSheet.create({
   AddToCartButton: {
     width: "100%",
@@ -87,8 +88,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    paddingRight: 16,
-    paddingLeft: 16,
+    width: imageSize,
   },
   image: {
     backgroundColor: "white",
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 8,
     color: "white",
-    fontSize: 24,
-    maxWidth: "100%",
+    fontSize: 18,
+    maxWidth: imageSize,
   },
   price: {
     color: "white",
