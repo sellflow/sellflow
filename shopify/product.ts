@@ -55,7 +55,7 @@ export const getProduct = async (
               name
             }
           }
-          selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+          selectedVariant: selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions) {
             id
             availableForSale
             selectedOptions {

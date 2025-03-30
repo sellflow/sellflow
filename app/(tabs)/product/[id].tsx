@@ -34,6 +34,7 @@ export default function Page() {
         }
 
         setProduct(data);
+        console.log(product);
       };
       fetchProduct();
 

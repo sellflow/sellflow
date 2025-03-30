@@ -76,7 +76,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             options.map(
               (option, index) =>
                 options.length! > 1 && (
-                  <View key={option!.name}>
+                  <View key={index}>
                     <Text style={{ color: "white" }}>{option!.name}</Text>
                     <View
                       style={{
@@ -108,10 +108,10 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                               ]}
                               key={optionVal}
                               href={{
-                                pathname: "/product/[handle]",
+                                pathname: "/product/[id]",
                                 params: {
                                   ...search,
-                                  handle: product!.handle,
+                                  id: product!.id!,
                                   [option?.name]: optionVal,
                                 },
                               }}
@@ -124,9 +124,9 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                 ),
             )}
         </>
-        {selectedVariant?.priceV2?.amount && (
+        {selectedVariant?.price?.amount && (
           <Text style={{ color: "white", fontSize: 24 }}>
-            ${selectedVariant.priceV2.amount}
+            ${selectedVariant.price.amount}
           </Text>
         )}
         <TouchableOpacity
