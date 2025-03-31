@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  ScrollView,
 } from "react-native";
 import { BuyNowButton, useCart, useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
@@ -45,12 +46,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
   };
 
   return (
-    <View
-      style={{
-        flexDirection: SCREEN_WIDTH > 640 ? "row" : "column",
-        gap: 64,
-      }}
-    >
+    <View style={styles.Container}>
       <FlatList
         ref={flatListRef}
         data={product!.media!.edges}
@@ -67,7 +63,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
         horizontal
         pagingEnabled
       />
-      <View>
+      <View style={styles.InfoContainer}>
         <Text style={{ color: "white", fontSize: 48, fontWeight: 600 }}>
           {product!.title}
         </Text>
@@ -78,12 +74,9 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                 options.length! > 1 && (
                   <View key={index}>
                     <Text style={{ color: "white" }}>{option!.name}</Text>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "flex-start",
-                        gap: 8,
-                      }}
+                    <ScrollView
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
                     >
                       {option?.values &&
                         option.values
@@ -119,7 +112,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                               {optionVal}
                             </Link>
                           ))}
-                    </View>
+                    </ScrollView>
                   </View>
                 ),
             )}
@@ -148,21 +141,31 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             </Text>
           </BuyNowButton>
         )}
+        <Text style={styles.Description}>{product!.description}</Text>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  Container: {
+    flexDirection: SCREEN_WIDTH > 640 ? "row" : "column",
+    gap: 64,
+    width: "100%",
+    maxWidth: SCREEN_WIDTH > 1175 ? 1175 : SCREEN_WIDTH,
+  },
+  InfoContainer: {
+    width: SCREEN_WIDTH > 640 ? "40%" : "100%",
+    paddingHorizontal: SCREEN_WIDTH > 640 ? 0 : 16,
+  },
   Option: {
     padding: 2,
     borderColor: "slategray",
-    paddingRight: 8,
-    paddingLeft: 8,
-    paddingBottom: 4,
-    paddingTop: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: 4,
     borderWidth: 1,
+    marginRight: 4,
   },
   AddToCartButton: {
     marginTop: 16,
@@ -177,5 +180,10 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     paddingTop: 4,
     paddingBottom: 4,
+  },
+  Description: {
+    color: "white",
+    width: "100%",
+    paddingTop: 24,
   },
 });

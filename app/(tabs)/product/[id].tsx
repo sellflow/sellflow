@@ -5,6 +5,8 @@ import {
   ActivityIndicator,
   View,
   FlatList,
+  Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -15,6 +17,8 @@ import { getProduct, getProductRecommendations } from "@/shopify/product";
 import { ProductProvider } from "@shopify/hydrogen-react";
 import Product from "@/components/Product";
 import RecommendedProduct from "@/components/RecommendedProduct";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Page() {
   const search = useLocalSearchParams();
@@ -55,38 +59,50 @@ export default function Page() {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {product ? (
-        <View style={{ paddingTop: 64 }}>
-          <ProductProvider
-            data={product!.data!.product}
-            initialVariantId={product!.data!.product?.selectedVariant?.id}
-          >
-            <Product search={search} />
-          </ProductProvider>
-          <Text style={styles.recommendedHeading}>Recommended</Text>
-          {recommended?.data?.productRecommendations && (
-            <FlatList
-              data={recommended.data.productRecommendations}
-              renderItem={({ item }) => <RecommendedProduct item={item} />}
-              keyExtractor={(item) => item.id}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.recommendedItemsContainer}
-            />
-          )}
-        </View>
-      ) : (
-        <ActivityIndicator color="#fff" />
-      )}
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {product ? (
+          <View style={styles.product}>
+            <ProductProvider
+              data={product!.data!.product}
+              initialVariantId={product!.data!.product?.selectedVariant?.id}
+            >
+              <Product search={search} />
+            </ProductProvider>
+            <View style={styles.recommendedContainer}>
+              <Text style={styles.recommendedHeading}>Recommended</Text>
+              {recommended?.data?.productRecommendations && (
+                <FlatList
+                  data={recommended.data.productRecommendations}
+                  renderItem={({ item }) => <RecommendedProduct item={item} />}
+                  keyExtractor={(item) => item.id}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.recommendedItemsContainer}
+                />
+              )}
+            </View>
+          </View>
+        ) : (
+          <ActivityIndicator color="#fff" />
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
+    maxWidth: SCREEN_WIDTH,
+  },
+  product: {
+    alignItems: "center",
+  },
+  recommendedContainer: {
+    paddingLeft: SCREEN_WIDTH > 640 ? 0 : 16,
+    maxWidth: SCREEN_WIDTH > 1175 ? 1175 : SCREEN_WIDTH,
+    width: "100%",
   },
   recommendedHeading: {
     fontSize: 20,
@@ -96,7 +112,6 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
   recommendedItemsContainer: {
-    maxWidth: 1000,
     gap: 16,
     paddingBottom: 256,
   },
