@@ -65,9 +65,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      // Routes we do not want explicitly shown in tab bar (but we want the tab
-      bar to be shown on these routes) must have href: null option set in order
-      to be hidden
       <Tabs.Screen name="orders" options={{ href: null }} />
       <Tabs.Screen name="product/[id]" options={{ href: null }} />
       <Tabs.Screen name="order/[id]" options={{ href: null }} />
