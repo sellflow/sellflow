@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { Product as ShopifyProduct } from "@/types/storefront.types";
 import { useCart } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
@@ -8,6 +9,7 @@ import {
   StyleSheet,
   GestureResponderEvent,
   Dimensions,
+  useColorScheme,
 } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -16,6 +18,7 @@ const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function Product({ item }: { item: { node: ShopifyProduct } }) {
+  const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
   const getImageUrl = (url: string) => {
     const imageUrl = new URL(url);
@@ -32,6 +35,9 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
       linesAdd([merchandise]);
     }
   };
+
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
   return (
     <Link
@@ -53,11 +59,11 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
             ...styles.image,
           }}
         />
-        <Text numberOfLines={1} style={styles.heading}>
+        <Text numberOfLines={1} style={[styles.heading, { color: textColor }]}>
           {item.node?.title}
         </Text>
         {item?.node?.priceRange?.minVariantPrice && (
-          <Text style={styles.price}>
+          <Text style={[styles.price, { color: textColor }]}>
             ${item.node.priceRange.minVariantPrice.amount}
           </Text>
         )}
@@ -66,7 +72,7 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
             style={styles.AddToCartButton}
             onPress={(e) => addToCart(e)}
           >
-            <Text style={{ textAlign: "center", fontWeight: 600 }}>
+            <Text style={{ textAlign: "center", color: textColor }}>
               Add to Cart
             </Text>
           </TouchableOpacity>
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 16,
-    borderRadius: 4,
+    borderRadius: 50,
     backgroundColor: "yellow",
     paddingTop: 4,
     paddingBottom: 4,

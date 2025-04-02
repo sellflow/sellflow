@@ -7,6 +7,7 @@ import {
   FlatList,
   Dimensions,
   SafeAreaView,
+  useColorScheme,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -17,10 +18,12 @@ import { getProduct, getProductRecommendations } from "@/shopify/product";
 import { ProductProvider } from "@shopify/hydrogen-react";
 import Product from "@/components/Product";
 import RecommendedProduct from "@/components/RecommendedProduct";
+import { Colors } from "@/constants/Colors";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Page() {
+  const colorScheme = useColorScheme();
   const search = useLocalSearchParams();
   const [product, setProduct] = useState<
     ClientResponse<ProductQuery> | undefined
@@ -58,6 +61,9 @@ export default function Page() {
     }
   }, []);
 
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -70,7 +76,9 @@ export default function Page() {
               <Product search={search} />
             </ProductProvider>
             <View style={styles.recommendedContainer}>
-              <Text style={styles.recommendedHeading}>Recommended</Text>
+              <Text style={[styles.recommendedHeading, { color: textColor }]}>
+                Recommended
+              </Text>
               {recommended?.data?.productRecommendations && (
                 <FlatList
                   data={recommended.data.productRecommendations}
@@ -84,7 +92,7 @@ export default function Page() {
             </View>
           </View>
         ) : (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={textColor} />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -107,7 +115,6 @@ const styles = StyleSheet.create({
   recommendedHeading: {
     fontSize: 20,
     fontWeight: 600,
-    color: "white",
     paddingTop: 128,
     paddingBottom: 4,
   },

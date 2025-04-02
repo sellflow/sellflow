@@ -1,7 +1,8 @@
+import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
 
 const imageSize = 75;
 const blurHash =
@@ -13,6 +14,10 @@ export default function OrderItem({ item }: { item: any }) {
   );
   url.searchParams.append("height", String(imageSize));
   const imageUrl = url.toString();
+  const colorScheme = useColorScheme();
+
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
   return (
     <Link
@@ -39,26 +44,20 @@ export default function OrderItem({ item }: { item: any }) {
           />
         )}
         <View style={{ paddingLeft: 8 }}>
-          <Text style={{ color: "white" }}>
+          <Text style={{ color: textColor }}>
             {item.node.fulfillments.edges[0].node.estimatedDeliveryAt
               ? item.node.fulfillments.edges[0].node.estimatedDeliveryAt
               : item.node.fulfillments.edges[0].node.latestShipmentStatus}
           </Text>
-          <Text style={{ color: "white" }}>
+          <Text style={{ color: textColor }}>
             {
               item.node.fulfillments.edges[0].node.fulfillmentLineItems.edges[0]
                 .node.lineItem.name
             }
           </Text>
         </View>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginLeft: "auto",
-          }}
-        >
-          <Ionicons name="arrow-forward-sharp" size={28} color="#fff" />
+        <View style={styles.Icon}>
+          <Ionicons name="arrow-forward-sharp" size={28} color={textColor} />
         </View>
       </View>
     </Link>
@@ -69,5 +68,10 @@ const styles = StyleSheet.create({
   Image: {
     backgroundColor: "white",
     borderRadius: 4,
+  },
+  Icon: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: "auto",
   },
 });

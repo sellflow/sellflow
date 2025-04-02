@@ -6,15 +6,18 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
+  useColorScheme,
 } from "react-native";
 import { BuyNowButton, useCart, useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
 import { useRef } from "react";
 import ProductImage from "./ProductImage";
+import { Colors } from "@/constants/Colors";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Product({ search }: { search: UnknownOutputParams }) {
+  const colorScheme = useColorScheme();
   const {
     product,
     options,
@@ -45,6 +48,11 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     return "";
   };
 
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
+  const backgroundColor =
+    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
+
   return (
     <View style={styles.Container}>
       <FlatList
@@ -64,7 +72,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
         pagingEnabled
       />
       <View style={styles.InfoContainer}>
-        <Text style={{ color: "white", fontSize: 48, fontWeight: 600 }}>
+        <Text style={{ fontSize: 48, fontWeight: 600, color: textColor }}>
           {product!.title}
         </Text>
         <>
@@ -73,7 +81,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
               (option, index) =>
                 options.length! > 1 && (
                   <View key={index}>
-                    <Text style={{ color: "white" }}>{option!.name}</Text>
+                    <Text style={{ color: textColor }}>{option!.name}</Text>
                     <ScrollView
                       horizontal={true}
                       showsHorizontalScrollIndicator={false}
@@ -91,12 +99,16 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                                 {
                                   backgroundColor:
                                     optionVal == selectedOptions[option.name]
-                                      ? "black"
-                                      : "white",
+                                      ? colorScheme === "light"
+                                        ? Colors.dark.background
+                                        : Colors.light.background
+                                      : backgroundColor,
                                   color:
                                     optionVal == selectedOptions[option.name]
-                                      ? "white"
-                                      : "black",
+                                      ? colorScheme === "light"
+                                        ? Colors.dark.text
+                                        : Colors.light.text
+                                      : textColor,
                                 },
                               ]}
                               key={optionVal}
@@ -118,7 +130,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             )}
         </>
         {selectedVariant?.price?.amount && (
-          <Text style={{ color: "white", fontSize: 24 }}>
+          <Text style={{ color: textColor, fontSize: 24 }}>
             ${selectedVariant.price.amount}
           </Text>
         )}
@@ -127,7 +139,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
           onPress={() => addToCart()}
           disabled={!selectedVariant}
         >
-          <Text style={{ textAlign: "center", fontWeight: 600 }}>
+          <Text style={{ color: textColor, textAlign: "center" }}>
             Add to Cart
           </Text>
         </TouchableOpacity>
@@ -141,7 +153,9 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             </Text>
           </BuyNowButton>
         )}
-        <Text style={styles.Description}>{product!.description}</Text>
+        <Text style={[styles.Description, { color: textColor }]}>
+          {product!.description}
+        </Text>
       </View>
     </View>
   );

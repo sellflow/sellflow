@@ -1,10 +1,9 @@
 import { useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
-  Button,
+  ScrollView,
   StyleSheet,
-  Text,
-  View,
+  useColorScheme,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { getAccessToken, getRefreshToken, discovery } from "@/lib/tokens";
@@ -12,11 +11,13 @@ import { getOrder } from "@/shopify/order";
 import { refreshUser } from "@/lib/auth";
 import { Image } from "expo-image";
 import OrderDetails from "@/components/OrderDetails";
+import { Colors } from "@/constants/Colors";
 
 export default function Order() {
   const { id } = useLocalSearchParams();
   const [order, setOrder] = useState();
   const [loading, setLoading] = useState<boolean>(false);
+  const colorScheme = useColorScheme();
 
   const fetchOrder = async () => {
     const accessToken = await getAccessToken();
@@ -61,22 +62,24 @@ export default function Order() {
     loadOrder();
   }, []);
 
+  const backgroundColor =
+    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
+
   return (
-    <View style={styles.Container}>
+    <ScrollView style={{ width: "100%", backgroundColor }}>
       {loading ? (
-        <ActivityIndicator color="#fff" />
+        <ActivityIndicator
+          color={colorScheme === "light" ? Colors.light.text : Colors.dark.text}
+        />
       ) : (
         <OrderDetails order={order} />
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   Container: {
-    flex: 1,
     width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { useCart } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
@@ -6,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
 
 const imageSize = 200;
@@ -13,6 +15,7 @@ const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function RecommendedProduct({ item }: { item: any }) {
+  const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
   const getImageUrl = (url: string) => {
     if (url) {
@@ -30,6 +33,9 @@ export default function RecommendedProduct({ item }: { item: any }) {
       linesAdd([merchandise]);
     }
   };
+
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
   return (
     <Link
@@ -51,11 +57,11 @@ export default function RecommendedProduct({ item }: { item: any }) {
             ...styles.image,
           }}
         />
-        <Text numberOfLines={1} style={styles.heading}>
+        <Text numberOfLines={1} style={[styles.heading, { color: textColor }]}>
           {item?.title}
         </Text>
         {item?.priceRange?.minVariantPrice && (
-          <Text style={styles.price}>
+          <Text style={[styles.price, { color: textColor }]}>
             ${item.priceRange.minVariantPrice.amount}
           </Text>
         )}
@@ -64,7 +70,7 @@ export default function RecommendedProduct({ item }: { item: any }) {
             style={styles.AddToCartButton}
             onPress={(e) => addToCart(e)}
           >
-            <Text style={{ textAlign: "center", fontWeight: 600 }}>
+            <Text style={{ textAlign: "center", color: textColor }}>
               Add to Cart
             </Text>
           </TouchableOpacity>

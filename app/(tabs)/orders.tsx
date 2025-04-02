@@ -9,13 +9,18 @@ import {
   View,
   StyleSheet,
   ActivityIndicator,
+  useColorScheme,
+  ScrollView,
 } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 const imageSize = 100;
 
 export default function Orders() {
-  const [loading, setLoading] = useState<boolean>();
   const [orders, setOrders] = useState({});
+  const [loading, setLoading] = useState<boolean>();
+  const colorScheme = useColorScheme();
+
   const fetchOrders = async () => {
     const accessToken = await getAccessToken();
     if (accessToken) {
@@ -53,44 +58,56 @@ export default function Orders() {
       if (data) {
         setOrders(data);
       }
+      setLoading(false);
     };
 
     loadOrders();
   }, []);
-  return (
-    <View style={styles.Container}>
-      {loading ? (
-        typeof orders === "object" && Object.keys(orders).length > 0 ? (
-          <>
-            <Text style={{ color: "white" }}>Orders</Text>
 
-            <FlatList
-              data={orders.data.customer.orders.edges}
-              style={styles.ListStyle}
-              keyExtractor={(item) => item.node.id}
-              renderItem={({ item }) => (
-                <View style={styles.ItemContainer}>
-                  <OrderItem item={item} />
-                </View>
-              )}
-            />
-          </>
-        ) : (
-          <Text>No orders yet!</Text>
-        )
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
+  const backgroundColor =
+    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
+
+  return (
+    <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+      {loading ? (
+        <ActivityIndicator color={textColor} />
       ) : (
-        <ActivityIndicator color="#fff" />
+        <View style={styles.Container}>
+          {typeof orders === "object" && Object.keys(orders).length > 0 ? (
+            <>
+              <Text style={{ color: textColor }}>Orders</Text>
+
+              <FlatList
+                data={orders.data.customer.orders.edges}
+                style={styles.ListStyle}
+                keyExtractor={(item) => item.node.id}
+                renderItem={({ item }) => (
+                  <View style={styles.ItemContainer}>
+                    <OrderItem item={item} />
+                  </View>
+                )}
+              />
+            </>
+          ) : (
+            <Text style={{ color: textColor }}>No orders yet!</Text>
+          )}
+        </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  ScrollContainer: {
+    width: "100%",
+  },
   Container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#000",
+    width: "100%",
+    maxWidth: 640,
+    paddingHorizontal: 16,
+    alignSelf: "center",
   },
   ItemContainer: {
     width: "100%",

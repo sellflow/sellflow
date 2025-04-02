@@ -1,4 +1,12 @@
-import { Text, View, StyleSheet, Button, Platform } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Platform,
+  ScrollView,
+  useColorScheme,
+} from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
@@ -8,15 +16,17 @@ import { loginUser, refreshUser } from "@/lib/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
+import { Colors } from "@/constants/Colors";
 
 WebBrowser.maybeCompleteAuthSession();
 const blurHash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function Index() {
+  const [user, setUser] = useState();
+  const colorScheme = useColorScheme();
   const redirectUri = makeRedirectUri({ scheme: "https://" });
   const [loginComplete, setLoginComplete] = useState(false);
-  const [user, setUser] = useState();
 
   const [request, response, promptAsync] = useAuthRequest(
     {
@@ -56,67 +66,83 @@ export default function Index() {
     });
   }, [loginComplete]);
 
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
+  const backgroundColor =
+    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
+
   return user ? (
-    <View style={styles.Container}>
-      {user?.imageUrl ? (
-        <Image
-          source={{ uri: user?.imageUrl }}
-          placeholder={{ blurHash }}
-          style={{
-            width: 64,
-            height: 64,
-            borderRadius: 100,
-          }}
-        />
-      ) : (
-        <Ionicons size={64} name="person-circle" color="white" />
-      )}
-      <Text style={styles.Username}>{user?.displayName}</Text>
-      <View style={styles.OptionsContainer}>
-        <Link style={styles.OptionButton} href="/orders">
-          Orders
-        </Link>
-        <Link style={styles.OptionButton} href="/account">
-          Account
-        </Link>
-        <Link style={styles.OptionButton} href="/">
-          Wishlist
-        </Link>
-        <Link style={styles.OptionButton} href="/">
-          Settings
-        </Link>
+    <View style={[styles.PageContainer, { backgroundColor }]}>
+      <View style={styles.Container}>
+        {user?.imageUrl ? (
+          <Image
+            source={{ uri: user?.imageUrl }}
+            placeholder={{ blurHash }}
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 100,
+              alignSelf: "center",
+            }}
+          />
+        ) : (
+          <Ionicons size={64} name="person-circle" color={textColor} />
+        )}
+        <Text style={[styles.Username, { color: textColor }]}>
+          {user?.displayName}
+        </Text>
+        <View style={styles.OptionsContainer}>
+          <Link style={styles.OptionButton} href="/orders">
+            Orders
+          </Link>
+          <Link style={styles.OptionButton} href="/account">
+            Account
+          </Link>
+          <Link style={styles.OptionButton} href="/">
+            Wishlist
+          </Link>
+          <Link style={styles.OptionButton} href="/">
+            Settings
+          </Link>
+        </View>
       </View>
     </View>
   ) : (
-    <View style={styles.Container}>
-      <Text style={styles.text}>Profile page</Text>
-      <Button
-        disabled={!request}
-        title="Login"
-        onPress={() => {
-          loginUser({
-            request,
-            promptAsync,
-            redirectUri,
-            discovery,
-            setLoginComplete,
-          });
-        }}
-      />
-      <Button
-        title="Refresh"
-        onPress={async () => await refreshUser({ discovery })}
-      />
+    <View style={[styles.PageContainer, { backgroundColor }]}>
+      <View style={styles.Container}>
+        <Text style={[styles.text, { color: textColor }]}>Profile page</Text>
+        <Button
+          disabled={!request}
+          title="Login"
+          onPress={() => {
+            loginUser({
+              request,
+              promptAsync,
+              redirectUri,
+              discovery,
+              setLoginComplete,
+            });
+          }}
+        />
+        <Button
+          title="Refresh"
+          onPress={async () => await refreshUser({ discovery })}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  Container: {
+  PageContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#000",
+  },
+  Container: {
+    width: "100%",
+    maxWidth: 640,
+    paddingHorizontal: 16,
   },
   OptionButton: {
     color: "black",
@@ -137,7 +163,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   Username: {
-    color: "#fff",
     marginTop: 8,
+    alignSelf: "center",
   },
 });

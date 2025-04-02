@@ -1,12 +1,21 @@
+import { Colors } from "@/constants/Colors";
 import { getAccessToken } from "@/lib/tokens";
 import { getUserInfo } from "@/shopify/user";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 
 export default function Account() {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState<boolean>();
+  const colorScheme = useColorScheme();
+
   useEffect(() => {
     setLoading(true);
     getAccessToken().then((accessToken) => {
@@ -20,36 +29,74 @@ export default function Account() {
       }
     });
   }, []);
-  return loading ? (
-    <ActivityIndicator color="#fff" />
-  ) : (
-    <View style={styles.Container}>
-      <Image style={styles.ProfilePicture} source={{ uri: user?.imageUrl }} />
-      <View>
-        <Text style={styles.UserInfoHeading}>First Name: </Text>
-        <Text style={styles.UserInfo}>{user?.firstName}</Text>
-      </View>
-      <View>
-        <Text style={styles.UserInfoHeading}>Last Name: </Text>
-        <Text style={styles.UserInfo}>{user?.lastName}</Text>
-      </View>
-      <View>
-        <Text style={styles.UserInfoHeading}>Phone Number: </Text>
-        <Text style={styles.UserInfo}>{user?.phoneNumber?.phoneNumber}</Text>
-      </View>
-      <View>
-        <Text style={styles.UserInfoHeading}>Email Address:</Text>
-        <Text style={styles.UserInfo}>{user?.emailAddress?.emailAddress}</Text>
-      </View>
-      <View>
-        <Text style={styles.UserInfoHeading}>Default Address: </Text>
-        <Text style={styles?.UserInfo}>{user?.defaultAddress?.address1}</Text>
-      </View>
+
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
+  const backgroundColor =
+    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
+
+  return (
+    <View style={[styles.PageContainer, { backgroundColor }]}>
+      {loading ? (
+        <ActivityIndicator color={textColor} />
+      ) : (
+        <View style={styles.Container}>
+          <Image
+            style={styles.ProfilePicture}
+            source={{ uri: user?.imageUrl }}
+          />
+          <View>
+            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+              First Name:{" "}
+            </Text>
+            <Text style={[styles.UserInfo, { color: textColor }]}>
+              {user?.firstName}
+            </Text>
+          </View>
+          <View>
+            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+              Last Name:{" "}
+            </Text>
+            <Text style={[styles.UserInfo, { color: textColor }]}>
+              {user?.lastName}
+            </Text>
+          </View>
+          <View>
+            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+              Phone Number:{" "}
+            </Text>
+            <Text style={[styles.UserInfo, { color: textColor }]}>
+              {user?.phoneNumber?.phoneNumber}
+            </Text>
+          </View>
+          <View>
+            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+              Email Address:
+            </Text>
+            <Text style={[styles.UserInfo, { color: textColor }]}>
+              {user?.emailAddress?.emailAddress}
+            </Text>
+          </View>
+          <View>
+            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+              Default Address:{" "}
+            </Text>
+            <Text style={styles?.UserInfo}>
+              {user?.defaultAddress?.address1}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  PageContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   Container: {
     maxWidth: 640,
     width: "100%",
@@ -62,12 +109,10 @@ const styles = StyleSheet.create({
     height: 100,
   },
   UserInfoHeading: {
-    color: "white",
     fontSize: 18,
     marginBottom: 4,
   },
   UserInfo: {
-    color: "white",
     fontWeight: 600,
   },
 });

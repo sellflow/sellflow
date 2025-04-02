@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  useColorScheme,
   View,
 } from "react-native";
 import { useEffect, useState } from "react";
@@ -12,10 +13,12 @@ import { getProducts } from "@/shopify/product";
 import { GetProductsQuery } from "@/types/storefront.generated";
 import { ClientResponse } from "@shopify/storefront-api-client";
 import Product from "@/components/ProductCard";
+import { Colors } from "@/constants/Colors";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Index() {
+  const colorScheme = useColorScheme();
   const [products, setProducts] = useState<
     ClientResponse<GetProductsQuery> | undefined
   >();
@@ -36,11 +39,18 @@ export default function Index() {
     fetchProducts();
   }, []);
 
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
+  const backgroundColor =
+    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[styles.Container, { backgroundColor: backgroundColor }]}
+    >
       {products ? (
         <>
-          <Text style={styles.heading}>Products</Text>
+          <Text style={[styles.Heading, { color: textColor }]}>Products</Text>
           <FlatList
             data={products?.data?.products.edges}
             renderItem={({ item }) => <Product item={item} />}
@@ -50,7 +60,7 @@ export default function Index() {
             ItemSeparatorComponent={() => (
               <View style={{ width: SCREEN_WIDTH > 640 ? 16 : 0 }} />
             )}
-            style={styles.productContainer}
+            style={styles.ProductContainer}
             {...(SCREEN_WIDTH < 640 && {
               columnWrapperStyle: {
                 ...{ justifyContent: "space-between", width: "100%" },
@@ -59,23 +69,22 @@ export default function Index() {
           />
         </>
       ) : (
-        <ActivityIndicator color="#fff" />
+        <ActivityIndicator color={textColor} />
       )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  Container: {
     width: "100%",
   },
-  heading: {
+  Heading: {
     fontSize: 20,
     fontWeight: 600,
-    color: "white",
     paddingLeft: 8,
   },
-  productContainer: {
+  ProductContainer: {
     gap: SCREEN_WIDTH > 640 ? 16 : 4,
     paddingVertical: 16,
     paddingHorizontal: 8,

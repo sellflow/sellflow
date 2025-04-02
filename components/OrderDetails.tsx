@@ -1,28 +1,24 @@
+import { Colors } from "@/constants/Colors";
 import { mapSelectedProductOptionToObject } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { Button } from "react-native";
+import { Button, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "react-native";
 
 export default function OrderDetails({ order }: { order: any }) {
+  const colorScheme = useColorScheme();
+
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
+
   return (
-    <View style={{ width: "100%", maxWidth: 640, gap: 8 }}>
+    <View style={styles.Container}>
       <View style={{ width: "100%" }}>
-        <Text style={{ color: "white" }}>Order details</Text>
-        <View
-          style={{
-            width: "100%",
-            padding: 8,
-            borderColor: "grey",
-            borderWidth: 1,
-            borderRadius: 4,
-          }}
-        >
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Order date</Text>
-            <Text style={{ color: "white" }}>
+        <Text style={{ color: textColor }}>Order details</Text>
+        <View style={styles.SummaryContainer}>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Order date</Text>
+            <Text style={{ color: textColor }}>
               {new Date(order?.data?.order.createdAt).toLocaleString("en-US", {
                 year: "numeric",
                 month: "short",
@@ -30,17 +26,15 @@ export default function OrderDetails({ order }: { order: any }) {
               })}
             </Text>
           </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Order #</Text>{" "}
-            <Text style={{ color: "white" }}>{order?.data?.order?.number}</Text>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Order #</Text>{" "}
+            <Text style={{ color: textColor }}>
+              {order?.data?.order?.number}
+            </Text>
           </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Order total</Text>
-            <Text style={{ color: "white" }}>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Order total</Text>
+            <Text style={{ color: textColor }}>
               ${order?.data?.order?.totalPrice?.amount}
             </Text>
           </View>
@@ -50,16 +44,8 @@ export default function OrderDetails({ order }: { order: any }) {
       {order?.data?.order.requiresShipping && (
         <>
           <View style={{ width: "100%" }}>
-            <Text style={{ color: "white" }}>Shipment details</Text>
-            <View
-              style={{
-                width: "100%",
-                padding: 8,
-                borderColor: "grey",
-                borderRadius: 4,
-                borderWidth: 1,
-              }}
-            >
+            <Text style={{ color: textColor }}>Shipment details</Text>
+            <View style={styles.SummaryContainer}>
               {order.data.order.lineItems.edges.map((item: any) => (
                 <View key={item.node.image.url} style={{ width: "100%" }}>
                   <Link
@@ -80,16 +66,18 @@ export default function OrderDetails({ order }: { order: any }) {
                     <View style={{ flexDirection: "row", gap: 4 }}>
                       <Image
                         source={{ uri: item.node.image.url }}
-                        style={{ width: 75, height: 75, borderRadius: 4 }}
+                        style={{ width: 100, height: 100, borderRadius: 4 }}
                       />
                       <View style={{ gap: 4 }}>
-                        <Text style={{ color: "white" }}>{item.node.name}</Text>
-                        <Text style={{ color: "white" }}>
+                        <Text style={{ color: textColor }}>
+                          {item.node.name}
+                        </Text>
+                        <Text style={{ color: textColor }}>
                           Quantity: {item.node.quantity}
                         </Text>
                       </View>
                     </View>
-                    <Text style={{ color: "white" }}>
+                    <Text style={{ color: textColor }}>
                       ${item.node.price.amount}
                     </Text>
                   </Link>
@@ -98,81 +86,55 @@ export default function OrderDetails({ order }: { order: any }) {
             </View>
           </View>
           <View style={{ width: "100%" }}>
-            <Text style={{ color: "white" }}>Shipping Address</Text>
-            <View
-              style={{
-                width: "100%",
-                padding: 8,
-                borderColor: "grey",
-                borderRadius: 4,
-                borderWidth: 1,
-              }}
-            >
-              <Text style={{ color: "white" }}>
+            <Text style={{ color: textColor }}>Shipping Address</Text>
+            <View style={styles.SummaryContainer}>
+              <Text style={{ color: textColor }}>
                 {order.data.order.shippingAddress.firstName}{" "}
                 {order.data.order.shippingAddress.lastName}
               </Text>
-              <Text style={{ color: "white" }}>
+              <Text style={{ color: textColor }}>
                 {order.data.order.shippingAddress.address1}
               </Text>
-              <Text style={{ color: "white" }}>
+              <Text style={{ color: textColor }}>
                 {order.data.order.shippingAddress.formattedArea}
               </Text>
-              <Text style={{ color: "white" }}>
+              <Text style={{ color: textColor }}>
                 {order.data.order.shippingAddress.country}
               </Text>
             </View>
           </View>
         </>
       )}
-      <View style={{ width: "100%", maxWidth: 640 }}>
-        <Text style={{ color: "white" }}>Order Summary</Text>
-        <View
-          style={{
-            width: "100%",
-            borderWidth: 1,
-            borderColor: "grey",
-            borderRadius: 4,
-            padding: 8,
-          }}
-        >
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Items:</Text>
-            <Text style={{ color: "white" }}>
+      <View style={{ width: "100%" }}>
+        <Text style={{ color: textColor }}>Order Summary</Text>
+        <View style={styles.SummaryContainer}>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Items:</Text>
+            <Text style={{ color: textColor }}>
               ${order?.data.order.subtotal.amount}
             </Text>
           </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Shipping & Handling: </Text>
-            <Text style={{ color: "white" }}>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Shipping & Handling: </Text>
+            <Text style={{ color: textColor }}>
               ${order?.data.order.totalShipping.amount}
             </Text>
           </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Total Tip: </Text>
-            <Text style={{ color: "white" }}>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Total Tip: </Text>
+            <Text style={{ color: textColor }}>
               ${order?.data.order.totalTip.amount}
             </Text>
           </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Tax: </Text>
-            <Text style={{ color: "white" }}>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Tax: </Text>
+            <Text style={{ color: textColor }}>
               ${order?.data.order.totalTax.amount}
             </Text>
           </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ color: "white" }}>Total: </Text>
-            <Text style={{ color: "white" }}>
+          <View style={styles.InfoContainer}>
+            <Text style={{ color: textColor }}>Total: </Text>
+            <Text style={{ color: textColor }}>
               ${order?.data.order.totalPrice.amount}
             </Text>
           </View>
@@ -181,3 +143,22 @@ export default function OrderDetails({ order }: { order: any }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  Container: {
+    width: "100%",
+    maxWidth: 640,
+    gap: 8,
+    alignSelf: "center",
+  },
+  InfoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  SummaryContainer: {
+    width: "100%",
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 8,
+  },
+});

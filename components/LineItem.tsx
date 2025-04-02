@@ -1,10 +1,11 @@
+import { Colors } from "@/constants/Colors";
 import {
   mapSelectedProductOptionToObject,
   useCartLine,
 } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
 
 const imageSize = 100;
 const blurHash =
@@ -12,12 +13,16 @@ const blurHash =
 
 export default function LineItem() {
   const line = useCartLine();
+  const colorScheme = useColorScheme();
   const imageUrl = line.merchandise?.image?.url
     ? new URL(line.merchandise?.image?.url!)
     : "";
   if (imageUrl) {
     imageUrl.searchParams.append("height", String(imageSize));
   }
+
+  const textColor =
+    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
   return (
     <Link
@@ -46,14 +51,18 @@ export default function LineItem() {
           />
         )}
         <View style={styles.Labels}>
-          <Text style={styles.Title} numberOfLines={1}>
+          <Text style={[styles.Title, { color: textColor }]} numberOfLines={1}>
             {line.merchandise?.product?.title}
           </Text>
-          <Text>{line.merchandise?.title}</Text>
-          <Text style={{ marginTop: "auto" }}>Quantity: {line.quantity}</Text>
+          <Text style={{ color: textColor }}>{line.merchandise?.title}</Text>
+          <Text style={{ marginTop: "auto", color: textColor }}>
+            Quantity: {line.quantity}
+          </Text>
         </View>
         <View style={styles.PriceContainer}>
-          <Text style={styles.Price}>${line.cost?.totalAmount?.amount}</Text>
+          <Text style={[styles.Price, { color: textColor }]}>
+            ${line.cost?.totalAmount?.amount}
+          </Text>
         </View>
       </View>
     </Link>
