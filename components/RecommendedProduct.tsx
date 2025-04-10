@@ -1,5 +1,4 @@
 import { Colors } from "@/constants/Colors";
-import { useCart } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import {
@@ -9,6 +8,7 @@ import {
   TouchableOpacity,
   useColorScheme,
 } from "react-native";
+import { useCart } from "./CartProvider";
 
 const imageSize = 200;
 const blurhash =

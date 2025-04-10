@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "react-native";
-import { CartProvider, ShopifyProvider } from "@shopify/hydrogen-react";
+import { ShopifyProvider } from "@shopify/hydrogen-react";
+import { CartProvider } from "@/components/CartProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

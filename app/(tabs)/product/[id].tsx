@@ -12,10 +12,10 @@ import {
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ClientResponse } from "@shopify/storefront-api-client";
+import { ProductProvider } from "@shopify/hydrogen-react";
 import { ProductQuery } from "@/types/storefront.generated";
 import { getProductOptions } from "@/shopify/client";
 import { getProduct, getProductRecommendations } from "@/shopify/product";
-import { ProductProvider } from "@shopify/hydrogen-react";
 import Product from "@/components/Product";
 import RecommendedProduct from "@/components/RecommendedProduct";
 import { Colors } from "@/constants/Colors";

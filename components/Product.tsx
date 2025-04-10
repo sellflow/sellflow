@@ -8,11 +8,12 @@ import {
   ScrollView,
   useColorScheme,
 } from "react-native";
-import { BuyNowButton, useCart, useProduct } from "@shopify/hydrogen-react";
+import { useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
 import { useRef } from "react";
 import ProductImage from "./ProductImage";
 import { Colors } from "@/constants/Colors";
+import { useCart } from "./CartProvider";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -144,14 +145,11 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
           </Text>
         </TouchableOpacity>
         {selectedVariant?.id && (
-          <BuyNowButton
-            variantId={selectedVariant?.id}
-            style={styles.BuyNowButton}
-          >
+          <View style={styles.BuyNowButton}>
             <Text style={{ textAlign: "center", fontWeight: 600 }}>
               Buy now
             </Text>
-          </BuyNowButton>
+          </View>
         )}
         <Text style={[styles.Description, { color: textColor }]}>
           {product!.description}

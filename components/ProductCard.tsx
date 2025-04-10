@@ -1,6 +1,5 @@
 import { Colors } from "@/constants/Colors";
 import { Product as ShopifyProduct } from "@/types/storefront.types";
-import { useCart } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import {
@@ -11,6 +10,7 @@ import {
   Dimensions,
   useColorScheme,
 } from "react-native";
+import { useCart } from "./CartProvider";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const imageSize = SCREEN_WIDTH > 640 ? 300 : SCREEN_WIDTH / 2 - 12;

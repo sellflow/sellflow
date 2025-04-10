@@ -1,10 +1,7 @@
+import { useCart } from "@/components/CartProvider";
 import LineItem from "@/components/LineItem";
 import { Colors } from "@/constants/Colors";
-import {
-  CartCheckoutButton,
-  CartLineProvider,
-  useCart,
-} from "@shopify/hydrogen-react";
+import { CartLineProvider } from "@shopify/hydrogen-react";
 import { Link } from "expo-router";
 import {
   Text,
@@ -14,6 +11,7 @@ import {
   FlatList,
   useColorScheme,
   ScrollView,
+  Button,
 } from "react-native";
 
 export default function Index() {
@@ -32,7 +30,7 @@ export default function Index() {
         {Platform.OS == "ios" || Platform.OS == "android" ? (
           <Link href="../checkout">Proceed to Checkout</Link>
         ) : (
-          <CartCheckoutButton
+          <View
             style={{
               backgroundColor:
                 colorScheme === "light"
@@ -51,7 +49,7 @@ export default function Index() {
             >
               Proceed to Checkout
             </Text>
-          </CartCheckoutButton>
+          </View>
         )}
         {
           <FlatList

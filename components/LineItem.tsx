@@ -1,8 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import {
-  mapSelectedProductOptionToObject,
-  useCartLine,
-} from "@shopify/hydrogen-react";
+import { useCartLine } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
