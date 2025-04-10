@@ -9,6 +9,7 @@ import {
   GestureResponderEvent,
   Dimensions,
   useColorScheme,
+  View,
 } from "react-native";
 import { useCart } from "./CartProvider";
 
@@ -28,6 +29,7 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
 
   const addToCart = (e: GestureResponderEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     const merchandise = {
       merchandiseId: item.node.selectedOrFirstAvailableVariant!.id,
     };
@@ -42,41 +44,46 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
   return (
     <Link
       href={{
-        pathname: "/(tabs)/product/[id]",
+        pathname: "/product/[id]",
         params: { id: item.node.id },
       }}
-      style={styles.container}
-      key={item.node.id}
+      asChild
     >
-      <TouchableOpacity>
-        <Image
-          //@ts-ignore
-          source={{ uri: getImageUrl(item.node.featuredImage.url) }}
-          placeholder={{ blurhash }}
-          style={{
-            width: imageSize,
-            height: imageSize,
-            ...styles.image,
-          }}
-        />
-        <Text numberOfLines={1} style={[styles.heading, { color: textColor }]}>
-          {item.node?.title}
-        </Text>
-        {item?.node?.priceRange?.minVariantPrice && (
-          <Text style={[styles.price, { color: textColor }]}>
-            ${item.node.priceRange.minVariantPrice.amount}
-          </Text>
-        )}
-        {item?.node?.variantsCount!.count === 1 && (
-          <TouchableOpacity
-            style={styles.AddToCartButton}
-            onPress={(e) => addToCart(e)}
+      <TouchableOpacity style={styles.container}>
+        <View>
+          <Image
+            //@ts-ignore
+            source={{ uri: getImageUrl(item.node.featuredImage.url) }}
+            placeholder={{ blurhash }}
+            style={{
+              width: imageSize,
+              height: imageSize,
+              ...styles.image,
+            }}
+          />
+          <Text
+            numberOfLines={1}
+            style={[styles.heading, { color: textColor }]}
           >
-            <Text style={{ textAlign: "center", color: textColor }}>
-              Add to Cart
+            {item.node?.title}
+          </Text>
+          {item?.node?.priceRange?.minVariantPrice && (
+            <Text style={[styles.price, { color: textColor }]}>
+              ${item.node.priceRange.minVariantPrice.amount}
             </Text>
-          </TouchableOpacity>
-        )}
+          )}
+          {item?.node?.variantsCount!.count === 1 && (
+            <TouchableOpacity
+              style={styles.AddToCartButton}
+              onPress={(e) => addToCart(e)}
+              activeOpacity={0.7}
+            >
+              <Text style={{ textAlign: "center", color: textColor }}>
+                Add to Cart
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </TouchableOpacity>
     </Link>
   );
