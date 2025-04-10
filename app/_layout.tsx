@@ -11,9 +11,6 @@ import { useColorScheme } from "react-native";
 import { ShopifyProvider } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/CartProvider";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
 export default function RootLayout() {
   const [user, setUser] = useState("");
   const colorScheme = useColorScheme();

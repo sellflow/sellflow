@@ -54,6 +54,7 @@ export default function Index() {
         {
           <FlatList
             data={cart.lines}
+            scrollEnabled={false}
             renderItem={({ item }) => (
               <CartLineProvider line={item}>
                 <View style={styles.LineItemContainer}>

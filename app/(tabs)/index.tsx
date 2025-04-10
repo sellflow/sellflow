@@ -53,10 +53,12 @@ export default function Index() {
           <Text style={[styles.Heading, { color: textColor }]}>Products</Text>
           <FlatList
             data={products?.data?.products.edges}
+            //@ts-ignore
             renderItem={({ item }) => <Product item={item} />}
             keyExtractor={(item) => item.node.id}
             horizontal={SCREEN_WIDTH > 640 ? true : false}
             numColumns={SCREEN_WIDTH > 640 ? 1 : 2}
+            scrollEnabled={false}
             ItemSeparatorComponent={() => (
               <View style={{ width: SCREEN_WIDTH > 640 ? 16 : 0 }} />
             )}
