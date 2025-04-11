@@ -6,6 +6,7 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
+  Pressable,
   useColorScheme,
 } from "react-native";
 import { useProduct } from "@shopify/hydrogen-react";
@@ -58,14 +59,14 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     <View style={styles.Container}>
       <FlatList
         ref={flatListRef}
-        data={product!.media!.edges}
+        data={product?.media?.edges || []}
         renderItem={({ item }) => (
-          <ProductImage url={getImageUrl(item!.node?.image?.url)} />
+          <ProductImage url={getImageUrl(item?.node?.image?.url)} />
         )}
-        keyExtractor={(item) => item.node.image.url}
+        keyExtractor={(item) => item?.node?.image?.url || String(Math.random())}
         showsHorizontalScrollIndicator={false}
         snapToInterval={SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH}
-        decelerationRate={"fast"}
+        decelerationRate="fast"
         contentContainerStyle={{
           width: SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
         }}
@@ -73,56 +74,71 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
         pagingEnabled
       />
       <View style={styles.InfoContainer}>
-        <Text style={{ fontSize: 48, fontWeight: 600, color: textColor }}>
-          {product!.title}
+        <Text style={[styles.TitleText, { color: textColor }]}>
+          {product?.title}
         </Text>
         <>
           {options &&
             options.map(
               (option, index) =>
                 options.length! > 1 && (
-                  <View key={index}>
-                    <Text style={{ color: textColor }}>{option!.name}</Text>
+                  <View key={index} style={styles.OptionWrapper}>
+                    <Text style={{ color: textColor }}>{option?.name}</Text>
                     <ScrollView
                       horizontal={true}
                       showsHorizontalScrollIndicator={false}
+                      style={styles.OptionsScrollContainer}
                     >
                       {option?.values &&
                         option.values
+                          //@ts-ignore
                           .sort((a, b) => a - b)
                           .map((optionVal) => (
                             <Link
-                              onPress={() =>
-                                setSelectedOption(option.name, optionVal)
-                              }
-                              style={[
-                                styles.Option,
-                                {
-                                  backgroundColor:
-                                    optionVal == selectedOptions[option.name]
-                                      ? colorScheme === "light"
-                                        ? Colors.dark.background
-                                        : Colors.light.background
-                                      : backgroundColor,
-                                  color:
-                                    optionVal == selectedOptions[option.name]
-                                      ? colorScheme === "light"
-                                        ? Colors.dark.text
-                                        : Colors.light.text
-                                      : textColor,
-                                },
-                              ]}
                               key={optionVal}
                               href={{
                                 pathname: "/product/[id]",
                                 params: {
                                   ...search,
-                                  id: product!.id!,
-                                  [option?.name]: optionVal,
+                                  id: product?.id || "",
+                                  [option?.name || ""]: optionVal,
                                 },
                               }}
+                              style={[
+                                styles.Option,
+                                {
+                                  backgroundColor:
+                                    optionVal === selectedOptions![option.name!]
+                                      ? colorScheme === "light"
+                                        ? Colors.dark.background
+                                        : Colors.light.background
+                                      : backgroundColor,
+                                },
+                              ]}
+                              asChild
                             >
-                              {optionVal}
+                              <Pressable
+                                onPress={() =>
+                                  setSelectedOption(
+                                    option.name || "",
+                                    optionVal || "",
+                                  )
+                                }
+                              >
+                                <Text
+                                  style={{
+                                    color:
+                                      optionVal ==
+                                      selectedOptions![option.name!]
+                                        ? colorScheme === "light"
+                                          ? Colors.dark.text
+                                          : Colors.light.text
+                                        : textColor,
+                                  }}
+                                >
+                                  {optionVal}
+                                </Text>
+                              </Pressable>
                             </Link>
                           ))}
                     </ScrollView>
@@ -131,13 +147,13 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             )}
         </>
         {selectedVariant?.price?.amount && (
-          <Text style={{ color: textColor, fontSize: 24 }}>
+          <Text style={[styles.PriceText, { color: textColor }]}>
             ${selectedVariant.price.amount}
           </Text>
         )}
         <TouchableOpacity
           style={styles.AddToCartButton}
-          onPress={() => addToCart()}
+          onPress={addToCart}
           disabled={!selectedVariant}
         >
           <Text style={{ color: textColor, textAlign: "center" }}>
@@ -145,14 +161,14 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
           </Text>
         </TouchableOpacity>
         {selectedVariant?.id && (
-          <View style={styles.BuyNowButton}>
-            <Text style={{ textAlign: "center", fontWeight: 600 }}>
+          <TouchableOpacity style={styles.BuyNowButton}>
+            <Text style={{ textAlign: "center", fontWeight: "600" }}>
               Buy now
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
         <Text style={[styles.Description, { color: textColor }]}>
-          {product!.description}
+          {product?.description}
         </Text>
       </View>
     </View>
@@ -162,7 +178,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
 const styles = StyleSheet.create({
   Container: {
     flexDirection: SCREEN_WIDTH > 640 ? "row" : "column",
-    gap: 64,
+    gap: 32,
     width: "100%",
     maxWidth: SCREEN_WIDTH > 1175 ? 1175 : SCREEN_WIDTH,
   },
@@ -170,32 +186,48 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH > 640 ? "40%" : "100%",
     paddingHorizontal: SCREEN_WIDTH > 640 ? 0 : 16,
   },
+  TitleText: {
+    fontSize: 40,
+    fontWeight: "600",
+    marginBottom: 16,
+  },
+  PriceText: {
+    fontSize: 24,
+    marginTop: 12,
+  },
+  OptionWrapper: {
+    marginBottom: 8,
+  },
   Option: {
-    padding: 2,
     borderColor: "slategray",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
     borderWidth: 1,
-    marginRight: 4,
+    marginRight: 8,
+  },
+  OptionsScrollContainer: {
+    flexGrow: 0,
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    paddingVertical: 4,
   },
   AddToCartButton: {
     marginTop: 16,
     borderRadius: 4,
-    backgroundColor: "yellow",
-    paddingTop: 4,
-    paddingBottom: 4,
+    backgroundColor: "coral",
+    paddingVertical: 8,
+    maxWidth: "100%",
   },
   BuyNowButton: {
     marginTop: 8,
     borderRadius: 4,
     backgroundColor: "orange",
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingVertical: 8,
+    maxWidth: "100%",
   },
   Description: {
-    color: "white",
-    width: "100%",
+    maxWidth: "100%",
     paddingTop: 24,
   },
 });
