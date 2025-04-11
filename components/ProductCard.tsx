@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 16,
     borderRadius: 50,
-    backgroundColor: "yellow",
+    backgroundColor: "coral",
     paddingTop: 4,
     paddingBottom: 4,
     flex: 1,
