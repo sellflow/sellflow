@@ -58,9 +58,14 @@ export default function Index() {
             keyExtractor={(item) => item.node.id}
             horizontal={SCREEN_WIDTH > 640 ? true : false}
             numColumns={SCREEN_WIDTH > 640 ? 1 : 2}
-            scrollEnabled={false}
+            scrollEnabled={SCREEN_WIDTH > 640}
             ItemSeparatorComponent={() => (
-              <View style={{ width: SCREEN_WIDTH > 640 ? 16 : 0 }} />
+              <View
+                style={{
+                  width: SCREEN_WIDTH > 640 ? 16 : 0,
+                  height: 16,
+                }}
+              />
             )}
             style={styles.ProductContainer}
             {...(SCREEN_WIDTH < 640 && {
@@ -68,6 +73,7 @@ export default function Index() {
                 ...{ justifyContent: "space-between", width: "100%" },
               },
             })}
+            ListFooterComponent={() => <View style={{ height: 128 }} />}
           />
         </>
       ) : (
@@ -80,6 +86,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   Container: {
     width: "100%",
+    paddingVertical: 48,
   },
   Heading: {
     fontSize: 20,
