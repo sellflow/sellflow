@@ -15,6 +15,7 @@ import { useRef } from "react";
 import ProductImage from "./ProductImage";
 import { Colors } from "@/constants/Colors";
 import { useCart } from "./CartProvider";
+import { getOptimizedImageUrl } from "@/lib/utils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -38,18 +39,6 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     }
   };
 
-  const getImageUrl = (url: string) => {
-    if (url) {
-      const imageURL = new URL(url);
-      imageURL.searchParams.append(
-        "height",
-        String(SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH),
-      );
-      return imageURL.toString();
-    }
-    return "";
-  };
-
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
   const backgroundColor =
@@ -61,7 +50,12 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
         ref={flatListRef}
         data={product?.media?.edges || []}
         renderItem={({ item }) => (
-          <ProductImage url={getImageUrl(item?.node?.image?.url)} />
+          <ProductImage
+            url={getOptimizedImageUrl(
+              item?.node?.image?.url,
+              SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
+            )}
+          />
         )}
         keyExtractor={(item) => item?.node?.image?.url || String(Math.random())}
         showsHorizontalScrollIndicator={false}

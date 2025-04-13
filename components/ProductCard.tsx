@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { useCart } from "./CartProvider";
+import { getOptimizedImageUrl } from "@/lib/utils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const imageSize = SCREEN_WIDTH > 640 ? 300 : SCREEN_WIDTH / 2 - 12;
@@ -21,11 +22,6 @@ const blurhash =
 export default function Product({ item }: { item: { node: ShopifyProduct } }) {
   const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
-  const getImageUrl = (url: string) => {
-    const imageUrl = new URL(url);
-    imageUrl.searchParams.append("height", String(imageSize));
-    return imageUrl.toString();
-  };
 
   const addToCart = (e: GestureResponderEvent) => {
     e.stopPropagation();
@@ -53,7 +49,9 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
         <View>
           <Image
             //@ts-ignore
-            source={{ uri: getImageUrl(item.node.featuredImage.url) }}
+            source={{
+              uri: getOptimizedImageUrl(item.node.featuredImage.url, imageSize),
+            }}
             placeholder={{ blurhash }}
             style={{
               width: imageSize,

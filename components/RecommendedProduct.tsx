@@ -9,6 +9,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { useCart } from "./CartProvider";
+import { getOptimizedImageUrl } from "@/lib/utils";
 
 const imageSize = 200;
 const blurhash =
@@ -17,13 +18,6 @@ const blurhash =
 export default function RecommendedProduct({ item }: { item: any }) {
   const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
-  const getImageUrl = (url: string) => {
-    if (url) {
-      const imageUrl = new URL(url);
-      imageUrl.searchParams.append("height", String(imageSize));
-      return imageUrl.toString();
-    }
-  };
   const addToCart = (e: GestureResponderEvent) => {
     e.stopPropagation();
     const merchandise = {
@@ -49,7 +43,9 @@ export default function RecommendedProduct({ item }: { item: any }) {
       <TouchableOpacity>
         <Image
           //@ts-ignore
-          source={{ uri: getImageUrl(item?.featuredImage?.url) }}
+          source={{
+            uri: getOptimizedImageUrl(item?.featuredImage?.url, imageSize),
+          }}
           placeholder={{ blurhash }}
           style={{
             width: imageSize,

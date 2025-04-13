@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { getOptimizedImageUrl } from "@/lib/utils";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Button, StyleSheet, useColorScheme } from "react-native";
@@ -64,7 +65,9 @@ export default function OrderDetails({ order }: { order: any }) {
                   >
                     <View style={{ flexDirection: "row", gap: 4 }}>
                       <Image
-                        source={{ uri: item.node.image.url }}
+                        source={{
+                          uri: getOptimizedImageUrl(item.node.image.url, 100),
+                        }}
                         style={{ width: 100, height: 100, borderRadius: 4 }}
                       />
                       <View style={{ gap: 4 }}>

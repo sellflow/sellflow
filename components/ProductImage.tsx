@@ -1,3 +1,4 @@
+import { getOptimizedImageUrl } from "@/lib/utils";
 import { Image } from "expo-image";
 import { Dimensions, StyleSheet, View } from "react-native";
 
@@ -9,7 +10,12 @@ export default function ProductImage({ url }: { url: string }) {
   return (
     <View style={styles.Container} pointerEvents="none">
       <Image
-        source={{ uri: url }}
+        source={{
+          uri: getOptimizedImageUrl(
+            url,
+            SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
+          ),
+        }}
         placeholder={blurhash}
         style={styles.Image}
         contentFit="cover"
