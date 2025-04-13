@@ -40,7 +40,22 @@ export default function RootLayout() {
           onLineAddComplete={() => console.log("Line add complete")}
           customerAccessToken={user}
         >
-          <Stack>
+          <Stack
+            screenOptions={{
+              animation: "slide_from_right",
+              headerBackButtonDisplayMode: "minimal",
+            }}
+          >
+            <Stack.Screen
+              name="order/[id]"
+              options={{ headerTitle: "Order" }}
+            />
+            <Stack.Screen
+              name="product/[id]"
+              options={{ headerTitle: "Product" }}
+            />
+            <Stack.Screen name="account" options={{ headerTitle: "Account" }} />
+            <Stack.Screen name="orders" options={{ headerTitle: "Orders" }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
