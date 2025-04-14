@@ -255,6 +255,7 @@ export default function Header() {
                     pathname: "/product/[id]",
                     params: { id: result.id },
                   }}
+                  key={index}
                   asChild
                 >
                   <TouchableOpacity key={index}>
