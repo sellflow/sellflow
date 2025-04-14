@@ -16,6 +16,7 @@ import ProductImage from "./ProductImage";
 import { Colors } from "@/constants/Colors";
 import { useCart } from "./CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
+import ImageCarousel from "./ImageCarousel";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -46,27 +47,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
 
   return (
     <View style={styles.Container}>
-      <FlatList
-        ref={flatListRef}
-        data={product?.media?.edges || []}
-        renderItem={({ item }) => (
-          <ProductImage
-            url={getOptimizedImageUrl(
-              item?.node?.image?.url,
-              SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
-            )}
-          />
-        )}
-        keyExtractor={(item) => item?.node?.image?.url || String(Math.random())}
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH}
-        decelerationRate="fast"
-        contentContainerStyle={{
-          width: SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
-        }}
-        horizontal
-        pagingEnabled
-      />
+      <ImageCarousel images={product?.media?.edges} />
       <View style={styles.InfoContainer}>
         <Text style={[styles.TitleText, { color: textColor }]}>
           {product?.title}
