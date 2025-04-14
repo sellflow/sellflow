@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { getOptimizedImageUrl } from "@/lib/utils";
+import { mapSelectedProductOptionToObject } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Button, StyleSheet, useColorScheme } from "react-native";
