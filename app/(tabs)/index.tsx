@@ -48,37 +48,39 @@ export default function Index() {
     <ScrollView
       style={[styles.Container, { backgroundColor: backgroundColor }]}
     >
-      {products ? (
-        <>
-          <Text style={[styles.Heading, { color: textColor }]}>Products</Text>
-          <FlatList
-            data={products?.data?.products.edges}
-            //@ts-ignore
-            renderItem={({ item }) => <Product item={item} />}
-            keyExtractor={(item) => item.node.id}
-            horizontal={SCREEN_WIDTH > 640 ? true : false}
-            numColumns={SCREEN_WIDTH > 640 ? 1 : 2}
-            scrollEnabled={SCREEN_WIDTH > 640}
-            ItemSeparatorComponent={() => (
-              <View
-                style={{
-                  width: SCREEN_WIDTH > 640 ? 16 : 0,
-                  height: 16,
-                }}
-              />
-            )}
-            style={styles.ProductContainer}
-            {...(SCREEN_WIDTH < 640 && {
-              columnWrapperStyle: {
-                ...{ justifyContent: "space-between", width: "100%" },
-              },
-            })}
-            ListFooterComponent={() => <View style={{ height: 128 }} />}
-          />
-        </>
-      ) : (
-        <ActivityIndicator color={textColor} />
-      )}
+      <View style={styles.ContentContainer}>
+        {products ? (
+          <>
+            <Text style={[styles.Heading, { color: textColor }]}>Products</Text>
+            <FlatList
+              data={products?.data?.products.edges}
+              //@ts-ignore
+              renderItem={({ item }) => <Product item={item} />}
+              keyExtractor={(item) => item.node.id}
+              horizontal={SCREEN_WIDTH > 640 ? true : false}
+              numColumns={SCREEN_WIDTH > 640 ? 1 : 2}
+              scrollEnabled={SCREEN_WIDTH > 640}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    width: SCREEN_WIDTH > 640 ? 16 : 0,
+                    height: 16,
+                  }}
+                />
+              )}
+              style={styles.ProductContainer}
+              {...(SCREEN_WIDTH < 640 && {
+                columnWrapperStyle: {
+                  ...{ justifyContent: "space-between", width: "100%" },
+                },
+              })}
+              ListFooterComponent={() => <View style={{ height: 128 }} />}
+            />
+          </>
+        ) : (
+          <ActivityIndicator color={textColor} />
+        )}
+      </View>
     </ScrollView>
   );
 }
@@ -86,7 +88,11 @@ export default function Index() {
 const styles = StyleSheet.create({
   Container: {
     width: "100%",
-    paddingVertical: 48,
+  },
+  ContentContainer: {
+    width: "100%",
+    maxWidth: 1200,
+    alignSelf: "center",
   },
   Heading: {
     fontSize: 20,

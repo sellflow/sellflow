@@ -6,11 +6,10 @@ import {
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "react-native";
 import { ShopifyProvider } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/CartProvider";
-import { Image } from "expo-image";
+import Header from "@/components/Header";
 
 export default function RootLayout() {
   const [user, setUser] = useState("");
@@ -60,12 +59,7 @@ export default function RootLayout() {
             <Stack.Screen
               name="(tabs)"
               options={{
-                headerLeft: () => (
-                  <Image
-                    source={require("@/images/favicon.svg")}
-                    style={{ width: 35, height: 35, borderRadius: 100 }}
-                  />
-                ),
+                header: () => <Header />,
                 headerTitle: "",
               }}
             />
