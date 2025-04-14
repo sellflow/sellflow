@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "100%",
     maxWidth: 640,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
   },
   LineItemContainer: {
     width: "100%",
