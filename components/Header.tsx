@@ -3,7 +3,7 @@ import { getOptimizedImageUrl } from "@/lib/utils";
 import { getPredictiveSearchResults } from "@/shopify/search";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
   StyleSheet,
@@ -21,6 +21,7 @@ import {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Header() {
+  const router = useRouter();
   const colorScheme = useColorScheme();
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState(false);
@@ -111,6 +112,11 @@ export default function Header() {
     }
   };
 
+  const handleSubmit = () => {
+    setSearchBarOpen(false);
+    router.push({ pathname: "/search/[query]", params: { query: search } });
+  };
+
   return (
     <View
       style={[
@@ -169,6 +175,7 @@ export default function Header() {
           style={[styles.searchContainer, { opacity: searchBarOpacity }]}
         >
           <TextInput
+            onSubmitEditing={handleSubmit}
             ref={inputRef}
             style={[
               styles.SearchInput,

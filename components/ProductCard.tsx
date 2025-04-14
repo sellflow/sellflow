@@ -15,7 +15,7 @@ import { useCart } from "./CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const imageSize = SCREEN_WIDTH > 640 ? 300 : SCREEN_WIDTH / 2 - 12;
+const imageSize = SCREEN_WIDTH > 640 ? 290 : SCREEN_WIDTH / 2 - 12;
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
