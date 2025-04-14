@@ -10,6 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "react-native";
 import { ShopifyProvider } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/CartProvider";
+import { Image } from "expo-image";
 
 export default function RootLayout() {
   const [user, setUser] = useState("");
@@ -56,7 +57,18 @@ export default function RootLayout() {
             />
             <Stack.Screen name="account" options={{ headerTitle: "Account" }} />
             <Stack.Screen name="orders" options={{ headerTitle: "Orders" }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(tabs)"
+              options={{
+                headerLeft: () => (
+                  <Image
+                    source={require("@/images/favicon.svg")}
+                    style={{ width: 35, height: 35, borderRadius: 100 }}
+                  />
+                ),
+                headerTitle: "",
+              }}
+            />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style="auto" />
