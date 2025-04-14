@@ -165,7 +165,7 @@ export const getProducts = async () =>
   }`,
     {
       variables: {
-        first: 10,
+        first: 12,
       },
     },
   );

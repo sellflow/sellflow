@@ -57,9 +57,7 @@ export default function Index() {
               //@ts-ignore
               renderItem={({ item }) => <Product item={item} />}
               keyExtractor={(item) => item.node.id}
-              horizontal={SCREEN_WIDTH > 640 ? true : false}
-              numColumns={SCREEN_WIDTH > 640 ? 1 : 2}
-              scrollEnabled={SCREEN_WIDTH > 640}
+              numColumns={SCREEN_WIDTH > 640 ? 4 : 2}
               ItemSeparatorComponent={() => (
                 <View
                   style={{
@@ -69,11 +67,10 @@ export default function Index() {
                 />
               )}
               style={styles.ProductContainer}
-              {...(SCREEN_WIDTH < 640 && {
-                columnWrapperStyle: {
-                  ...{ justifyContent: "space-between", width: "100%" },
-                },
-              })}
+              columnWrapperStyle={{
+                justifyContent: "space-between",
+                width: "100%",
+              }}
               ListFooterComponent={() => <View style={{ height: 128 }} />}
             />
           </>
