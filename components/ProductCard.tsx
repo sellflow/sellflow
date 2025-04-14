@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     maxWidth: imageSize,
+    flexGrow: 0,
   },
   price: {
     color: "white",
