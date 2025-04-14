@@ -43,9 +43,10 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
         pathname: "/product/[id]",
         params: { id: item.node.id },
       }}
+      style={styles.container}
       asChild
     >
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity>
         <View>
           <Image
             //@ts-ignore
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: "auto",
   },
   image: {
     backgroundColor: "white",
@@ -118,5 +120,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginTop: 4,
     fontWeight: 600,
+    marginBottom: "auto",
   },
 });
