@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   SearchResultsContainer: {
     position: "absolute",
     borderWidth: 1,
-    borderRadius: SCREEN_WIDTH > 1200 ? 4 : 0,
+    borderRadius: 4,
     top: 96,
     left: 8,
     width: "100%",
