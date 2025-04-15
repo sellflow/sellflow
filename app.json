@@ -5,12 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./images/favicon.png",
-    "scheme": "shop.72278704345.app",
+    "scheme": "https://",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "shop.72278704345.app",
+      "bundleIdentifier": "com.sellflow",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
