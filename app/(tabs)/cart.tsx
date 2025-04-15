@@ -1,8 +1,9 @@
 import { useCart } from "@/components/CartProvider";
 import LineItem from "@/components/LineItem";
 import { Colors } from "@/constants/Colors";
+import shopifyCheckout from "@/shopify/checkout";
 import { CartLineProvider } from "@shopify/hydrogen-react";
-import { Link } from "expo-router";
+import { useEffect } from "react";
 import {
   Text,
   View,
@@ -11,64 +12,113 @@ import {
   FlatList,
   useColorScheme,
   ScrollView,
-  Button,
+  TouchableOpacity,
 } from "react-native";
 
-export default function Index() {
+export default function Cart() {
   const cart = useCart();
   const colorScheme = useColorScheme();
-
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
   const backgroundColor =
     colorScheme === "light" ? Colors.light.background : Colors.dark.background;
 
-  return (
-    <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
-      <View style={styles.Container}>
-        <Text style={{ color: textColor }}>Your cart</Text>
-        {Platform.OS == "ios" || Platform.OS == "android" ? (
-          <Link href="../checkout">Proceed to Checkout</Link>
-        ) : (
-          <View
-            style={{
-              backgroundColor:
-                colorScheme === "light"
-                  ? Colors.dark.background
-                  : Colors.light.background,
-              ...styles.Checkout,
-            }}
-          >
-            <Text
+  if (Platform.OS === "android" || Platform.OS === "ios") {
+    const handleCheckout = () => {
+      if (cart.checkoutUrl) {
+        shopifyCheckout!.present(cart.checkoutUrl);
+      }
+    };
+
+    useEffect(() => {
+      if (cart.checkoutUrl) shopifyCheckout!.preload(cart.checkoutUrl);
+    }, []);
+
+    return (
+      <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+        <View style={styles.Container}>
+          <Text style={{ color: textColor }}>Your cart</Text>
+          {Platform.OS === "ios" || Platform.OS === "android" ? (
+            <TouchableOpacity onPress={handleCheckout}>
+              <Text>Proceed to Checkout</Text>
+            </TouchableOpacity>
+          ) : (
+            <View
               style={{
-                color:
+                backgroundColor:
                   colorScheme === "light"
-                    ? Colors.dark.text
-                    : Colors.light.text,
+                    ? Colors.dark.background
+                    : Colors.light.background,
+                ...styles.Checkout,
               }}
             >
-              Proceed to Checkout
-            </Text>
-          </View>
-        )}
-        {
-          <FlatList
-            data={cart.lines}
-            scrollEnabled={false}
-            renderItem={({ item }) => (
-              <CartLineProvider line={item}>
-                <View style={styles.LineItemContainer}>
-                  <LineItem />
-                </View>
-              </CartLineProvider>
-            )}
-            keyExtractor={(line) => line!.id!}
-            style={styles.ListStyle}
-          />
-        }
-      </View>
-    </ScrollView>
-  );
+              <Text
+                style={{
+                  color:
+                    colorScheme === "light"
+                      ? Colors.dark.text
+                      : Colors.light.text,
+                }}
+              >
+                Proceed to Checkout
+              </Text>
+            </View>
+          )}
+          {
+            <FlatList
+              data={cart.lines}
+              scrollEnabled={false}
+              renderItem={({ item }) => (
+                <CartLineProvider line={item}>
+                  <View style={styles.LineItemContainer}>
+                    <LineItem />
+                  </View>
+                </CartLineProvider>
+              )}
+              keyExtractor={(line) => line!.id!}
+              style={styles.ListStyle}
+            />
+          }
+        </View>
+      </ScrollView>
+    );
+  } else {
+    return (
+      <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+        <View
+          style={{
+            backgroundColor:
+              colorScheme === "light"
+                ? Colors.dark.background
+                : Colors.light.background,
+            ...styles.Checkout,
+          }}
+        >
+          <Text
+            style={{
+              color:
+                colorScheme === "light" ? Colors.dark.text : Colors.light.text,
+            }}
+          >
+            Proceed to Checkout
+          </Text>
+        </View>
+        <FlatList
+          data={cart.lines}
+          scrollEnabled={false}
+          renderItem={({ item }) => (
+            <CartLineProvider line={item}>
+              <View style={styles.LineItemContainer}>
+                <LineItem />
+              </View>
+            </CartLineProvider>
+          )}
+          keyExtractor={(line) => line!.id!}
+          style={styles.ListStyle}
+        />
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

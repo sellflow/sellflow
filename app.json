@@ -20,7 +20,7 @@
         "foregroundImage": "./images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "shop.72278704345.app"
+      "package": "com.sellflow"
     },
     "web": {
       "bundler": "metro",
