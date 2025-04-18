@@ -31,6 +31,7 @@
     "expo": "^52.0.38",
     "expo-auth-session": "~6.0.3",
     "expo-blur": "~14.0.3",
+    "expo-checkbox": "~4.0.1",
     "expo-constants": "~17.0.7",
     "expo-font": "^13.0.4",
     "expo-haptics": "~14.0.1",
@@ -54,6 +55,7 @@
     "react-native-svg": "^15.2.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
+    "rn-range-slider": "^2.2.2",
     "type-fest": "^4.35.0"
   },
   "devDependencies": {

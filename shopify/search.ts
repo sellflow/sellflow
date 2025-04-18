@@ -3,7 +3,7 @@ import { client } from "./client";
 
 export const getSearchResults = async (
   query: string,
-  productFilters: ProductFilter,
+  productFilters: ProductFilter[],
 ) =>
   await client.request(
     `
@@ -31,6 +31,34 @@ export const getSearchResults = async (
           }
         }
       }
+      productFilters {
+        id
+        label
+        presentation
+        type
+        values {
+          id
+          count
+          image {
+            alt
+            image {
+              url
+            }
+          }
+          input
+          label
+          swatch {
+            color
+            image {
+              alt
+              image {
+                url
+              }
+            }
+          }
+        }
+      }
+      totalCount
     }
   }
   `,
