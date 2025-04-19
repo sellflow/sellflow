@@ -19,7 +19,7 @@ const imageSize = SCREEN_WIDTH > 640 ? 290 : SCREEN_WIDTH / 2 - 12;
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-export default function Product({ item }: { item: { node: ShopifyProduct } }) {
+export default function Product({ node }: { node: ShopifyProduct }) {
   const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
 
@@ -27,7 +27,7 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
     e.stopPropagation();
     e.preventDefault();
     const merchandise = {
-      merchandiseId: item.node.selectedOrFirstAvailableVariant!.id,
+      merchandiseId: node.selectedOrFirstAvailableVariant!.id,
     };
     if (merchandise?.merchandiseId) {
       linesAdd([merchandise]);
@@ -41,7 +41,7 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
     <Link
       href={{
         pathname: "/product/[id]",
-        params: { id: item.node.id },
+        params: { id: node.id },
       }}
       style={styles.container}
       asChild
@@ -51,7 +51,7 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
           <Image
             //@ts-ignore
             source={{
-              uri: getOptimizedImageUrl(item.node.featuredImage.url, imageSize),
+              uri: getOptimizedImageUrl(node.featuredImage!.url, imageSize),
             }}
             placeholder={{ blurhash }}
             style={{
@@ -64,14 +64,14 @@ export default function Product({ item }: { item: { node: ShopifyProduct } }) {
             numberOfLines={1}
             style={[styles.heading, { color: textColor }]}
           >
-            {item.node?.title}
+            {node?.title}
           </Text>
-          {item?.node?.priceRange?.minVariantPrice && (
+          {node?.priceRange?.minVariantPrice && (
             <Text style={[styles.price, { color: textColor }]}>
-              ${item.node.priceRange.minVariantPrice.amount}
+              ${node.priceRange.minVariantPrice.amount}
             </Text>
           )}
-          {item?.node?.variantsCount!.count === 1 && (
+          {node?.variantsCount!.count === 1 && (
             <TouchableOpacity
               style={styles.AddToCartButton}
               onPress={(e) => addToCart(e)}
@@ -98,11 +98,10 @@ const styles = StyleSheet.create({
     backgroundColor: "coral",
     paddingTop: 4,
     paddingBottom: 4,
-    flex: 1,
   },
   container: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: "auto",
   },
   image: {

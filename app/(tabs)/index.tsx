@@ -52,27 +52,11 @@ export default function Index() {
         {products ? (
           <>
             <Text style={[styles.Heading, { color: textColor }]}>Products</Text>
-            <FlatList
-              data={products?.data?.products.edges}
-              //@ts-ignore
-              renderItem={({ item }) => <Product item={item} />}
-              keyExtractor={(item) => item.node.id}
-              numColumns={SCREEN_WIDTH > 640 ? 4 : 2}
-              ItemSeparatorComponent={() => (
-                <View
-                  style={{
-                    width: SCREEN_WIDTH > 640 ? 16 : 0,
-                    height: 16,
-                  }}
-                />
-              )}
-              style={styles.ProductContainer}
-              columnWrapperStyle={{
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-              ListFooterComponent={() => <View style={{ height: 128 }} />}
-            />
+            <View style={styles.ProductContainer}>
+              {products?.data?.products?.edges?.map(({ node }, index) => (
+                <Product node={node} key={index} />
+              ))}
+            </View>
           </>
         ) : (
           <ActivityIndicator color={textColor} />
@@ -97,8 +81,10 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   ProductContainer: {
-    gap: SCREEN_WIDTH > 640 ? 16 : 4,
+    gap: 8,
     paddingVertical: 16,
     paddingHorizontal: 8,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
 });
