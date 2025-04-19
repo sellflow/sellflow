@@ -16,6 +16,7 @@ import {
   Dimensions,
   Text,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -118,7 +119,7 @@ export default function Header() {
   };
 
   return (
-    <View
+    <SafeAreaView
       style={[
         styles.Container,
         {
@@ -293,7 +294,7 @@ export default function Header() {
           </ScrollView>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
