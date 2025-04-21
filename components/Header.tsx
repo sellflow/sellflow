@@ -13,13 +13,10 @@ import {
   View,
   Animated,
   Keyboard,
-  Dimensions,
   Text,
   ScrollView,
   SafeAreaView,
 } from "react-native";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Header() {
   const router = useRouter();
@@ -41,7 +38,6 @@ export default function Header() {
         setSearchError(true);
       }
       setSearchResults(results.data);
-      console.log(results);
     } catch (e) {
       console.error(e);
       setSearchError(true);
