@@ -26,7 +26,10 @@ export default function Index() {
   const [user, setUser] = useState();
   const colorScheme = useColorScheme();
   const redirectUri = makeRedirectUri({
-    scheme: Platform.OS === "web" ? "https://" : "shop.72278704345.app",
+    scheme:
+      Platform.OS === "web"
+        ? "https://"
+        : process.env.EXPO_PUBLIC_CUSTOMER_ACCOUNT_SHOP_ID,
     path: "profile",
   });
   const [loginComplete, setLoginComplete] = useState(false);
@@ -48,7 +51,6 @@ export default function Index() {
         WebBrowser.coolDownAsync();
       };
     }
-    console.log("REDIRECT URI: ", request?.redirectUri);
   }, [response]);
 
   useEffect(() => {
