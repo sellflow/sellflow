@@ -66,7 +66,17 @@ export default function Page() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          {
+            backgroundColor:
+              colorScheme === "light"
+                ? Colors.light.background
+                : Colors.dark.background,
+          },
+        ]}
+      >
         {product ? (
           <View style={styles.product}>
             <ProductProvider
