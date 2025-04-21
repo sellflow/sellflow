@@ -76,20 +76,15 @@ export default function Orders() {
       ) : (
         <View style={styles.Container}>
           {typeof orders === "object" && Object.keys(orders).length > 0 ? (
-            <>
-              <Text style={{ color: textColor }}>Orders</Text>
-
-              <FlatList
-                data={orders.data.customer.orders.edges}
-                style={styles.ListStyle}
-                keyExtractor={(item) => item.node.id}
-                renderItem={({ item }) => (
-                  <View style={styles.ItemContainer}>
-                    <OrderItem item={item} />
+            <View style={styles.ListStyle}>
+              {orders?.data?.customer?.orders?.edges?.map(
+                (order: any, index: number) => (
+                  <View style={styles.ItemContainer} key={index}>
+                    <OrderItem item={order} />
                   </View>
-                )}
-              />
-            </>
+                ),
+              )}
+            </View>
           ) : (
             <Text style={{ color: textColor }}>No orders yet!</Text>
           )}
@@ -111,11 +106,14 @@ const styles = StyleSheet.create({
   },
   ItemContainer: {
     width: "100%",
-    marginBottom: 8,
     flexDirection: "row",
   },
   ListStyle: {
     width: "100%",
-    maxWidth: 640,
+    maxWidth: 600,
+    paddingTop: 8,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
   },
 });

@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   useColorScheme,
@@ -66,15 +67,19 @@ export default function Order() {
     colorScheme === "light" ? Colors.light.background : Colors.dark.background;
 
   return (
-    <ScrollView style={{ width: "100%", backgroundColor }}>
-      {loading ? (
-        <ActivityIndicator
-          color={colorScheme === "light" ? Colors.light.text : Colors.dark.text}
-        />
-      ) : (
-        <OrderDetails order={order} />
-      )}
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={[styles.Container, { backgroundColor }]}>
+        {loading ? (
+          <ActivityIndicator
+            color={
+              colorScheme === "light" ? Colors.light.text : Colors.dark.text
+            }
+          />
+        ) : (
+          <OrderDetails order={order} />
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
