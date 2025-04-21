@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   useColorScheme,
+  TouchableOpacity,
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Colors } from "@/constants/Colors";
+import { SafeAreaView } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 const blurHash =
@@ -77,49 +79,87 @@ export default function Index() {
   const backgroundColor =
     colorScheme === "light" ? Colors.light.background : Colors.dark.background;
 
+  const oppositeTextColor =
+    colorScheme === "light" ? Colors.dark.text : Colors.light.text;
+  const oppositeBackgroundColor =
+    colorScheme === "light" ? Colors.dark.background : Colors.light.background;
+
   return user ? (
-    <View style={[styles.PageContainer, { backgroundColor }]}>
+    <SafeAreaView style={[styles.PageContainer, { backgroundColor }]}>
       <View style={styles.Container}>
-        {user?.imageUrl ? (
-          <Image
-            source={{ uri: user?.imageUrl }}
-            placeholder={{ blurHash }}
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 100,
-              alignSelf: "center",
-            }}
-          />
-        ) : (
-          <Ionicons size={64} name="person-circle" color={textColor} />
-        )}
+        <Ionicons
+          size={96}
+          name="person-circle"
+          color={textColor}
+          style={{ alignSelf: "center" }}
+        />
         <Text style={[styles.Username, { color: textColor }]}>
           {user?.displayName}
         </Text>
         <View style={styles.OptionsContainer}>
-          <Link style={styles.OptionButton} href="/orders">
+          <Link
+            style={[
+              styles.OptionButton,
+              {
+                backgroundColor: oppositeBackgroundColor,
+                color: oppositeTextColor,
+              },
+            ]}
+            href="/orders"
+          >
             Orders
           </Link>
-          <Link style={styles.OptionButton} href="/account">
+          <Link
+            style={[
+              styles.OptionButton,
+              {
+                backgroundColor: oppositeBackgroundColor,
+                color: oppositeTextColor,
+              },
+            ]}
+            href="/account"
+          >
             Account
           </Link>
-          <Link style={styles.OptionButton} href="/">
+          <Link
+            style={[
+              styles.OptionButton,
+              {
+                backgroundColor: oppositeBackgroundColor,
+                color: oppositeTextColor,
+              },
+            ]}
+            href="/orders"
+          >
             Wishlist
           </Link>
-          <Link style={styles.OptionButton} href="/">
+          <Link
+            style={[
+              styles.OptionButton,
+              {
+                backgroundColor: oppositeBackgroundColor,
+                color: oppositeTextColor,
+              },
+            ]}
+            href="/orders"
+          >
             Settings
           </Link>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   ) : (
-    <View style={[styles.PageContainer, { backgroundColor }]}>
+    <SafeAreaView style={[styles.PageContainer, { backgroundColor }]}>
       <View style={styles.Container}>
-        <Text style={[styles.text, { color: textColor }]}>Profile page</Text>
-        <Button
+        <Text style={[styles.Header, { color: textColor }]}>
+          Log in or Sign up
+        </Text>
+        <TouchableOpacity
           disabled={!request}
-          title="Login"
+          style={[
+            styles.LogInButton,
+            { backgroundColor: oppositeBackgroundColor },
+          ]}
           onPress={() => {
             loginUser({
               request,
@@ -129,13 +169,29 @@ export default function Index() {
               setLoginComplete,
             });
           }}
-        />
-        <Button
-          title="Refresh"
-          onPress={async () => await refreshUser({ discovery })}
-        />
+        >
+          <Text style={{ color: oppositeTextColor }}>Log in</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          disabled={!request}
+          style={[
+            styles.LogInButton,
+            { backgroundColor: oppositeBackgroundColor },
+          ]}
+          onPress={() => {
+            loginUser({
+              request,
+              promptAsync,
+              redirectUri,
+              discovery,
+              setLoginComplete,
+            });
+          }}
+        >
+          <Text style={{ color: oppositeTextColor }}>Sign up</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -149,17 +205,13 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 640,
     paddingHorizontal: 16,
+    gap: 16,
   },
   OptionButton: {
-    color: "black",
     width: "47.5%",
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingVertical: 8,
     textAlign: "center",
-    backgroundColor: "lightgrey",
-    borderWidth: 2,
-    borderColor: "grey",
-    borderRadius: 50,
+    borderRadius: 4,
   },
   OptionsContainer: {
     flexDirection: "row",
@@ -171,5 +223,16 @@ const styles = StyleSheet.create({
   Username: {
     marginTop: 8,
     alignSelf: "center",
+  },
+  Header: {
+    alignSelf: "center",
+    fontSize: 18,
+    paddingBottom: 24,
+  },
+  LogInButton: {
+    width: "100%",
+    paddingVertical: 8,
+    alignItems: "center",
+    borderRadius: 4,
   },
 });
