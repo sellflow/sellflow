@@ -4,9 +4,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   View,
-  FlatList,
-  Dimensions,
   useColorScheme,
+  SafeAreaView,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { getSearchResults } from "@/shopify/search";
@@ -22,8 +21,6 @@ import {
 import ProductFilter from "@/components/ProductFilter";
 import FilterDropdown from "@/components/FilterDropdown";
 import DropdownProvider from "@/components/DropdownProvider";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export type Action =
   | { type: "include"; input: Object }
@@ -96,62 +93,50 @@ export default function Search() {
     colorScheme === "light" ? Colors.light.background : Colors.dark.background;
 
   return (
-    <ScrollView
-      style={[styles.Container, { backgroundColor: backgroundColor }]}
-    >
-      <DropdownProvider>
-        <View style={styles.ContentContainer}>
-          {products ? (
-            <>
-              <Text style={[styles.Heading, { color: textColor }]}>
-                Showing results for "{query}"
-              </Text>
-              {products?.data?.search?.productFilters && (
-                <View style={styles.FilterContainer}>
-                  {products?.data?.search?.productFilters.map(
-                    (filter: Filter, index: number) => (
-                      <ProductFilter
-                        filter={filter}
-                        key={index}
-                        colorScheme={colorScheme}
-                      />
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        style={[styles.Container, { backgroundColor: backgroundColor }]}
+      >
+        <DropdownProvider>
+          <View style={styles.ContentContainer}>
+            {products ? (
+              <>
+                <Text style={[styles.Heading, { color: textColor }]}>
+                  Showing results for "{query}"
+                </Text>
+                {products?.data?.search?.productFilters && (
+                  <View style={styles.FilterContainer}>
+                    {products?.data?.search?.productFilters.map(
+                      (filter: Filter, index: number) => (
+                        <ProductFilter
+                          filter={filter}
+                          key={index}
+                          colorScheme={colorScheme}
+                        />
+                      ),
+                    )}
+                  </View>
+                )}
+                <View style={styles.ProductContainer}>
+                  {products?.data?.search?.edges?.map(
+                    ({ node }: { node: any }, index: number) => (
+                      <Product node={node} key={index} />
                     ),
                   )}
                 </View>
-              )}
-              <FlatList
-                data={products?.data?.search.edges}
-                //@ts-ignore
-                renderItem={({ item }) => <Product item={item} />}
-                keyExtractor={(item) => item.node.id}
-                numColumns={SCREEN_WIDTH > 640 ? 4 : 2}
-                ItemSeparatorComponent={() => (
-                  <View
-                    style={{
-                      width: SCREEN_WIDTH > 640 ? 16 : 0,
-                      height: 16,
-                    }}
-                  />
-                )}
-                style={styles.ProductContainer}
-                columnWrapperStyle={{
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-                ListFooterComponent={() => <View style={{ height: 128 }} />}
-              />
-            </>
-          ) : (
-            <ActivityIndicator color={textColor} />
-          )}
-          <FilterDropdown
-            colorScheme={colorScheme}
-            state={state}
-            dispatch={dispatch}
-          />
-        </View>
-      </DropdownProvider>
-    </ScrollView>
+              </>
+            ) : (
+              <ActivityIndicator color={textColor} />
+            )}
+            <FilterDropdown
+              colorScheme={colorScheme}
+              state={state}
+              dispatch={dispatch}
+            />
+          </View>
+        </DropdownProvider>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -177,8 +162,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   ProductContainer: {
-    gap: SCREEN_WIDTH > 640 ? 16 : 4,
+    gap: 8,
     paddingVertical: 16,
     paddingHorizontal: 8,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
 });
