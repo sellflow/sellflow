@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   Dimensions,
   FlatList,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -45,24 +46,28 @@ export default function Index() {
     colorScheme === "light" ? Colors.light.background : Colors.dark.background;
 
   return (
-    <ScrollView
-      style={[styles.Container, { backgroundColor: backgroundColor }]}
-    >
-      <View style={styles.ContentContainer}>
-        {products ? (
-          <>
-            <Text style={[styles.Heading, { color: textColor }]}>Products</Text>
-            <View style={styles.ProductContainer}>
-              {products?.data?.products?.edges?.map(({ node }, index) => (
-                <Product node={node} key={index} />
-              ))}
-            </View>
-          </>
-        ) : (
-          <ActivityIndicator color={textColor} />
-        )}
-      </View>
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        style={[styles.Container, { backgroundColor: backgroundColor }]}
+      >
+        <View style={styles.ContentContainer}>
+          {products ? (
+            <>
+              <Text style={[styles.Heading, { color: textColor }]}>
+                Products
+              </Text>
+              <View style={styles.ProductContainer}>
+                {products?.data?.products?.edges?.map(({ node }, index) => (
+                  <Product node={node} key={index} />
+                ))}
+              </View>
+            </>
+          ) : (
+            <ActivityIndicator color={textColor} />
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
