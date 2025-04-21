@@ -4,18 +4,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  FlatList,
   ScrollView,
   Pressable,
   useColorScheme,
 } from "react-native";
 import { useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
-import { useRef } from "react";
-import ProductImage from "./ProductImage";
 import { Colors } from "@/constants/Colors";
 import { useCart } from "./CartProvider";
-import { getOptimizedImageUrl } from "@/lib/utils";
 import ImageCarousel from "./ImageCarousel";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -31,11 +27,11 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     isOptionInStock,
   } = useProduct();
   const { linesAdd } = useCart();
-  const flatListRef = useRef(null);
 
   const addToCart = () => {
     const merchandise = { merchandiseId: selectedVariant!.id };
     if (merchandise?.merchandiseId) {
+      //@ts-ignore
       linesAdd([merchandise]);
     }
   };
