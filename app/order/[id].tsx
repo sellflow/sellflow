@@ -55,7 +55,6 @@ export default function Order() {
       const order = await fetchOrder();
       if (order) {
         setOrder(order);
-        console.log(order);
       }
       setLoading(false);
     };
