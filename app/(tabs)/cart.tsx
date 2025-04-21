@@ -13,6 +13,7 @@ import {
   useColorScheme,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 
 export default function Cart() {
@@ -35,14 +36,55 @@ export default function Cart() {
     }, []);
 
     return (
-      <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
-        <View style={styles.Container}>
-          <Text style={{ color: textColor }}>Your cart</Text>
-          {Platform.OS === "ios" || Platform.OS === "android" ? (
-            <TouchableOpacity onPress={handleCheckout}>
-              <Text>Proceed to Checkout</Text>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+          <View style={styles.Container}>
+            <Text style={{ color: textColor }}>Your cart</Text>
+            <TouchableOpacity
+              onPress={handleCheckout}
+              style={[
+                styles.Checkout,
+                {
+                  backgroundColor:
+                    colorScheme === "light"
+                      ? Colors.dark.background
+                      : Colors.light.background,
+                },
+              ]}
+            >
+              <Text
+                style={{
+                  color:
+                    colorScheme === "light"
+                      ? Colors.dark.text
+                      : Colors.light.text,
+                }}
+              >
+                Proceed to Checkout
+              </Text>
             </TouchableOpacity>
-          ) : (
+            {cart?.lines ? (
+              <View style={styles.ListStyle}>
+                {cart?.lines.map((line: any, index: number) => (
+                  <CartLineProvider line={line} key={index}>
+                    <View style={styles.LineItemContainer}>
+                      <LineItem />
+                    </View>
+                  </CartLineProvider>
+                ))}
+              </View>
+            ) : (
+              <Text>No items in here yet!</Text>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+          <View style={styles.Container}>
             <View
               style={{
                 backgroundColor:
@@ -63,60 +105,22 @@ export default function Cart() {
                 Proceed to Checkout
               </Text>
             </View>
-          )}
-          {
-            <FlatList
-              data={cart.lines}
-              scrollEnabled={false}
-              renderItem={({ item }) => (
-                <CartLineProvider line={item}>
-                  <View style={styles.LineItemContainer}>
-                    <LineItem />
-                  </View>
-                </CartLineProvider>
-              )}
-              keyExtractor={(line) => line!.id!}
-              style={styles.ListStyle}
-            />
-          }
-        </View>
-      </ScrollView>
-    );
-  } else {
-    return (
-      <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
-        <View
-          style={{
-            backgroundColor:
-              colorScheme === "light"
-                ? Colors.dark.background
-                : Colors.light.background,
-            ...styles.Checkout,
-          }}
-        >
-          <Text
-            style={{
-              color:
-                colorScheme === "light" ? Colors.dark.text : Colors.light.text,
-            }}
-          >
-            Proceed to Checkout
-          </Text>
-        </View>
-        <FlatList
-          data={cart.lines}
-          scrollEnabled={false}
-          renderItem={({ item }) => (
-            <CartLineProvider line={item}>
-              <View style={styles.LineItemContainer}>
-                <LineItem />
+            {cart?.lines ? (
+              <View style={styles.ListStyle}>
+                {cart?.lines.map((line: any, index: number) => (
+                  <CartLineProvider line={line} key={index}>
+                    <View style={styles.LineItemContainer}>
+                      <LineItem />
+                    </View>
+                  </CartLineProvider>
+                ))}
               </View>
-            </CartLineProvider>
-          )}
-          keyExtractor={(line) => line!.id!}
-          style={styles.ListStyle}
-        />
-      </ScrollView>
+            ) : (
+              <Text>No items in here yet!</Text>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
   Container: {
     alignSelf: "center",
     width: "100%",
-    maxWidth: 640,
+    maxWidth: 1200,
     paddingHorizontal: 8,
   },
   LineItemContainer: {
@@ -145,5 +149,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     width: "100%",
     borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
