@@ -25,7 +25,10 @@ const blurHash =
 export default function Index() {
   const [user, setUser] = useState();
   const colorScheme = useColorScheme();
-  const redirectUri = makeRedirectUri({ scheme: "https://" });
+  const redirectUri = makeRedirectUri({
+    scheme: Platform.OS === "web" ? "https://" : "shop.72278704345.app",
+    path: "profile",
+  });
   const [loginComplete, setLoginComplete] = useState(false);
 
   const [request, response, promptAsync] = useAuthRequest(
@@ -45,6 +48,7 @@ export default function Index() {
         WebBrowser.coolDownAsync();
       };
     }
+    console.log("REDIRECT URI: ", request?.redirectUri);
   }, [response]);
 
   useEffect(() => {

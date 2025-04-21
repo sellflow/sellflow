@@ -1,4 +1,4 @@
-package com.sellflow
+package com.echo5678.Sellflow
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
