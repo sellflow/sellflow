@@ -1,0 +1,102 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-04-21 23:14-0700\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: es\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: app/_layout.tsx:97
+#: app/(tabs)/profile.tsx:123
+msgid "Account"
+msgstr "Cuenta"
+
+#: app/(tabs)/_layout.tsx:46
+msgid "Cart"
+msgstr "Carrito"
+
+#: app/account.tsx:83
+msgid "Default Address: "
+msgstr "Dirección predeterminada: "
+
+#: app/account.tsx:75
+msgid "Email Address:"
+msgstr "Correo electrónico:"
+
+#: app/account.tsx:51
+msgid "First Name:"
+msgstr "Nombre:"
+
+#: app/(tabs)/_layout.tsx:33
+msgid "Home"
+msgstr "Inicio"
+
+#: app/account.tsx:59
+msgid "Last Name:"
+msgstr "Apellido:"
+
+#: app/(tabs)/profile.tsx:175
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+#: app/(tabs)/profile.tsx:156
+msgid "Log in or Sign up"
+msgstr "Iniciar sesión o Registrarse"
+
+#: app/(tabs)/cart.tsx:81
+#: app/(tabs)/cart.tsx:125
+msgid "No items in here yet!"
+msgstr "¡Aún no hay artículos aquí!"
+
+#: app/orders.tsx:91
+msgid "No orders yet!"
+msgstr "¡Aún no hay pedidos!"
+
+#: app/_layout.tsx:89
+msgid "Order"
+msgstr "Orden"
+
+#: app/_layout.tsx:101
+#: app/(tabs)/profile.tsx:111
+msgid "Orders"
+msgstr "Órdenes"
+
+#: app/account.tsx:67
+msgid "Phone Number:"
+msgstr "Número de teléfono:"
+
+#: app/(tabs)/cart.tsx:66
+#: app/(tabs)/cart.tsx:110
+msgid "Proceed to Checkout"
+msgstr "Proceder al pago"
+
+#: app/_layout.tsx:93
+msgid "Product"
+msgstr "Producto"
+
+#: app/(tabs)/index.tsx:56
+msgid "Products"
+msgstr "Productos"
+
+#: app/(tabs)/_layout.tsx:59
+msgid "Profile"
+msgstr "Perfil"
+
+#: app/(tabs)/search/[query].tsx:106
+msgid "Showing search results for {query}"
+msgstr "Mostrando resultados de búsqueda para {query}"
+
+#: app/(tabs)/profile.tsx:195
+msgid "Sign up"
+msgstr "Registrarse"
+
+#: app/(tabs)/cart.tsx:44
+msgid "Your cart"
+msgstr "Tu carrito"

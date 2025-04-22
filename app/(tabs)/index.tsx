@@ -1,7 +1,5 @@
 import {
   ActivityIndicator,
-  Dimensions,
-  FlatList,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -15,10 +13,11 @@ import { GetProductsQuery } from "@/types/storefront.generated";
 import { ClientResponse } from "@shopify/storefront-api-client";
 import Product from "@/components/ProductCard";
 import { Colors } from "@/constants/Colors";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+import { useShop } from "@shopify/hydrogen-react";
+import { Trans } from "@lingui/react/macro";
 
 export default function Index() {
+  const { languageIsoCode, countryIsoCode } = useShop();
   const colorScheme = useColorScheme();
   const [products, setProducts] = useState<
     ClientResponse<GetProductsQuery> | undefined
@@ -27,7 +26,7 @@ export default function Index() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getProducts();
+        const data = await getProducts(countryIsoCode, languageIsoCode);
         if (data.errors) {
           console.error(data.errors.graphQLErrors);
           throw new Error("Failed to fetch products");
@@ -54,7 +53,7 @@ export default function Index() {
           {products ? (
             <>
               <Text style={[styles.Heading, { color: textColor }]}>
-                Products
+                <Trans>Products</Trans>
               </Text>
               <View style={styles.ProductContainer}>
                 {products?.data?.products?.edges?.map(({ node }, index) => (

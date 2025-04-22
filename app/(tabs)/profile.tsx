@@ -19,6 +19,7 @@ import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native";
+import { Trans } from "@lingui/react/macro";
 
 WebBrowser.maybeCompleteAuthSession();
 const blurHash =
@@ -107,7 +108,7 @@ export default function Index() {
             ]}
             href="/orders"
           >
-            Orders
+            <Trans>Orders</Trans>
           </Link>
           <Link
             style={[
@@ -119,7 +120,7 @@ export default function Index() {
             ]}
             href="/account"
           >
-            Account
+            <Trans>Account</Trans>
           </Link>
           <Link
             style={[
@@ -129,9 +130,9 @@ export default function Index() {
                 color: oppositeTextColor,
               },
             ]}
-            href="/orders"
+            href="/"
           >
-            Wishlist
+            <Ionicons name="heart-outline" size={16} />
           </Link>
           <Link
             style={[
@@ -141,9 +142,9 @@ export default function Index() {
                 color: oppositeTextColor,
               },
             ]}
-            href="/orders"
+            href="/"
           >
-            Settings
+            <Ionicons name="settings-sharp" size={16} />
           </Link>
         </View>
       </View>
@@ -152,7 +153,7 @@ export default function Index() {
     <SafeAreaView style={[styles.PageContainer, { backgroundColor }]}>
       <View style={styles.Container}>
         <Text style={[styles.Header, { color: textColor }]}>
-          Log in or Sign up
+          <Trans>Log in or Sign up</Trans>
         </Text>
         <TouchableOpacity
           disabled={!request}
@@ -170,7 +171,9 @@ export default function Index() {
             });
           }}
         >
-          <Text style={{ color: oppositeTextColor }}>Log in</Text>
+          <Text style={{ color: oppositeTextColor }}>
+            <Trans>Log in</Trans>
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           disabled={!request}
@@ -188,7 +191,9 @@ export default function Index() {
             });
           }}
         >
-          <Text style={{ color: oppositeTextColor }}>Sign up</Text>
+          <Text style={{ color: oppositeTextColor }}>
+            <Trans>Sign up</Trans>
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { useLingui } from "@lingui/react/macro";
 import {
   mapSelectedProductOptionToObject,
   useCartLine,
@@ -13,6 +14,7 @@ const blurHash =
 
 export default function LineItem() {
   const line = useCartLine();
+  const { i18n } = useLingui();
   const colorScheme = useColorScheme();
   const imageUrl = line.merchandise?.image?.url
     ? new URL(line.merchandise?.image?.url!)
@@ -61,7 +63,10 @@ export default function LineItem() {
         </View>
         <View style={styles.PriceContainer}>
           <Text style={[styles.Price, { color: textColor }]}>
-            ${line.cost?.totalAmount?.amount}
+            {i18n.number(Number(line.cost?.totalAmount?.amount), {
+              style: "currency",
+              currency: line.cost?.totalAmount?.currencyCode,
+            })}
           </Text>
         </View>
       </View>

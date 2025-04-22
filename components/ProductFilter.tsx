@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { DropdownContext } from "./DropdownProvider";
+import { Trans } from "@lingui/react/macro";
 
 export default function ProductFilter({
   filter: filterProp,
@@ -17,14 +18,8 @@ export default function ProductFilter({
   filter: Filter;
   colorScheme: ColorSchemeName;
 }) {
-  const {
-    dropdownOpen,
-    setDropdownOpen,
-    filter,
-    setFilter,
-    position,
-    setPosition,
-  } = useContext(DropdownContext);
+  const { dropdownOpen, setDropdownOpen, setFilter, position, setPosition } =
+    useContext(DropdownContext);
   const componentRef = useRef(null);
   const oppositeTextColor =
     colorScheme === "light" ? Colors.dark.text : Colors.light.text;
@@ -59,7 +54,7 @@ export default function ProductFilter({
       ref={componentRef}
     >
       <Text style={[{ color: oppositeTextColor, fontWeight: 600 }]}>
-        {filterProp.label}
+        <Trans>{filterProp.label}</Trans>
       </Text>
       <Ionicons name="caret-down-outline" size={16} color={oppositeTextColor} />
     </TouchableOpacity>

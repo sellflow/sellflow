@@ -12,7 +12,7 @@ import {
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ClientResponse } from "@shopify/storefront-api-client";
-import { ProductProvider } from "@shopify/hydrogen-react";
+import { ProductProvider, useShop } from "@shopify/hydrogen-react";
 import { ProductQuery } from "@/types/storefront.generated";
 import { getProductOptions } from "@/shopify/client";
 import { getProduct, getProductRecommendations } from "@/shopify/product";
@@ -23,6 +23,7 @@ import { Colors } from "@/constants/Colors";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Page() {
+  const { countryIsoCode, languageIsoCode } = useShop();
   const colorScheme = useColorScheme();
   const search = useLocalSearchParams();
   const [product, setProduct] = useState<
@@ -34,7 +35,12 @@ export default function Page() {
   useEffect(() => {
     try {
       const fetchProduct = async () => {
-        const data = await getProduct(search?.id as string, selectedOptions);
+        const data = await getProduct(
+          search?.id as string,
+          selectedOptions,
+          countryIsoCode,
+          languageIsoCode,
+        );
         if (data?.errors?.graphQLErrors) {
           //@ts-ignore
           throw new Error(data.errors.graphQLErrors);
@@ -45,7 +51,11 @@ export default function Page() {
       fetchProduct();
 
       const fetchRecommended = async () => {
-        const data = await getProductRecommendations(search?.id as string);
+        const data = await getProductRecommendations(
+          search?.id as string,
+          countryIsoCode,
+          languageIsoCode,
+        );
         if (data?.errors?.graphQLErrors) {
           //@ts-ignore
           throw new Error(data.errors?.graphQLErrors);
@@ -86,7 +96,7 @@ export default function Page() {
             </ProductProvider>
             <View style={styles.recommendedContainer}>
               <Text style={[styles.recommendedHeading, { color: textColor }]}>
-                Recommended
+                <Trans>Recommended</Trans>
               </Text>
               {recommended?.data?.productRecommendations && (
                 <FlatList

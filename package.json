@@ -6,6 +6,8 @@
   "version": "0.0.1",
   "scripts": {
     "start": "expo start",
+    "extract": "lingui extract --clean",
+    "compile": "lingui compile --typescript",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "DARK_MODE=media expo start --android",
     "ios": "DARK_MODE=media expo start --ios",
@@ -20,6 +22,10 @@
   "dependencies": {
     "@expo/html-elements": "^0.4.2",
     "@expo/vector-icons": "^14.0.2",
+    "@formatjs/intl-locale": "^4.2.11",
+    "@formatjs/intl-pluralrules": "^5.4.4",
+    "@lingui/core": "^5.3.1",
+    "@lingui/react": "^5.3.1",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
@@ -38,6 +44,7 @@
     "expo-image": "~2.0.7",
     "expo-image-picker": "~16.0.6",
     "expo-linking": "~7.0.5",
+    "expo-localization": "~16.0.1",
     "expo-router": "~4.0.20",
     "expo-secure-store": "~14.0.1",
     "expo-splash-screen": "~0.29.24",
@@ -60,6 +67,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@lingui/babel-plugin-lingui-macro": "^5.3.1",
+    "@lingui/cli": "^5.3.1",
+    "@lingui/metro-transformer": "^5.3.1",
     "@react-native/assets-registry": "^0.78.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",

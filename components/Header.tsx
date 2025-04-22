@@ -2,6 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { getPredictiveSearchResults } from "@/shopify/search";
 import { Ionicons } from "@expo/vector-icons";
+import { t } from "@lingui/core/macro";
 import { Image } from "expo-image";
 import { Link, useRouter } from "expo-router";
 import { useRef, useState } from "react";
@@ -187,7 +188,7 @@ export default function Header() {
                     : Colors.dark.text,
               },
             ]}
-            placeholder="Search..."
+            placeholder={t`Search...`}
             value={search}
             onChangeText={searchProducts}
             placeholderTextColor={

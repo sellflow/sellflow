@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
@@ -10,6 +11,7 @@ const blurHash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function OrderItem({ item }: { item: any }) {
+  const { i18n } = useLingui();
   const colorScheme = useColorScheme();
 
   const textColor =
@@ -46,9 +48,13 @@ export default function OrderItem({ item }: { item: any }) {
         )}
         <View style={{ paddingLeft: 8 }}>
           <Text style={{ color: textColor }}>
-            {item.node.fulfillments.edges[0].node.estimatedDeliveryAt
-              ? item.node.fulfillments.edges[0].node.estimatedDeliveryAt
-              : item.node.fulfillments.edges[0].node.latestShipmentStatus}
+            <Trans>
+              {item.node.fulfillments.edges[0].node.estimatedDeliveryAt
+                ? i18n.date(
+                    item.node.fulfillments.edges[0].node.estimatedDeliveryAt,
+                  )
+                : item.node.fulfillments.edges[0].node.latestShipmentStatus}
+            </Trans>
           </Text>
           <Text style={{ color: textColor }}>
             {

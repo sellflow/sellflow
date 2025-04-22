@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { getAccessToken, getRefreshToken, discovery } from "@/lib/tokens";
 import { getOrder } from "@/shopify/order";
 import { refreshUser } from "@/lib/auth";
-import { Image } from "expo-image";
 import OrderDetails from "@/components/OrderDetails";
 import { Colors } from "@/constants/Colors";
 

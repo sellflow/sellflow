@@ -5,7 +5,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./images/favicon.png",
-    "scheme": ["shop.72278704345.app"],
+    "scheme": [
+      "shop.72278704345.app"
+    ],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -18,7 +20,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.echo5678.Sellflow"
     },
     "web": {
       "bundler": "metro",
@@ -30,13 +33,14 @@
       [
         "expo-splash-screen",
         {
-          "image": "./images/adaptive-icon.png",
+          "image": "./images/favicon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

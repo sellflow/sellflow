@@ -6,6 +6,7 @@ import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import { t } from "@lingui/core/macro";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -29,7 +30,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t`Home`,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               size={28}
@@ -42,7 +43,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "Cart",
+          title: t`Cart`,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               size={28}
@@ -55,7 +56,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t`Profile`,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               size={28}

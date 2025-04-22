@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useCart } from "./CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
+import { useLingui } from "@lingui/react/macro";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const imageSize = SCREEN_WIDTH > 640 ? 290 : SCREEN_WIDTH / 2 - 12;
@@ -20,6 +21,7 @@ const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function Product({ node }: { node: ShopifyProduct }) {
+  const { i18n } = useLingui();
   const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
 
@@ -68,7 +70,10 @@ export default function Product({ node }: { node: ShopifyProduct }) {
           </Text>
           {node?.priceRange?.minVariantPrice && (
             <Text style={[styles.price, { color: textColor }]}>
-              ${node.priceRange.minVariantPrice.amount}
+              {i18n.number(node.priceRange.minVariantPrice.amount, {
+                style: "currency",
+                currency: node.priceRange.minVariantPrice.currencyCode,
+              })}
             </Text>
           )}
           {node?.variantsCount!.count === 1 && (

@@ -21,6 +21,7 @@ import {
 import ProductFilter from "@/components/ProductFilter";
 import FilterDropdown from "@/components/FilterDropdown";
 import DropdownProvider from "@/components/DropdownProvider";
+import { Trans } from "@lingui/react/macro";
 
 export type Action =
   | { type: "include"; input: Object }
@@ -102,7 +103,7 @@ export default function Search() {
             {products ? (
               <>
                 <Text style={[styles.Heading, { color: textColor }]}>
-                  Showing results for "{query}"
+                  <Trans>Showing search results for {query}</Trans>
                 </Text>
                 {products?.data?.search?.productFilters && (
                   <View style={styles.FilterContainer}>

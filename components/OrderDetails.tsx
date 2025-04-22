@@ -1,5 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { getOptimizedImageUrl } from "@/lib/utils";
+import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { mapSelectedProductOptionToObject } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
@@ -7,6 +9,7 @@ import { Button, SafeAreaView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "react-native";
 
 export default function OrderDetails({ order }: { order: any }) {
+  const { i18n } = useLingui();
   const colorScheme = useColorScheme();
 
   const textColor =
@@ -17,49 +20,52 @@ export default function OrderDetails({ order }: { order: any }) {
       <View style={styles.Container}>
         <View style={{ width: "100%" }}>
           <Text style={[styles.Heading, { color: textColor }]}>
-            Order details
+            <Trans>Order Details</Trans>
           </Text>
           <View style={styles.SummaryContainer}>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Order date</Text>
               <Text style={{ color: textColor }}>
-                {new Date(order?.data?.order.createdAt).toLocaleString(
-                  "en-US",
-                  {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                  },
-                )}
+                <Trans>Order Date</Trans>
+              </Text>
+              <Text style={{ color: textColor }}>
+                <Trans>{i18n.date(order?.data?.order.createdAt)}</Trans>
               </Text>
             </View>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Order #</Text>{" "}
+              <Text style={{ color: textColor }}>
+                <Trans>Order Number</Trans>
+              </Text>
               <Text style={{ color: textColor }}>
                 {order?.data?.order?.number}
               </Text>
             </View>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Order total</Text>
               <Text style={{ color: textColor }}>
-                ${order?.data?.order?.totalPrice?.amount}
+                <Trans>Order total</Trans>
+              </Text>
+              <Text style={{ color: textColor }}>
+                {order?.data?.order?.totalPrice &&
+                  i18n.number(order?.data?.order?.totalPrice?.amount, {
+                    style: "currency",
+                    currency: order?.data?.order?.totalPrice?.currencyCode,
+                  })}
               </Text>
             </View>
-            <Button title="Cancel items" />
+            <Button title={t`Cancel items`} />
           </View>
         </View>
         {order?.data?.order.requiresShipping && (
           <>
             <View style={{ width: "100%" }}>
               <Text style={[styles.Heading, { color: textColor }]}>
-                Shipment details
+                <Trans>Shipment Details</Trans>
               </Text>
               <View style={styles.SummaryContainer}>
                 {order.data.order.lineItems.edges.map((item: any) => (
                   <View key={item.node.image.url} style={{ width: "100%" }}>
                     <Link
                       href={{
-                        pathname: "/(tabs)/product/[id]",
+                        pathname: "/product/[id]",
                         params: {
                           id: item.node.productId,
                           ...mapSelectedProductOptionToObject(
@@ -84,12 +90,15 @@ export default function OrderDetails({ order }: { order: any }) {
                             {item.node.name}
                           </Text>
                           <Text style={{ color: textColor }}>
-                            Quantity: {item.node.quantity}
+                            <Trans>Quantity: {item.node.quantity}</Trans>
                           </Text>
                         </View>
                       </View>
                       <Text style={{ color: textColor }}>
-                        ${item.node.price.amount}
+                        {i18n.number(item.node.price.amount, {
+                          style: "currency",
+                          currency: item.node.price.currencyCode,
+                        })}
                       </Text>
                     </Link>
                   </View>
@@ -98,7 +107,7 @@ export default function OrderDetails({ order }: { order: any }) {
             </View>
             <View style={{ width: "100%" }}>
               <Text style={[styles.Heading, { color: textColor }]}>
-                Shipping Address
+                <Trans>Shipping Address</Trans>
               </Text>
               <View style={styles.SummaryContainer}>
                 <Text style={{ color: textColor }}>
@@ -120,37 +129,67 @@ export default function OrderDetails({ order }: { order: any }) {
         )}
         <View style={{ width: "100%" }}>
           <Text style={[styles.Heading, { color: textColor }]}>
-            Order Summary
+            <Trans>Order Summary</Trans>
           </Text>
           <View style={styles.SummaryContainer}>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Items:</Text>
               <Text style={{ color: textColor }}>
-                ${order?.data.order.subtotal.amount}
+                <Trans>Items:</Trans>
+              </Text>
+              <Text style={{ color: textColor }}>
+                {order?.data?.order?.subtotal &&
+                  i18n.number(order?.data.order.subtotal.amount, {
+                    style: "currency",
+                    currency: order.data.order.subtotal.currencyCode,
+                  })}
               </Text>
             </View>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Shipping & Handling: </Text>
               <Text style={{ color: textColor }}>
-                ${order?.data.order.totalShipping.amount}
+                <Trans>Shipping & Handling</Trans>
+              </Text>
+              <Text style={{ color: textColor }}>
+                {order?.data?.order?.totalShipping &&
+                  i18n.number(order?.data.order.totalShipping.amount, {
+                    style: "currency",
+                    currency: order.data.order.totalShipping.currencyCode,
+                  })}
               </Text>
             </View>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Total Tip: </Text>
               <Text style={{ color: textColor }}>
-                ${order?.data.order.totalTip.amount}
+                <Trans>Total Tip: </Trans>
+              </Text>
+              <Text style={{ color: textColor }}>
+                {order?.data?.order?.totalTip &&
+                  i18n.number(order?.data.order.totalTip.amount, {
+                    style: "currency",
+                    currency: order.data.order.totalTip.currencyCode,
+                  })}
               </Text>
             </View>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Tax: </Text>
               <Text style={{ color: textColor }}>
-                ${order?.data.order.totalTax.amount}
+                <Trans>Tax: </Trans>{" "}
+              </Text>
+              <Text style={{ color: textColor }}>
+                {order?.data?.order?.totalTax &&
+                  i18n.number(order?.data.order.totalTax.amount, {
+                    style: "currency",
+                    currency: order.data.order.totalTax.currencyCode,
+                  })}
               </Text>
             </View>
             <View style={styles.InfoContainer}>
-              <Text style={{ color: textColor }}>Total: </Text>
               <Text style={{ color: textColor }}>
-                ${order?.data.order.totalPrice.amount}
+                <Trans>Total: </Trans>
+              </Text>
+              <Text style={{ color: textColor }}>
+                {order?.data?.order?.totalPrice &&
+                  i18n.number(order?.data.order.totalPrice.amount, {
+                    style: "currency",
+                    currency: order.data.order.totalPrice.currencyCode,
+                  })}
               </Text>
             </View>
           </View>

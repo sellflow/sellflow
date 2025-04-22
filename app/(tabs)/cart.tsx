@@ -2,6 +2,7 @@ import { useCart } from "@/components/CartProvider";
 import LineItem from "@/components/LineItem";
 import { Colors } from "@/constants/Colors";
 import shopifyCheckout from "@/shopify/checkout";
+import { Trans } from "@lingui/react/macro";
 import { CartLineProvider } from "@shopify/hydrogen-react";
 import { useEffect } from "react";
 import {
@@ -39,7 +40,9 @@ export default function Cart() {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
           <View style={styles.Container}>
-            <Text style={{ color: textColor }}>Your cart</Text>
+            <Text style={{ color: textColor }}>
+              <Trans>Your cart</Trans>
+            </Text>
             <TouchableOpacity
               onPress={handleCheckout}
               style={[
@@ -60,7 +63,7 @@ export default function Cart() {
                       : Colors.light.text,
                 }}
               >
-                Proceed to Checkout
+                <Trans>Proceed to Checkout</Trans>
               </Text>
             </TouchableOpacity>
             {cart?.lines ? (
@@ -74,7 +77,9 @@ export default function Cart() {
                 ))}
               </View>
             ) : (
-              <Text>No items in here yet!</Text>
+              <Text>
+                <Trans>No items in here yet!</Trans>
+              </Text>
             )}
           </View>
         </ScrollView>
@@ -102,7 +107,7 @@ export default function Cart() {
                       : Colors.light.text,
                 }}
               >
-                Proceed to Checkout
+                <Trans>Proceed to Checkout</Trans>
               </Text>
             </View>
             {cart?.lines ? (
@@ -116,7 +121,9 @@ export default function Cart() {
                 ))}
               </View>
             ) : (
-              <Text>No items in here yet!</Text>
+              <Text>
+                <Trans>No items in here yet!</Trans>
+              </Text>
             )}
           </View>
         </ScrollView>

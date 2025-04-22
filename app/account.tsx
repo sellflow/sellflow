@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { getAccessToken } from "@/lib/tokens";
 import { getUserInfo } from "@/shopify/user";
+import { Trans } from "@lingui/react/macro";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import {
@@ -47,7 +48,7 @@ export default function Account() {
           />
           <View>
             <Text style={[styles.UserInfoHeading, { color: textColor }]}>
-              First Name:{" "}
+              <Trans>First Name:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
               {user?.firstName}
@@ -55,7 +56,7 @@ export default function Account() {
           </View>
           <View>
             <Text style={[styles.UserInfoHeading, { color: textColor }]}>
-              Last Name:{" "}
+              <Trans>Last Name:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
               {user?.lastName}
@@ -63,7 +64,7 @@ export default function Account() {
           </View>
           <View>
             <Text style={[styles.UserInfoHeading, { color: textColor }]}>
-              Phone Number:{" "}
+              <Trans>Phone Number:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
               {user?.phoneNumber?.phoneNumber}
@@ -71,7 +72,7 @@ export default function Account() {
           </View>
           <View>
             <Text style={[styles.UserInfoHeading, { color: textColor }]}>
-              Email Address:
+              <Trans>Email Address:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
               {user?.emailAddress?.emailAddress}
@@ -79,7 +80,7 @@ export default function Account() {
           </View>
           <View>
             <Text style={[styles.UserInfoHeading, { color: textColor }]}>
-              Default Address:{" "}
+              <Trans>Default Address: </Trans>
             </Text>
             <Text style={styles?.UserInfo}>
               {user?.defaultAddress?.address1}

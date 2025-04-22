@@ -10,12 +10,14 @@ import {
 } from "react-native";
 import { useCart } from "./CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
+import { useLingui } from "@lingui/react/macro";
 
 const imageSize = 200;
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function RecommendedProduct({ item }: { item: any }) {
+  const { i18n } = useLingui();
   const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
   const addToCart = (e: GestureResponderEvent) => {
@@ -34,7 +36,7 @@ export default function RecommendedProduct({ item }: { item: any }) {
   return (
     <Link
       href={{
-        pathname: "/(tabs)/product/[id]",
+        pathname: "/product/[id]",
         params: { id: item.id },
       }}
       style={styles.container}
@@ -58,7 +60,10 @@ export default function RecommendedProduct({ item }: { item: any }) {
         </Text>
         {item?.priceRange?.minVariantPrice && (
           <Text style={[styles.price, { color: textColor }]}>
-            ${item.priceRange.minVariantPrice.amount}
+            {i18n.number(item.priceRange.minVariantPrice.amount, {
+              style: "currency",
+              currency: item.priceRange.minVariantPrice.currencyCode,
+            })}
           </Text>
         )}
         {item?.variantsCount?.count === 1 && (

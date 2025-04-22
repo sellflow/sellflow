@@ -1,12 +1,20 @@
 import { SelectedOptionInput } from "@/types/storefront.types";
 import { client } from "./client";
+import {
+  CountryCode,
+  LanguageCode,
+} from "@shopify/hydrogen-react/storefront-api-types";
 
 //Returns a list of recommended items given a product id
-export const getProductRecommendations = async (productId: string) =>
+export const getProductRecommendations = async (
+  productId: string,
+  countryCode: CountryCode,
+  languageCode: LanguageCode,
+) =>
   await client.request(
     `
   #graphql
-  query productRecommendations($productId: ID!) {
+  query productRecommendations($productId: ID!) @inContext(country: ${countryCode}, language: ${languageCode}) {
     productRecommendations(productId: $productId) {
       id
       featuredImage {
@@ -17,6 +25,7 @@ export const getProductRecommendations = async (productId: string) =>
       priceRange {
         minVariantPrice {
           amount
+          currencyCode
         }
       }
       selectedOrFirstAvailableVariant {
@@ -38,13 +47,15 @@ export const getProductRecommendations = async (productId: string) =>
 export const getProduct = async (
   id: string,
   selectedOptions: SelectedOptionInput[],
+  countryCode: CountryCode,
+  languageCode: LanguageCode,
 ) =>
   await client.request(
     `#graphql
-    query Product(
+    query Product (
         $id: ID!
         $selectedOptions: [SelectedOptionInput!]!
-      ) {
+      ) @inContext(country: ${countryCode}, language: ${languageCode}) {
         product(id: $id) {
           id
           title
@@ -99,7 +110,7 @@ export const getProduct = async (
       fragment mediaFieldsByType on Media {
         ... on ExternalVideo {
           id
-          embeddedUrl
+          originUrl
         }
         ... on MediaImage {
           image {
@@ -133,10 +144,13 @@ export const getProduct = async (
     },
   );
 
-export const getProducts = async () =>
+export const getProducts = async (
+  countryCode: CountryCode,
+  languageCode: LanguageCode,
+) =>
   await client.request(
     `#graphql
-    query getProducts($first: Int) {
+    query getProducts($first: Int) @inContext(country: ${countryCode}, language: ${languageCode}) {
     products(first: $first) {
       edges {
         node {
@@ -151,6 +165,7 @@ export const getProducts = async () =>
           priceRange {
             minVariantPrice {
               amount
+              currencyCode
             }
           }
           featuredImage {

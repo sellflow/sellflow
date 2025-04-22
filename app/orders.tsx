@@ -13,6 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
+import { Trans } from "@lingui/react/macro";
 
 const imageSize = 100;
 
@@ -86,7 +87,9 @@ export default function Orders() {
               )}
             </View>
           ) : (
-            <Text style={{ color: textColor }}>No orders yet!</Text>
+            <Text style={{ color: textColor }}>
+              <Trans>No orders yet!</Trans>
+            </Text>
           )}
         </View>
       )}

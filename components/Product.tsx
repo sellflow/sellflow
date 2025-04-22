@@ -13,10 +13,12 @@ import { Link, UnknownOutputParams } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { useCart } from "./CartProvider";
 import ImageCarousel from "./ImageCarousel";
+import { useLingui } from "@lingui/react/macro";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Product({ search }: { search: UnknownOutputParams }) {
+  const { i18n } = useLingui();
   const colorScheme = useColorScheme();
   const {
     product,
@@ -119,7 +121,10 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
         </>
         {selectedVariant?.price?.amount && (
           <Text style={[styles.PriceText, { color: textColor }]}>
-            ${selectedVariant.price.amount}
+            {i18n.number(Number(selectedVariant.price.amount), {
+              style: "currency",
+              currency: selectedVariant.price.currencyCode,
+            })}
           </Text>
         )}
         <TouchableOpacity
