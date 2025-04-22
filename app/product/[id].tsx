@@ -19,6 +19,7 @@ import { getProduct, getProductRecommendations } from "@/shopify/product";
 import Product from "@/components/Product";
 import RecommendedProduct from "@/components/RecommendedProduct";
 import { Colors } from "@/constants/Colors";
+import { Trans } from "@lingui/react/macro";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
