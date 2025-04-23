@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.echo5678.Sellflow'
+    namespace 'com.sellflow'
     defaultConfig {
-        applicationId 'com.echo5678.Sellflow'
+        applicationId 'com.sellflow'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,4 +1,4 @@
-package com.echo5678.Sellflow
+package com.sellflow
 
 import android.app.Application
 import android.content.res.Configuration

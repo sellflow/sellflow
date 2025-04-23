@@ -26,7 +26,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="shop.72278704345.app"/>
-        <data android:scheme="com.echo5678.Sellflow"/>
+        <data android:scheme="com.sellflow"/>
       </intent-filter>
     </activity>
   </application>

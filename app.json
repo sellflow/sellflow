@@ -5,23 +5,22 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./images/favicon.png",
-    "scheme": [
-      "shop.72278704345.app"
-    ],
+    "scheme": ["shop.72278704345.app"],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "bundleIdentifier": "com.sellflow"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.echo5678.Sellflow"
+      "package": "com.sellflow"
     },
     "web": {
       "bundler": "metro",
