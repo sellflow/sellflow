@@ -157,7 +157,11 @@ export default function Header() {
               },
             ]}
           >
-            <TouchableOpacity onPress={toggleSearch} style={styles.backButton}>
+            <TouchableOpacity
+              onPress={toggleSearch}
+              style={styles.backButton}
+              accessibilityLabel="Press to open search bar"
+            >
               <Ionicons
                 size={24}
                 name="arrow-back-sharp"
