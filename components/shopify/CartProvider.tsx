@@ -290,7 +290,7 @@ export function CartProvider({
   useEffect(() => {
     const doStuff = async () => {
       if (!cartReady.current && !fetchingFromStorage.current) {
-        if (!cart && (await storageAvailable())) {
+        if (!cart) {
           fetchingFromStorage.current = true;
           try {
             const cartId = await AsyncStorage.getItem(CART_ID_STORAGE_KEY);
@@ -336,10 +336,10 @@ export function CartProvider({
     [cartSend],
   );
 
-  // save cart id to local storage
+  // save cart id to Async storage
   useEffect(() => {
     const doStuff = async () => {
-      if (cartState?.context?.cart?.id && (await storageAvailable())) {
+      if (cartState?.context?.cart?.id) {
         try {
           await AsyncStorage.setItem(
             CART_ID_STORAGE_KEY,
@@ -356,7 +356,7 @@ export function CartProvider({
   // delete cart from local storage if cart fetched has been completed
   useEffect(() => {
     const doStuff = async () => {
-      if (cartCompleted && (await storageAvailable())) {
+      if (cartCompleted) {
         try {
           await AsyncStorage.removeItem(CART_ID_STORAGE_KEY);
         } catch (error) {
@@ -538,21 +538,6 @@ function useDelayedStateUntilHydration<T>(state: T): T {
   const displayState = firstTimePendingFinished.current ? state : delayedState;
 
   return displayState;
-}
-
-/**
- * Check for storage availability function obtained from
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
- */
-export async function storageAvailable(): Promise<boolean> {
-  try {
-    const x = "__storage_test__";
-    await AsyncStorage.setItem(x, x);
-    await AsyncStorage.removeItem(x);
-    return true;
-  } catch (e) {
-    return false;
-  }
 }
 
 function countryCodeNotUpdated(

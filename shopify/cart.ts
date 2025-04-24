@@ -1,4 +1,4 @@
-export const CartLineAdd = async () => `#graphql
+export const CartLineAdd = () => `#graphql
   mutation CartLineAdd(
     $cartId: ID!
     $lines: [CartLineInput!]!

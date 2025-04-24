@@ -24,15 +24,10 @@ import {
 } from "@/shopify/cart";
 import { PartialDeep } from "type-fest";
 import {
-  SHOPIFY_S,
   SHOPIFY_STOREFRONT_ID_HEADER,
-  SHOPIFY_STOREFRONT_S_HEADER,
-  SHOPIFY_STOREFRONT_Y_HEADER,
-  SHOPIFY_Y,
   StorefrontApiResponseOkPartial,
   useShop,
 } from "@shopify/hydrogen-react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type CartResponse = PartialDeep<CartType, { recurseIntoArrays: true }>;
 
@@ -249,12 +244,6 @@ export function useCartFetch() {
       if (storefrontId) {
         headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
       }
-
-      // Find Shopify cookies
-      headers[SHOPIFY_STOREFRONT_Y_HEADER] =
-        (await AsyncStorage.getItem(SHOPIFY_Y)) || "";
-      headers[SHOPIFY_STOREFRONT_S_HEADER] =
-        (await AsyncStorage.getItem(SHOPIFY_S)) || "";
 
       return fetch(getStorefrontApiUrl(), {
         method: "POST",
