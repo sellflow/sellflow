@@ -1,0 +1,14 @@
+appId: com.sellflow
+---
+- launchApp
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Products"
+    timeout: 10000
+- assertVisible: "Cowboy Boot"
+- tapOn:
+    text: "Cowboy Boot"
+- extendedWaitUntil:
+    timeout: 100
+    visible: "Buy now"
+- assertVisible: "Recommended"

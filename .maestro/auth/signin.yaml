@@ -1,0 +1,30 @@
+appId: com.sellflow
+---
+- launchApp
+- waitForAnimationToEnd
+- tapOn: "Profile"
+- tapOn: "Log in"
+
+- runScript: ../scripts/getEmail.js
+
+- tapOn: "Email"
+- inputText: ${output.email.testEmail}
+- tapOn: "continue"
+
+- runScript:
+    file: ../scripts/getOTP.js
+    env:
+      guerillaSid: ${output.email.guerillaSid}
+
+- tapOn: "6-digit code"
+- inputText: ${output.otp}
+- tapOn: "Submit"
+
+- extendedWaitUntil:
+    timeout: 2000
+    visible: ${output.email.testEmail}
+
+- tapOn: "Account"
+- extendedWaitUntil:
+    timeout: 500
+    visible: ${output.email.testEmail}

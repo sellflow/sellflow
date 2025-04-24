@@ -1,0 +1,20 @@
+appId: com.sellflow
+---
+- launchApp
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Products"
+    timeout: 2000
+
+- tapOn: "Press to open search bar"
+- inputText: "Shirt"
+- tapOn: "Casual Classic Shirt"
+
+- extendedWaitUntil:
+    visible: "Buy now"
+    timeout: 1000
+
+- tapOn: "Large"
+- swipe:
+    start: 5%, 80%
+    end: 50%, 80%

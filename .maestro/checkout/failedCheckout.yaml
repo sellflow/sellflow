@@ -1,0 +1,54 @@
+appId: com.sellflow
+---
+- launchApp
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Products"
+    timeout: 2000
+
+- tapOn: "Add to cart"
+- tapOn: "Cart"
+- tapOn: "Proceed to checkout"
+
+# Enter user info
+- tapOn: "First name (optional)"
+- inputRandomPersonName
+- tapOn: "Last name"
+- inputRandomPersonName
+- tapOn: "Address"
+# Input random address
+- inputText: "3264 Calico Drive"
+- tapOn: "City"
+- inputText: "Wenatchee"
+- tapOn: "ZIP code"
+- inputText: "98801"
+
+- scrollUntilVisible:
+    element:
+      text: "Card number"
+
+# Input fake card in order for this test to work you must enable test payments in your Shopify Admin panel
+# Using the Bogus Gateway for Shopify test payments we can enter a:
+# 1 to simulate a successful transaction
+# 2 to simulate a failed transaction
+# 3 to simulate an exception (which generates a message indicating an error has occurred with the provider)
+- tapOn: "Card number"
+- inputText: "2"
+
+- tapOn: "Expiration date (MM / YY)"
+- inputText: "08/60"
+
+- tapOn: "Security code"
+- inputText: "000"
+
+- tapOn: "Name on card"
+- inputRandomPersonName
+
+- scrollUntilVisible:
+    element:
+      text: "Pay now"
+
+- tapOn: "Pay now"
+- extendedWaitUntil:
+    visible: "There was an issue processing your payment. Try again or use a different payment method."
+    timeout: 2000

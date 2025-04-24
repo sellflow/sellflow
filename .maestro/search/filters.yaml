@@ -1,0 +1,27 @@
+appId: com.sellflow
+---
+- launchApp
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Products"
+    timeout: 2000
+
+- tapOn: "Press to open search bar"
+- tapOn: "Search..."
+- inputText: "Bracelet"
+- pressKey: "enter"
+
+- assertVisible: "Bangle Bracelet"
+
+# Testing Product Filters I am using a test store so I know none of my product information is changing
+# You may want to change how it tests product filters for your store as it will most likely have dynamic content
+- tapOn: "Availability"
+- tapOn:
+    leftOf: "Out of stock"
+- assertNotVisible: "Bangle Bracelet"
+- assertVisible: "Bracelet 41 in Silver"
+
+- tapOn:
+    leftOf: "Out of stock"
+- assertNotVisible: "Bracelet 41 in Silver"
+- assertVisible: "Bangle Bracelet"
