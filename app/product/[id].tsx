@@ -34,6 +34,7 @@ export default function Page() {
   const selectedOptions = getProductOptions(search);
 
   useEffect(() => {
+    console.log("SEARCH: ", search.id);
     try {
       const fetchProduct = async () => {
         const data = await getProduct(
@@ -69,7 +70,7 @@ export default function Page() {
     } catch (e) {
       console.error(e);
     }
-  }, []);
+  }, [search?.id]);
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;

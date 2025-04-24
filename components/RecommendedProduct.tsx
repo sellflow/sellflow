@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { Image } from "expo-image";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import {
   GestureResponderEvent,
   StyleSheet,
@@ -20,6 +20,14 @@ export default function RecommendedProduct({ item }: { item: any }) {
   const { i18n } = useLingui();
   const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
+
+  const navigateToProduct = () => {
+    router.push({
+      pathname: "/product/[id]",
+      params: { id: item.id },
+    });
+  };
+
   const addToCart = (e: GestureResponderEvent) => {
     e.stopPropagation();
     const merchandise = {
@@ -34,50 +42,45 @@ export default function RecommendedProduct({ item }: { item: any }) {
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
   return (
-    <Link
-      href={{
-        pathname: "/product/[id]",
-        params: { id: item.id },
-      }}
+    <TouchableOpacity
       style={styles.container}
-      key={item.id}
+      onPress={navigateToProduct}
+      activeOpacity={0.6}
     >
-      <TouchableOpacity>
-        <Image
-          //@ts-ignore
-          source={{
-            uri: getOptimizedImageUrl(item?.featuredImage?.url, imageSize),
-          }}
-          placeholder={{ blurhash }}
-          style={{
-            width: imageSize,
-            height: imageSize,
-            ...styles.image,
-          }}
-        />
-        <Text numberOfLines={1} style={[styles.heading, { color: textColor }]}>
-          {item?.title}
+      <Image
+        //@ts-ignore
+        source={{
+          uri: getOptimizedImageUrl(item?.featuredImage?.url, imageSize),
+        }}
+        placeholder={{ blurhash }}
+        style={{
+          width: imageSize,
+          height: imageSize,
+          ...styles.image,
+        }}
+      />
+      <Text numberOfLines={1} style={[styles.heading, { color: textColor }]}>
+        {item?.title}
+      </Text>
+      {item?.priceRange?.minVariantPrice && (
+        <Text style={[styles.price, { color: textColor }]}>
+          {i18n.number(item.priceRange.minVariantPrice.amount, {
+            style: "currency",
+            currency: item.priceRange.minVariantPrice.currencyCode,
+          })}
         </Text>
-        {item?.priceRange?.minVariantPrice && (
-          <Text style={[styles.price, { color: textColor }]}>
-            {i18n.number(item.priceRange.minVariantPrice.amount, {
-              style: "currency",
-              currency: item.priceRange.minVariantPrice.currencyCode,
-            })}
+      )}
+      {item?.variantsCount?.count === 1 && (
+        <TouchableOpacity
+          style={styles.AddToCartButton}
+          onPress={(e) => addToCart(e)}
+        >
+          <Text style={{ textAlign: "center", color: textColor }}>
+            Add to Cart
           </Text>
-        )}
-        {item?.variantsCount?.count === 1 && (
-          <TouchableOpacity
-            style={styles.AddToCartButton}
-            onPress={(e) => addToCart(e)}
-          >
-            <Text style={{ textAlign: "center", color: textColor }}>
-              Add to Cart
-            </Text>
-          </TouchableOpacity>
-        )}
-      </TouchableOpacity>
-    </Link>
+        </TouchableOpacity>
+      )}
+    </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({
@@ -93,16 +96,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flexDirection: "row",
-    alignItems: "center",
     width: imageSize,
+    alignItems: "flex-start",
+    marginBottom: "auto",
   },
   image: {
     backgroundColor: "white",
     borderRadius: 4,
   },
   heading: {
-    flex: 1,
     marginTop: 8,
     color: "white",
     fontSize: 18,
