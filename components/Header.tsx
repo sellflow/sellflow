@@ -157,11 +157,7 @@ export default function Header() {
               },
             ]}
           >
-            <TouchableOpacity
-              onPress={toggleSearch}
-              style={styles.backButton}
-              accessibilityLabel="Press to open search bar"
-            >
+            <TouchableOpacity onPress={toggleSearch} style={styles.backButton}>
               <Ionicons
                 size={24}
                 name="arrow-back-sharp"
@@ -207,6 +203,7 @@ export default function Header() {
           onPress={() =>
             searchBarOpen && search !== "" ? setSearch("") : toggleSearch()
           }
+          accessibilityLabel="Press to open search bar"
         >
           <Ionicons
             name={
