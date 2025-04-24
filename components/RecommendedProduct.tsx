@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { Image } from "expo-image";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import {
   GestureResponderEvent,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   useColorScheme,
 } from "react-native";
-import { useCart } from "./CartProvider";
+import { useCart } from "./shopify/CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { useLingui } from "@lingui/react/macro";
 

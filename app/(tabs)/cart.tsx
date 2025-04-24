@@ -1,4 +1,4 @@
-import { useCart } from "@/components/CartProvider";
+import { useCart } from "@/components/shopify/CartProvider";
 import LineItem from "@/components/LineItem";
 import { Colors } from "@/constants/Colors";
 import shopifyCheckout from "@/shopify/checkout";

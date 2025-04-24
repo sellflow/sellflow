@@ -11,7 +11,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { useCart } from "./CartProvider";
+import { useCart } from "./shopify/CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { useLingui } from "@lingui/react/macro";
 

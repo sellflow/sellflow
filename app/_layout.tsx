@@ -14,7 +14,7 @@ import { useEffect, useState, ReactNode } from "react";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
 import { ShopifyProvider } from "@shopify/hydrogen-react";
-import { CartProvider } from "@/components/CartProvider";
+import { CartProvider } from "@/components/shopify/CartProvider";
 import Header from "@/components/Header";
 import {
   CountryCode,

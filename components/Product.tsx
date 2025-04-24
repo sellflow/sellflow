@@ -11,7 +11,7 @@ import {
 import { useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
 import { Colors } from "@/constants/Colors";
-import { useCart } from "./CartProvider";
+import { useCart } from "./shopify/CartProvider";
 import ImageCarousel from "./ImageCarousel";
 import { useLingui } from "@lingui/react/macro";
 
