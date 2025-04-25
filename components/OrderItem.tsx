@@ -17,6 +17,7 @@ export default function OrderItem({ item }: { item: any }) {
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
+  console.log(item);
   return (
     <Link
       href={{
@@ -28,8 +29,8 @@ export default function OrderItem({ item }: { item: any }) {
       style={{ width: "100%" }}
     >
       <View style={{ flexDirection: "row", width: "100%" }}>
-        {item.node.fulfillments.edges[0].node.fulfillmentLineItems.edges[0].node
-          .lineItem.image.url && (
+        {item?.node?.fulfillments?.edges[0]?.node?.fulfillmentLineItems
+          ?.edges[0]?.node?.lineItem?.image?.url && (
           <Image
             source={{
               uri: getOptimizedImageUrl(
@@ -49,17 +50,18 @@ export default function OrderItem({ item }: { item: any }) {
         <View style={{ paddingLeft: 8 }}>
           <Text style={{ color: textColor }}>
             <Trans>
-              {item.node.fulfillments.edges[0].node.estimatedDeliveryAt
+              {item?.node?.fulfillments?.edges[0]?.node?.estimatedDeliveryAt
                 ? i18n.date(
                     item.node.fulfillments.edges[0].node.estimatedDeliveryAt,
                   )
-                : item.node.fulfillments.edges[0].node.latestShipmentStatus}
+                : item?.node?.fulfillments?.edges[0]?.node
+                    ?.latestShipmentStatus}
             </Trans>
           </Text>
           <Text style={{ color: textColor }}>
             {
-              item.node.fulfillments.edges[0].node.fulfillmentLineItems.edges[0]
-                .node.lineItem.name
+              item?.node?.fulfillments?.edges[0]?.node?.fulfillmentLineItems
+                ?.edges[0]?.node?.lineItem?.name
             }
           </Text>
         </View>
