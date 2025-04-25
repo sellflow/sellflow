@@ -54,8 +54,11 @@ export default function RootLayout() {
 
   const getUser = () => {
     if (typeof window !== "undefined") {
+      const { refreshUser } = require("@/lib/auth");
       const { getAccessToken } = require("@/lib/tokens");
-      return getAccessToken().then((res: string) => setUser(res));
+      return refreshUser().then(() => {
+        getAccessToken.then((res: string) => setUser(res));
+      });
     }
   };
 
