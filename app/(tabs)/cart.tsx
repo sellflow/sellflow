@@ -1,3 +1,4 @@
+import * as Notifications from "expo-notifications";
 import { useCart } from "@/components/shopify/CartProvider";
 import LineItem from "@/components/LineItem";
 import { Colors } from "@/constants/Colors";
@@ -34,6 +35,30 @@ export default function Cart() {
 
     useEffect(() => {
       if (cart.checkoutUrl) shopifyCheckout!.preload(cart.checkoutUrl);
+      shopifyCheckout?.addEventListener("completed", async () => {
+        try {
+          Notifications.cancelAllScheduledNotificationsAsync();
+          console.log("All pending notifications have been cancelled");
+        } catch (e) {
+          console.log("Failed to cancel notificaitons");
+        }
+      });
+      shopifyCheckout?.addEventListener("close", async () => {
+        try {
+          Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Sellflow",
+              body: "Last chance to grab this!",
+              data: { url: "com.sellflow://cart" },
+            },
+            trigger: {
+              seconds: 60 * 60 * 3,
+              repeats: true,
+              type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+            },
+          });
+        } catch (e) {}
+      });
     }, []);
 
     return (

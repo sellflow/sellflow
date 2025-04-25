@@ -9,12 +9,13 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { Stack } from "expo-router";
-import { useEffect, useState, ReactNode } from "react";
+import { router, Stack } from "expo-router";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
 import { ShopifyProvider } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/shopify/CartProvider";
+import * as Notifications from "expo-notifications";
 import Header from "@/components/Header";
 import {
   CountryCode,
@@ -42,7 +43,47 @@ const DefaultComponent = (props: TransRenderProps) => (
   <Text>{props.children}</Text>
 );
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+function useNotificationObserver() {
+  useEffect(() => {
+    let isMounted = true;
+
+    function redirect(notification: Notifications.Notification) {
+      const url = notification.request.content.data?.url;
+      if (url) {
+        router.push(url);
+      }
+    }
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (!isMounted || !response?.notification) {
+        return;
+      }
+      redirect(response?.notification);
+    });
+
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        redirect(response.notification);
+      },
+    );
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
+  }, []);
+}
+
 export default function RootLayout() {
+  useNotificationObserver();
   const [user, setUser] = useState("");
   const [countryIsoCode, setCountryIsoCode] = useState<CountryCode>(
     countryCode.toUpperCase() as CountryCode,
