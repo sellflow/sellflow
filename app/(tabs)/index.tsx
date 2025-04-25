@@ -15,6 +15,7 @@ import Product from "@/components/ProductCard";
 import { Colors } from "@/constants/Colors";
 import { useShop } from "@shopify/hydrogen-react";
 import { Trans } from "@lingui/react/macro";
+import { getAccessToken } from "@/lib/tokens";
 
 export default function Index() {
   const { languageIsoCode, countryIsoCode } = useShop();
@@ -26,7 +27,12 @@ export default function Index() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getProducts(countryIsoCode, languageIsoCode);
+        const accessToken = await getAccessToken();
+        const data = await getProducts(
+          countryIsoCode,
+          languageIsoCode,
+          accessToken,
+        );
         if (data.errors) {
           console.error(data.errors.graphQLErrors);
           throw new Error("Failed to fetch products");

@@ -10,11 +10,12 @@ export const getProductRecommendations = async (
   productId: string,
   countryCode: CountryCode,
   languageCode: LanguageCode,
+  accessToken: string | null,
 ) =>
   await client.request(
     `
   #graphql
-  query productRecommendations($productId: ID!) @inContext(country: ${countryCode}, language: ${languageCode}) {
+  query productRecommendations($productId: ID!) @inContext(country: ${countryCode}, language: ${languageCode} ${accessToken ? `, buyer: { customerAccessToken: "${accessToken}" }` : ""}) {
     productRecommendations(productId: $productId) {
       id
       featuredImage {
@@ -49,13 +50,14 @@ export const getProduct = async (
   selectedOptions: SelectedOptionInput[],
   countryCode: CountryCode,
   languageCode: LanguageCode,
+  accessToken: string | null,
 ) =>
   await client.request(
     `#graphql
     query Product (
         $id: ID!
         $selectedOptions: [SelectedOptionInput!]!
-      ) @inContext(country: ${countryCode}, language: ${languageCode}) {
+      ) @inContext(country: ${countryCode}, language: ${languageCode} ${accessToken ? `, buyer: { customerAccessToken: "${accessToken}" }` : ""}) {
         product(id: $id) {
           id
           title
@@ -147,10 +149,11 @@ export const getProduct = async (
 export const getProducts = async (
   countryCode: CountryCode,
   languageCode: LanguageCode,
+  accessToken: string | null,
 ) =>
   await client.request(
     `#graphql
-    query getProducts($first: Int) @inContext(country: ${countryCode}, language: ${languageCode}) {
+    query getProducts($first: Int) @inContext(country: ${countryCode}, language: ${languageCode} ${accessToken ? `, buyer: { customerAccessToken: "${accessToken}" }` : ""}) {
     products(first: $first) {
       edges {
         node {

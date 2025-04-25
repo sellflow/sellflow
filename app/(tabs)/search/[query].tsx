@@ -22,6 +22,7 @@ import ProductFilter from "@/components/ProductFilter";
 import FilterDropdown from "@/components/FilterDropdown";
 import DropdownProvider from "@/components/DropdownProvider";
 import { Trans } from "@lingui/react/macro";
+import { getAccessToken } from "@/lib/tokens";
 
 export type Action =
   | { type: "include"; input: Object }
@@ -76,7 +77,8 @@ export default function Search() {
   const [state, dispatch] = useReducer(reducer, []);
 
   const searchProducts = useCallback(async () => {
-    const res = await getSearchResults(query as string, state);
+    const accessToken = await getAccessToken();
+    const res = await getSearchResults(query as string, state, accessToken);
     setProducts(res);
   }, [query, state]);
 

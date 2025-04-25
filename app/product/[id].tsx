@@ -20,6 +20,7 @@ import Product from "@/components/Product";
 import RecommendedProduct from "@/components/RecommendedProduct";
 import { Colors } from "@/constants/Colors";
 import { Trans } from "@lingui/react/macro";
+import { getAccessToken } from "@/lib/tokens";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -34,14 +35,15 @@ export default function Page() {
   const selectedOptions = getProductOptions(search);
 
   useEffect(() => {
-    console.log("SEARCH: ", search.id);
     try {
       const fetchProduct = async () => {
+        const accessToken = await getAccessToken();
         const data = await getProduct(
           search?.id as string,
           selectedOptions,
           countryIsoCode,
           languageIsoCode,
+          accessToken,
         );
         if (data?.errors?.graphQLErrors) {
           //@ts-ignore
@@ -57,6 +59,7 @@ export default function Page() {
           search?.id as string,
           countryIsoCode,
           languageIsoCode,
+          accessToken,
         );
         if (data?.errors?.graphQLErrors) {
           //@ts-ignore

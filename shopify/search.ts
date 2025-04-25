@@ -4,11 +4,12 @@ import { client } from "./client";
 export const getSearchResults = async (
   query: string,
   productFilters: ProductFilter[],
+  accessToken: string | null,
 ) =>
   await client.request(
     `
   #graphql
-  query searchProducts($query: String!, $productFilters: [ProductFilter!]) {
+  query searchProducts($query: String!, $productFilters: [ProductFilter!]) ${accessToken ? `@inContext(buyer: { customerAccessToken: "${accessToken}" })` : ""} {
     search(query: $query, first: 10, productFilters: $productFilters) {
       edges {
         node {
@@ -70,11 +71,14 @@ export const getSearchResults = async (
     },
   );
 
-export const getPredictiveSearchResults = async (search: string) =>
+export const getPredictiveSearchResults = async (
+  search: string,
+  accessToken: string | null,
+) =>
   await client.request(
     `
   #graphql
-  query suggestions($query: String!) {
+  query suggestions($query: String!) ${accessToken ? `@inContext(buyer: { customerAccessToken: "${accessToken}" })` : ""} {
     predictiveSearch(query: $query) {
       products {
         id
