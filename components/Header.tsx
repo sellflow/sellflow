@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   },
   Header: {
     gap: 8,
-    paddingTop: 52,
+    paddingTop: 12,
     paddingBottom: 16,
     paddingHorizontal: 8,
     flexDirection: "row",
