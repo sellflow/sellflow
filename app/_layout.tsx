@@ -25,6 +25,7 @@ import { getLocales } from "expo-localization";
 import { I18nProvider, TransRenderProps } from "@lingui/react";
 import { messages as esMessages } from "@/locales/es/messages";
 import { messages as enMessages } from "@/locales/en/messages";
+import Toast from "react-native-toast-message";
 import { i18n } from "@lingui/core";
 import { Text } from "react-native";
 import { t } from "@lingui/core/macro";
@@ -98,7 +99,7 @@ export default function RootLayout() {
       const { refreshUser } = require("@/lib/auth");
       const { getAccessToken } = require("@/lib/tokens");
       return refreshUser().then(() => {
-        getAccessToken.then((res: string) => setUser(res));
+        getAccessToken.then((res: string) => setUser(res || undefined));
       });
     }
   };
@@ -107,56 +108,79 @@ export default function RootLayout() {
     getUser();
   }, []);
 
+  const onSuccessAddToCart = () => {
+    Toast.show({
+      type: "success",
+      text1: "Product added to cart",
+      position: "bottom",
+      bottomOffset: 60,
+    });
+  };
+
+  const onSuccessRemoveFromCart = () => {
+    Toast.show({
+      type: "success",
+      text1: "Product successfully removed from cart",
+      position: "bottom",
+      bottomOffset: 60,
+    });
+  };
+
   return (
-    <I18nProvider i18n={i18n} defaultComponent={DefaultComponent}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <ShopifyProvider
-          storeDomain={process.env.EXPO_PUBLIC_STORE_DOMAIN!}
-          storefrontApiVersion="2025-01"
-          storefrontToken={process.env.EXPO_PUBLIC_STORE_TOKEN!}
-          countryIsoCode={countryIsoCode}
-          languageIsoCode={languageIsoCode}
+    <>
+      <I18nProvider i18n={i18n} defaultComponent={DefaultComponent}>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <CartProvider
-            onLineAdd={() => console.log("A line is being added")}
-            onLineAddComplete={() => console.log("Line add complete")}
-            customerAccessToken={user}
+          <ShopifyProvider
+            storeDomain={process.env.EXPO_PUBLIC_STORE_DOMAIN!}
+            storefrontApiVersion="2025-01"
+            storefrontToken={process.env.EXPO_PUBLIC_STORE_TOKEN!}
+            countryIsoCode={countryIsoCode}
+            languageIsoCode={languageIsoCode}
           >
-            <Stack
-              screenOptions={{
-                animation: "slide_from_right",
-                headerBackButtonDisplayMode: "minimal",
-              }}
+            <CartProvider
+              onLineAddComplete={onSuccessAddToCart}
+              onLineRemoveComplete={onSuccessRemoveFromCart}
+              customerAccessToken={user}
             >
-              <Stack.Screen
-                name="order/[id]"
-                options={{ headerTitle: t`Order` }}
-              />
-              <Stack.Screen
-                name="product/[id]"
-                options={{ headerTitle: t`Product` }}
-              />
-              <Stack.Screen
-                name="account"
-                options={{ headerTitle: t`Account` }}
-              />
-              <Stack.Screen
-                name="orders"
-                options={{ headerTitle: t`Orders` }}
-              />
-              <Stack.Screen
-                name="(tabs)"
-                options={{
-                  header: () => <Header />,
-                  headerTitle: "",
+              <Stack
+                screenOptions={{
+                  animation: "slide_from_right",
+                  headerBackButtonDisplayMode: "minimal",
                 }}
-              />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="auto" />
-          </CartProvider>
-        </ShopifyProvider>
-      </ThemeProvider>
-    </I18nProvider>
+              >
+                <Stack.Screen
+                  name="order/[id]"
+                  options={{ headerTitle: t`Order` }}
+                />
+                <Stack.Screen
+                  name="product/[id]"
+                  options={{ headerTitle: t`Product` }}
+                />
+                <Stack.Screen
+                  name="account"
+                  options={{ headerTitle: t`Account` }}
+                />
+                <Stack.Screen
+                  name="orders"
+                  options={{ headerTitle: t`Orders` }}
+                />
+                <Stack.Screen
+                  name="(tabs)"
+                  options={{
+                    header: () => <Header />,
+                    headerTitle: "",
+                  }}
+                />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+              <StatusBar style="auto" />
+            </CartProvider>
+          </ShopifyProvider>
+        </ThemeProvider>
+      </I18nProvider>
+      <Toast />
+    </>
   );
 }
