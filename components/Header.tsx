@@ -17,6 +17,7 @@ import {
   Text,
   ScrollView,
   SafeAreaView,
+  Platform,
 } from "react-native";
 
 export default function Header() {
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
   },
   Header: {
     gap: 8,
-    paddingTop: 12,
+    paddingTop: Platform.OS === "android" ? 48 : 12,
     paddingBottom: 16,
     paddingHorizontal: 8,
     flexDirection: "row",
