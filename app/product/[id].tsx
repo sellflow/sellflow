@@ -55,6 +55,7 @@ export default function Page() {
       fetchProduct();
 
       const fetchRecommended = async () => {
+        const accessToken = await getAccessToken();
         const data = await getProductRecommendations(
           search?.id as string,
           countryIsoCode,
