@@ -1,10 +1,8 @@
 import OrderItem from "@/components/OrderItem";
 import { getOrders } from "@/shopify/order";
 import { refreshUser } from "@/lib/auth";
-import { discovery, getAccessToken, getRefreshToken } from "@/lib/tokens";
 import { useEffect, useState } from "react";
 import {
-  FlatList,
   Text,
   View,
   StyleSheet,
@@ -14,41 +12,42 @@ import {
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Trans } from "@lingui/react/macro";
-
-const imageSize = 100;
+import { useMMKVString } from "react-native-mmkv";
+import { storage } from "@/lib/storage";
 
 export default function Orders() {
   const [orders, setOrders] = useState({});
   const [loading, setLoading] = useState<boolean>();
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
+  const [refreshToken, setRefreshToken] = useMMKVString(
+    "refreshToken",
+    storage,
+  );
   const colorScheme = useColorScheme();
 
   const fetchOrders = async () => {
-    const accessToken = await getAccessToken();
     if (accessToken) {
       const data = await getOrders(accessToken);
+      // If access token is valid and data is present
       if (data.status !== 401 && data) {
         const parsedData = await data.json();
         return parsedData;
+        // If access token is invalid and data is not present
       } else if (data.status !== 401) {
-        const refreshToken = await getRefreshToken();
-        if (refreshToken) {
-          refreshUser({ discovery }).then(async () => {
-            const accessToken = await getAccessToken();
-            const data = await getOrders(accessToken!);
-            const parsedData = await data.json();
-            return parsedData;
-          });
-        }
+        refreshUser().then(async () => {
+          const data = await getOrders(accessToken);
+          const parsedData = await data.json();
+          return parsedData;
+        });
       }
-    }
 
-    const refreshToken = await getAccessToken();
-    if (refreshToken) {
-      refreshUser({ discovery }).then(async () => {
-        const accessToken = await getAccessToken();
-        const data = await getOrders(accessToken!);
-        return await data.json();
-      });
+      if (refreshToken) {
+        refreshUser().then(async () => {
+          const data = await getOrders(accessToken);
+          const parsedData = await data.json();
+          return parsedData;
+        });
+      }
     }
   };
 

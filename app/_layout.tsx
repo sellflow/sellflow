@@ -29,6 +29,9 @@ import Toast from "react-native-toast-message";
 import { i18n } from "@lingui/core";
 import { Text } from "react-native";
 import { t } from "@lingui/core/macro";
+import { useMMKVString } from "react-native-mmkv";
+import { refreshUser } from "@/lib/auth";
+import { storage } from "@/lib/storage";
 
 const locales = getLocales();
 let languageCode = locales[0]?.languageCode || "en";
@@ -86,7 +89,7 @@ function useNotificationObserver() {
 
 export default function RootLayout() {
   useNotificationObserver();
-  const [user, setUser] = useState<string | undefined>("");
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const [countryIsoCode, setCountryIsoCode] = useState<CountryCode>(
     countryCode.toUpperCase() as CountryCode,
   );
@@ -95,18 +98,8 @@ export default function RootLayout() {
   );
   const colorScheme = useColorScheme();
 
-  const getUser = () => {
-    if (typeof window !== "undefined") {
-      try {
-        const { refreshUser } = require("@/lib/auth");
-
-        return refreshUser().then((param: { accessToken?: string }) => {
-          setUser(param?.accessToken);
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
+  const getUser = async () => {
+    await refreshUser();
   };
 
   useEffect(() => {
@@ -147,7 +140,7 @@ export default function RootLayout() {
             <CartProvider
               onLineAddComplete={onSuccessAddToCart}
               onLineRemoveComplete={onSuccessRemoveFromCart}
-              customerAccessToken={user}
+              customerAccessToken={accessToken}
             >
               <Stack
                 screenOptions={{

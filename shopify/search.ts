@@ -4,7 +4,7 @@ import { client } from "./client";
 export const getSearchResults = async (
   query: string,
   productFilters: ProductFilter[],
-  accessToken: string | null,
+  accessToken: string | null | undefined,
 ) =>
   await client.request(
     `
@@ -73,7 +73,7 @@ export const getSearchResults = async (
 
 export const getPredictiveSearchResults = async (
   search: string,
-  accessToken: string | null,
+  accessToken: string | null | undefined,
 ) =>
   await client.request(
     `

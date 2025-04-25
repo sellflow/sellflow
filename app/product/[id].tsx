@@ -20,12 +20,14 @@ import Product from "@/components/Product";
 import RecommendedProduct from "@/components/RecommendedProduct";
 import { Colors } from "@/constants/Colors";
 import { Trans } from "@lingui/react/macro";
-import { getAccessToken } from "@/lib/tokens";
+import { useMMKVString } from "react-native-mmkv";
+import { storage } from "@/lib/storage";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Page() {
   const { countryIsoCode, languageIsoCode } = useShop();
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const colorScheme = useColorScheme();
   const search = useLocalSearchParams();
   const [product, setProduct] = useState<
@@ -37,7 +39,6 @@ export default function Page() {
   useEffect(() => {
     try {
       const fetchProduct = async () => {
-        const accessToken = await getAccessToken();
         const data = await getProduct(
           search?.id as string,
           selectedOptions,
@@ -55,7 +56,6 @@ export default function Page() {
       fetchProduct();
 
       const fetchRecommended = async () => {
-        const accessToken = await getAccessToken();
         const data = await getProductRecommendations(
           search?.id as string,
           countryIsoCode,

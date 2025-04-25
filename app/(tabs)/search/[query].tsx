@@ -22,7 +22,8 @@ import ProductFilter from "@/components/ProductFilter";
 import FilterDropdown from "@/components/FilterDropdown";
 import DropdownProvider from "@/components/DropdownProvider";
 import { Trans } from "@lingui/react/macro";
-import { getAccessToken } from "@/lib/tokens";
+import { useMMKVString } from "react-native-mmkv";
+import { storage } from "@/lib/storage";
 
 export type Action =
   | { type: "include"; input: Object }
@@ -75,9 +76,9 @@ export default function Search() {
     ClientResponse<ProductQuery> | undefined
   >();
   const [state, dispatch] = useReducer(reducer, []);
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
 
   const searchProducts = useCallback(async () => {
-    const accessToken = await getAccessToken();
     const res = await getSearchResults(query as string, state, accessToken);
     setProducts(res);
   }, [query, state]);

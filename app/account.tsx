@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { getAccessToken } from "@/lib/tokens";
+import { storage } from "@/lib/storage";
 import { getUserInfo } from "@/shopify/user";
 import { Trans } from "@lingui/react/macro";
 import { Image } from "expo-image";
@@ -11,24 +11,23 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import { useMMKVString } from "react-native-mmkv";
 
 export default function Account() {
   const [user, setUser] = useState();
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const [loading, setLoading] = useState<boolean>();
   const colorScheme = useColorScheme();
 
   useEffect(() => {
     setLoading(true);
-    getAccessToken().then((accessToken) => {
-      if (accessToken) {
-        getUserInfo(accessToken).then(async (res) => {
-          const data = await res.json();
-          setUser(await data.data.customer);
-          setLoading(false);
-          console.log(user);
-        });
-      }
-    });
+    if (accessToken) {
+      getUserInfo(accessToken).then(async (res) => {
+        const data = await res.json();
+        setUser(await data.data.customer);
+        setLoading(false);
+      });
+    }
   }, []);
 
   const textColor =

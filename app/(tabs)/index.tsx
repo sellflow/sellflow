@@ -15,9 +15,11 @@ import Product from "@/components/ProductCard";
 import { Colors } from "@/constants/Colors";
 import { useShop } from "@shopify/hydrogen-react";
 import { Trans } from "@lingui/react/macro";
-import { getAccessToken } from "@/lib/tokens";
+import { useMMKVString } from "react-native-mmkv";
+import { storage } from "@/lib/storage";
 
 export default function Index() {
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const { languageIsoCode, countryIsoCode } = useShop();
   const colorScheme = useColorScheme();
   const [products, setProducts] = useState<
@@ -27,7 +29,6 @@ export default function Index() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const accessToken = await getAccessToken();
         const data = await getProducts(
           countryIsoCode,
           languageIsoCode,

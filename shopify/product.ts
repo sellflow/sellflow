@@ -10,7 +10,7 @@ export const getProductRecommendations = async (
   productId: string,
   countryCode: CountryCode,
   languageCode: LanguageCode,
-  accessToken: string | null,
+  accessToken: string | null | undefined,
 ) =>
   await client.request(
     `
@@ -50,7 +50,7 @@ export const getProduct = async (
   selectedOptions: SelectedOptionInput[],
   countryCode: CountryCode,
   languageCode: LanguageCode,
-  accessToken: string | null,
+  accessToken: string | null | undefined,
 ) =>
   await client.request(
     `#graphql
@@ -149,7 +149,7 @@ export const getProduct = async (
 export const getProducts = async (
   countryCode: CountryCode,
   languageCode: LanguageCode,
-  accessToken: string | null,
+  accessToken: string | null | undefined,
 ) =>
   await client.request(
     `#graphql

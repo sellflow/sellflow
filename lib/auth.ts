@@ -4,35 +4,25 @@ import {
   exchangeCodeAsync,
   refreshAsync,
 } from "expo-auth-session";
-import * as SecureStore from "expo-secure-store";
-import { Platform } from "react-native";
-import {
-  discovery,
-  getRefreshToken,
-  SECURE_AUTH_REFRESH_KEY,
-  SECURE_AUTH_STATE_KEY,
-} from "./tokens";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-interface Discovery {
-  authorizationEndpoint: string;
-  tokenEndpoint: string;
-  revocationEndpoint: string;
-}
+import { storage } from "./storage";
 
 interface LoginUserProps {
   request: AuthRequest | null;
   promptAsync: () => Promise<AuthSessionResult>;
   redirectUri: string;
-  discovery: Discovery;
   setLoginComplete: (arg0: boolean) => void;
 }
+
+export const discovery = {
+  authorizationEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_ENDPOINT}/oauth/authorize`,
+  tokenEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_ENDPOINT}/oauth/token`,
+  revocationEndpoint: `${process.env.EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_ENDPOINT}/logout`,
+};
 
 export const loginUser = ({
   request,
   promptAsync,
   redirectUri,
-  discovery,
   setLoginComplete,
 }: LoginUserProps) => {
   promptAsync().then((codeResponse) => {
@@ -48,28 +38,17 @@ export const loginUser = ({
         },
         discovery,
       ).then((res) => {
-        if (Platform.OS !== "web") {
-          // Securely store the auth on your device
-          SecureStore.setItemAsync(SECURE_AUTH_STATE_KEY, res.accessToken);
-          SecureStore.setItemAsync(SECURE_AUTH_REFRESH_KEY, res.refreshToken!);
-          setLoginComplete(true);
-        } else {
-          // Not secure but it works ¯\_(ツ)_/¯
-          AsyncStorage.setItem(SECURE_AUTH_STATE_KEY, res.accessToken);
-          AsyncStorage.setItem(SECURE_AUTH_REFRESH_KEY, res.refreshToken!);
-          setLoginComplete(true);
-        }
+        // Securely store the auth on your device
+        storage.set("accessToken", res.accessToken);
+        storage.set("refreshToken", res.refreshToken!);
+        setLoginComplete(true);
       });
     }
   });
 };
 
-interface RefreshUserProps {
-  discovery: Discovery;
-}
-
 export const refreshUser = async () => {
-  const refreshToken = await getRefreshToken();
+  const refreshToken = storage.getString("refreshToken");
   if (!refreshToken) {
     return;
   }
@@ -80,15 +59,7 @@ export const refreshUser = async () => {
     },
     discovery,
   ).then((res) => {
-    if (Platform.OS !== "web") {
-      // Securely store the auth on your device
-      SecureStore.setItemAsync(SECURE_AUTH_STATE_KEY, res.accessToken);
-      SecureStore.setItemAsync(SECURE_AUTH_REFRESH_KEY, res.refreshToken!);
-    } else {
-      // Not secure but it works ¯\_(ツ)_/¯
-      AsyncStorage.setItem(SECURE_AUTH_STATE_KEY, res.accessToken);
-      AsyncStorage.setItem(SECURE_AUTH_REFRESH_KEY, res.refreshToken!);
-    }
-    return { accessToken: res.accessToken, refreshToken: res.refreshToken };
+    storage.set("accessToken", res.accessToken);
+    storage.set("refreshToken", res.refreshToken!);
   });
 };

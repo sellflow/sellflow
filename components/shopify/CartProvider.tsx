@@ -31,7 +31,7 @@ import { useCartAPIStateMachine } from "./useCartAPIStateMachine";
 import { PartialDeep } from "type-fest";
 import { useShop } from "@shopify/hydrogen-react";
 import { defaultCartFragment } from "@/shopify/cart";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storage } from "@/lib/storage";
 
 const CART_ID_STORAGE_KEY = "shopifyCartId";
 
@@ -285,29 +285,26 @@ export function CartProvider({
   /**
    * Initializes cart with priority in this order:
    * 1. cart props
-   * 2. AsyncStorage cartId
+   * 2. Storage cartId
    */
   useEffect(() => {
-    const doStuff = async () => {
-      if (!cartReady.current && !fetchingFromStorage.current) {
-        if (!cart) {
-          fetchingFromStorage.current = true;
-          try {
-            const cartId = await AsyncStorage.getItem(CART_ID_STORAGE_KEY);
-            if (cartId) {
-              cartSend({ type: "CART_FETCH", payload: { cartId } });
-            }
-          } catch (error) {
-            console.warn("error fetching cartId");
-            console.warn(error);
+    if (!cartReady.current && !fetchingFromStorage.current) {
+      if (!cart) {
+        fetchingFromStorage.current = true;
+        try {
+          const cartId = storage.getString(CART_ID_STORAGE_KEY);
+          if (cartId) {
+            cartSend({ type: "CART_FETCH", payload: { cartId } });
           }
+        } catch (error) {
+          console.warn("error fetching cartId");
+          console.warn(error);
         }
-        cartReady.current = true;
-        // Providing a separate cart ready state variable to avoid re-renders in this logic while still being able to pass the reactive status through context.
-        setIsCartReady(true);
       }
-    };
-    doStuff();
+      cartReady.current = true;
+      // Providing a separate cart ready state variable to avoid re-renders in this logic while still being able to pass the reactive status through context.
+      setIsCartReady(true);
+    }
   }, [cart, cartReady, cartSend]);
 
   // Update cart country code if cart and props countryCode's as different
@@ -336,36 +333,26 @@ export function CartProvider({
     [cartSend],
   );
 
-  // save cart id to Async storage
+  // save cart id to storage
   useEffect(() => {
-    const doStuff = async () => {
-      if (cartState?.context?.cart?.id) {
-        try {
-          await AsyncStorage.setItem(
-            CART_ID_STORAGE_KEY,
-            cartState.context.cart?.id,
-          );
-        } catch (error) {
-          console.warn("Failed to save cartId to AsyncStorage", error);
-        }
+    if (cartState?.context?.cart?.id) {
+      try {
+        storage.set(CART_ID_STORAGE_KEY, cartState.context.cart?.id);
+      } catch (error) {
+        console.warn("Failed to save cartId to storage", error);
       }
-    };
-    doStuff();
+    }
   }, [cartState?.context?.cart?.id]);
 
   // delete cart from local storage if cart fetched has been completed
   useEffect(() => {
-    const doStuff = async () => {
-      if (cartCompleted) {
-        try {
-          await AsyncStorage.removeItem(CART_ID_STORAGE_KEY);
-        } catch (error) {
-          console.warn("Failed to delete cartId from AsyncStorage", error);
-        }
+    if (cartCompleted) {
+      try {
+        storage.delete(CART_ID_STORAGE_KEY);
+      } catch (error) {
+        console.warn("Failed to delete cartId from storage", error);
       }
-    };
-
-    doStuff();
+    }
   }, [cartCompleted]);
 
   const cartCreate = useCallback(

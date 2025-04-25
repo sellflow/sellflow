@@ -2,9 +2,7 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   Platform,
-  ScrollView,
   useColorScheme,
   TouchableOpacity,
 } from "react-native";
@@ -12,14 +10,14 @@ import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { getUser } from "@/shopify/user";
-import { discovery, getAccessToken, getRefreshToken } from "@/lib/tokens";
-import { loginUser, refreshUser } from "@/lib/auth";
+import { discovery, loginUser, refreshUser } from "@/lib/auth";
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native";
 import { Trans } from "@lingui/react/macro";
+import { useMMKVString } from "react-native-mmkv";
+import { storage } from "@/lib/storage";
 
 WebBrowser.maybeCompleteAuthSession();
 const blurHash =
@@ -27,6 +25,13 @@ const blurHash =
 
 export default function Index() {
   const [user, setUser] = useState();
+  const [loginComplete, setLoginComplete] = useState(false);
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
+  const [refreshToken, setRefreshToken] = useMMKVString(
+    "refreshToken",
+    storage,
+  );
+
   const colorScheme = useColorScheme();
   const redirectUri = makeRedirectUri({
     scheme:
@@ -35,8 +40,6 @@ export default function Index() {
         : process.env.EXPO_PUBLIC_CUSTOMER_ACCOUNT_SHOP_ID,
     path: "profile",
   });
-  const [loginComplete, setLoginComplete] = useState(false);
-
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: process.env.EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_TOKEN!,
@@ -56,23 +59,27 @@ export default function Index() {
     }
   }, [response]);
 
-  useEffect(() => {
-    getAccessToken().then((accessToken) => {
-      if (accessToken) {
-        getUser(accessToken).then(async (data) => {
+  const retrieveUserInfo = async () => {
+    if (accessToken) {
+      const data = await getUser(accessToken);
+      if (data.status === 200) {
+        const parsedData = await data.json();
+        setUser(await parsedData?.data.customer);
+      } else if (data.status === 401) {
+        if (refreshToken) {
+          await refreshUser();
+          const data = await getUser(accessToken);
           if (data.status === 200) {
             const parsedData = await data.json();
-            setUser(await parsedData?.data.customer);
-          } else if (data.status === 401) {
-            getRefreshToken().then(async (refreshToken) => {
-              if (refreshToken) {
-                await refreshUser({ discovery });
-              }
-            });
+            setUser(await parsedData.data.customer);
           }
-        });
+        }
       }
-    });
+    }
+  };
+
+  useEffect(() => {
+    retrieveUserInfo();
   }, [loginComplete]);
 
   const textColor =
@@ -166,7 +173,6 @@ export default function Index() {
               request,
               promptAsync,
               redirectUri,
-              discovery,
               setLoginComplete,
             });
           }}
@@ -186,7 +192,6 @@ export default function Index() {
               request,
               promptAsync,
               redirectUri,
-              discovery,
               setLoginComplete,
             });
           }}
