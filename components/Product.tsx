@@ -77,15 +77,23 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                                   [option?.name || ""]: optionVal,
                                 },
                               }}
+                              disabled={
+                                !isOptionInStock(option.name || "", optionVal!)
+                              }
                               style={[
                                 styles.Option,
                                 {
-                                  backgroundColor:
-                                    optionVal === selectedOptions![option.name!]
+                                  backgroundColor: isOptionInStock(
+                                    option.name || "",
+                                    optionVal!,
+                                  )
+                                    ? optionVal ===
+                                      selectedOptions![option.name!]
                                       ? colorScheme === "light"
                                         ? Colors.dark.background
                                         : Colors.light.background
-                                      : backgroundColor,
+                                      : backgroundColor
+                                    : "grey",
                                 },
                               ]}
                               asChild
