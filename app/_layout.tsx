@@ -12,7 +12,7 @@ import {
 import { router, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { useColorScheme } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import { ShopifyProvider } from "@shopify/hydrogen-react";
 import { CartProvider } from "@/components/shopify/CartProvider";
 import * as Notifications from "expo-notifications";
@@ -53,39 +53,40 @@ Notifications.setNotificationHandler({
 });
 
 function useNotificationObserver() {
-  useEffect(() => {
-    let isMounted = true;
+  if (Platform.OS === "android" || Platform.OS === "ios") {
+    useEffect(() => {
+      let isMounted = true;
 
-    function redirect(notification: Notifications.Notification) {
-      const url = notification.request.content.data?.url;
-      if (url) {
-        router.push(url);
+      function redirect(notification: Notifications.Notification) {
+        const url = notification.request.content.data?.url;
+        if (url) {
+          router.push(url);
+        }
       }
-    }
 
-    Notifications.getLastNotificationResponseAsync().then((response) => {
-      if (!isMounted || !response?.notification) {
-        return;
-      }
-      redirect(response?.notification);
-    });
+      Notifications.getLastNotificationResponseAsync().then((response) => {
+        if (!isMounted || !response?.notification) {
+          return;
+        }
+        redirect(response?.notification);
+      });
 
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        redirect(response.notification);
-      },
-    );
+      const subscription =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          redirect(response.notification);
+        });
 
-    return () => {
-      isMounted = false;
-      subscription.remove();
-    };
-  }, []);
+      return () => {
+        isMounted = false;
+        subscription.remove();
+      };
+    }, []);
+  }
 }
 
 export default function RootLayout() {
   useNotificationObserver();
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState<string | undefined>("");
   const [countryIsoCode, setCountryIsoCode] = useState<CountryCode>(
     countryCode.toUpperCase() as CountryCode,
   );
@@ -96,11 +97,15 @@ export default function RootLayout() {
 
   const getUser = () => {
     if (typeof window !== "undefined") {
-      const { refreshUser } = require("@/lib/auth");
-      const { getAccessToken } = require("@/lib/tokens");
-      return refreshUser().then(() => {
-        getAccessToken.then((res: string) => setUser(res || undefined));
-      });
+      try {
+        const { refreshUser } = require("@/lib/auth");
+
+        return refreshUser().then((param: { accessToken?: string }) => {
+          setUser(param?.accessToken);
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 

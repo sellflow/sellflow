@@ -7,6 +7,7 @@ import {
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 import {
+  discovery,
   getRefreshToken,
   SECURE_AUTH_REFRESH_KEY,
   SECURE_AUTH_STATE_KEY,
@@ -67,11 +68,15 @@ interface RefreshUserProps {
   discovery: Discovery;
 }
 
-export const refreshUser = async ({ discovery }: RefreshUserProps) => {
+export const refreshUser = async () => {
+  const refreshToken = await getRefreshToken();
+  if (!refreshToken) {
+    return;
+  }
   refreshAsync(
     {
       clientId: process.env.EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_TOKEN!,
-      refreshToken: await getRefreshToken()!,
+      refreshToken: refreshToken,
     },
     discovery,
   ).then((res) => {
@@ -84,5 +89,6 @@ export const refreshUser = async ({ discovery }: RefreshUserProps) => {
       AsyncStorage.setItem(SECURE_AUTH_STATE_KEY, res.accessToken);
       AsyncStorage.setItem(SECURE_AUTH_REFRESH_KEY, res.refreshToken!);
     }
+    return { accessToken: res.accessToken, refreshToken: res.refreshToken };
   });
 };
