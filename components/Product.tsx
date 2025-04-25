@@ -7,6 +7,7 @@ import {
   ScrollView,
   Pressable,
   useColorScheme,
+  TextInput,
 } from "react-native";
 import { useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
@@ -14,12 +15,13 @@ import { Colors } from "@/constants/Colors";
 import { useCart } from "./shopify/CartProvider";
 import ImageCarousel from "./ImageCarousel";
 import { useLingui } from "@lingui/react/macro";
+import { useEffect, useRef, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Product({ search }: { search: UnknownOutputParams }) {
   const { i18n } = useLingui();
-  const colorScheme = useColorScheme();
   const {
     product,
     options,
@@ -28,15 +30,43 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     selectedVariant,
     isOptionInStock,
   } = useProduct();
+  // Keep track of current quantity to set max variant quantity to actualy value when user
+  // changes product options
+  const currentMaxQuantity = useRef(selectedVariant?.quantityAvailable || 1);
+  const [quantity, setQuantity] = useState("1");
+  const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
 
   const addToCart = () => {
-    const merchandise = { merchandiseId: selectedVariant!.id };
+    const merchandise = {
+      merchandiseId: selectedVariant!.id,
+      quantity: Number(quantity),
+    };
     if (merchandise?.merchandiseId) {
       //@ts-ignore
       linesAdd([merchandise]);
     }
   };
+
+  const handleQuantityChange = (text: string) => {
+    const numericValue = text.replace(/[^0-9]/g, "");
+    if (numericValue === "" || numericValue === "0") {
+      setQuantity("1");
+      return;
+    }
+    setQuantity(
+      (Number(numericValue) || 1) > (selectedVariant?.quantityAvailable || 1)
+        ? String(selectedVariant?.quantityAvailable)
+        : numericValue,
+    );
+  };
+
+  useEffect(() => {
+    if ((selectedVariant?.quantityAvailable || 0) < Number(quantity)) {
+      setQuantity(String(selectedVariant?.quantityAvailable));
+      currentMaxQuantity.current = selectedVariant?.quantityAvailable || 0;
+    }
+  }, [selectedVariant?.quantityAvailable]);
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -135,6 +165,45 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             })}
           </Text>
         )}
+        {
+          <View
+            style={[
+              styles.QuantitySelector,
+              {
+                backgroundColor: colorScheme === "light" ? "lightgrey" : "grey",
+              },
+            ]}
+          >
+            <TouchableOpacity
+              disabled={Number(quantity) - 1 === 0}
+              onPress={() => setQuantity(String(Number(quantity) - 1))}
+            >
+              <Ionicons
+                name="remove-sharp"
+                size={16}
+                color={colorScheme === "light" ? "darkgrey" : "lightgrey"}
+              />
+            </TouchableOpacity>
+            <TextInput
+              keyboardType="number-pad"
+              value={quantity}
+              style={{ color: textColor, textAlign: "center" }}
+              onChangeText={handleQuantityChange}
+            />
+            <TouchableOpacity
+              disabled={
+                Number(quantity) + 1 > (selectedVariant?.quantityAvailable || 0)
+              }
+              onPress={() => setQuantity(String(Number(quantity) + 1))}
+            >
+              <Ionicons
+                name="add-sharp"
+                size={16}
+                color={colorScheme === "light" ? "darkgrey" : "lightgrey"}
+              />
+            </TouchableOpacity>
+          </View>
+        }
         <TouchableOpacity
           style={styles.AddToCartButton}
           onPress={addToCart}
@@ -177,7 +246,7 @@ const styles = StyleSheet.create({
   },
   PriceText: {
     fontSize: 24,
-    marginTop: 12,
+    paddingVertical: 12,
   },
   OptionWrapper: {
     marginBottom: 8,
@@ -195,6 +264,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "nowrap",
     paddingVertical: 4,
+  },
+  QuantitySelector: {
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    borderRadius: 50,
+    padding: 8,
   },
   AddToCartButton: {
     marginTop: 16,
