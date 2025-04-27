@@ -5,23 +5,47 @@ import { Colors } from "@/constants/Colors";
 import shopifyCheckout from "@/shopify/checkout";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { CartLineProvider } from "@shopify/hydrogen-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Text,
   View,
   StyleSheet,
   Platform,
-  FlatList,
   useColorScheme,
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  TextInput,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function Cart() {
   const cart = useCart();
   const { i18n, t } = useLingui();
   const colorScheme = useColorScheme();
+  const [note, setNote] = useState(cart?.note || "");
+
+  const handleNoteSubmit = () => {
+    try {
+      cart.noteUpdate(note);
+
+      Toast.show({
+        type: "success",
+        text1: "Successfully saved note",
+        position: "bottom",
+        bottomOffset: 60,
+      });
+    } catch (e) {
+      console.error(`Failed to save note ${e}`);
+      Toast.show({
+        type: "error",
+        text1: "Failed to save note",
+        position: "bottom",
+        bottomOffset: 60,
+      });
+    }
+  };
+
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
   const backgroundColor =
@@ -79,7 +103,21 @@ export default function Cart() {
                 </Text>
               </Trans>
             </Text>
-
+            <View style={styles.NoteContainer}>
+              <TextInput
+                value={note}
+                onChangeText={setNote}
+                multiline
+                maxLength={500}
+                returnKeyType="done"
+                placeholder="Leave a note..."
+                placeholderTextColor={
+                  colorScheme === "light" ? "grey" : "lightgrey"
+                }
+                style={[styles.Note, { color: textColor }]}
+                onSubmitEditing={handleNoteSubmit}
+              />
+            </View>
             <TouchableOpacity
               onPress={handleCheckout}
               style={[
@@ -140,7 +178,21 @@ export default function Cart() {
                 </Text>
               </Trans>
             </Text>
-
+            <View style={styles.NoteContainer}>
+              <TextInput
+                value={note}
+                onChangeText={setNote}
+                multiline
+                maxLength={500}
+                returnKeyType="done"
+                placeholder="Leave a note..."
+                placeholderTextColor={
+                  colorScheme === "light" ? "grey" : "lightgrey"
+                }
+                style={[styles.Note, { color: textColor }]}
+                onSubmitEditing={handleNoteSubmit}
+              />
+            </View>
             <View
               style={{
                 backgroundColor:
@@ -196,12 +248,21 @@ const styles = StyleSheet.create({
   Subtotal: {
     fontSize: 20,
   },
+  NoteContainer: {
+    paddingTop: 8,
+    paddingBottom: 12,
+    width: "100%",
+  },
+  Note: {
+    fontSize: 16,
+  },
   LineItemContainer: {
     width: "100%",
     marginBottom: 8,
   },
   ListStyle: {
     width: "100%",
+    paddingVertical: 32,
   },
   Checkout: {
     paddingTop: 8,
