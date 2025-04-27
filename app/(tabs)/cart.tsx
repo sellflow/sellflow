@@ -3,7 +3,7 @@ import { useCart } from "@/components/shopify/CartProvider";
 import LineItem from "@/components/LineItem";
 import { Colors } from "@/constants/Colors";
 import shopifyCheckout from "@/shopify/checkout";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { CartLineProvider } from "@shopify/hydrogen-react";
 import { useEffect } from "react";
 import {
@@ -20,6 +20,7 @@ import {
 
 export default function Cart() {
   const cart = useCart();
+  const { i18n } = useLingui();
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -57,7 +58,9 @@ export default function Cart() {
               type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
             },
           });
-        } catch (e) {}
+        } catch (e) {
+          console.error(`Failed to schedule cart checkout notification: ${e}`);
+        }
       });
     }, []);
 
@@ -65,8 +68,16 @@ export default function Cart() {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
           <View style={styles.Container}>
-            <Text style={{ color: textColor }}>
-              <Trans>Your cart</Trans>
+            <Text style={[styles.Subtotal, { color: textColor }]}>
+              <Trans>
+                Subtotal:{" "}
+                <Text style={{ fontWeight: 600 }}>
+                  {i18n.number(Number(cart.cost?.subtotalAmount?.amount), {
+                    style: "currency",
+                    currency: cart.cost?.subtotalAmount?.currencyCode,
+                  })}
+                </Text>
+              </Trans>
             </Text>
             <TouchableOpacity
               onPress={handleCheckout}
@@ -166,6 +177,9 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 1200,
     paddingHorizontal: 8,
+  },
+  Subtotal: {
+    fontSize: 20,
   },
   LineItemContainer: {
     width: "100%",
