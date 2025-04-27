@@ -99,12 +99,8 @@ export default function RootLayout() {
   );
   const colorScheme = useColorScheme();
 
-  const getUser = async () => {
-    await refreshUser();
-  };
-
   useEffect(() => {
-    getUser();
+    refreshUser();
   }, []);
 
   const onSuccessAddToCart = () => {
