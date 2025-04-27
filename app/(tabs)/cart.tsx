@@ -96,10 +96,11 @@ export default function Cart() {
               <Trans>
                 Subtotal:{" "}
                 <Text style={{ fontWeight: 600 }}>
-                  {i18n.number(Number(cart.cost?.subtotalAmount?.amount), {
-                    style: "currency",
-                    currency: cart.cost?.subtotalAmount?.currencyCode,
-                  })}
+                  {cart?.cost?.subtotalAmount &&
+                    i18n.number(Number(cart.cost?.subtotalAmount?.amount), {
+                      style: "currency",
+                      currency: cart.cost?.subtotalAmount?.currencyCode,
+                    })}
                 </Text>
               </Trans>
             </Text>
