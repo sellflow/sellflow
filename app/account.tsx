@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     maxWidth: 640,
     width: "100%",
     alignSelf: "center",
+    paddingHorizontal: 16,
     gap: 24,
   },
   ProfilePicture: {
