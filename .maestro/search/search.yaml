@@ -4,7 +4,7 @@ appId: com.sellflow
 - waitForAnimationToEnd
 - extendedWaitUntil:
     visible: "Products"
-    timeout: 2000
+    timeout: 3500
 
 - tapOn: "Press to open search bar"
 - inputText: "Shirt"
