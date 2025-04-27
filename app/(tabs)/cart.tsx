@@ -20,7 +20,7 @@ import {
 
 export default function Cart() {
   const cart = useCart();
-  const { i18n } = useLingui();
+  const { i18n, t } = useLingui();
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -79,6 +79,7 @@ export default function Cart() {
                 </Text>
               </Trans>
             </Text>
+
             <TouchableOpacity
               onPress={handleCheckout}
               style={[
@@ -126,6 +127,20 @@ export default function Cart() {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
           <View style={styles.Container}>
+            <Text style={[styles.Subtotal, { color: textColor }]}>
+              <Trans>
+                Subtotal:{" "}
+                <Text style={{ fontWeight: 600 }}>
+                  {cart.cost?.subtotalAmount
+                    ? i18n.number(Number(cart.cost?.subtotalAmount?.amount), {
+                        style: "currency",
+                        currency: cart.cost?.subtotalAmount?.currencyCode,
+                      })
+                    : ""}
+                </Text>
+              </Trans>
+            </Text>
+
             <View
               style={{
                 backgroundColor:
