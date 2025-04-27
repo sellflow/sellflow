@@ -6,9 +6,6 @@
 ## Get started
 Prerequisites:
 
-> [!Important]
-> Web client requires HTTPS for most of it's functionality such as user authentication, as well as the car and will not work locally. To test these features locally you must use an API Gateway such as Ngrok or Cloudflare Tunnels and add the domains to your Shopify headless redirect and Javscript Origin URL's. These features will also not work with the Expo Go app.
-
 - Make sure you have [Node.js](https://nodejs.org) installed
 - Download the [Headless App](https://apps.shopify.com/headless)
 1. Enter Environment Variables
@@ -26,7 +23,6 @@ Prerequisites:
   - `ENCRYPTION_KEY` random string used by [MMKV](https://github.com/mrousavy/react-native-mmkv) to encrypt user data.
   - `CUSTOMER_STORE_ENDPOINT` is the endpoint given to you from the Shopify Headless app in the Customer Account API section
   - `CUSTOMER_ACCOUNT_API_TOKEN` is the Client ID of your Customer API Endpoint
-
 
 2. Install dependencies
 
@@ -60,6 +56,15 @@ In the output, you'll find options to open the app in a
 - Internationalization ready: all strings localized and ready to be translated into your customers' language.
 - Free and open source!
 - Commercial support available
+
+Checkout Sheet Demo:
+![android_checkout_sheet_demo-_online-video-cutter com_](https://github.com/user-attachments/assets/b71ed105-011a-4508-8d7e-293f161aec33)
+Search & Filtering Demo: 
+![product_filtering_demo](https://github.com/user-attachments/assets/f69d6483-f9a4-44f9-a09e-0a818f81f4af)
+
+Add to Cart Bottom Sheet for Multi-Variant Products:
+![Add to Cart dropdown Video](https://github.com/user-attachments/assets/b97841e9-e54f-4c25-82d1-1035260c3477)
+
 
 ## How to Contribute
 
