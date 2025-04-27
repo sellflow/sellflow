@@ -22,6 +22,8 @@ import { Colors } from "@/constants/Colors";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
+import ProductSkeleton from "@/components/ProductSkeleton";
+import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -33,44 +35,60 @@ export default function Page() {
   const [product, setProduct] = useState<
     ClientResponse<ProductQuery> | undefined
   >();
+  const [loading, setLoading] = useState(true);
+  const [loadingRecommendations, setLoadingRecommendations] = useState(true);
   const [recommended, setRecommended] = useState<ClientResponse<any>>();
   const selectedOptions = getProductOptions(search);
 
   useEffect(() => {
     try {
-      const fetchProduct = async () => {
-        const data = await getProduct(
-          search?.id as string,
-          selectedOptions,
-          countryIsoCode,
-          languageIsoCode,
-          accessToken,
-        );
-        if (data?.errors?.graphQLErrors) {
-          //@ts-ignore
-          throw new Error(data.errors.graphQLErrors);
+      const fetchData = async () => {
+        setLoading(true);
+        setLoadingRecommendations(true);
+
+        try {
+          const [productData, recommendedData] = await Promise.all([
+            getProduct(
+              search?.id as string,
+              selectedOptions,
+              countryIsoCode,
+              languageIsoCode,
+              accessToken,
+            ),
+            getProductRecommendations(
+              search?.id as string,
+              countryIsoCode,
+              languageIsoCode,
+              accessToken,
+            ),
+          ]);
+
+          // Handle product data errors
+          if (productData?.errors?.graphQLErrors) {
+            //@ts-ignore
+            throw new Error(productData.errors.graphQLErrors);
+          }
+
+          // Handle recommendation data errors
+          if (recommendedData?.errors?.graphQLErrors) {
+            //@ts-ignore
+            throw new Error(recommendedData.errors.graphQLErrors);
+          }
+
+          // Update state with fetched data
+          setProduct(productData);
+          setRecommended(recommendedData);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          // Handle errors appropriately - perhaps set error state
+        } finally {
+          // Always reset loading states regardless of success/failure
+          setLoading(false);
+          setLoadingRecommendations(false);
         }
-
-        setProduct(data);
-      };
-      fetchProduct();
-
-      const fetchRecommended = async () => {
-        const data = await getProductRecommendations(
-          search?.id as string,
-          countryIsoCode,
-          languageIsoCode,
-          accessToken,
-        );
-        if (data?.errors?.graphQLErrors) {
-          //@ts-ignore
-          throw new Error(data.errors?.graphQLErrors);
-        }
-
-        setRecommended(data);
       };
 
-      fetchRecommended();
+      fetchData();
     } catch (e) {
       console.error(e);
     }
@@ -92,7 +110,19 @@ export default function Page() {
           },
         ]}
       >
-        {product ? (
+        {loading ? (
+          <View style={styles.product}>
+            <ProductSkeleton />
+            <View style={styles.recommendedContainer}>
+              <Text style={[styles.recommendedHeading, { color: textColor }]}>
+                <Trans>Recommended</Trans>
+              </Text>
+              {[0, 1, 2, 3, 4, 5].map((item, index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </View>
+          </View>
+        ) : (
           <View style={styles.product}>
             <ProductProvider
               data={product!.data!.product}
@@ -116,8 +146,6 @@ export default function Page() {
               )}
             </View>
           </View>
-        ) : (
-          <ActivityIndicator color={textColor} />
         )}
       </ScrollView>
     </SafeAreaView>

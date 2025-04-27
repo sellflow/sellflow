@@ -54,6 +54,7 @@
     "expo-system-ui": "~4.0.9",
     "expo-web-browser": "~14.0.2",
     "react": "18.3.1",
+    "react-content-loader": "^7.0.2",
     "react-dom": "18.3.1",
     "react-native": "0.76.9",
     "react-native-css-interop": "^0.1.22",

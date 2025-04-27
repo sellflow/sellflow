@@ -25,6 +25,7 @@ import DropdownProvider from "@/components/DropdownProvider";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
+import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 
 export type Action =
   | { type: "include"; input: Object }
@@ -85,7 +86,6 @@ function sortReducer(
   state: SortReducerState,
   action: SortAction,
 ): SortReducerState {
-  console.log("ACTION: ", action);
   switch (action.type) {
     case "priceLowToHigh": {
       return {
@@ -117,6 +117,7 @@ function sortReducer(
 export default function Search() {
   const colorScheme = useColorScheme();
   const { query } = useLocalSearchParams();
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<
     ClientResponse<ProductQuery> | undefined
   >();
@@ -128,6 +129,7 @@ export default function Search() {
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
 
   const searchProducts = useCallback(async () => {
+    setLoading(true);
     const res = await getSearchResults(
       query as string,
       state,
@@ -136,6 +138,7 @@ export default function Search() {
       sortState.reverse,
     );
     setProducts(res);
+    setLoading(false);
   }, [query, state, sortState]);
 
   useEffect(() => {
@@ -158,11 +161,17 @@ export default function Search() {
       >
         <DropdownProvider>
           <View style={styles.ContentContainer}>
-            {products ? (
+            <Text style={[styles.Heading, { color: textColor }]}>
+              <Trans>Showing search results for {query}</Trans>
+            </Text>
+            {loading ? (
+              <View style={styles.ProductContainer}>
+                {[0, 1, 2, 3, 4, 5, 6, 7].map((item, index) => (
+                  <ProductCardSkeleton key={index} />
+                ))}
+              </View>
+            ) : (
               <>
-                <Text style={[styles.Heading, { color: textColor }]}>
-                  <Trans>Showing search results for {query}</Trans>
-                </Text>
                 {products?.data?.search?.productFilters && (
                   <View style={styles.FilterContainer}>
                     {products?.data?.search?.productFilters.map(
@@ -185,8 +194,6 @@ export default function Search() {
                   )}
                 </View>
               </>
-            ) : (
-              <ActivityIndicator color={textColor} />
             )}
             <FilterDropdown
               colorScheme={colorScheme}
