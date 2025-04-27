@@ -3,9 +3,6 @@
 </p>
 <h3 align="center">An open-source, pre-built mobile app for your <a href="https://www.shopify.com/plus/solutions/headless-commerce">Headless Shopify app</a>!</h3>
 
-> [!Warning]
-> This project is currently under development and is not intended for production use.
-
 ## Get started
 Prerequisites:
 
@@ -13,14 +10,12 @@ Prerequisites:
 > Web client requires HTTPS for most of it's functionality such as user authentication, as well as the car and will not work locally. To test these features locally you must use an API Gateway such as Ngrok or Cloudflare Tunnels and add the domains to your Shopify headless redirect and Javscript Origin URL's. These features will also not work with the Expo Go app.
 
 - Make sure you have [Node.js](https://nodejs.org) installed
-- [Get an API key](https://help.shopify.com/en/api/getting-started/authentication/private-authentication#generate-credentials-from-the-shopify-admin) for the Shopify Storefront API for your Shopify store.
-
+- Download the [Headless App](https://apps.shopify.com/headless)
 1. Enter Environment Variables
   ```bash
   EXPO_PUBLIC_STORE_TOKEN=
   EXPO_PUBLIC_STORE_DOMAIN=
-  EXPO_PUBLIC_AUTH_STATE_KEY=
-  EXPO_PUBLIC_AUTH_REFRESH_KEY=
+  EXPO_PUBLIC_ENCRYPTION_KEY=
   EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT=
   EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_TOKEN=
   EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_ENDPOINT=
@@ -28,7 +23,7 @@ Prerequisites:
   All environment variables are prefixed with EXPO_PUBLIC to be available through the expo client this may change in the future. All of these variable names are also subject to change because the naming is terrible.
   - `STORE_TOKEN` is your Storefront Public API Token
   - `STORE_DOMAIN` is the domain given to you from the Headless app
-  - `AUTH_STATE` and `AUTH_REFRESH` are both random strings used to access the authentication tokens the value can be whatever you choose
+  - `ENCRYPTION_KEY` random string used by [MMKV](https://github.com/mrousavy/react-native-mmkv) to encrypt user data.
   - `CUSTOMER_STORE_ENDPOINT` is the endpoint given to you from the Shopify Headless app in the Customer Account API section
   - `CUSTOMER_ACCOUNT_API_TOKEN` is the Client ID of your Customer API Endpoint
 
@@ -55,13 +50,15 @@ In the output, you'll find options to open the app in a
 ## Features
 
 - 100% [React Native](https://facebook.github.io/react-native/) and [TypeScript](http://typescriptlang.org) built on [Expo](https://expo.io)
+- User Auth
+- Search & Filtering
+- Checkout Page
 - Plugs directly into your existing Shopify store
-- Android, iPhone and iPad
+- Android, iPhone and iPad, Web
 - Customizable to your brand's look and feel
 - Responsive layout: supports phones and tablets
 - Internationalization ready: all strings localized and ready to be translated into your customers' language.
 - Free and open source!
-- Maintained by a dedicated team
 - Commercial support available
 
 ## How to Contribute
@@ -70,8 +67,6 @@ In the output, you'll find options to open the app in a
 - Follow the Getting Started instructions above.
 - Use your favorite code editor to develop a feature or fix.
 - Commit your change to a branch.
-- Run the tests:
-  `yarn test-full`
 - Push to your fork and create a PR.
 
 
