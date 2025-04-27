@@ -15,7 +15,7 @@ export default function ProductFilter({
   filter: filterProp,
   colorScheme,
 }: {
-  filter: Filter;
+  filter: Filter | "sort";
   colorScheme: ColorSchemeName;
 }) {
   const { dropdownOpen, setDropdownOpen, setFilter, position, setPosition } =
@@ -54,7 +54,7 @@ export default function ProductFilter({
       ref={componentRef}
     >
       <Text style={[{ color: oppositeTextColor, fontWeight: 600 }]}>
-        <Trans>{filterProp.label}</Trans>
+        <Trans>{filterProp === "sort" ? "Sort by" : filterProp.label}</Trans>
       </Text>
       <Ionicons name="caret-down-outline" size={16} color={oppositeTextColor} />
     </TouchableOpacity>

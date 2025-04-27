@@ -17,6 +17,7 @@ import Product from "@/components/ProductCard";
 import {
   Filter,
   ProductFilter as ProductFilterType,
+  SearchSortKeys,
 } from "@shopify/hydrogen-react/storefront-api-types";
 import ProductFilter from "@/components/ProductFilter";
 import FilterDropdown from "@/components/FilterDropdown";
@@ -30,6 +31,17 @@ export type Action =
   | { type: "remove"; input: Object }
   | { type: "price"; input: { min: number; max: number | null } }
   | { type: "clearAll" };
+
+export type SortAction =
+  | { type: "priceLowToHigh" }
+  | { type: "priceHighToLow" }
+  | { type: "mostRelevant" }
+  | { type: "leastRelevant" };
+
+export interface SortReducerState {
+  sortKey: SearchSortKeys;
+  reverse: boolean;
+}
 
 function reducer(
   state: ProductFilterType[],
@@ -69,6 +81,39 @@ function reducer(
   }
 }
 
+function sortReducer(
+  state: SortReducerState,
+  action: SortAction,
+): SortReducerState {
+  console.log("ACTION: ", action);
+  switch (action.type) {
+    case "priceLowToHigh": {
+      return {
+        sortKey: "PRICE",
+        reverse: false,
+      };
+    }
+    case "priceHighToLow": {
+      return {
+        sortKey: "PRICE",
+        reverse: true,
+      };
+    }
+    case "leastRelevant": {
+      return {
+        sortKey: "RELEVANCE",
+        reverse: false,
+      };
+    }
+    case "mostRelevant": {
+      return {
+        sortKey: "RELEVANCE",
+        reverse: true,
+      };
+    }
+  }
+}
+
 export default function Search() {
   const colorScheme = useColorScheme();
   const { query } = useLocalSearchParams();
@@ -76,12 +121,22 @@ export default function Search() {
     ClientResponse<ProductQuery> | undefined
   >();
   const [state, dispatch] = useReducer(reducer, []);
+  const [sortState, sortDispatch] = useReducer(sortReducer, {
+    sortKey: "RELEVANCE",
+    reverse: false,
+  });
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
 
   const searchProducts = useCallback(async () => {
-    const res = await getSearchResults(query as string, state, accessToken);
+    const res = await getSearchResults(
+      query as string,
+      state,
+      accessToken,
+      sortState.sortKey,
+      sortState.reverse,
+    );
     setProducts(res);
-  }, [query, state]);
+  }, [query, state, sortState]);
 
   useEffect(() => {
     try {
@@ -119,6 +174,7 @@ export default function Search() {
                         />
                       ),
                     )}
+                    <ProductFilter filter="sort" colorScheme={colorScheme} />
                   </View>
                 )}
                 <View style={styles.ProductContainer}>
@@ -136,6 +192,8 @@ export default function Search() {
               colorScheme={colorScheme}
               state={state}
               dispatch={dispatch}
+              sortState={sortState}
+              sortDispatch={sortDispatch}
             />
           </View>
         </DropdownProvider>

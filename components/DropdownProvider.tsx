@@ -10,8 +10,8 @@ import {
 interface DropdownContext {
   dropdownOpen: boolean;
   setDropdownOpen: Dispatch<SetStateAction<boolean>>;
-  filter: Filter | undefined;
-  setFilter: Dispatch<SetStateAction<Filter | undefined>>;
+  filter: Filter | "sort" | undefined;
+  setFilter: Dispatch<SetStateAction<Filter | "sort" | undefined>>;
   position: { x: number; y: number; height: number } | undefined;
   setPosition: Dispatch<SetStateAction<any>>;
 }
@@ -32,7 +32,7 @@ export default function DropdownProvider({
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [position, setPosition] = useState();
-  const [filter, setFilter] = useState<Filter | undefined>();
+  const [filter, setFilter] = useState<Filter | "sort" | undefined>();
 
   return (
     <DropdownContext.Provider

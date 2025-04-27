@@ -1,16 +1,21 @@
-import { ProductFilter } from "@shopify/hydrogen-react/storefront-api-types";
+import {
+  ProductFilter,
+  SearchSortKeys,
+} from "@shopify/hydrogen-react/storefront-api-types";
 import { client } from "./client";
 
 export const getSearchResults = async (
   query: string,
   productFilters: ProductFilter[],
   accessToken: string | null | undefined,
+  sortKey: SearchSortKeys,
+  reverse: boolean,
 ) =>
   await client.request(
     `
   #graphql
-  query searchProducts($query: String!, $productFilters: [ProductFilter!]) ${accessToken ? `@inContext(buyer: { customerAccessToken: "${accessToken}" })` : ""} {
-    search(query: $query, first: 10, productFilters: $productFilters) {
+  query searchProducts($query: String!, $productFilters: [ProductFilter!], $sortKey: SearchSortKeys, $reverse: Boolean) ${accessToken ? `@inContext(buyer: { customerAccessToken: "${accessToken}" })` : ""} {
+    search(query: $query, first: 10, productFilters: $productFilters, sortKey: $sortKey, reverse: $reverse) {
       edges {
         node {
           ... on Product {
@@ -67,6 +72,8 @@ export const getSearchResults = async (
       variables: {
         query,
         productFilters,
+        sortKey,
+        reverse,
       },
     },
   );

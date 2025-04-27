@@ -1,11 +1,18 @@
-import { Dispatch, useCallback, useContext, useEffect, useRef } from "react";
+import {
+  Dispatch,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   ColorSchemeName,
   Dimensions,
   Platform,
   StyleSheet,
   Text,
-  TextInput,
   View,
   Animated,
 } from "react-native";
@@ -17,21 +24,37 @@ import {
   FilterValue,
   ProductFilter,
 } from "@shopify/hydrogen-react/storefront-api-types";
-import { Action } from "@/app/(tabs)/search/[query]";
+import {
+  Action,
+  SortAction,
+  SortReducerState,
+} from "@/app/(tabs)/search/[query]";
 import RangeSlider from "rn-range-slider";
 import Slider from "./ui/Slider";
+import RadioGroup from "react-native-radio-buttons-group";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+interface RadioButton {
+  id: string;
+  label: string;
+  value: SortAction["type"];
+}
 
 export default function FilterDropdown({
   colorScheme,
   state,
   dispatch,
+  sortState,
+  sortDispatch,
 }: {
   colorScheme: ColorSchemeName;
   state: ProductFilter[];
   dispatch: Dispatch<Action>;
+  sortState: SortReducerState;
+  sortDispatch: Dispatch<SortAction>;
 }) {
+  const [selectedId, setSelectedId] = useState("1");
   const { dropdownOpen, position, filter } = useContext(DropdownContext);
   const dropdownAnim = useRef(new Animated.Value(-25)).current;
   const dropdownOpacity = useRef(new Animated.Value(0)).current;
@@ -77,6 +100,59 @@ export default function FilterDropdown({
   useEffect(() => {
     toggleDropdownAnimation();
   }, [dropdownOpen]);
+  const sortButtons = useMemo<RadioButton[]>(
+    () => [
+      {
+        id: "1",
+        label: "Most relevant",
+        value: "mostRelevant",
+        color:
+          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
+      },
+      {
+        id: "2",
+        label: "Least Relevant",
+        value: "leastRelevant",
+        color:
+          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
+      },
+      {
+        id: "3",
+        label: "Price low to High",
+        value: "priceLowToHigh",
+        color:
+          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
+      },
+      {
+        id: "4",
+        label: "Price high to low",
+        value: "priceHighToLow",
+        color:
+          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
+      },
+    ],
+    [],
+  );
+  useEffect(() => {
+    switch (selectedId) {
+      case "1": {
+        sortDispatch({ type: "mostRelevant" });
+        break;
+      }
+      case "2": {
+        sortDispatch({ type: "leastRelevant" });
+        break;
+      }
+      case "3": {
+        sortDispatch({ type: "priceLowToHigh" });
+        break;
+      }
+      case "4": {
+        sortDispatch({ type: "priceHighToLow" });
+        break;
+      }
+    }
+  }, [selectedId]);
 
   return (
     <Animated.View
@@ -94,10 +170,21 @@ export default function FilterDropdown({
       ]}
     >
       <Text style={[styles.FilterHeading, { color: textColor }]}>
-        {filter?.label}
+        {filter === "sort" ? "Sort By" : filter?.label}
       </Text>
       <View>
-        {filter?.type === "LIST"
+        {filter === "sort" && (
+          <View style={styles.CheckboxContainer}>
+            <RadioGroup
+              radioButtons={sortButtons}
+              onPress={setSelectedId}
+              selectedId={selectedId}
+              labelStyle={{ color: textColor }}
+              containerStyle={{ alignItems: "flex-start" }}
+            />
+          </View>
+        )}
+        {filter !== "sort" && filter?.type === "LIST"
           ? filter?.values?.map((value, index) => (
               <View key={index} style={styles.CheckboxContainer}>
                 <FilterCheckbox
@@ -120,11 +207,13 @@ export default function FilterDropdown({
                 </View>
               </View>
             ))
-          : filter?.type === "PRICE_RANGE" && (
+          : //@ts-ignore
+            filter?.type === "PRICE_RANGE" && (
               <View style={styles.PriceContainer}>
                 <PriceFilter
                   state={state}
                   dispatch={dispatch}
+                  //@ts-ignore
                   filter={filter}
                 />
               </View>
