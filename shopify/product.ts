@@ -45,6 +45,58 @@ export const getProductRecommendations = async (
     },
   );
 
+export const getDropdownProduct = async (
+  id: string,
+  countryCode: CountryCode,
+  languageCode: LanguageCode,
+  accessToken: string | null | undefined,
+) =>
+  await client.request(
+    `#graphql
+    query Product (
+        $id: ID!
+      ) @inContext(country: ${countryCode}, language: ${languageCode} ${accessToken ? `, buyer: { customerAccessToken: "${accessToken}" }` : ""}) {
+        product(id: $id) {
+          id
+          title
+          options {
+            name
+            optionValues {
+              name
+            }
+          }
+          featuredImage {
+            altText
+            url
+          }
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                title
+                quantityAvailable
+                price {
+                  amount
+                  currencyCode
+                  }
+                selectedOptions {
+                  name
+                  value
+                }
+                availableForSale
+              }
+            }
+          }
+        }
+      }
+    `,
+    {
+      variables: {
+        id,
+      },
+    },
+  );
+
 export const getProduct = async (
   id: string,
   selectedOptions: SelectedOptionInput[],

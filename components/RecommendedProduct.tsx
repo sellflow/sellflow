@@ -11,6 +11,7 @@ import {
 import { useCart } from "./shopify/CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { useLingui } from "@lingui/react/macro";
+import { useProductBottomSheet } from "./BottomSheetProvider";
 
 const imageSize = 200;
 const blurhash =
@@ -20,6 +21,7 @@ export default function RecommendedProduct({ item }: { item: any }) {
   const { i18n } = useLingui();
   const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
+  const { setProductId, bottomSheet } = useProductBottomSheet();
 
   const navigateToProduct = () => {
     router.push({
@@ -36,6 +38,14 @@ export default function RecommendedProduct({ item }: { item: any }) {
     if (merchandise?.merchandiseId) {
       linesAdd([merchandise]);
     }
+  };
+
+  const handleMultiVariantAddToCart = (e: GestureResponderEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    setProductId(node.id);
+    bottomSheet?.expand();
   };
 
   const textColor =
@@ -70,10 +80,19 @@ export default function RecommendedProduct({ item }: { item: any }) {
           })}
         </Text>
       )}
-      {item?.variantsCount?.count === 1 && (
+      {item?.variantsCount?.count === 1 ? (
         <TouchableOpacity
           style={styles.AddToCartButton}
           onPress={(e) => addToCart(e)}
+        >
+          <Text style={{ textAlign: "center", color: textColor }}>
+            Add to Cart
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.AddToCartButton}
+          onPress={(e) => handleMultiVariantAddToCart(e)}
         >
           <Text style={{ textAlign: "center", color: textColor }}>
             Add to Cart

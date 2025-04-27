@@ -1,0 +1,19 @@
+appId: com.sellflow
+---
+- launchApp
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Products"
+    timeout: 10000
+- assertVisible: "Cowboy Boot"
+- tapOn:
+    text: "Add to cart"
+- tapOn:
+    text: "Black"
+- tapOn:
+    text: "7.5"
+- tapOn:
+    id: "bottom_sheet_add_to_cart"
+- extendedWaitUntil:
+    visible: "Product added to cart"
+    timeout: 1500

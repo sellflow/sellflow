@@ -25,6 +25,7 @@ import { getLocales } from "expo-localization";
 import { I18nProvider, TransRenderProps } from "@lingui/react";
 import { messages as esMessages } from "@/locales/es/messages";
 import { messages as enMessages } from "@/locales/en/messages";
+import BottomSheetProvider from "@/components/BottomSheetProvider";
 import Toast from "react-native-toast-message";
 import { i18n } from "@lingui/core";
 import { Text } from "react-native";
@@ -142,38 +143,40 @@ export default function RootLayout() {
               onLineRemoveComplete={onSuccessRemoveFromCart}
               customerAccessToken={accessToken}
             >
-              <Stack
-                screenOptions={{
-                  animation: "slide_from_right",
-                  headerBackButtonDisplayMode: "minimal",
-                }}
-              >
-                <Stack.Screen
-                  name="order/[id]"
-                  options={{ headerTitle: t`Order` }}
-                />
-                <Stack.Screen
-                  name="product/[id]"
-                  options={{ headerTitle: t`Product` }}
-                />
-                <Stack.Screen
-                  name="account"
-                  options={{ headerTitle: t`Account` }}
-                />
-                <Stack.Screen
-                  name="orders"
-                  options={{ headerTitle: t`Orders` }}
-                />
-                <Stack.Screen
-                  name="(tabs)"
-                  options={{
-                    header: () => <Header />,
-                    headerTitle: "",
+              <BottomSheetProvider>
+                <Stack
+                  screenOptions={{
+                    animation: "slide_from_right",
+                    headerBackButtonDisplayMode: "minimal",
                   }}
-                />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-              <StatusBar style="auto" />
+                >
+                  <Stack.Screen
+                    name="order/[id]"
+                    options={{ headerTitle: t`Order` }}
+                  />
+                  <Stack.Screen
+                    name="product/[id]"
+                    options={{ headerTitle: t`Product` }}
+                  />
+                  <Stack.Screen
+                    name="account"
+                    options={{ headerTitle: t`Account` }}
+                  />
+                  <Stack.Screen
+                    name="orders"
+                    options={{ headerTitle: t`Orders` }}
+                  />
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{
+                      header: () => <Header />,
+                      headerTitle: "",
+                    }}
+                  />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+                <StatusBar style="auto" />
+              </BottomSheetProvider>
             </CartProvider>
           </ShopifyProvider>
         </ThemeProvider>
