@@ -4,6 +4,7 @@ import "@formatjs/intl-pluralrules/polyfill-force";
 import "@formatjs/intl-pluralrules/locale-data/en"; // locale-data for en
 import "@formatjs/intl-pluralrules/locale-data/es"; // locale-data for es
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   DarkTheme,
   DefaultTheme,
@@ -88,6 +89,8 @@ function useNotificationObserver() {
   }
 }
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
   useNotificationObserver();
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
@@ -98,10 +101,6 @@ export default function RootLayout() {
     languageCode.toUpperCase() as LanguageCode,
   );
   const colorScheme = useColorScheme();
-
-  useEffect(() => {
-    refreshUser();
-  }, []);
 
   const onSuccessAddToCart = () => {
     Toast.show({
@@ -123,60 +122,62 @@ export default function RootLayout() {
 
   return (
     <>
-      <I18nProvider i18n={i18n} defaultComponent={DefaultComponent}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <ShopifyProvider
-            storeDomain={process.env.EXPO_PUBLIC_STORE_DOMAIN!}
-            storefrontApiVersion="2025-01"
-            storefrontToken={process.env.EXPO_PUBLIC_STORE_TOKEN!}
-            countryIsoCode={countryIsoCode}
-            languageIsoCode={languageIsoCode}
+      <QueryClientProvider client={queryClient}>
+        <I18nProvider i18n={i18n} defaultComponent={DefaultComponent}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
-            <CartProvider
-              onLineAddComplete={onSuccessAddToCart}
-              onLineRemoveComplete={onSuccessRemoveFromCart}
-              customerAccessToken={accessToken}
+            <ShopifyProvider
+              storeDomain={process.env.EXPO_PUBLIC_STORE_DOMAIN!}
+              storefrontApiVersion="2025-01"
+              storefrontToken={process.env.EXPO_PUBLIC_STORE_TOKEN!}
+              countryIsoCode={countryIsoCode}
+              languageIsoCode={languageIsoCode}
             >
-              <BottomSheetProvider>
-                <Stack
-                  screenOptions={{
-                    animation: "slide_from_right",
-                    headerBackButtonDisplayMode: "minimal",
-                  }}
-                >
-                  <Stack.Screen
-                    name="order/[id]"
-                    options={{ headerTitle: t`Order` }}
-                  />
-                  <Stack.Screen
-                    name="product/[id]"
-                    options={{ headerTitle: t`Product` }}
-                  />
-                  <Stack.Screen
-                    name="account"
-                    options={{ headerTitle: t`Account` }}
-                  />
-                  <Stack.Screen
-                    name="orders"
-                    options={{ headerTitle: t`Orders` }}
-                  />
-                  <Stack.Screen
-                    name="(tabs)"
-                    options={{
-                      header: () => <Header />,
-                      headerTitle: "",
+              <CartProvider
+                onLineAddComplete={onSuccessAddToCart}
+                onLineRemoveComplete={onSuccessRemoveFromCart}
+                customerAccessToken={accessToken}
+              >
+                <BottomSheetProvider>
+                  <Stack
+                    screenOptions={{
+                      animation: "slide_from_right",
+                      headerBackButtonDisplayMode: "minimal",
                     }}
-                  />
-                  <Stack.Screen name="+not-found" />
-                </Stack>
-                <StatusBar style="auto" />
-              </BottomSheetProvider>
-            </CartProvider>
-          </ShopifyProvider>
-        </ThemeProvider>
-      </I18nProvider>
+                  >
+                    <Stack.Screen
+                      name="order/[id]"
+                      options={{ headerTitle: t`Order` }}
+                    />
+                    <Stack.Screen
+                      name="product/[id]"
+                      options={{ headerTitle: t`Product` }}
+                    />
+                    <Stack.Screen
+                      name="account"
+                      options={{ headerTitle: t`Account` }}
+                    />
+                    <Stack.Screen
+                      name="orders"
+                      options={{ headerTitle: t`Orders` }}
+                    />
+                    <Stack.Screen
+                      name="(tabs)"
+                      options={{
+                        header: () => <Header />,
+                        headerTitle: "",
+                      }}
+                    />
+                    <Stack.Screen name="+not-found" />
+                  </Stack>
+                  <StatusBar style="auto" />
+                </BottomSheetProvider>
+              </CartProvider>
+            </ShopifyProvider>
+          </ThemeProvider>
+        </I18nProvider>
+      </QueryClientProvider>
       <Toast />
     </>
   );

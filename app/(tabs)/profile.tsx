@@ -18,13 +18,12 @@ import { SafeAreaView } from "react-native";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
+import { useQuery } from "@tanstack/react-query";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
 
 WebBrowser.maybeCompleteAuthSession();
-const blurHash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function Index() {
-  const [user, setUser] = useState();
   const [loginComplete, setLoginComplete] = useState(false);
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const [refreshToken, setRefreshToken] = useMMKVString(
@@ -50,7 +49,7 @@ export default function Index() {
   );
 
   useEffect(() => {
-    if (Platform.OS === "android" && !user) {
+    if (Platform.OS === "android" && !accessToken) {
       WebBrowser.warmUpAsync();
 
       return () => {
@@ -59,28 +58,27 @@ export default function Index() {
     }
   }, [response]);
 
-  const retrieveUserInfo = async () => {
-    if (accessToken) {
-      const data = await getUser(accessToken);
-      if (data.status === 200) {
-        const parsedData = await data.json();
-        setUser(await parsedData?.data.customer);
-      } else if (data.status === 401) {
-        if (refreshToken) {
-          await refreshUser();
-          const data = await getUser(accessToken);
-          if (data.status === 200) {
-            const parsedData = await data.json();
-            setUser(await parsedData.data.customer);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["user", accessToken, refreshToken, loginComplete],
+    queryFn: async () => {
+      if (accessToken) {
+        const data = await getUser(accessToken);
+        if (data.status === 200) {
+          const parsedData = await data.json();
+          return parsedData.data.customer;
+        } else if (data.status === 401) {
+          if (refreshToken) {
+            await refreshUser();
+            const data = await getUser(accessToken);
+            if (data.status === 200) {
+              const parsedData = await data.json();
+              return parsedData.data.customer;
+            }
           }
         }
       }
-    }
-  };
-
-  useEffect(() => {
-    retrieveUserInfo();
-  }, [loginComplete]);
+    },
+  });
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -92,7 +90,29 @@ export default function Index() {
   const oppositeBackgroundColor =
     colorScheme === "light" ? Colors.dark.background : Colors.light.background;
 
-  return user ? (
+  if (isPending) {
+    return (
+      <SafeAreaView style={[styles.PageContainer, { backgroundColor }]}>
+        <View style={styles.Container}>
+          <ProfileSkeleton />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (isError) {
+    return (
+      <SafeAreaView style={[styles.PageContainer, { backgroundColor }]}>
+        <View style={styles.Container}>
+          <Text style={{ textAlign: "center" }}>
+            <Trans>An unexpected error has occurred: {error.message}</Trans>
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return data ? (
     <SafeAreaView style={[styles.PageContainer, { backgroundColor }]}>
       <View style={styles.Container}>
         <Ionicons
@@ -102,7 +122,7 @@ export default function Index() {
           style={{ alignSelf: "center" }}
         />
         <Text style={[styles.Username, { color: textColor }]}>
-          {user?.displayName}
+          {data?.displayName}
         </Text>
         <View style={styles.OptionsContainer}>
           <Link

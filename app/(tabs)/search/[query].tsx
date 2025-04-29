@@ -2,16 +2,13 @@ import {
   ScrollView,
   Text,
   StyleSheet,
-  ActivityIndicator,
   View,
   useColorScheme,
   SafeAreaView,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { getSearchResults } from "@/shopify/search";
-import { useCallback, useEffect, useReducer, useState } from "react";
-import { ClientResponse } from "@shopify/storefront-api-client";
-import { ProductQuery } from "@/types/storefront.generated";
+import { useReducer } from "react";
 import { Colors } from "@/constants/Colors";
 import Product from "@/components/ProductCard";
 import {
@@ -26,6 +23,7 @@ import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
+import { useQuery } from "@tanstack/react-query";
 
 export type Action =
   | { type: "include"; input: Object }
@@ -117,10 +115,6 @@ function sortReducer(
 export default function Search() {
   const colorScheme = useColorScheme();
   const { query } = useLocalSearchParams();
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<
-    ClientResponse<ProductQuery> | undefined
-  >();
   const [state, dispatch] = useReducer(reducer, []);
   const [sortState, sortDispatch] = useReducer(sortReducer, {
     sortKey: "RELEVANCE",
@@ -128,31 +122,41 @@ export default function Search() {
   });
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
 
-  const searchProducts = useCallback(async () => {
-    setLoading(true);
-    const res = await getSearchResults(
-      query as string,
-      state,
-      accessToken,
-      sortState.sortKey,
-      sortState.reverse,
-    );
-    setProducts(res);
-    setLoading(false);
-  }, [query, state, sortState]);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["search", accessToken, state, query, sortState],
+    queryFn: async () => {
+      const data = await getSearchResults(
+        query as string,
+        state,
+        accessToken,
+        sortState.sortKey,
+        sortState.reverse,
+      );
+      if (data.errors) {
+        //@ts-ignore
+        throw new Error("Failed to fetch search results: ", data.errors);
+      }
 
-  useEffect(() => {
-    try {
-      searchProducts();
-    } catch (e) {
-      console.error(e);
-    }
-  }, [searchProducts]);
+      return data.data.search;
+    },
+  });
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
   const backgroundColor =
     colorScheme === "light" ? Colors.light.background : Colors.dark.background;
+
+  if (isError) {
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={[styles.Container, { backgroundColor }]}>
+        <View style={styles.ContentContainer}>
+          <Text style={[styles.Heading, { color: textColor }]}>
+            <Trans>An unexpected error has occurred {error.message}</Trans>
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -164,7 +168,7 @@ export default function Search() {
             <Text style={[styles.Heading, { color: textColor }]}>
               <Trans>Showing search results for {query}</Trans>
             </Text>
-            {loading ? (
+            {isPending ? (
               <View style={styles.ProductContainer}>
                 {[0, 1, 2, 3, 4, 5, 6, 7].map((item, index) => (
                   <ProductCardSkeleton key={index} />
@@ -172,9 +176,9 @@ export default function Search() {
               </View>
             ) : (
               <>
-                {products?.data?.search?.productFilters && (
+                {data.productFilters && (
                   <View style={styles.FilterContainer}>
-                    {products?.data?.search?.productFilters.map(
+                    {data.productFilters.map(
                       (filter: Filter, index: number) => (
                         <ProductFilter
                           filter={filter}
@@ -187,11 +191,9 @@ export default function Search() {
                   </View>
                 )}
                 <View style={styles.ProductContainer}>
-                  {products?.data?.search?.edges?.map(
-                    ({ node }: { node: any }, index: number) => (
-                      <Product node={node} key={index} />
-                    ),
-                  )}
+                  {data.edges?.map(({ node }: { node: any }, index: number) => (
+                    <Product node={node} key={index} />
+                  ))}
                 </View>
               </>
             )}

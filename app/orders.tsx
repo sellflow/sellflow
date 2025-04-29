@@ -1,7 +1,6 @@
 import OrderItem from "@/components/OrderItem";
 import { getOrders } from "@/shopify/order";
 import { refreshUser } from "@/lib/auth";
-import { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -14,10 +13,9 @@ import { Colors } from "@/constants/Colors";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Orders() {
-  const [orders, setOrders] = useState({});
-  const [loading, setLoading] = useState<boolean>();
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const [refreshToken, setRefreshToken] = useMMKVString(
     "refreshToken",
@@ -25,44 +23,34 @@ export default function Orders() {
   );
   const colorScheme = useColorScheme();
 
-  const fetchOrders = async () => {
-    if (accessToken) {
-      const data = await getOrders(accessToken);
-      // If access token is valid and data is present
-      if (data.status !== 401 && data) {
-        const parsedData = await data.json();
-        return parsedData;
-        // If access token is invalid and data is not present
-      } else if (data.status !== 401) {
-        refreshUser().then(async () => {
-          const data = await getOrders(accessToken);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["orders", accessToken],
+    queryFn: async () => {
+      if (accessToken) {
+        const data = await getOrders(accessToken);
+        // If access token is valid and data is present
+        if (data.status !== 401 && data) {
           const parsedData = await data.json();
-          return parsedData;
-        });
-      }
+          return parsedData.data.customer.orders;
+          // If access token is invalid and data is not present
+        } else if (data.status !== 401) {
+          refreshUser().then(async () => {
+            const data = await getOrders(accessToken);
+            const parsedData = await data.json();
+            return parsedData.data.customer.orders;
+          });
+        }
 
-      if (refreshToken) {
-        refreshUser().then(async () => {
-          const data = await getOrders(accessToken);
-          const parsedData = await data.json();
-          return parsedData;
-        });
+        if (refreshToken) {
+          refreshUser().then(async () => {
+            const data = await getOrders(accessToken);
+            const parsedData = await data.json();
+            return parsedData.data.customer.orders;
+          });
+        }
       }
-    }
-  };
-
-  useEffect(() => {
-    const loadOrders = async () => {
-      setLoading(true);
-      const data = await fetchOrders();
-      if (data) {
-        setOrders(data);
-      }
-      setLoading(false);
-    };
-
-    loadOrders();
-  }, []);
+    },
+  });
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -71,19 +59,17 @@ export default function Orders() {
 
   return (
     <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
-      {loading ? (
+      {isPending ? (
         <ActivityIndicator color={textColor} />
       ) : (
         <View style={styles.Container}>
-          {typeof orders === "object" && Object.keys(orders).length > 0 ? (
+          {data ? (
             <View style={styles.ListStyle}>
-              {orders?.data?.customer?.orders?.edges?.map(
-                (order: any, index: number) => (
-                  <View style={styles.ItemContainer} key={index}>
-                    <OrderItem item={order} />
-                  </View>
-                ),
-              )}
+              {data.edges?.map((order: any, index: number) => (
+                <View style={styles.ItemContainer} key={index}>
+                  <OrderItem item={order} />
+                </View>
+              ))}
             </View>
           ) : (
             <Text style={{ color: textColor }}>

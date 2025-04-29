@@ -24,6 +24,7 @@ import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
 import ProductSkeleton from "@/components/ProductSkeleton";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
+import { useQuery } from "@tanstack/react-query";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -32,67 +33,57 @@ export default function Page() {
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const colorScheme = useColorScheme();
   const search = useLocalSearchParams();
-  const [product, setProduct] = useState<
-    ClientResponse<ProductQuery> | undefined
-  >();
-  const [loading, setLoading] = useState(true);
-  const [loadingRecommendations, setLoadingRecommendations] = useState(true);
-  const [recommended, setRecommended] = useState<ClientResponse<any>>();
   const selectedOptions = getProductOptions(search);
 
-  useEffect(() => {
-    try {
-      const fetchData = async () => {
-        setLoading(true);
-        setLoadingRecommendations(true);
+  const product = useQuery({
+    queryKey: [
+      "product",
+      search?.id,
+      accessToken,
+      countryIsoCode,
+      languageIsoCode,
+    ],
+    queryFn: async () => {
+      const data = await getProduct(
+        search?.id as string,
+        selectedOptions,
+        countryIsoCode,
+        languageIsoCode,
+        accessToken,
+      );
+      if (data.errors) {
+        throw new Error("Failed to fetch product: ", data.errors);
+      }
 
-        try {
-          const [productData, recommendedData] = await Promise.all([
-            getProduct(
-              search?.id as string,
-              selectedOptions,
-              countryIsoCode,
-              languageIsoCode,
-              accessToken,
-            ),
-            getProductRecommendations(
-              search?.id as string,
-              countryIsoCode,
-              languageIsoCode,
-              accessToken,
-            ),
-          ]);
+      return data.data.product;
+    },
+  });
 
-          // Handle product data errors
-          if (productData?.errors?.graphQLErrors) {
-            //@ts-ignore
-            throw new Error(productData.errors.graphQLErrors);
-          }
+  const recommended = useQuery({
+    queryKey: [
+      "recommended",
+      search?.id,
+      accessToken,
+      countryIsoCode,
+      languageIsoCode,
+    ],
+    queryFn: async () => {
+      const data = await getProductRecommendations(
+        search?.id as string,
+        countryIsoCode,
+        languageIsoCode,
+        accessToken,
+      );
+      if (data.errors) {
+        throw new Error(
+          "Failed to fetch product recommendations: ",
+          data.errors,
+        );
+      }
 
-          // Handle recommendation data errors
-          if (recommendedData?.errors?.graphQLErrors) {
-            //@ts-ignore
-            throw new Error(recommendedData.errors.graphQLErrors);
-          }
-
-          // Update state with fetched data
-          setProduct(productData);
-          setRecommended(recommendedData);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-          // Handle errors appropriately - perhaps set error state
-        } finally {
-          // Always reset loading states regardless of success/failure
-          setLoading(false);
-          setLoadingRecommendations(false);
-        }
-      };
-
-      fetchData();
-    } catch (e) {
-      console.error(e);
-    }
-  }, [search?.id]);
+      return data.data.productRecommendations;
+    },
+  });
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -110,7 +101,7 @@ export default function Page() {
           },
         ]}
       >
-        {loading ? (
+        {product.isPending ? (
           <View style={styles.product}>
             <ProductSkeleton />
             <View style={styles.recommendedContainer}>
@@ -125,8 +116,8 @@ export default function Page() {
         ) : (
           <View style={styles.product}>
             <ProductProvider
-              data={product!.data!.product}
-              initialVariantId={product!.data!.product?.selectedVariant?.id}
+              data={product.data}
+              initialVariantId={product.data.selectedVariant?.id}
             >
               <Product search={search} />
             </ProductProvider>
@@ -134,9 +125,9 @@ export default function Page() {
               <Text style={[styles.recommendedHeading, { color: textColor }]}>
                 <Trans>Recommended</Trans>
               </Text>
-              {recommended?.data?.productRecommendations && (
+              {recommended.data && (
                 <FlatList
-                  data={recommended.data.productRecommendations}
+                  data={recommended.data}
                   renderItem={({ item }) => <RecommendedProduct item={item} />}
                   keyExtractor={(item) => item.id}
                   horizontal={true}

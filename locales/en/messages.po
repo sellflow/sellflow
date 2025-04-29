@@ -13,8 +13,8 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: app/_layout.tsx:97
-#: app/(tabs)/profile.tsx:123
+#: app/_layout.tsx:159
+#: app/(tabs)/profile.tsx:130
 msgid "Account"
 msgstr "Account"
 
@@ -22,15 +22,15 @@ msgstr "Account"
 msgid "Cart"
 msgstr "Cart"
 
-#: app/account.tsx:83
+#: app/account.tsx:82
 msgid "Default Address: "
 msgstr "Default Address: "
 
-#: app/account.tsx:75
+#: app/account.tsx:74
 msgid "Email Address:"
 msgstr "Email Address:"
 
-#: app/account.tsx:51
+#: app/account.tsx:50
 msgid "First Name:"
 msgstr "First Name:"
 
@@ -38,50 +38,50 @@ msgstr "First Name:"
 msgid "Home"
 msgstr "Home"
 
-#: app/account.tsx:59
+#: app/account.tsx:58
 msgid "Last Name:"
 msgstr "Last Name:"
 
-#: app/(tabs)/profile.tsx:175
+#: app/(tabs)/profile.tsx:181
 msgid "Log in"
 msgstr "Log in"
 
-#: app/(tabs)/profile.tsx:156
+#: app/(tabs)/profile.tsx:163
 msgid "Log in or Sign up"
 msgstr "Log in or Sign up"
 
-#: app/(tabs)/cart.tsx:81
-#: app/(tabs)/cart.tsx:125
+#: app/(tabs)/cart.tsx:157
+#: app/(tabs)/cart.tsx:229
 msgid "No items in here yet!"
 msgstr "No items in here yet!"
 
-#: app/orders.tsx:91
+#: app/orders.tsx:90
 msgid "No orders yet!"
 msgstr "No orders yet!"
 
-#: app/_layout.tsx:89
+#: app/_layout.tsx:151
 msgid "Order"
 msgstr "Order"
 
-#: app/_layout.tsx:101
-#: app/(tabs)/profile.tsx:111
+#: app/_layout.tsx:163
+#: app/(tabs)/profile.tsx:118
 msgid "Orders"
 msgstr "Orders"
 
-#: app/account.tsx:67
+#: app/account.tsx:66
 msgid "Phone Number:"
 msgstr "Phone Number:"
 
-#: app/(tabs)/cart.tsx:66
-#: app/(tabs)/cart.tsx:110
+#: app/(tabs)/cart.tsx:142
+#: app/(tabs)/cart.tsx:214
 msgid "Proceed to Checkout"
 msgstr "Proceed to Checkout"
 
-#: app/_layout.tsx:93
+#: app/_layout.tsx:155
 msgid "Product"
 msgstr "Product"
 
-#: app/(tabs)/index.tsx:56
+#: app/(tabs)/index.tsx:65
 msgid "Products"
 msgstr "Products"
 
@@ -89,14 +89,22 @@ msgstr "Products"
 msgid "Profile"
 msgstr "Profile"
 
-#: app/(tabs)/search/[query].tsx:106
+#: app/product/[id].tsx:118
+#: app/product/[id].tsx:135
+msgid "Recommended"
+msgstr "Recommended"
+
+#: app/(tabs)/search/[query].tsx:165
 msgid "Showing search results for {query}"
 msgstr "Showing search results for {query}"
 
-#: app/(tabs)/profile.tsx:195
+#: app/(tabs)/profile.tsx:200
 msgid "Sign up"
 msgstr "Sign up"
 
-#: app/(tabs)/cart.tsx:44
-msgid "Your cart"
-msgstr "Your cart"
+#. placeholder {0}: cart?.cost?.subtotalAmount && i18n.number(Number(cart.cost?.subtotalAmount?.amount), { style: "currency", currency: cart.cost?.subtotalAmount?.currencyCode, })
+#. placeholder {0}: cart.cost?.subtotalAmount ? i18n.number(Number(cart.cost?.subtotalAmount?.amount), { style: "currency", currency: cart.cost?.subtotalAmount?.currencyCode, }) : ""
+#: app/(tabs)/cart.tsx:96
+#: app/(tabs)/cart.tsx:170
+msgid "Subtotal: <0>{0}</0>"
+msgstr "Subtotal: <0>{0}</0>"

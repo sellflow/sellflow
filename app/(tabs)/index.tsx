@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -7,10 +6,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { useEffect, useState } from "react";
 import { getProducts } from "@/shopify/product";
-import { GetProductsQuery } from "@/types/storefront.generated";
-import { ClientResponse } from "@shopify/storefront-api-client";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 import Product from "@/components/ProductCard";
 import { Colors } from "@/constants/Colors";
@@ -18,37 +14,37 @@ import { useShop } from "@shopify/hydrogen-react";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
+import { useQuery } from "@tanstack/react-query";
+import { refreshUser } from "@/lib/auth";
 
 export default function Index() {
-  const [loading, setLoading] = useState(true);
+  const colorScheme = useColorScheme();
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const { languageIsoCode, countryIsoCode } = useShop();
-  const colorScheme = useColorScheme();
-  const [products, setProducts] = useState<
-    ClientResponse<GetProductsQuery> | undefined
-  >();
+  useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      await refreshUser();
+      return true;
+    },
+  });
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const data = await getProducts(
-          countryIsoCode,
-          languageIsoCode,
-          accessToken,
-        );
-        if (data.errors) {
-          console.error(data.errors.graphQLErrors);
-          throw new Error("Failed to fetch products");
-        }
-        setProducts(data);
-        setLoading(false);
-      } catch (e) {
-        console.error(`Error fetching products ${e}`);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["products", accessToken],
+    queryFn: async () => {
+      const data = await getProducts(
+        countryIsoCode,
+        languageIsoCode,
+        accessToken,
+      );
+      if (data.errors) {
+        //@ts-ignore
+        throw new Error("Failed to fetch products: ", data.errors);
       }
-    };
-    fetchProducts();
-  }, []);
+
+      return data.data.products;
+    },
+  });
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -64,20 +60,24 @@ export default function Index() {
           <Text style={[styles.Heading, { color: textColor }]}>
             <Trans>Products</Trans>
           </Text>
-          {loading ? (
-            <View style={styles.ProductContainer}>
-              {[0, 1, 2, 3, 4, 5, 6, 7].map((item, index) => (
-                <ProductCardSkeleton key={index} />
-              ))}
-            </View>
-          ) : (
-            <>
+          {!isError ? (
+            isPending ? (
               <View style={styles.ProductContainer}>
-                {products?.data?.products?.edges?.map(({ node }, index) => (
-                  <Product node={node} key={index} />
+                {[0, 1, 2, 3, 4, 5, 6, 7].map((item, index) => (
+                  <ProductCardSkeleton key={index} />
                 ))}
               </View>
-            </>
+            ) : (
+              <>
+                <View style={styles.ProductContainer}>
+                  {data.edges?.map(({ node }: { node: any }, index: number) => (
+                    <Product node={node} key={index} />
+                  ))}
+                </View>
+              </>
+            )
+          ) : (
+            <Trans>An unexpected error has occured: {error.message}</Trans>
           )}
         </View>
       </ScrollView>

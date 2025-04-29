@@ -2,8 +2,8 @@ import { Colors } from "@/constants/Colors";
 import { storage } from "@/lib/storage";
 import { getUserInfo } from "@/shopify/user";
 import { Trans } from "@lingui/react/macro";
+import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
-import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -14,21 +14,20 @@ import {
 import { useMMKVString } from "react-native-mmkv";
 
 export default function Account() {
-  const [user, setUser] = useState();
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
-  const [loading, setLoading] = useState<boolean>();
   const colorScheme = useColorScheme();
 
-  useEffect(() => {
-    setLoading(true);
-    if (accessToken) {
-      getUserInfo(accessToken).then(async (res) => {
-        const data = await res.json();
-        setUser(await data.data.customer);
-        setLoading(false);
-      });
-    }
-  }, []);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["userAccount", accessToken],
+    queryFn: async () => {
+      if (accessToken) {
+        const data = await getUserInfo(accessToken);
+        const parsedData = await data.json();
+
+        return parsedData.data.customer;
+      }
+    },
+  });
 
   const textColor =
     colorScheme === "light" ? Colors.light.text : Colors.dark.text;
@@ -37,20 +36,20 @@ export default function Account() {
 
   return (
     <View style={[styles.PageContainer, { backgroundColor }]}>
-      {loading ? (
+      {isPending ? (
         <ActivityIndicator color={textColor} />
       ) : (
         <View style={styles.Container}>
           <Image
             style={styles.ProfilePicture}
-            source={{ uri: user?.imageUrl }}
+            source={{ uri: data?.imageUrl }}
           />
           <View>
             <Text style={[styles.UserInfoHeading, { color: textColor }]}>
               <Trans>First Name:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
-              {user?.firstName}
+              {data?.firstName}
             </Text>
           </View>
           <View>
@@ -58,7 +57,7 @@ export default function Account() {
               <Trans>Last Name:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
-              {user?.lastName}
+              {data?.lastName}
             </Text>
           </View>
           <View>
@@ -66,7 +65,7 @@ export default function Account() {
               <Trans>Phone Number:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
-              {user?.phoneNumber?.phoneNumber}
+              {data?.phoneNumber?.phoneNumber}
             </Text>
           </View>
           <View>
@@ -74,7 +73,7 @@ export default function Account() {
               <Trans>Email Address:</Trans>
             </Text>
             <Text style={[styles.UserInfo, { color: textColor }]}>
-              {user?.emailAddress?.emailAddress}
+              {data?.emailAddress?.emailAddress}
             </Text>
           </View>
           <View>
@@ -82,7 +81,7 @@ export default function Account() {
               <Trans>Default Address: </Trans>
             </Text>
             <Text style={styles?.UserInfo}>
-              {user?.defaultAddress?.address1}
+              {data?.defaultAddress?.address1}
             </Text>
           </View>
         </View>
