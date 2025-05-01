@@ -1,3 +1,38 @@
+export const updateCustomerName = async ({
+  firstName,
+  lastName,
+  accessToken,
+}: {
+  firstName: string;
+  lastName: string;
+  accessToken: string;
+}) =>
+  await fetch(process.env.EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT!, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+    },
+    body: JSON.stringify({
+      query: `
+    mutation customerUpdate($input: CustomerUpdateInput!) {
+      customerUpdate(input: $input) {
+        customer {
+          firstName
+          lastName
+        }
+      }
+    }
+    `,
+      variables: {
+        input: {
+          firstName,
+          lastName,
+        },
+      },
+    }),
+  });
+
 // Retrieves user account info given user accessToken
 export const getUserInfo = async (accessToken: string) =>
   await fetch(process.env.EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT!, {
@@ -22,8 +57,14 @@ export const getUserInfo = async (accessToken: string) =>
           emailAddress
         }
         defaultAddress {
+          id
           address1
           address2
+          city
+          company
+          country
+          province
+          zip
         }
       }
     }

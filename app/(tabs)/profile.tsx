@@ -18,7 +18,7 @@ import { SafeAreaView } from "react-native";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
-import { useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -59,21 +59,21 @@ export default function Index() {
   }, [response]);
 
   const { isPending, isError, data, error } = useQuery({
+    //If tokens are absent the query is disabled and will not automatically run on mount
+    enabled: !!accessToken && !!refreshToken,
     queryKey: ["user", accessToken, refreshToken, loginComplete],
     queryFn: async () => {
-      if (accessToken) {
-        const data = await getUser(accessToken);
-        if (data.status === 200) {
-          const parsedData = await data.json();
-          return parsedData.data.customer;
-        } else if (data.status === 401) {
-          if (refreshToken) {
-            await refreshUser();
-            const data = await getUser(accessToken);
-            if (data.status === 200) {
-              const parsedData = await data.json();
-              return parsedData.data.customer;
-            }
+      const data = await getUser(accessToken!);
+      if (data.status === 200) {
+        const parsedData = await data.json();
+        return parsedData.data.customer;
+      } else if (data.status === 401) {
+        if (refreshToken) {
+          await refreshUser();
+          const data = await getUser(accessToken!);
+          if (data.status === 200) {
+            const parsedData = await data.json();
+            return parsedData.data.customer;
           }
         }
       }
@@ -90,7 +90,7 @@ export default function Index() {
   const oppositeBackgroundColor =
     colorScheme === "light" ? Colors.dark.background : Colors.light.background;
 
-  if (isPending) {
+  if (isPending && accessToken && refreshToken) {
     return (
       <SafeAreaView style={[styles.PageContainer, { backgroundColor }]}>
         <View style={styles.Container}>

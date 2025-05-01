@@ -39,6 +39,7 @@ export const loginUser = ({
         discovery,
       ).then((res) => {
         // Securely store the auth on your device
+        storage.set("idToken", res.idToken!);
         storage.set("accessToken", res.accessToken);
         storage.set("refreshToken", res.refreshToken!);
         setLoginComplete(true);
