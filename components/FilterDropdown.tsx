@@ -1,6 +1,5 @@
 import {
   Dispatch,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -29,9 +28,10 @@ import {
   SortAction,
   SortReducerState,
 } from "@/app/(tabs)/search/[query]";
-import RangeSlider from "rn-range-slider";
 import Slider from "./ui/Slider";
 import RadioGroup from "react-native-radio-buttons-group";
+import { useNavigation } from "expo-router";
+import { usePreventRemove } from "@react-navigation/native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -58,6 +58,7 @@ export default function FilterDropdown({
   const { dropdownOpen, position, filter } = useContext(DropdownContext);
   const dropdownAnim = useRef(new Animated.Value(-25)).current;
   const dropdownOpacity = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation();
   const backgroundColor =
     colorScheme === "light" ? Colors.light.background : Colors.dark.background;
   const textColor =
@@ -97,9 +98,27 @@ export default function FilterDropdown({
     }
   };
 
+  usePreventRemove(
+    filter !== "sort" && filter?.type === "PRICE_RANGE" && dropdownOpen,
+    ({ data }) => {
+      if (Platform.OS === "android") {
+        console.log("WORKING");
+      } else {
+        navigation.dispatch(data.action);
+      }
+    },
+  );
+
+  useEffect(() => {
+    navigation.setOptions({
+      gestureEnabled:
+        filter !== "sort" && filter?.type === "PRICE_RANGE" && dropdownOpen,
+    });
+  }, [dropdownOpen, navigation]);
   useEffect(() => {
     toggleDropdownAnimation();
   }, [dropdownOpen]);
+
   const sortButtons = useMemo<RadioButton[]>(
     () => [
       {
@@ -233,36 +252,32 @@ function PriceFilter({
   dispatch: Dispatch<Action>;
   filter: Filter | undefined;
 }) {
-  let sliderTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
-  // canUse variable is in place because the Slider library being used calls handleValueChange on first render as soon as user opens dropdown
-  // to prevent this the variable canUse is in place so that the first time the function is called it immediately returns and sets the value
-  // to true so and subsequent calls to the callback function process normally
-  let canUse = false;
-
-  const handleValueChange = useCallback((low: number, high: number) => {
-    if (!canUse) {
-      canUse = true;
-      return;
-    }
-    if (sliderTimeout) {
-      clearTimeout(sliderTimeout.current);
-    }
-
-    sliderTimeout.current = setTimeout(() => {
-      dispatch({ type: "price", input: { min: low, max: high } });
-    }, 750);
-  }, []);
-
   try {
     const input = JSON.parse(filter?.values[0]?.input as string);
     const min = input?.price?.min;
     const max = input?.price?.max;
 
-    return <Slider min={min} max={max} onValueChanged={handleValueChange} />;
+    return (
+      <Slider
+        min={0}
+        max={max}
+        onValueChange={(low, high) =>
+          dispatch({ type: "price", input: { min: low, max: high } })
+        }
+      />
+    );
   } catch (e) {
     const min = 0;
     const max = 1000;
-    return <Slider min={min} max={max} onValueChanged={handleValueChange} />;
+    return (
+      <Slider
+        min={min}
+        max={max}
+        onValueChange={(low, high) =>
+          dispatch({ type: "price", input: { min: low, max: high } })
+        }
+      />
+    );
   }
 }
 function FilterCheckbox({

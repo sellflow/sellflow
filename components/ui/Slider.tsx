@@ -1,155 +1,203 @@
-import { Colors } from "@/constants/Colors";
-import { useCallback } from "react";
+import { useRef, useState } from "react";
 import {
-  ColorSchemeName,
-  StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  PanResponder,
+  GestureResponderEvent,
+  StyleSheet,
+  useColorScheme,
+  Text,
 } from "react-native";
-import RangeSlider from "rn-range-slider";
-
-const THUMB_RADIUS_LOW = 12;
+import { useRanger, Ranger } from "@tanstack/react-ranger";
+import { useLingui } from "@lingui/react/macro";
+import { Colors } from "@/constants/Colors";
 
 export default function Slider({
   min,
   max,
-  onValueChanged,
+  onValueChange,
 }: {
   min: number;
   max: number;
-  onValueChanged: (low: number, high: number) => void;
+  onValueChange: (low: number, high: number) => void;
 }) {
+  const rangerRef = useRef<View>(null);
   const colorScheme = useColorScheme();
-  return (
-    <RangeSlider
-      min={min}
-      max={max}
-      step={1}
-      floatingLabel
-      renderLabel={useCallback(
-        (value: number) => (
-          <Label text={value} colorScheme={colorScheme} />
-        ),
-        [],
-      )}
-      renderRail={useCallback(
-        () => (
-          <Rail />
-        ),
-        [],
-      )}
-      renderRailSelected={useCallback(
-        () => (
-          <RailSelected colorScheme={colorScheme} />
-        ),
-        [],
-      )}
-      renderThumb={useCallback(
-        () => (
-          <Thumb colorScheme={colorScheme} />
-        ),
-        [],
-      )}
-      onValueChanged={onValueChanged}
-    />
+  const [values, setValues] = useState<ReadonlyArray<number>>([min, max]);
+  const [activeHandleIndex, setActiveHandleIndex] = useState<number | null>(
+    null,
   );
-}
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [trackLeft, setTrackLeft] = useState(0);
+  const { i18n } = useLingui();
 
-const Rail = () => {
-  return <View style={styles.root} />;
-};
+  const rangerInstance = useRanger<View>({
+    getRangerElement: () => rangerRef.current,
+    values,
+    min,
+    max,
+    stepSize: 5,
+    onChange: (instance: Ranger<View>) => {
+      setValues(instance.sortedValues);
+      onValueChange(instance.sortedValues[0], instance.sortedValues[1]);
+    },
+  });
 
-const RailSelected = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
+  // Calculate value from touch position
+  const getValueFromPosition = (pageX: number) => {
+    if (trackWidth === 0) return min;
+
+    // Calculate relative position (0-1)
+    const relativePosition = Math.max(
+      0,
+      Math.min(1, (pageX - trackLeft) / trackWidth),
+    );
+
+    // Map the position (0-1) to value range (min-max)
+    const value = min + relativePosition * (max - min);
+
+    // If stepSize is needed, round to nearest step
+    return Math.round(value / 5) * 5;
+  };
+
+  // Create pan responders for each handle
+  const createPanResponder = (handleIndex: number) =>
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+
+      onPanResponderGrant: () => {
+        setActiveHandleIndex(handleIndex);
+      },
+
+      onPanResponderMove: (evt: GestureResponderEvent) => {
+        const { pageX } = evt.nativeEvent;
+        const newValue = getValueFromPosition(pageX);
+
+        // Create a new values array with the updated value for this handle
+        const newValues = [...values];
+        newValues[handleIndex] = newValue;
+
+        // Sort the values to ensure they're in order
+        const sortedValues = [...newValues].sort((a, b) => a - b);
+        setValues(sortedValues);
+      },
+
+      onPanResponderRelease: () => {
+        onValueChange(values[0], values[1]);
+        setActiveHandleIndex(null);
+      },
+
+      onPanResponderTerminate: () => {
+        setActiveHandleIndex(null);
+      },
+    });
+
   return (
-    <View
-      style={[
-        styles.RailSelected,
-        {
-          backgroundColor:
-            colorScheme === "light"
-              ? Colors.light.primary
-              : Colors.dark.primary,
-        },
-      ]}
-    />
-  );
-};
-
-const Thumb = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
-  return (
-    <View
-      style={[
-        styles.rootLow,
-        {
-          backgroundColor:
-            colorScheme === "light" ? Colors.light.border : Colors.dark.border,
-          borderColor:
-            colorScheme === "light" ? Colors.light.border : Colors.dark.border,
-        },
-      ]}
-    />
-  );
-};
-
-const Label = ({
-  text,
-  colorScheme,
-  ...restProps
-}: {
-  text: number;
-  colorScheme: ColorSchemeName;
-}) => {
-  return (
-    <View
-      style={[
-        styles.textRoot,
-        {
-          backgroundColor:
-            colorScheme === "light"
-              ? Colors.dark.background
-              : Colors.light.background,
-        },
-      ]}
-      {...restProps}
-    >
+    <>
       <Text
         style={[
-          styles.textRoot,
+          styles.Price,
           {
             color:
-              colorScheme === "light" ? Colors.dark.text : Colors.light.text,
+              colorScheme === "light" ? Colors.light.text : Colors.dark.text,
           },
         ]}
       >
-        {String(text)}
+        {i18n.number(values[0], { style: "currency", currency: "USD" })} -{" "}
+        {values[1]}
       </Text>
-    </View>
+      <View
+        ref={rangerRef}
+        style={styles.Track}
+        onLayout={(event) => {
+          const { width, x } = event.nativeEvent.layout;
+          setTrackWidth(width);
+          setTrackLeft(x);
+        }}
+      >
+        {/* Track segment between handles */}
+        <View
+          style={[
+            styles.TrackSegment,
+            {
+              left: `${rangerInstance.getPercentageForValue(values[0])}%`,
+              width: `${
+                rangerInstance.getPercentageForValue(values[1]) -
+                rangerInstance.getPercentageForValue(values[0])
+              }%`,
+              backgroundColor: colorScheme === "dark" ? "#555" : "#007AFF",
+            },
+          ]}
+        />
+
+        {/* Handles */}
+        {rangerInstance.handles().map((handle, i) => {
+          const panResponder = createPanResponder(i);
+
+          return (
+            <View
+              key={i}
+              role="slider"
+              accessibilityRole="adjustable"
+              accessibilityLabel={`Slider handle ${i + 1}`}
+              accessibilityValue={{
+                min: min,
+                max: max,
+                now: handle.value,
+              }}
+              style={[
+                styles.Handle,
+                {
+                  left: `${rangerInstance.getPercentageForValue(handle.value)}%`,
+                  transform: [{ translateX: -8 }], // Center the handle (half of width)
+                  backgroundColor:
+                    activeHandleIndex === i
+                      ? colorScheme === "light"
+                        ? "#0056B3"
+                        : "#7EB6FF"
+                      : colorScheme === "light"
+                        ? "#007AFF"
+                        : "#6F6F6F",
+                },
+              ]}
+              {...panResponder.panHandlers}
+            />
+          );
+        })}
+      </View>
+    </>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
+  Price: {
+    fontWeight: 600,
+    paddingBottom: 16,
+    paddingTop: 4,
+  },
+  Track: {
+    position: "relative",
     height: 4,
+    backgroundColor: "#ddd",
     borderRadius: 2,
-    backgroundColor: "#7f7f7f",
-    pointerEvents: "none",
+    marginVertical: 16,
   },
-  RailSelected: {
-    height: 4,
+  TrackSegment: {
+    position: "absolute",
+    height: "100%",
     borderRadius: 2,
   },
-  rootLow: {
-    width: THUMB_RADIUS_LOW * 2,
-    height: THUMB_RADIUS_LOW * 2,
-    borderRadius: THUMB_RADIUS_LOW,
-    borderWidth: 2,
-  },
-  textRoot: {
-    alignItems: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 4,
+  Handle: {
+    position: "absolute",
+    top: -6, // Center vertically relative to track
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    zIndex: 1, // Ensure handles are above the track
   },
 });
