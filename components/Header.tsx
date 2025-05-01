@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { storage } from "@/lib/storage";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { getPredictiveSearchResults } from "@/shopify/search";
 import { Ionicons } from "@expo/vector-icons";
@@ -19,6 +20,7 @@ import {
   SafeAreaView,
   Platform,
 } from "react-native";
+import { useMMKVString } from "react-native-mmkv";
 
 export default function Header() {
   const router = useRouter();
@@ -27,6 +29,7 @@ export default function Header() {
   const [searchError, setSearchError] = useState(false);
   const [searchResults, setSearchResults] = useState();
   const [searchBarOpen, setSearchBarOpen] = useState(false);
+  const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const logoAnim = useRef(new Animated.Value(0)).current;
   const arrowAnim = useRef(new Animated.Value(-50)).current;
   const inputRef = useRef(null);
@@ -35,7 +38,7 @@ export default function Header() {
 
   const getSearchResults = async () => {
     try {
-      const results = await getPredictiveSearchResults(search);
+      const results = await getPredictiveSearchResults(search, accessToken);
       if (results.errors) {
         setSearchError(true);
       }
@@ -268,7 +271,9 @@ export default function Header() {
                   <TouchableOpacity key={index}>
                     <Image
                       source={{
-                        uri: getOptimizedImageUrl(result.featuredImage.url, 50),
+                        uri:
+                          getOptimizedImageUrl(result.featuredImage.url, 50) ||
+                          "",
                       }}
                       alt={result.featuredImage.altText}
                       style={styles.SearchResultImage}
