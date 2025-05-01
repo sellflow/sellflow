@@ -272,7 +272,7 @@ export default function Header() {
                     <Image
                       source={{
                         uri:
-                          getOptimizedImageUrl(result.featuredImage.url, 50) ||
+                          getOptimizedImageUrl(result.featuredImage?.url, 50) ||
                           "",
                       }}
                       alt={result.featuredImage.altText}
