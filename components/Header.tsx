@@ -275,7 +275,7 @@ export default function Header() {
                           getOptimizedImageUrl(result.featuredImage?.url, 50) ||
                           "",
                       }}
-                      alt={result.featuredImage.altText}
+                      alt={result.featuredImage?.altText}
                       style={styles.SearchResultImage}
                     />
                     <Text
