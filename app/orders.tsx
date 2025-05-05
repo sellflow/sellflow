@@ -65,11 +65,15 @@ export default function Orders() {
         <View style={styles.Container}>
           {data ? (
             <View style={styles.ListStyle}>
-              {data.edges?.map((order: any, index: number) => (
-                <View style={styles.ItemContainer} key={index}>
-                  <OrderItem item={order} />
-                </View>
-              ))}
+              {data.edges.length === 0 ? (
+                <Text style={[{ color: textColor }]}>No orders yet!</Text>
+              ) : (
+                data.edges?.map((order: any, index: number) => (
+                  <View style={styles.ItemContainer} key={index}>
+                    <OrderItem item={order} />
+                  </View>
+                ))
+              )}
             </View>
           ) : (
             <Text style={{ color: textColor }}>
