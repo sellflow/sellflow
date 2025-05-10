@@ -12,5 +12,6 @@ config.resolver = {
   ...resolver,
   sourceExts: [...resolver.sourceExts, "po", "pot"],
 };
+config.resolver.unstable_enablePackageExports = false;
 
 module.exports = config;

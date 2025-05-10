@@ -24,30 +24,16 @@ import {
 } from "@shopify/hydrogen-react/storefront-api-types";
 import { getLocales } from "expo-localization";
 import { I18nProvider, TransRenderProps } from "@lingui/react";
-import { messages as esMessages } from "@/locales/es/messages";
-import { messages as enMessages } from "@/locales/en/messages";
 import BottomSheetProvider from "@/components/BottomSheetProvider";
 import Toast from "react-native-toast-message";
-import { i18n } from "@lingui/core";
-import { Text } from "react-native";
 import { t } from "@lingui/core/macro";
 import { useMMKVString } from "react-native-mmkv";
-import { refreshUser } from "@/lib/auth";
 import { storage } from "@/lib/storage";
+import { DefaultComponent, i18n } from "@/lib/i18n";
 
 const locales = getLocales();
 let languageCode = locales[0]?.languageCode || "en";
 let countryCode = locales[0]?.regionCode || "US";
-
-i18n.load({
-  en: enMessages,
-  es: esMessages,
-});
-i18n.activate(languageCode);
-
-const DefaultComponent = (props: TransRenderProps) => (
-  <Text>{props.children}</Text>
-);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
