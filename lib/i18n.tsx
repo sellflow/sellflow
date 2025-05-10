@@ -6,7 +6,7 @@ import { messages as esMessages } from "@/locales/es/messages";
 import { messages as enMessages } from "@/locales/en/messages";
 
 const locales = getLocales();
-let languageCode = locales[0].languageCode || "en";
+let languageCode = locales[0]?.languageCode || "en";
 
 i18n.load({
   en: enMessages,
