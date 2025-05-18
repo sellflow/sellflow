@@ -62,7 +62,7 @@ export default function BottomSheetProvider({
   children: ReactNode;
 }) {
   const { countryIsoCode, languageIsoCode } = useShop();
-  const bottomSheetRef = useRef<BottomSheet>();
+  const bottomSheetRef = useRef<BottomSheet | null>(null);
   const [product, setProduct] = useState<ClientResponse<any>>();
   const [loading, setLoading] = useState(true);
   const [productId, setProductId] = useState("");
@@ -107,6 +107,7 @@ export default function BottomSheetProvider({
   return (
     <GestureHandlerRootView>
       <BottomSheetContext.Provider
+        //@ts-ignore
         value={{ productId, setProductId, bottomSheet: bottomSheetRef }}
       >
         {children}
@@ -150,7 +151,7 @@ const UniBottomSheet = withUnistyles(BottomSheet, (theme) => ({
 function Product({
   bottomSheetRef,
 }: {
-  bottomSheetRef: RefObject<BottomSheet>;
+  bottomSheetRef: RefObject<BottomSheet | null>;
 }) {
   const { i18n } = useLingui();
   const {
@@ -228,31 +229,31 @@ function Product({
                               }
                               style={[
                                 styles.Option,
-                                {
-                                  backgroundColor: isOptionInStock(
-                                    option.name || "",
-                                    optionVal!,
-                                  )
-                                    ? optionVal ===
-                                      selectedOptions![option.name!]
-                                      ? UnistylesRuntime.colorScheme === "light"
-                                        ? darkTheme.colors.text
-                                        : lightTheme.colors.text
-                                      : backgroundColor
-                                    : "grey",
-                                },
+                                isOptionInStock(option.name || "", optionVal!)
+                                  ? optionVal == selectedOptions![option.name!]
+                                    ? UnistylesRuntime.colorScheme === "light"
+                                      ? {
+                                          backgroundColor:
+                                            lightTheme.colors.text,
+                                        }
+                                      : {
+                                          backgroundColor:
+                                            darkTheme.colors.text,
+                                        }
+                                    : {}
+                                  : { backgroundColor: "grey" },
                               ]}
                               key={optionVal}
                             >
                               <Text
-                                style={{
-                                  color:
-                                    optionVal == selectedOptions![option.name!]
-                                      ? UniStylesRuntime.colorScheme === "light"
-                                        ? darkTheme.colors.text
-                                        : lightTheme.colors.text
-                                      : textColor,
-                                }}
+                                style={[
+                                  styles.OptionVal,
+                                  optionVal == selectedOptions![option.name!]
+                                    ? UnistylesRuntime.colorScheme === "light"
+                                      ? { color: darkTheme.colors.text }
+                                      : { color: lightTheme.colors.text }
+                                    : {},
+                                ]}
                               >
                                 {optionVal}
                               </Text>
@@ -338,12 +339,16 @@ const styles = StyleSheet.create((theme) => ({
     color: theme.colors.text,
   },
   Option: {
+    backgroundColor: theme.colors.background,
     borderColor: "slategray",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
     borderWidth: 1,
     marginRight: 8,
+  },
+  OptionVal: {
+    color: theme.colors.text,
   },
   PriceText: {
     fontSize: 18,
