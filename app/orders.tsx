@@ -1,19 +1,12 @@
 import OrderItem from "@/components/OrderItem";
 import { getOrders } from "@/shopify/order";
 import { refreshUser } from "@/lib/auth";
-import {
-  Text,
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  useColorScheme,
-  ScrollView,
-} from "react-native";
-import { Colors } from "@/constants/Colors";
+import { Text, View, ActivityIndicator, ScrollView } from "react-native";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
 import { useQuery } from "@tanstack/react-query";
+import { StyleSheet, withUnistyles } from "react-native-unistyles";
 
 export default function Orders() {
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
@@ -21,7 +14,6 @@ export default function Orders() {
     "refreshToken",
     storage,
   );
-  const colorScheme = useColorScheme();
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["orders", accessToken],
@@ -52,21 +44,16 @@ export default function Orders() {
     },
   });
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   return (
-    <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+    <ScrollView style={styles.ScrollContainer}>
       {isPending ? (
-        <ActivityIndicator color={textColor} />
+        <UniActivityIndicator />
       ) : (
         <View style={styles.Container}>
           {data ? (
             <View style={styles.ListStyle}>
               {data.edges.length === 0 ? (
-                <Text style={[{ color: textColor }]}>No orders yet!</Text>
+                <Text style={styles.Text}>No orders yet!</Text>
               ) : (
                 data.edges?.map((order: any, index: number) => (
                   <View style={styles.ItemContainer} key={index}>
@@ -76,7 +63,7 @@ export default function Orders() {
               )}
             </View>
           ) : (
-            <Text style={{ color: textColor }}>
+            <Text style={styles.Text}>
               <Trans>No orders yet!</Trans>
             </Text>
           )}
@@ -86,9 +73,14 @@ export default function Orders() {
   );
 }
 
-const styles = StyleSheet.create({
+const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
+  color: theme.colors.text,
+}));
+
+const styles = StyleSheet.create((theme) => ({
   ScrollContainer: {
     width: "100%",
+    backgroundColor: theme.colors.background,
   },
   Container: {
     width: "100%",
@@ -108,4 +100,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 8,
   },
-});
+  Text: {
+    color: theme.colors.text,
+  },
+}));

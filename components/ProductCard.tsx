@@ -1,20 +1,18 @@
-import { Colors } from "@/constants/Colors";
 import { Product as ShopifyProduct } from "@/types/storefront.types";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import {
   Text,
   TouchableOpacity,
-  StyleSheet,
   GestureResponderEvent,
   Dimensions,
-  useColorScheme,
   View,
 } from "react-native";
 import { useCart } from "./shopify/CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { useLingui } from "@lingui/react/macro";
 import { useProductBottomSheet } from "./BottomSheetProvider";
+import { StyleSheet } from "react-native-unistyles";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const imageSize = SCREEN_WIDTH > 640 ? 290 : SCREEN_WIDTH / 2 - 12;
@@ -23,7 +21,6 @@ const blurhash =
 
 export default function Product({ node }: { node: ShopifyProduct }) {
   const { i18n } = useLingui();
-  const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
   const { setProductId, bottomSheet } = useProductBottomSheet();
 
@@ -45,9 +42,6 @@ export default function Product({ node }: { node: ShopifyProduct }) {
     setProductId(node.id);
     bottomSheet?.expand();
   };
-
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
   return (
     <Link
@@ -72,14 +66,11 @@ export default function Product({ node }: { node: ShopifyProduct }) {
               ...styles.image,
             }}
           />
-          <Text
-            numberOfLines={1}
-            style={[styles.heading, { color: textColor }]}
-          >
+          <Text numberOfLines={1} style={styles.heading}>
             {node?.title}
           </Text>
           {node?.priceRange?.minVariantPrice && (
-            <Text style={[styles.price, { color: textColor }]}>
+            <Text style={styles.price}>
               {i18n.number(node.priceRange.minVariantPrice.amount, {
                 style: "currency",
                 currency: node.priceRange.minVariantPrice.currencyCode,
@@ -92,9 +83,7 @@ export default function Product({ node }: { node: ShopifyProduct }) {
               onPress={(e) => addToCart(e)}
               activeOpacity={0.7}
             >
-              <Text style={{ textAlign: "center", color: textColor }}>
-                Add to Cart
-              </Text>
+              <Text style={styles.AddToCartText}>Add to Cart</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -102,9 +91,7 @@ export default function Product({ node }: { node: ShopifyProduct }) {
               onPress={(e) => handleMultiVariantAddToCart(e)}
               activeOpacity={0.7}
             >
-              <Text style={{ textAlign: "center", color: textColor }}>
-                Add to cart
-              </Text>
+              <Text style={styles.AddToCartText}>Add to cart</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -113,7 +100,7 @@ export default function Product({ node }: { node: ShopifyProduct }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   AddToCartButton: {
     width: "100%",
     alignItems: "center",
@@ -123,6 +110,10 @@ const styles = StyleSheet.create({
     backgroundColor: "coral",
     paddingTop: 4,
     paddingBottom: 4,
+  },
+  AddToCartText: {
+    textAlign: "center",
+    color: theme.colors.text,
   },
   container: {
     flexDirection: "row",
@@ -136,15 +127,15 @@ const styles = StyleSheet.create({
   heading: {
     flex: 1,
     marginTop: 8,
-    color: "white",
     fontSize: 20,
     maxWidth: imageSize,
     flexGrow: 0,
+    color: theme.colors.text,
   },
   price: {
-    color: "white",
     marginTop: 4,
     fontWeight: 600,
     marginBottom: "auto",
+    color: theme.colors.text,
   },
-});
+}));

@@ -1,22 +1,6 @@
-import {
-  Dispatch,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  ColorSchemeName,
-  Dimensions,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Animated,
-} from "react-native";
+import { Dispatch, useContext, useEffect, useRef, useState } from "react";
+import { Platform, Text, View, Animated } from "react-native";
 import { DropdownContext } from "./DropdownProvider";
-import { Colors } from "@/constants/Colors";
 import Checkbox from "expo-checkbox";
 import {
   Filter,
@@ -29,26 +13,17 @@ import {
   SortReducerState,
 } from "@/app/(tabs)/search/[query]";
 import Slider from "./ui/Slider";
-import RadioGroup from "react-native-radio-buttons-group";
 import { useNavigation } from "expo-router";
 import { usePreventRemove } from "@react-navigation/native";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-
-interface RadioButton {
-  id: string;
-  label: string;
-  value: SortAction["type"];
-}
+import RadioButtons from "./RadioButtons";
+import { StyleSheet, withUnistyles } from "react-native-unistyles";
 
 export default function FilterDropdown({
-  colorScheme,
   state,
   dispatch,
   sortState,
   sortDispatch,
 }: {
-  colorScheme: ColorSchemeName;
   state: ProductFilter[];
   dispatch: Dispatch<Action>;
   sortState: SortReducerState;
@@ -59,14 +34,6 @@ export default function FilterDropdown({
   const dropdownAnim = useRef(new Animated.Value(-25)).current;
   const dropdownOpacity = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const gray =
-    colorScheme === "light"
-      ? Colors.light.tabIconDefault
-      : Colors.dark.tabIconDefault;
 
   const toggleDropdownAnimation = () => {
     if (dropdownOpen) {
@@ -119,39 +86,6 @@ export default function FilterDropdown({
     toggleDropdownAnimation();
   }, [dropdownOpen]);
 
-  const sortButtons = useMemo<RadioButton[]>(
-    () => [
-      {
-        id: "1",
-        label: "Most relevant",
-        value: "mostRelevant",
-        color:
-          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
-      },
-      {
-        id: "2",
-        label: "Least Relevant",
-        value: "leastRelevant",
-        color:
-          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
-      },
-      {
-        id: "3",
-        label: "Price low to High",
-        value: "priceLowToHigh",
-        color:
-          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
-      },
-      {
-        id: "4",
-        label: "Price high to low",
-        value: "priceHighToLow",
-        color:
-          colorScheme === "light" ? Colors.light.primary : Colors.dark.primary,
-      },
-    ],
-    [],
-  );
   useEffect(() => {
     switch (selectedId) {
       case "1": {
@@ -180,27 +114,18 @@ export default function FilterDropdown({
         {
           left: Platform.OS === "web" ? position?.x : 0,
           top: (position?.y || 0) + (position?.height || 0) + 40,
-          borderColor:
-            colorScheme === "light" ? Colors.light.border : Colors.dark.border,
-          backgroundColor,
           transform: [{ translateY: dropdownAnim }],
           opacity: dropdownOpacity,
         },
       ]}
     >
-      <Text style={[styles.FilterHeading, { color: textColor }]}>
+      <Text style={styles.FilterHeading}>
         {filter === "sort" ? "Sort By" : filter?.label}
       </Text>
       <View>
         {filter === "sort" && (
           <View style={styles.CheckboxContainer}>
-            <RadioGroup
-              radioButtons={sortButtons}
-              onPress={setSelectedId}
-              selectedId={selectedId}
-              labelStyle={{ color: textColor }}
-              containerStyle={{ alignItems: "flex-start" }}
-            />
+            <RadioButtons selectedId={selectedId} onPress={setSelectedId} />
           </View>
         )}
         {filter !== "sort" && filter?.type === "LIST"
@@ -210,19 +135,10 @@ export default function FilterDropdown({
                   value={value}
                   state={state}
                   dispatch={dispatch}
-                  colorScheme={colorScheme}
                 />
                 <View style={styles.FilterInfo}>
-                  <Text style={[{ color: textColor }]}>{value?.label}</Text>
-                  <Text
-                    style={{
-                      fontWeight: 600,
-                      marginLeft: "auto",
-                      color: gray,
-                    }}
-                  >
-                    {value?.count}
-                  </Text>
+                  <Text style={styles.FilterLabel}>{value?.label}</Text>
+                  <Text style={styles.FilterCount}>{value?.count}</Text>
                 </View>
               </View>
             ))
@@ -284,12 +200,10 @@ function FilterCheckbox({
   value,
   state,
   dispatch,
-  colorScheme,
 }: {
   value: FilterValue;
   state: ProductFilter[];
   dispatch: Dispatch<Action>;
-  colorScheme: ColorSchemeName;
 }) {
   const getValue = () => {
     /**
@@ -328,21 +242,23 @@ function FilterCheckbox({
   };
 
   return (
-    <Checkbox
-      color={
-        colorScheme === "light" ? Colors.light.primary : Colors.dark.primary
-      }
-      value={checkboxValue}
-      onValueChange={() => toggleFilter()}
-    />
+    <UniCheckbox value={checkboxValue} onValueChange={() => toggleFilter()} />
   );
 }
 
-const styles = StyleSheet.create({
+const UniCheckbox = withUnistyles(Checkbox, (theme) => ({
+  color: theme.colors.primary,
+}));
+
+const styles = StyleSheet.create((theme) => ({
   DropdownContainer: {
     position: "absolute",
-    width: SCREEN_WIDTH > 640 ? "auto" : "100%",
-    backgroundColor: "white",
+    width: {
+      xs: "100%",
+      md: "auto",
+    },
+    backgroundColor: theme.colors.background,
+    borderColor: theme.colors.border,
     padding: 12,
     borderRadius: 4,
     borderWidth: 2,
@@ -351,6 +267,15 @@ const styles = StyleSheet.create({
   },
   FilterHeading: {
     fontWeight: 600,
+    color: theme.colors.text,
+  },
+  FilterLabel: {
+    color: theme.colors.text,
+  },
+  FilterCount: {
+    fontWeight: 600,
+    marginLeft: "auto",
+    color: theme.colors.tabIconDefault,
   },
   CheckboxContainer: {
     flexDirection: "row",
@@ -366,4 +291,4 @@ const styles = StyleSheet.create({
   PriceContainer: {
     minWidth: 200,
   },
-});
+}));

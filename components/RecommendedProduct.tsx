@@ -1,17 +1,11 @@
-import { Colors } from "@/constants/Colors";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import {
-  GestureResponderEvent,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { GestureResponderEvent, Text, TouchableOpacity } from "react-native";
 import { useCart } from "./shopify/CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { useLingui } from "@lingui/react/macro";
 import { useProductBottomSheet } from "./BottomSheetProvider";
+import { StyleSheet } from "react-native-unistyles";
 
 const imageSize = 200;
 const blurhash =
@@ -19,7 +13,6 @@ const blurhash =
 
 export default function RecommendedProduct({ item }: { item: any }) {
   const { i18n } = useLingui();
-  const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
   const { setProductId, bottomSheet } = useProductBottomSheet();
 
@@ -48,9 +41,6 @@ export default function RecommendedProduct({ item }: { item: any }) {
     bottomSheet?.expand();
   };
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-
   return (
     <TouchableOpacity
       style={styles.container}
@@ -69,11 +59,11 @@ export default function RecommendedProduct({ item }: { item: any }) {
           ...styles.image,
         }}
       />
-      <Text numberOfLines={1} style={[styles.heading, { color: textColor }]}>
+      <Text numberOfLines={1} style={styles.heading}>
         {item?.title}
       </Text>
       {item?.priceRange?.minVariantPrice && (
-        <Text style={[styles.price, { color: textColor }]}>
+        <Text style={styles.price}>
           {i18n.number(item.priceRange.minVariantPrice.amount, {
             style: "currency",
             currency: item.priceRange.minVariantPrice.currencyCode,
@@ -85,24 +75,20 @@ export default function RecommendedProduct({ item }: { item: any }) {
           style={styles.AddToCartButton}
           onPress={(e) => addToCart(e)}
         >
-          <Text style={{ textAlign: "center", color: textColor }}>
-            Add to Cart
-          </Text>
+          <Text style={styles.AddToCartText}>Add to Cart</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           style={styles.AddToCartButton}
           onPress={(e) => handleMultiVariantAddToCart(e)}
         >
-          <Text style={{ textAlign: "center", color: textColor }}>
-            Add to Cart
-          </Text>
+          <Text style={styles.AddToCartText}>Add to Cart</Text>
         </TouchableOpacity>
       )}
     </TouchableOpacity>
   );
 }
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   AddToCartButton: {
     width: "100%",
     alignItems: "center",
@@ -113,6 +99,10 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     flex: 1,
+  },
+  AddToCartText: {
+    textAlign: "center",
+    color: theme.colors.text,
   },
   container: {
     width: imageSize,
@@ -125,13 +115,13 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginTop: 8,
-    color: "white",
     fontSize: 18,
     maxWidth: imageSize,
+    color: theme.colors.text,
   },
   price: {
-    color: "white",
     marginTop: 4,
     fontWeight: 600,
+    color: theme.colors.text,
   },
-});
+}));

@@ -1,10 +1,11 @@
-import { Colors } from "@/constants/Colors";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Text, View } from "react-native";
+import Icon from "./Icon";
+import { StyleSheet } from "react-native-unistyles";
 
 const imageSize = 75;
 const blurHash =
@@ -12,12 +13,7 @@ const blurHash =
 
 export default function OrderItem({ item }: { item: any }) {
   const { i18n } = useLingui();
-  const colorScheme = useColorScheme();
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-
-  console.log(item);
   return (
     <Link
       href={{
@@ -48,7 +44,7 @@ export default function OrderItem({ item }: { item: any }) {
           />
         )}
         <View style={{ paddingLeft: 8 }}>
-          <Text style={{ color: textColor }}>
+          <Text style={styles.Text}>
             <Trans>
               {item?.node?.fulfillments?.edges[0]?.node?.estimatedDeliveryAt
                 ? i18n.date(
@@ -58,7 +54,7 @@ export default function OrderItem({ item }: { item: any }) {
                     ?.latestShipmentStatus}
             </Trans>
           </Text>
-          <Text style={{ color: textColor }}>
+          <Text style={styles.Text}>
             {
               item?.node?.fulfillments?.edges[0]?.node?.fulfillmentLineItems
                 ?.edges[0]?.node?.lineItem?.name
@@ -66,14 +62,14 @@ export default function OrderItem({ item }: { item: any }) {
           </Text>
         </View>
         <View style={styles.Icon}>
-          <Ionicons name="arrow-forward-sharp" size={28} color={textColor} />
+          <Icon name="arrow-forward-sharp" size={28} />
         </View>
       </View>
     </Link>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   Image: {
     backgroundColor: "white",
     borderRadius: 4,
@@ -83,4 +79,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: "auto",
   },
-});
+  Text: {
+    color: theme.colors.text,
+  },
+}));

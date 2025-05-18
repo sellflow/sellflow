@@ -1,15 +1,8 @@
 import { useRef, useState } from "react";
-import {
-  View,
-  PanResponder,
-  GestureResponderEvent,
-  StyleSheet,
-  useColorScheme,
-  Text,
-} from "react-native";
+import { View, PanResponder, GestureResponderEvent, Text } from "react-native";
 import { useRanger, Ranger } from "@tanstack/react-ranger";
 import { useLingui } from "@lingui/react/macro";
-import { Colors } from "@/constants/Colors";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 
 export default function Slider({
   min,
@@ -21,7 +14,6 @@ export default function Slider({
   onValueChange: (low: number, high: number) => void;
 }) {
   const rangerRef = useRef<View>(null);
-  const colorScheme = useColorScheme();
   const [values, setValues] = useState<ReadonlyArray<number>>([min, max]);
   const [activeHandleIndex, setActiveHandleIndex] = useState<number | null>(
     null,
@@ -94,15 +86,7 @@ export default function Slider({
 
   return (
     <>
-      <Text
-        style={[
-          styles.Price,
-          {
-            color:
-              colorScheme === "light" ? Colors.light.text : Colors.dark.text,
-          },
-        ]}
-      >
+      <Text style={styles.Price}>
         {i18n.number(values[0], { style: "currency", currency: "USD" })} -{" "}
         {values[1]}
       </Text>
@@ -125,7 +109,6 @@ export default function Slider({
                 rangerInstance.getPercentageForValue(values[1]) -
                 rangerInstance.getPercentageForValue(values[0])
               }%`,
-              backgroundColor: colorScheme === "dark" ? "#555" : "#007AFF",
             },
           ]}
         />
@@ -152,10 +135,10 @@ export default function Slider({
                   transform: [{ translateX: -8 }], // Center the handle (half of width)
                   backgroundColor:
                     activeHandleIndex === i
-                      ? colorScheme === "light"
+                      ? UnistylesRuntime.colorScheme === "light"
                         ? "#0056B3"
                         : "#7EB6FF"
-                      : colorScheme === "light"
+                      : UnistylesRuntime.colorScheme === "light"
                         ? "#007AFF"
                         : "#6F6F6F",
                 },
@@ -169,11 +152,12 @@ export default function Slider({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   Price: {
     fontWeight: 600,
     paddingBottom: 16,
     paddingTop: 4,
+    color: theme.colors.text,
   },
   Track: {
     position: "relative",
@@ -186,6 +170,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: "100%",
     borderRadius: 2,
+    backgroundColor: theme.colors.tint,
   },
   Handle: {
     position: "absolute",
@@ -200,4 +185,4 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     zIndex: 1, // Ensure handles are above the track
   },
-});
+}));

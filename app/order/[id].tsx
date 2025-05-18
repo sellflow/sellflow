@@ -1,18 +1,12 @@
 import { useLocalSearchParams } from "expo-router";
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-} from "react-native";
+import { ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
 import { getOrder } from "@/shopify/order";
 import { refreshUser } from "@/lib/auth";
 import OrderDetails from "@/components/OrderDetails";
-import { Colors } from "@/constants/Colors";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
 import { useQuery } from "@tanstack/react-query";
+import { StyleSheet, withUnistyles } from "react-native-unistyles";
 
 export default function Order() {
   const { id } = useLocalSearchParams();
@@ -21,7 +15,6 @@ export default function Order() {
     "refreshToken",
     storage,
   );
-  const colorScheme = useColorScheme();
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["order", id],
@@ -42,28 +35,22 @@ export default function Order() {
     },
   });
 
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={[styles.Container, { backgroundColor }]}>
-        {isPending ? (
-          <ActivityIndicator
-            color={
-              colorScheme === "light" ? Colors.light.text : Colors.dark.text
-            }
-          />
-        ) : (
-          <OrderDetails order={data} />
-        )}
+      <ScrollView style={styles.Container}>
+        {isPending ? <UniActivityIndicator /> : <OrderDetails order={data} />}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
+  color: theme.colors.text,
+}));
+
+const styles = StyleSheet.create((theme) => ({
   Container: {
     width: "100%",
+    backgroundColor: theme.colors.background,
   },
-});
+}));

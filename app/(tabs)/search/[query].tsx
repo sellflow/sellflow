@@ -1,15 +1,7 @@
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  View,
-  useColorScheme,
-  SafeAreaView,
-} from "react-native";
+import { ScrollView, Text, View, SafeAreaView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { getSearchResults } from "@/shopify/search";
 import { useReducer } from "react";
-import { Colors } from "@/constants/Colors";
 import Product from "@/components/ProductCard";
 import {
   Filter,
@@ -24,6 +16,7 @@ import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 import { useQuery } from "@tanstack/react-query";
+import { StyleSheet } from "react-native-unistyles";
 
 export type Action =
   | { type: "include"; input: Object }
@@ -113,7 +106,6 @@ function sortReducer(
 }
 
 export default function Search() {
-  const colorScheme = useColorScheme();
   const { query } = useLocalSearchParams();
   const [state, dispatch] = useReducer(reducer, []);
   const [sortState, sortDispatch] = useReducer(sortReducer, {
@@ -141,16 +133,11 @@ export default function Search() {
     },
   });
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   if (isError) {
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={[styles.Container, { backgroundColor }]}>
+      <ScrollView style={styles.Container}>
         <View style={styles.ContentContainer}>
-          <Text style={[styles.Heading, { color: textColor }]}>
+          <Text style={styles.Heading}>
             <Trans>An unexpected error has occurred {error.message}</Trans>
           </Text>
         </View>
@@ -160,12 +147,10 @@ export default function Search() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView
-        style={[styles.Container, { backgroundColor: backgroundColor }]}
-      >
+      <ScrollView style={styles.Container}>
         <DropdownProvider>
           <View style={styles.ContentContainer}>
-            <Text style={[styles.Heading, { color: textColor }]}>
+            <Text style={styles.Heading}>
               <Trans>Showing search results for {query}</Trans>
             </Text>
             {isPending ? (
@@ -180,14 +165,10 @@ export default function Search() {
                   <View style={styles.FilterContainer}>
                     {data.productFilters.map(
                       (filter: Filter, index: number) => (
-                        <ProductFilter
-                          filter={filter}
-                          key={index}
-                          colorScheme={colorScheme}
-                        />
+                        <ProductFilter filter={filter} key={index} />
                       ),
                     )}
-                    <ProductFilter filter="sort" colorScheme={colorScheme} />
+                    <ProductFilter filter="sort" />
                   </View>
                 )}
                 <View style={styles.ProductContainer}>
@@ -198,7 +179,6 @@ export default function Search() {
               </>
             )}
             <FilterDropdown
-              colorScheme={colorScheme}
               state={state}
               dispatch={dispatch}
               sortState={sortState}
@@ -211,9 +191,10 @@ export default function Search() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   Container: {
     width: "100%",
+    backgroundColor: theme.colors.background,
   },
   ContentContainer: {
     width: "100%",
@@ -225,6 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 600,
     paddingLeft: 8,
+    color: theme.colors.text,
   },
   FilterContainer: {
     flexDirection: "row",
@@ -239,4 +221,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
   },
-});
+}));

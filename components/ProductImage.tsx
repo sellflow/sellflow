@@ -1,20 +1,19 @@
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { Image } from "expo-image";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { View } from "react-native";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+const imageSize =
+  UnistylesRuntime.screen.width > 640 ? 640 : UnistylesRuntime.screen.width;
 
 export default function ProductImage({ url }: { url: string }) {
   return (
     <View style={styles.Container} pointerEvents="none">
       <Image
         source={{
-          uri: getOptimizedImageUrl(
-            url,
-            SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
-          ),
+          uri: getOptimizedImageUrl(url, imageSize),
         }}
         placeholder={blurhash}
         style={styles.Image}
@@ -26,10 +25,10 @@ export default function ProductImage({ url }: { url: string }) {
 
 const styles = StyleSheet.create({
   Container: {
-    width: SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
+    width: imageSize,
   },
   Image: {
     width: "100%",
-    height: SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH,
+    height: imageSize,
   },
 });

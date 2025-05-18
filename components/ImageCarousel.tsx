@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/Colors";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { MediaEdge } from "@shopify/hydrogen-react/storefront-api-types";
@@ -8,11 +7,11 @@ import {
   Animated,
   Dimensions,
   ScrollView,
-  StyleSheet,
   View,
   PanResponder,
   Platform,
 } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
 import { PartialObjectDeep } from "type-fest/source/partial-deep";
 
 interface ImageCarouselProps {
@@ -164,8 +163,6 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
                   style={{
                     width: imageWidth,
                     height: imageWidth,
-                    backgroundColor: Colors.light.background,
-                    userSelect: "none", // Prevents text selection on web
                   }}
                   contentFit="cover"
                 />
@@ -200,7 +197,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   ScrollContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -231,6 +228,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     pointerEvents: "none",
   },
+  image: {
+    backgroundColor: theme.colors.background,
+    userSelect: "none", // Prevents text selection on web
+  },
   navButton: {
     width: 40,
     height: 40,
@@ -258,4 +259,4 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: "center",
   },
-});
+}));

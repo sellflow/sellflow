@@ -1,37 +1,22 @@
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  FlatList,
-  Dimensions,
-  SafeAreaView,
-  useColorScheme,
-} from "react-native";
+import { ScrollView, Text, View, FlatList, SafeAreaView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { ClientResponse } from "@shopify/storefront-api-client";
 import { ProductProvider, useShop } from "@shopify/hydrogen-react";
-import { ProductQuery } from "@/types/storefront.generated";
 import { getProductOptions } from "@/shopify/client";
 import { getProduct, getProductRecommendations } from "@/shopify/product";
 import Product from "@/components/Product";
 import RecommendedProduct from "@/components/RecommendedProduct";
-import { Colors } from "@/constants/Colors";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
 import ProductSkeleton from "@/components/ProductSkeleton";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 import { useQuery } from "@tanstack/react-query";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+import { StyleSheet } from "react-native-unistyles";
+import { UnistylesRuntime } from "react-native-unistyles";
 
 export default function Page() {
   const { countryIsoCode, languageIsoCode } = useShop();
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
-  const colorScheme = useColorScheme();
   const search = useLocalSearchParams();
   const selectedOptions = getProductOptions(search);
 
@@ -85,27 +70,14 @@ export default function Page() {
     },
   });
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          {
-            backgroundColor:
-              colorScheme === "light"
-                ? Colors.light.background
-                : Colors.dark.background,
-          },
-        ]}
-      >
+      <ScrollView contentContainerStyle={styles.container}>
         {product.isPending ? (
           <View style={styles.product}>
             <ProductSkeleton />
             <View style={styles.recommendedContainer}>
-              <Text style={[styles.recommendedHeading, { color: textColor }]}>
+              <Text style={[styles.recommendedHeading]}>
                 <Trans>Recommended</Trans>
               </Text>
               {[0, 1, 2, 3, 4, 5].map((item, index) => (
@@ -122,7 +94,7 @@ export default function Page() {
               <Product search={search} />
             </ProductProvider>
             <View style={styles.recommendedContainer}>
-              <Text style={[styles.recommendedHeading, { color: textColor }]}>
+              <Text style={[styles.recommendedHeading]}>
                 <Trans>Recommended</Trans>
               </Text>
               {recommended.data && (
@@ -143,17 +115,21 @@ export default function Page() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   container: {
     alignItems: "center",
-    maxWidth: SCREEN_WIDTH,
+    maxWidth: UnistylesRuntime.screen.width,
+    backgroundColor: theme.colors.background,
   },
   product: {
     alignItems: "center",
   },
   recommendedContainer: {
-    paddingLeft: SCREEN_WIDTH > 640 ? 0 : 16,
-    maxWidth: SCREEN_WIDTH > 1175 ? 1175 : SCREEN_WIDTH,
+    paddingLeft: { xs: 16, md: 0 },
+    maxWidth:
+      UnistylesRuntime.screen.width > 1175
+        ? 1175
+        : UnistylesRuntime.screen.width,
     width: "100%",
   },
   recommendedHeading: {
@@ -161,6 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     paddingTop: 128,
     paddingBottom: 4,
+    color: theme.colors.text,
   },
   recommendedItemsContainer: {
     gap: 16,
@@ -173,4 +150,4 @@ const styles = StyleSheet.create({
     flex: 1 / 3,
     alignItems: "center",
   },
-});
+}));

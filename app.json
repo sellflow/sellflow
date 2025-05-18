@@ -5,9 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./images/favicon.png",
-    "scheme": [
-      "shop.72278704345.app"
-    ],
+    "scheme": ["shop.72278704345.app"],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

@@ -1,24 +1,23 @@
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
-  Dimensions,
   ScrollView,
   Pressable,
-  useColorScheme,
   TextInput,
 } from "react-native";
 import { useProduct } from "@shopify/hydrogen-react";
 import { Link, UnknownOutputParams } from "expo-router";
-import { Colors } from "@/constants/Colors";
 import { useCart } from "./shopify/CartProvider";
 import ImageCarousel from "./ImageCarousel";
 import { useLingui } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+import {
+  StyleSheet,
+  UnistylesRuntime,
+  useUnistyles,
+} from "react-native-unistyles";
+import Icon from "./Icon";
 
 export default function Product({ search }: { search: UnknownOutputParams }) {
   const { i18n } = useLingui();
@@ -34,8 +33,8 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
   // changes product options
   const currentMaxQuantity = useRef(selectedVariant?.quantityAvailable || 1);
   const [quantity, setQuantity] = useState("1");
-  const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
+  const { theme } = useUnistyles();
 
   const addToCart = () => {
     const merchandise = {
@@ -68,25 +67,18 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
     }
   }, [selectedVariant?.quantityAvailable]);
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   return (
     <View style={styles.Container}>
       <ImageCarousel images={product?.media?.edges} />
       <View style={styles.InfoContainer}>
-        <Text style={[styles.TitleText, { color: textColor }]}>
-          {product?.title}
-        </Text>
+        <Text style={styles.TitleText}>{product?.title}</Text>
         <>
           {options &&
             options.map(
               (option, index) =>
                 options.length! > 1 && (
                   <View key={index} style={styles.OptionWrapper}>
-                    <Text style={{ color: textColor }}>{option?.name}</Text>
+                    <Text style={styles.OptionTitle}>{option?.name}</Text>
                     <ScrollView
                       horizontal={true}
                       showsHorizontalScrollIndicator={false}
@@ -119,10 +111,8 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                                   )
                                     ? optionVal ===
                                       selectedOptions![option.name!]
-                                      ? colorScheme === "light"
-                                        ? Colors.dark.background
-                                        : Colors.light.background
-                                      : backgroundColor
+                                      ? theme.colors.text
+                                      : theme.colors.background
                                     : "grey",
                                 },
                               ]}
@@ -141,10 +131,8 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                                     color:
                                       optionVal ==
                                       selectedOptions![option.name!]
-                                        ? colorScheme === "light"
-                                          ? Colors.dark.text
-                                          : Colors.light.text
-                                        : textColor,
+                                        ? theme.colors.background
+                                        : theme.colors.text,
                                   }}
                                 >
                                   {optionVal}
@@ -158,7 +146,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             )}
         </>
         {selectedVariant?.price?.amount && (
-          <Text style={[styles.PriceText, { color: textColor }]}>
+          <Text style={styles.PriceText}>
             {i18n.number(Number(selectedVariant.price.amount), {
               style: "currency",
               currency: selectedVariant.price.currencyCode,
@@ -166,28 +154,17 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
           </Text>
         )}
         {
-          <View
-            style={[
-              styles.QuantitySelector,
-              {
-                backgroundColor: colorScheme === "light" ? "lightgrey" : "grey",
-              },
-            ]}
-          >
+          <View style={styles.QuantitySelector}>
             <TouchableOpacity
               disabled={Number(quantity) - 1 === 0}
               onPress={() => setQuantity(String(Number(quantity) - 1))}
             >
-              <Ionicons
-                name="remove-sharp"
-                size={16}
-                color={colorScheme === "light" ? "darkgrey" : "lightgrey"}
-              />
+              <Icon name="remove-sharp" size={16} />
             </TouchableOpacity>
             <TextInput
               keyboardType="number-pad"
               value={quantity}
-              style={{ color: textColor, textAlign: "center" }}
+              style={styles.QuantityInput}
               onChangeText={handleQuantityChange}
             />
             <TouchableOpacity
@@ -196,11 +173,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
               }
               onPress={() => setQuantity(String(Number(quantity) + 1))}
             >
-              <Ionicons
-                name="add-sharp"
-                size={16}
-                color={colorScheme === "light" ? "darkgrey" : "lightgrey"}
-              />
+              <Icon name="add-sharp" size={16} />
             </TouchableOpacity>
           </View>
         }
@@ -209,9 +182,7 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
           onPress={addToCart}
           disabled={!selectedVariant}
         >
-          <Text style={{ color: textColor, textAlign: "center" }}>
-            Add to Cart
-          </Text>
+          <Text style={styles.QuantityInput}>Add to Cart</Text>
         </TouchableOpacity>
         {selectedVariant?.id && (
           <TouchableOpacity style={styles.BuyNowButton}>
@@ -220,36 +191,39 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
             </Text>
           </TouchableOpacity>
         )}
-        <Text style={[styles.Description, { color: textColor }]}>
-          {product?.description}
-        </Text>
+        <Text style={[styles.Description]}>{product?.description}</Text>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   Container: {
-    flexDirection: SCREEN_WIDTH > 640 ? "row" : "column",
+    flexDirection: { xs: "column", md: "row" },
     gap: 32,
     width: "100%",
-    maxWidth: SCREEN_WIDTH > 1175 ? 1175 : SCREEN_WIDTH,
+    maxWidth: { xs: UnistylesRuntime.screen.width, xl: 1175 },
   },
   InfoContainer: {
-    width: SCREEN_WIDTH > 640 ? "40%" : "100%",
-    paddingHorizontal: SCREEN_WIDTH > 640 ? 0 : 16,
+    width: { xs: "100%", md: "40%" },
+    paddingHorizontal: { xs: 16, md: 640 },
   },
   TitleText: {
     fontSize: 40,
     fontWeight: "600",
     marginBottom: 16,
+    color: theme.colors.text,
   },
   PriceText: {
     fontSize: 24,
     paddingVertical: 12,
+    color: theme.colors.text,
   },
   OptionWrapper: {
     marginBottom: 8,
+  },
+  OptionTitle: {
+    color: theme.colors.text,
   },
   Option: {
     borderColor: "slategray",
@@ -272,6 +246,11 @@ const styles = StyleSheet.create({
     gap: 8,
     borderRadius: 50,
     padding: 8,
+    backgroundColors: theme.colors.border,
+  },
+  QuantityInput: {
+    textAlign: "center",
+    color: theme.colors.text,
   },
   AddToCartButton: {
     marginTop: 16,
@@ -290,5 +269,6 @@ const styles = StyleSheet.create({
   Description: {
     maxWidth: "100%",
     paddingTop: 24,
+    color: theme.colors.text,
   },
-});
+}));

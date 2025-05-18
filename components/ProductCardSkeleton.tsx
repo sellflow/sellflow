@@ -1,22 +1,19 @@
-import { Colors } from "@/constants/Colors";
 import ContentLoader, { Rect } from "react-content-loader/native";
-import { Dimensions, useColorScheme } from "react-native";
+import { UnistylesRuntime, withUnistyles } from "react-native-unistyles";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const imageSize = SCREEN_WIDTH > 640 ? 290 : SCREEN_WIDTH / 2 - 12;
+const imageSize =
+  UnistylesRuntime.screen.width > 640
+    ? 290
+    : UnistylesRuntime.screen.width / 2 - 12;
+
+const UniContentLoader = withUnistyles(ContentLoader, (theme) => ({
+  backgroundColor: theme.colors.border,
+  foregroundColor: theme.colors.tabIconDefault,
+}));
 
 export default function ProductCardSkeleton() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ContentLoader
-      backgroundColor={
-        colorScheme === "light" ? Colors.light.border : Colors.dark.border
-      }
-      foregroundColor={colorScheme === "light" ? "#e0e0e0" : "#444444"}
-      width={imageSize}
-      height={imageSize + 62}
-    >
+    <UniContentLoader width={imageSize} height={imageSize + 62}>
       <Rect x="0" y="0" rx="4" ry="4" width={imageSize} height={imageSize} />
       <Rect
         x="0"
@@ -34,6 +31,6 @@ export default function ProductCardSkeleton() {
         width={imageSize - 120}
         height="14"
       />
-    </ContentLoader>
+    </UniContentLoader>
   );
 }

@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/Colors";
 import { storage } from "@/lib/storage";
 import { getUserInfo, updateCustomerName } from "@/shopify/user";
 import { Trans } from "@lingui/react/macro";
@@ -7,20 +6,17 @@ import { Image } from "expo-image";
 import {
   ActivityIndicator,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
-  useColorScheme,
   View,
 } from "react-native";
 import { useMMKVString } from "react-native-mmkv";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
-import { t } from "@lingui/core/macro";
-import { revokeAsync, RevokeTokenRequest } from "expo-auth-session";
 import { discovery } from "@/lib/auth";
 import Toast from "react-native-toast-message";
 import { Redirect } from "expo-router";
+import { StyleSheet, withUnistyles } from "react-native-unistyles";
 
 const userSchema = z.object({
   firstName: z
@@ -40,7 +36,6 @@ export default function Account() {
     "refreshToken",
     storage,
   );
-  const colorScheme = useColorScheme();
 
   const { isPending, isError, data, error } = useQuery({
     enabled: !!accessToken,
@@ -112,15 +107,10 @@ export default function Account() {
     }
   };
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   return (
-    <View style={[styles.PageContainer, { backgroundColor }]}>
+    <View style={styles.PageContainer}>
       {isPending ? (
-        <ActivityIndicator color={textColor} />
+        <UniActivityIndicator />
       ) : (
         <View style={styles.Container}>
           <Image
@@ -131,14 +121,13 @@ export default function Account() {
             <form.Field name="firstName">
               {(field) => (
                 <>
-                  <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+                  <Text style={styles.UserInfoHeading}>
                     <Trans>First Name:</Trans>
                   </Text>
-                  <TextInput
+                  <UniTextInput
                     value={field.state.value}
                     onChangeText={field.handleChange}
-                    placeholderTextColor={textColor}
-                    style={[styles.UserInfoHeading, { color: textColor }]}
+                    style={styles.UserInfoHeading}
                   />
                   {!field.state.meta.isValid && (
                     <Text style={{ color: "red" }}>
@@ -153,14 +142,13 @@ export default function Account() {
             <form.Field name="lastName">
               {(field) => (
                 <>
-                  <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+                  <Text style={styles.UserInfoHeading}>
                     <Trans>First Name:</Trans>
                   </Text>
-                  <TextInput
+                  <UniTextInput
                     value={field.state.value}
                     onChangeText={field.handleChange}
-                    placeholderTextColor={textColor}
-                    style={[styles.UserInfoHeading, { color: textColor }]}
+                    style={styles.UserInfoHeading}
                   />
                   {!field.state.meta.isValid && (
                     <Text style={{ color: "red" }}>
@@ -172,26 +160,26 @@ export default function Account() {
             </form.Field>
           </View>
           <View>
-            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+            <Text style={styles.UserInfoHeading}>
               <Trans>Phone Number:</Trans>
             </Text>
-            <Text style={[styles.UserInfo, { color: textColor }]}>
+            <Text style={styles.UserInfo}>
               {data?.phoneNumber?.phoneNumber}
             </Text>
           </View>
           <View>
-            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+            <Text style={styles.UserInfoHeading}>
               <Trans>Email Address:</Trans>
             </Text>
-            <Text style={[styles.UserInfo, { color: textColor }]}>
+            <Text style={styles.UserInfo}>
               {data?.emailAddress?.emailAddress}
             </Text>
           </View>
           <View>
-            <Text style={[styles.UserInfoHeading, { color: textColor }]}>
+            <Text style={styles.UserInfoHeading}>
               <Trans>Default Address: </Trans>
             </Text>
-            <Text style={[styles?.UserInfo, { color: textColor }]}>
+            <Text style={styles?.UserInfo}>
               {data?.defaultAddress?.address1}
             </Text>
           </View>
@@ -200,12 +188,11 @@ export default function Account() {
             style={({ pressed }) => [
               styles.SaveButton,
               {
-                backgroundColor: colorScheme === "light" ? "darkred" : "red",
                 opacity: pressed ? 70 : 100,
               },
             ]}
           >
-            <Text style={[styles.SaveButtonText, { color: textColor }]}>
+            <Text style={styles.SaveButtonText}>
               <Trans>Sign out</Trans>
             </Text>
           </Pressable>
@@ -223,34 +210,14 @@ export default function Account() {
                   style={({ pressed }) => [
                     styles.SaveButton,
                     {
-                      backgroundColor:
-                        colorScheme === "light"
-                          ? Colors.dark.background
-                          : Colors.light.background,
                       opacity: pressed || isSubmitting ? 70 : 100,
                     },
                   ]}
                 >
                   {isSubmitting || mutation.isPending ? (
-                    <ActivityIndicator
-                      color={
-                        colorScheme === "light"
-                          ? Colors.dark.text
-                          : Colors.light.text
-                      }
-                    />
+                    <UniActivityIndicator />
                   ) : (
-                    <Text
-                      style={[
-                        styles.SaveButtonText,
-                        {
-                          color:
-                            colorScheme === "light"
-                              ? Colors.dark.text
-                              : Colors.light.text,
-                        },
-                      ]}
-                    >
+                    <Text style={styles.SaveButtonText}>
                       <Trans>Save changes</Trans>
                     </Text>
                   )}
@@ -264,11 +231,20 @@ export default function Account() {
   );
 }
 
-const styles = StyleSheet.create({
+const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
+  color: theme.colors.text,
+}));
+
+const UniTextInput = withUnistyles(TextInput, (theme) => ({
+  placeholderTextColor: theme.colors.text,
+}));
+
+const styles = StyleSheet.create((theme) => ({
   PageContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: theme.colors.background,
   },
   Container: {
     maxWidth: 640,
@@ -285,6 +261,7 @@ const styles = StyleSheet.create({
   UserInfoHeading: {
     fontSize: 18,
     marginBottom: 4,
+    color: theme.colors.text,
   },
   UserInfo: {
     fontWeight: 600,
@@ -295,8 +272,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     paddingVertical: 8,
+    backgroundColor: theme.colors.red,
   },
   SaveButtonText: {
     fontWeight: 600,
+    color: theme.colors.text,
   },
-});
+}));

@@ -1,30 +1,19 @@
-import { Colors } from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
 import { Filter } from "@shopify/hydrogen-react/storefront-api-types";
 import { useContext, useRef } from "react";
-import {
-  ColorSchemeName,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { DropdownContext } from "./DropdownProvider";
 import { Trans } from "@lingui/react/macro";
+import { StyleSheet } from "react-native-unistyles";
+import Icon from "./Icon";
 
 export default function ProductFilter({
   filter: filterProp,
-  colorScheme,
 }: {
   filter: Filter | "sort";
-  colorScheme: ColorSchemeName;
 }) {
   const { dropdownOpen, setDropdownOpen, setFilter, position, setPosition } =
     useContext(DropdownContext);
   const componentRef = useRef(null);
-  const oppositeTextColor =
-    colorScheme === "light" ? Colors.dark.text : Colors.light.text;
-  const oppositeBackgroundColors =
-    colorScheme === "light" ? Colors.dark.background : Colors.light.background;
 
   const toggleDropdown = () => {
     if (componentRef.current) {
@@ -48,19 +37,19 @@ export default function ProductFilter({
 
   return (
     <TouchableOpacity
-      style={[styles.Filter, { backgroundColor: oppositeBackgroundColors }]}
+      style={styles.Filter}
       onPress={toggleDropdown}
       activeOpacity={0.6}
       ref={componentRef}
     >
-      <Text style={[{ color: oppositeTextColor, fontWeight: 600 }]}>
+      <Text style={styles.FilterLabel}>
         <Trans>{filterProp === "sort" ? "Sort by" : filterProp.label}</Trans>
       </Text>
-      <Ionicons name="caret-down-outline" size={16} color={oppositeTextColor} />
+      <Icon name="caret-down-outline" size={16} />
     </TouchableOpacity>
   );
 }
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   Filter: {
     gap: 8,
     flexGrow: 0,
@@ -69,5 +58,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     alignItems: "center",
+    backgroundColor: theme.colors.text,
   },
-});
+  FilterLabel: {
+    fontWeight: 600,
+    color: theme.colors.background,
+  },
+}));

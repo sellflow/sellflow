@@ -1,7 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { useCart } from "@/components/shopify/CartProvider";
 import LineItem from "@/components/LineItem";
-import { Colors } from "@/constants/Colors";
 import shopifyCheckout from "@/shopify/checkout";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { CartLineProvider } from "@shopify/hydrogen-react";
@@ -9,20 +8,18 @@ import { useEffect, useState } from "react";
 import {
   Text,
   View,
-  StyleSheet,
   Platform,
-  useColorScheme,
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
   TextInput,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import { StyleSheet } from "react-native-unistyles";
 
 export default function Cart() {
   const cart = useCart();
   const { i18n, t } = useLingui();
-  const colorScheme = useColorScheme();
   const [note, setNote] = useState(cart?.note || "");
 
   const handleNoteSubmit = () => {
@@ -45,11 +42,6 @@ export default function Cart() {
       });
     }
   };
-
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
 
   if (Platform.OS === "android" || Platform.OS === "ios") {
     const handleCheckout = () => {
@@ -90,9 +82,9 @@ export default function Cart() {
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+        <ScrollView style={[styles.ScrollContainer]}>
           <View style={styles.Container}>
-            <Text style={[styles.Subtotal, { color: textColor }]}>
+            <Text style={[styles.Subtotal]}>
               <Trans>
                 Subtotal:{" "}
                 <Text style={{ fontWeight: 600 }}>
@@ -112,33 +104,15 @@ export default function Cart() {
                 maxLength={500}
                 returnKeyType="done"
                 placeholder="Leave a note..."
-                placeholderTextColor={
-                  colorScheme === "light" ? "grey" : "lightgrey"
-                }
-                style={[styles.Note, { color: textColor }]}
+                style={[styles.Note]}
                 onSubmitEditing={handleNoteSubmit}
               />
             </View>
             <TouchableOpacity
               onPress={handleCheckout}
-              style={[
-                styles.Checkout,
-                {
-                  backgroundColor:
-                    colorScheme === "light"
-                      ? Colors.dark.background
-                      : Colors.light.background,
-                },
-              ]}
+              style={[styles.Checkout]}
             >
-              <Text
-                style={{
-                  color:
-                    colorScheme === "light"
-                      ? Colors.dark.text
-                      : Colors.light.text,
-                }}
-              >
+              <Text style={styles.CheckoutText}>
                 <Trans>Proceed to Checkout</Trans>
               </Text>
             </TouchableOpacity>
@@ -164,9 +138,9 @@ export default function Cart() {
   } else {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView style={[styles.ScrollContainer, { backgroundColor }]}>
+        <ScrollView style={[styles.ScrollContainer]}>
           <View style={styles.Container}>
-            <Text style={[styles.Subtotal, { color: textColor }]}>
+            <Text style={[styles.Subtotal]}>
               <Trans>
                 Subtotal:{" "}
                 <Text style={{ fontWeight: 600 }}>
@@ -187,30 +161,12 @@ export default function Cart() {
                 maxLength={500}
                 returnKeyType="done"
                 placeholder="Leave a note..."
-                placeholderTextColor={
-                  colorScheme === "light" ? "grey" : "lightgrey"
-                }
-                style={[styles.Note, { color: textColor }]}
+                style={[styles.Note]}
                 onSubmitEditing={handleNoteSubmit}
               />
             </View>
-            <View
-              style={{
-                backgroundColor:
-                  colorScheme === "light"
-                    ? Colors.dark.background
-                    : Colors.light.background,
-                ...styles.Checkout,
-              }}
-            >
-              <Text
-                style={{
-                  color:
-                    colorScheme === "light"
-                      ? Colors.dark.text
-                      : Colors.light.text,
-                }}
-              >
+            <View style={styles.Checkout}>
+              <Text style={styles.CheckoutText}>
                 <Trans>Proceed to Checkout</Trans>
               </Text>
             </View>
@@ -236,9 +192,10 @@ export default function Cart() {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   ScrollContainer: {
     width: "100%",
+    backgroundColor: theme.colors.background,
   },
   Container: {
     alignSelf: "center",
@@ -248,6 +205,7 @@ const styles = StyleSheet.create({
   },
   Subtotal: {
     fontSize: 20,
+    color: theme.colors.text,
   },
   NoteContainer: {
     paddingTop: 8,
@@ -256,6 +214,7 @@ const styles = StyleSheet.create({
   },
   Note: {
     fontSize: 16,
+    color: theme.colors.text,
   },
   LineItemContainer: {
     width: "100%",
@@ -266,13 +225,16 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
   },
   Checkout: {
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingVertical: 8,
     marginTop: 8,
     marginBottom: 4,
     width: "100%",
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: theme.colors.text,
   },
-});
+  CheckoutText: {
+    color: theme.colors.background,
+  },
+}));

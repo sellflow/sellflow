@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/Colors";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { useLingui } from "@lingui/react/macro";
@@ -9,15 +8,10 @@ import {
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useCart } from "./shopify/CartProvider";
+import { StyleSheet } from "react-native-unistyles";
+import Icon from "./Icon";
 
 const imageSize = 100;
 const blurHash =
@@ -27,11 +21,7 @@ export default function LineItem() {
   const line = useCartLine();
   const { i18n } = useLingui();
   const { linesUpdate, linesRemove } = useCart();
-  const colorScheme = useColorScheme();
   const [quantity, setQuantity] = useState(String(line.quantity));
-
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
 
   const handleQuantityIncrease = () => {
     try {
@@ -104,6 +94,7 @@ export default function LineItem() {
             source={{
               uri: getOptimizedImageUrl(line.merchandise.image.url, imageSize),
             }}
+            //@ts-ignore
             placeholder={{ blurHash }}
             style={{
               width: imageSize,
@@ -113,49 +104,39 @@ export default function LineItem() {
           />
         )}
         <View style={styles.Labels}>
-          <Text style={[styles.Title, { color: textColor }]} numberOfLines={1}>
+          <Text style={styles.Title} numberOfLines={1}>
             {line.merchandise?.product?.title}
           </Text>
-          <Text style={{ color: textColor }}>{line.merchandise?.title}</Text>
-          <Text style={[styles.Price, { color: textColor }]}>
+          <Text style={styles.Text}>{line.merchandise?.title}</Text>
+          <Text style={styles.Price}>
             {i18n.number(Number(line.cost?.totalAmount?.amount), {
               style: "currency",
               currency: line.cost?.totalAmount?.currencyCode,
             })}
           </Text>
         </View>
-        <View
-          style={[
-            styles.QuantitySelectorContainer,
-            { backgroundColor: colorScheme === "light" ? "lightgrey" : "grey" },
-          ]}
-        >
+        <View style={styles.QuantitySelectorContainer}>
           <View style={styles.QuantitySelector}>
             <TouchableOpacity
               onPress={handleQuantityDecrease}
               activeOpacity={0.7}
             >
-              <Ionicons
+              <Icon
                 name={quantity === "1" ? "trash-bin-sharp" : "remove-sharp"}
                 size={16}
-                color={colorScheme === "light" ? "darkgrey" : "lightgrey"}
               />
             </TouchableOpacity>
             <TextInput
               value={quantity}
               keyboardType="number-pad"
-              style={{ color: textColor, textAlign: "center" }}
+              style={styles.TextInput}
               onChangeText={handleQuantityChange}
             />
             <TouchableOpacity
               onPress={handleQuantityIncrease}
               activeOpacity={0.7}
             >
-              <Ionicons
-                name="add-sharp"
-                size={16}
-                color={colorScheme === "light" ? "darkgrey" : "lightgrey"}
-              />
+              <Icon name="add-sharp" size={16} />
             </TouchableOpacity>
           </View>
         </View>
@@ -164,7 +145,7 @@ export default function LineItem() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   image: {
     backgroundColor: "white",
     borderRadius: 4,
@@ -188,17 +169,22 @@ const styles = StyleSheet.create({
   },
   Title: {
     fontSize: 20,
+    color: theme.colors.text,
+  },
+  Text: {
+    color: theme.colors.text,
   },
   QuantitySelectorContainer: {
     alignSelf: "flex-start",
     justifyContent: "center",
     borderRadius: 50,
+    backgroundColor: theme.colors.tabIconDefault,
   },
   Price: {
-    color: "white",
     fontSize: 16,
     fontWeight: "600",
     marginTop: "auto",
+    color: theme.colors.text,
   },
   QuantitySelector: {
     alignSelf: "flex-start",
@@ -207,4 +193,8 @@ const styles = StyleSheet.create({
     gap: 8,
     padding: 8,
   },
-});
+  TextInput: {
+    color: theme.colors.text,
+    textAlign: "center",
+  },
+}));

@@ -1,6 +1,6 @@
-import { Colors } from "@/constants/Colors";
 import { Platform } from "react-native";
 import type { ShopifyCheckoutSheet } from "@shopify/checkout-sheet-kit";
+import { darkTheme, lightTheme } from "@/styles/unistyles";
 
 let shopifyCheckout: ShopifyCheckoutSheet | undefined;
 if (Platform.OS === "android" || Platform.OS === "ios") {
@@ -11,21 +11,21 @@ if (Platform.OS === "android" || Platform.OS === "ios") {
       title: "Sellflow",
       colors: {
         ios: {
-          backgroundColor: Colors.light.background,
-          tintColor: Colors.light.tint,
+          backgroundColor: lightTheme.colors.background,
+          tintColor: lightTheme.colors.tint,
         },
         android: {
           light: {
-            backgroundColor: Colors.light.background,
-            progressIndicator: Colors.light.icon,
-            headerBackgroundColor: Colors.light.background,
-            headerTextColor: Colors.light.text,
+            backgroundColor: lightTheme.colors.background,
+            progressIndicator: lightTheme.colors.icon,
+            headerBackgroundColor: lightTheme.colors.background,
+            headerTextColor: lightTheme.colors.text,
           },
           dark: {
-            backgroundColor: Colors.dark.background,
-            progressIndicator: Colors.dark.icon,
-            headerBackgroundColor: Colors.dark.background,
-            headerTextColor: Colors.dark.text,
+            backgroundColor: darkTheme.colors.background,
+            progressIndicator: darkTheme.colors.icon,
+            headerBackgroundColor: darkTheme.colors.background,
+            headerTextColor: darkTheme.colors.text,
           },
         },
       },

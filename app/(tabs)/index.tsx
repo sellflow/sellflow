@@ -1,24 +1,16 @@
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from "react-native";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { getProducts } from "@/shopify/product";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 import Product from "@/components/ProductCard";
-import { Colors } from "@/constants/Colors";
 import { useShop } from "@shopify/hydrogen-react";
 import { Trans } from "@lingui/react/macro";
 import { useMMKVString } from "react-native-mmkv";
 import { storage } from "@/lib/storage";
 import { useQuery } from "@tanstack/react-query";
 import { refreshUser } from "@/lib/auth";
+import { StyleSheet } from "react-native-unistyles";
 
 export default function Index() {
-  const colorScheme = useColorScheme();
   const [accessToken, setAccessToken] = useMMKVString("accessToken", storage);
   const { languageIsoCode, countryIsoCode } = useShop();
   useQuery({
@@ -46,18 +38,11 @@ export default function Index() {
     },
   });
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView
-        style={[styles.Container, { backgroundColor: backgroundColor }]}
-      >
+      <ScrollView style={[styles.Container]}>
         <View style={styles.ContentContainer}>
-          <Text style={[styles.Heading, { color: textColor }]}>
+          <Text style={[styles.Heading]}>
             <Trans>Products</Trans>
           </Text>
           {!isError ? (
@@ -85,9 +70,10 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   Container: {
     width: "100%",
+    backgroundColor: theme.colors.background,
   },
   ContentContainer: {
     width: "100%",
@@ -98,6 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 600,
     paddingLeft: 8,
+    color: theme.colors.text,
   },
   ProductContainer: {
     gap: 8,
@@ -106,4 +93,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
   },
-});
+}));

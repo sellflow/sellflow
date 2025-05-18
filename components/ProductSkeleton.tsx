@@ -1,36 +1,24 @@
-import { Colors } from "@/constants/Colors";
 import ContentLoader, { Rect } from "react-content-loader/native";
 import { StyleSheet, View } from "react-native";
-import { Dimensions, useColorScheme } from "react-native";
+import { UnistylesRuntime, withUnistyles } from "react-native-unistyles";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const imageSize = SCREEN_WIDTH > 640 ? 640 : SCREEN_WIDTH;
+const imageSize =
+  UnistylesRuntime.screen.width > 640 ? 640 : UnistylesRuntime.screen.width;
+
+const UniContentLoader = withUnistyles(ContentLoader, (theme) => ({
+  backgroundColor: theme.colors.border,
+  forgroundColor: theme.colors.tabIconDefault,
+}));
 
 export default function ProductSkeleton() {
-  const colorScheme = useColorScheme();
-
   return (
     <>
       <View style={styles.Container}>
-        <ContentLoader
-          backgroundColor={
-            colorScheme === "light" ? Colors.light.border : Colors.dark.border
-          }
-          foregroundColor={colorScheme === "light" ? "#e0e0e0" : "#444444"}
-          width={imageSize}
-          height={imageSize}
-        >
+        <UniContentLoader width={imageSize} height={imageSize}>
           <Rect x="0" y="0" width={imageSize} height={imageSize} />
-        </ContentLoader>
+        </UniContentLoader>
         <View style={styles.InfoContainer}>
-          <ContentLoader
-            backgroundColor={
-              colorScheme === "light" ? Colors.light.border : Colors.dark.border
-            }
-            foregroundColor={colorScheme === "light" ? "#e0e0e0" : "#444444"}
-            width={imageSize}
-            height={imageSize - 10}
-          >
+          <UniContentLoader width={imageSize} height={imageSize - 10}>
             <Rect
               x="16"
               y="64"
@@ -79,7 +67,7 @@ export default function ProductSkeleton() {
               width={imageSize - 28}
               height="16"
             />
-          </ContentLoader>
+          </UniContentLoader>
         </View>
       </View>
     </>
@@ -88,14 +76,17 @@ export default function ProductSkeleton() {
 
 const styles = StyleSheet.create({
   Container: {
-    flexDirection: SCREEN_WIDTH > 640 ? "row" : "column",
+    flexDirection: UnistylesRuntime.screen.width > 640 ? "row" : "column",
     gap: 32,
     width: "100%",
-    maxWidth: SCREEN_WIDTH > 1175 ? 1175 : SCREEN_WIDTH,
+    maxWidth:
+      UnistylesRuntime.screen.width > 1175
+        ? 1175
+        : UnistylesRuntime.screen.width,
   },
   InfoContainer: {
-    width: SCREEN_WIDTH > 640 ? "40%" : "100%",
-    paddingHorizontal: SCREEN_WIDTH > 640 ? 0 : 16,
+    width: UnistylesRuntime.screen.width > 640 ? "40%" : "100%",
+    paddingHorizontal: UnistylesRuntime.screen.width > 640 ? 0 : 16,
   },
   TitleText: {
     fontSize: 40,

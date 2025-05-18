@@ -13,26 +13,20 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { storage } from "@/lib/storage";
 import type { Dispatch, RefObject, SetStateAction } from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { useMMKVString } from "react-native-mmkv";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Colors } from "@/constants/Colors";
 import { Image } from "expo-image";
 import { ProductProvider, useProduct, useShop } from "@shopify/hydrogen-react";
 import { getDropdownProduct } from "@/shopify/product";
 import { ClientResponse } from "@shopify/storefront-api-client";
 import { useCart } from "./shopify/CartProvider";
 import { getOptimizedImageUrl } from "@/lib/utils";
-import { ScrollView } from "react-native";
 import { useLingui } from "@lingui/react/macro";
 import { Link } from "expo-router";
+import { UnistylesRuntime, withUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
+import { darkTheme, lightTheme } from "@/styles/unistyles";
 
 interface BottomSheetContextProps {
   productId: string;
@@ -68,8 +62,7 @@ export default function BottomSheetProvider({
   children: ReactNode;
 }) {
   const { countryIsoCode, languageIsoCode } = useShop();
-  const colorScheme = useColorScheme();
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheet>();
   const [product, setProduct] = useState<ClientResponse<any>>();
   const [loading, setLoading] = useState(true);
   const [productId, setProductId] = useState("");
@@ -111,45 +104,48 @@ export default function BottomSheetProvider({
     getProductDropdown(0);
   }, [getProductDropdown]);
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   return (
     <GestureHandlerRootView>
       <BottomSheetContext.Provider
         value={{ productId, setProductId, bottomSheet: bottomSheetRef }}
       >
         {children}
-        <BottomSheet
+        <UniBottomSheet
           index={-1}
           snapPoints={["40%", "35%"]}
           ref={bottomSheetRef}
           onChange={getProductDropdown}
-          handleStyle={{ backgroundColor }}
-          handleIndicatorStyle={{
-            backgroundColor: colorScheme === "light" ? "grey" : "lightgrey",
-          }}
-          backgroundStyle={{ backgroundColor }}
           enablePanDownToClose
         >
-          <BottomSheetView
-            style={[styles.BottomSheetContainer, { backgroundColor }]}
-          >
+          <BottomSheetView style={styles.BottomSheetContainer}>
             {loading ? (
-              <ActivityIndicator color={textColor} />
+              <UniActivityIndicator />
             ) : (
               <ProductProvider data={product!.data!.product}>
                 <Product bottomSheetRef={bottomSheetRef} />
               </ProductProvider>
             )}
           </BottomSheetView>
-        </BottomSheet>
+        </UniBottomSheet>
       </BottomSheetContext.Provider>
     </GestureHandlerRootView>
   );
 }
+
+const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
+  color: theme.colors.text,
+}));
+const UniBottomSheet = withUnistyles(BottomSheet, (theme) => ({
+  handleStyle: {
+    backgroundColor: theme.colors.background,
+  },
+  handleIndicatorStyle: {
+    backgroundColor: theme.colors.tabIconDefault,
+  },
+  backgroundStyle: {
+    backgroundColor: theme.colors.background,
+  },
+}));
 
 function Product({
   bottomSheetRef,
@@ -165,7 +161,6 @@ function Product({
     selectedVariant,
     isOptionInStock,
   } = useProduct();
-  const colorScheme = useColorScheme();
   const { linesAdd } = useCart();
 
   const addToCart = () => {
@@ -179,11 +174,6 @@ function Product({
     bottomSheetRef?.current?.close();
   };
 
-  const textColor =
-    colorScheme === "light" ? Colors.light.text : Colors.dark.text;
-  const backgroundColor =
-    colorScheme === "light" ? Colors.light.background : Colors.dark.background;
-
   return (
     <BottomSheetView style={styles.ProductContainer}>
       <BottomSheetView style={styles.ProductDisplayContainer}>
@@ -194,20 +184,13 @@ function Product({
           style={styles.FeaturedImage}
         />
         <BottomSheetView style={styles.ProductLinkContainer}>
-          <Text style={[styles.TitleText, { color: textColor }]}>
-            {product?.title}
-          </Text>
+          <Text style={[styles.TitleText]}>{product?.title}</Text>
           <Link
             href={{
               pathname: "/product/[id]",
               params: { id: product?.id || "" },
             }}
-            style={[
-              styles.Link,
-              {
-                color: colorScheme === "light" ? "darkgrey" : "lightgrey",
-              },
-            ]}
+            style={styles.Link}
             onPress={() => bottomSheetRef?.current?.close()}
           >
             See all item details
@@ -222,7 +205,7 @@ function Product({
               (option, index) =>
                 options.length! > 1 && (
                   <BottomSheetView key={index} style={styles.OptionWrapper}>
-                    <Text style={{ color: textColor }}>{option?.name}</Text>
+                    <Text style={styles.Text}>{option?.name}</Text>
                     <BottomSheetScrollView
                       horizontal={true}
                       showsHorizontalScrollIndicator={false}
@@ -252,9 +235,9 @@ function Product({
                                   )
                                     ? optionVal ===
                                       selectedOptions![option.name!]
-                                      ? colorScheme === "light"
-                                        ? Colors.dark.background
-                                        : Colors.light.background
+                                      ? UnistylesRuntime.colorScheme === "light"
+                                        ? darkTheme.colors.text
+                                        : lightTheme.colors.text
                                       : backgroundColor
                                     : "grey",
                                 },
@@ -265,9 +248,9 @@ function Product({
                                 style={{
                                   color:
                                     optionVal == selectedOptions![option.name!]
-                                      ? colorScheme === "light"
-                                        ? Colors.dark.text
-                                        : Colors.light.text
+                                      ? UniStylesRuntime.colorScheme === "light"
+                                        ? darkTheme.colors.text
+                                        : lightTheme.colors.text
                                       : textColor,
                                 }}
                               >
@@ -281,7 +264,7 @@ function Product({
             )}
         </>
         {selectedVariant?.price?.amount && (
-          <Text style={[styles.PriceText, { color: textColor }]}>
+          <Text style={styles.PriceText}>
             {i18n.number(Number(selectedVariant.price.amount), {
               style: "currency",
               currency: selectedVariant.price.currencyCode,
@@ -294,16 +277,14 @@ function Product({
           onPress={addToCart}
           disabled={!selectedVariant}
         >
-          <Text style={{ color: textColor, textAlign: "center" }}>
-            Add to Cart
-          </Text>
+          <Text style={styles.AddToCartText}>Add to Cart</Text>
         </TouchableOpacity>
       </BottomSheetView>
     </BottomSheetView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   Container: {
     flex: 1,
   },
@@ -315,6 +296,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingBottom: 36,
     alignItems: "center",
+    backgroundColor: theme.colors.background,
   },
   ProductContainer: {
     width: "100%",
@@ -330,6 +312,7 @@ const styles = StyleSheet.create({
   },
   Link: {
     textDecorationLine: "underline",
+    color: theme.colors.tabIconDefault,
   },
   ProductInfoContainer: {},
   FeaturedImage: {
@@ -340,6 +323,7 @@ const styles = StyleSheet.create({
   InfoContainer: {},
   TitleText: {
     fontWeight: 600,
+    color: theme.colors.text,
   },
   OptionWrapper: {
     marginBottom: 8,
@@ -349,6 +333,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "nowrap",
     paddingVertical: 4,
+  },
+  Text: {
+    color: theme.colors.text,
   },
   Option: {
     borderColor: "slategray",
@@ -361,6 +348,7 @@ const styles = StyleSheet.create({
   PriceText: {
     fontSize: 18,
     paddingTop: 32,
+    color: theme.colors.text,
   },
   AddToCartButton: {
     marginTop: 16,
@@ -369,4 +357,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     maxWidth: "100%",
   },
-});
+  AddToCartText: {
+    color: theme.colors.text,
+    textAlign: "center",
+  },
+}));

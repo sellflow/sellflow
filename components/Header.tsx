@@ -1,17 +1,13 @@
-import { Colors } from "@/constants/Colors";
 import { storage } from "@/lib/storage";
 import { getOptimizedImageUrl } from "@/lib/utils";
 import { getPredictiveSearchResults } from "@/shopify/search";
-import { Ionicons } from "@expo/vector-icons";
 import { t } from "@lingui/core/macro";
 import { Image } from "expo-image";
 import { Link, useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
-  StyleSheet,
   TextInput,
   TouchableOpacity,
-  useColorScheme,
   View,
   Animated,
   Keyboard,
@@ -21,10 +17,11 @@ import {
   Platform,
 } from "react-native";
 import { useMMKVString } from "react-native-mmkv";
+import { StyleSheet, withUnistyles } from "react-native-unistyles";
+import Icon from "./Icon";
 
 export default function Header() {
   const router = useRouter();
-  const colorScheme = useColorScheme();
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState(false);
   const [searchResults, setSearchResults] = useState();
@@ -120,18 +117,8 @@ export default function Header() {
   };
 
   return (
-    <SafeAreaView
-      style={[
-        styles.Container,
-        {
-          backgroundColor:
-            colorScheme === "light"
-              ? Colors.light.background
-              : Colors.dark.background,
-        },
-      ]}
-    >
-      <View style={[styles.Header]}>
+    <SafeAreaView style={styles.Container}>
+      <View style={styles.Header}>
         <View style={styles.AnimationContainer}>
           <Animated.View
             style={[
@@ -162,13 +149,7 @@ export default function Header() {
             ]}
           >
             <TouchableOpacity onPress={toggleSearch} style={styles.backButton}>
-              <Ionicons
-                size={24}
-                name="arrow-back-sharp"
-                color={
-                  colorScheme === "light" ? Colors.light.text : Colors.dark.text
-                }
-              />
+              <Icon size={24} name="arrow-back-sharp" />
             </TouchableOpacity>
           </Animated.View>
         </View>
@@ -176,28 +157,13 @@ export default function Header() {
         <Animated.View
           style={[styles.searchContainer, { opacity: searchBarOpacity }]}
         >
-          <TextInput
+          <UniTextInput
             onSubmitEditing={handleSubmit}
             ref={inputRef}
-            style={[
-              styles.SearchInput,
-              {
-                backgroundColor:
-                  colorScheme === "light"
-                    ? Colors.light.background
-                    : Colors.dark.background,
-                color:
-                  colorScheme === "light"
-                    ? Colors.light.text
-                    : Colors.dark.text,
-              },
-            ]}
+            style={styles.SearchInput}
             placeholder={t`Search...`}
             value={search}
             onChangeText={searchProducts}
-            placeholderTextColor={
-              colorScheme === "light" ? Colors.light.tint : Colors.dark.tint
-            }
             autoCapitalize="none"
             returnKeyType="search"
           />
@@ -209,47 +175,22 @@ export default function Header() {
           }
           accessibilityLabel="Press to open search bar"
         >
-          <Ionicons
+          <Icon
             name={
               searchBarOpen && search !== "" ? "close-sharp" : "search-sharp"
             }
             size={24}
-            color={
-              colorScheme === "light" ? Colors.light.text : Colors.dark.text
-            }
           />
         </TouchableOpacity>
         {searchBarOpen && searchError && (
-          <View
-            style={[
-              styles.SearchResultsContainer,
-              {
-                borderColor: colorScheme === "light" ? "lightgrey" : "grey",
-                backgroundColor:
-                  colorScheme === "light"
-                    ? Colors.light.background
-                    : Colors.dark.background,
-              },
-            ]}
-          >
+          <View style={styles.SearchResultsContainer}>
             <Text style={{ paddingVertical: 8, alignSelf: "center" }}>
               Oops, an error has occurred!
             </Text>
           </View>
         )}
         {searchResults && searchBarOpen && (
-          <ScrollView
-            style={[
-              styles.SearchResultsContainer,
-              {
-                borderColor: colorScheme === "light" ? "lightgrey" : "grey",
-                backgroundColor:
-                  colorScheme === "light"
-                    ? Colors.light.background
-                    : Colors.dark.background,
-              },
-            ]}
-          >
+          <ScrollView style={styles.SearchResultsContainer}>
             {searchResults?.predictiveSearch?.products?.map(
               (result: any, index: number) => (
                 <Link
@@ -257,8 +198,6 @@ export default function Header() {
                     styles.SearchResult,
                     {
                       borderTopWidth: index !== 0 ? 1 : 0,
-                      borderTopColor:
-                        colorScheme === "light" ? "grey" : "darkgrey",
                     },
                   ]}
                   href={{
@@ -278,17 +217,7 @@ export default function Header() {
                       alt={result.featuredImage?.altText}
                       style={styles.SearchResultImage}
                     />
-                    <Text
-                      style={[
-                        styles.SearchResultHeading,
-                        {
-                          color:
-                            colorScheme === "light"
-                              ? Colors.light.text
-                              : Colors.dark.text,
-                        },
-                      ]}
-                    >
+                    <Text style={styles.SearchResultHeading}>
                       {result.title}
                     </Text>
                   </TouchableOpacity>
@@ -302,10 +231,15 @@ export default function Header() {
   );
 }
 
-const styles = StyleSheet.create({
+const UniTextInput = withUnistyles(TextInput, (theme) => ({
+  placeholderTextColor: theme.colors.tint,
+}));
+
+const styles = StyleSheet.create((theme) => ({
   Container: {
     width: "100%",
     alignItems: "center",
+    backgroundColor: theme.colors.background,
   },
   Header: {
     gap: 8,
@@ -357,8 +291,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 0,
     paddingHorizontal: 8,
+    backgroundColor: theme.colors.background,
+    color: theme.colors.text,
   },
   SearchResultsContainer: {
+    backgroundColor: theme.colors.background,
+    borderColor: theme.colors.tint,
     position: "absolute",
     borderWidth: 1,
     borderRadius: 4,
@@ -373,6 +311,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
     paddingLeft: 16,
+    borderTopColor: theme.colors.tint,
   },
   SearchResultImage: {
     width: 50,
@@ -383,5 +322,6 @@ const styles = StyleSheet.create({
   SearchResultHeading: {
     fontSize: 18,
     fontWeight: 600,
+    color: theme.colors.text,
   },
-});
+}));

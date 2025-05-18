@@ -1,7 +1,10 @@
 module.exports = function (api) {
-  api.cache(false);
+  api.cache(true);
   return {
     presets: ["babel-preset-expo"],
-    plugins: ["@lingui/babel-plugin-lingui-macro"],
+    plugins: [
+      "@lingui/babel-plugin-lingui-macro",
+      "react-native-unistyles/plugin",
+    ],
   };
 };
