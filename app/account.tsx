@@ -265,6 +265,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   UserInfo: {
     fontWeight: 600,
+    color: theme.colors.text,
   },
   SaveButton: {
     borderRadius: 4,
