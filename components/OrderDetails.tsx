@@ -1,10 +1,9 @@
 import { getOptimizedImageUrl } from "@/lib/utils";
-import { t } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { mapSelectedProductOptionToObject } from "@shopify/hydrogen-react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { Button, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
@@ -45,7 +44,6 @@ export default function OrderDetails({ order }: { order: any }) {
                   })}
               </Text>
             </View>
-            <Button title={t`Cancel items`} />
           </View>
         </View>
         {order?.data?.order.requiresShipping && (
