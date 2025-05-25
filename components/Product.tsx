@@ -18,6 +18,7 @@ import {
   useUnistyles,
 } from "react-native-unistyles";
 import Icon from "./Icon";
+import { darkTheme, lightTheme } from "@/styles/unistyles";
 
 export default function Product({ search }: { search: UnknownOutputParams }) {
   const { i18n } = useLingui();
@@ -89,56 +90,47 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
                           //@ts-ignore
                           .sort((a, b) => a - b)
                           .map((optionVal) => (
-                            <Link
+                            <Pressable
                               key={optionVal}
-                              href={{
-                                pathname: "/product/[id]",
-                                params: {
-                                  ...search,
-                                  id: product?.id || "",
-                                  [option?.name || ""]: optionVal,
-                                },
-                              }}
+                              onPress={() =>
+                                setSelectedOption(
+                                  option.name || "",
+                                  optionVal || "",
+                                )
+                              }
                               disabled={
                                 !isOptionInStock(option.name || "", optionVal!)
                               }
                               style={[
                                 styles.Option,
-                                {
-                                  backgroundColor: isOptionInStock(
-                                    option.name || "",
-                                    optionVal!,
-                                  )
-                                    ? optionVal ===
-                                      selectedOptions![option.name!]
-                                      ? theme.colors.text
-                                      : theme.colors.background
-                                    : "grey",
-                                },
+                                isOptionInStock(option.name || "", optionVal!)
+                                  ? optionVal == selectedOptions![option.name!]
+                                    ? UnistylesRuntime.colorScheme === "light"
+                                      ? {
+                                          backgroundColor:
+                                            lightTheme.colors.text,
+                                        }
+                                      : {
+                                          backgroundColor:
+                                            darkTheme.colors.text,
+                                        }
+                                    : {}
+                                  : { backgroundColor: "grey" },
                               ]}
-                              asChild
                             >
-                              <Pressable
-                                onPress={() =>
-                                  setSelectedOption(
-                                    option.name || "",
-                                    optionVal || "",
-                                  )
-                                }
+                              <Text
+                                style={[
+                                  styles.OptionVal,
+                                  optionVal == selectedOptions![option.name!]
+                                    ? UnistylesRuntime.colorScheme === "light"
+                                      ? { color: darkTheme.colors.text }
+                                      : { color: lightTheme.colors.text }
+                                    : {},
+                                ]}
                               >
-                                <Text
-                                  style={{
-                                    color:
-                                      optionVal ==
-                                      selectedOptions![option.name!]
-                                        ? theme.colors.background
-                                        : theme.colors.text,
-                                  }}
-                                >
-                                  {optionVal}
-                                </Text>
-                              </Pressable>
-                            </Link>
+                                {optionVal}
+                              </Text>
+                            </Pressable>
                           ))}
                     </ScrollView>
                   </View>
@@ -226,12 +218,16 @@ const styles = StyleSheet.create((theme) => ({
     color: theme.colors.text,
   },
   Option: {
+    backgroundColor: theme.colors.background,
     borderColor: "slategray",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
     borderWidth: 1,
     marginRight: 8,
+  },
+  OptionVal: {
+    color: theme.colors.text,
   },
   OptionsScrollContainer: {
     flexGrow: 0,
