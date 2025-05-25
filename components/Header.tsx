@@ -155,7 +155,13 @@ export default function Header() {
         </View>
 
         <Animated.View
-          style={[styles.searchContainer, { opacity: searchBarOpacity }]}
+          style={[
+            styles.searchContainer,
+            {
+              opacity: searchBarOpacity,
+              display: searchBarOpen ? "flex" : "none",
+            },
+          ]}
         >
           <UniTextInput
             onSubmitEditing={handleSubmit}
@@ -291,6 +297,7 @@ const styles = StyleSheet.create((theme) => ({
     fontSize: 16,
     borderWidth: 0,
     paddingHorizontal: 8,
+    paddingTop: Platform.OS === "android" ? 4 : 0,
     backgroundColor: theme.colors.background,
     color: theme.colors.text,
   },
