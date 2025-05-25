@@ -7,16 +7,12 @@ import {
   TextInput,
 } from "react-native";
 import { useProduct } from "@shopify/hydrogen-react";
-import { Link, UnknownOutputParams } from "expo-router";
+import { UnknownOutputParams } from "expo-router";
 import { useCart } from "./shopify/CartProvider";
 import ImageCarousel from "./ImageCarousel";
 import { useLingui } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
-import {
-  StyleSheet,
-  UnistylesRuntime,
-  useUnistyles,
-} from "react-native-unistyles";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import Icon from "./Icon";
 import { darkTheme, lightTheme } from "@/styles/unistyles";
 
@@ -35,7 +31,6 @@ export default function Product({ search }: { search: UnknownOutputParams }) {
   const currentMaxQuantity = useRef(selectedVariant?.quantityAvailable || 1);
   const [quantity, setQuantity] = useState("1");
   const { linesAdd } = useCart();
-  const { theme } = useUnistyles();
 
   const addToCart = () => {
     const merchandise = {
