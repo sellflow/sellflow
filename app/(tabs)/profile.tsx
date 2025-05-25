@@ -107,12 +107,6 @@ export default function Index() {
           <Link style={styles.OptionButton} href="/account">
             <Trans>Account</Trans>
           </Link>
-          <Link style={styles.OptionButton} href="/">
-            <Ionicons name="heart-outline" size={16} />
-          </Link>
-          <Link style={styles.OptionButton} href="/">
-            <Ionicons name="settings-sharp" size={16} />
-          </Link>
         </View>
       </View>
     </SafeAreaView>
