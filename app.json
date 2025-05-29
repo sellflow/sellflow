@@ -3,7 +3,7 @@
     "name": "Sellflow",
     "slug": "Sellflow",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./images/favicon.png",
     "scheme": ["shop.72278704345.app"],
     "userInterfaceStyle": "automatic",
