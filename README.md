@@ -13,22 +13,22 @@ Prerequisites:
   EXPO_PUBLIC_STORE_TOKEN=
   EXPO_PUBLIC_STORE_DOMAIN=
   EXPO_PUBLIC_ENCRYPTION_KEY=
+  EXPO_PUBLIC_CUSTOMER_SHOP_ID=
   EXPO_PUBLIC_CUSTOMER_STORE_ENDPOINT=
   EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_TOKEN=
   EXPO_PUBLIC_CUSTOMER_ACCOUNT_API_ENDPOINT=
   ```
-  All environment variables are prefixed with EXPO_PUBLIC to be available through the expo client this may change in the future. All of these variable names are also subject to change because the naming is terrible.
+  All environment variables are prefixed with EXPO_PUBLIC to be available through the expo client this may change in the future.
   - `STORE_TOKEN` is your Storefront Public API Token
   - `STORE_DOMAIN` is the domain given to you from the Headless app
   - `ENCRYPTION_KEY` random string used by [MMKV](https://github.com/mrousavy/react-native-mmkv) to encrypt user data.
   - `CUSTOMER_STORE_ENDPOINT` is the endpoint given to you from the Shopify Headless app in the Customer Account API section
   - `CUSTOMER_ACCOUNT_API_TOKEN` is the Client ID of your Customer API Endpoint
 
-2. Install dependencies
-
-   ```bash
-   npm install
-   ```
+2. Install with npm
+  ```bash
+  npm create sellflow
+  ```
 
 3. Start the app
 
@@ -42,6 +42,8 @@ In the output, you'll find options to open the app in a
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+
+> [!WARNING] The app does not run with Expo Go because of Unistyles and the Shopify Checkout Sheet Kit the app will not run inside of Expo Go and will only run on an iOS or Android dev build.
 
 ## Features
 
@@ -59,7 +61,7 @@ In the output, you'll find options to open the app in a
 
 Checkout Sheet Demo:
 ![android_checkout_sheet_demo-_online-video-cutter com_](https://github.com/user-attachments/assets/b71ed105-011a-4508-8d7e-293f161aec33)
-Search & Filtering Demo: 
+Search & Filtering Demo:
 ![product_filtering_demo](https://github.com/user-attachments/assets/f69d6483-f9a4-44f9-a09e-0a818f81f4af)
 
 Add to Cart Bottom Sheet for Multi-Variant Products:
